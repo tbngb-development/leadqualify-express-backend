@@ -1,0 +1,1162 @@
+{
+  "info": {
+    "name": "Vapi Lead Qualification API",
+    "description": "Complete API collection for Vapi AI Lead Qualification System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "BASE_URL", "value": "http://localhost:3000" },
+    { "key": "TOKEN", "value": "" },
+    { "key": "TENANT_ID", "value": "" },
+    { "key": "USER_ID", "value": "" },
+    { "key": "ASSISTANT_ID", "value": "" },
+    { "key": "CAMPAIGN_ID", "value": "" },
+    { "key": "LEAD_ID", "value": "" },
+    { "key": "CALL_ID", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "🏥 Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/health"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status is OK', function () {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.status).to.eql('OK');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "🔐 Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "url": "{{BASE_URL}}/api/auth/register",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tenantName\": \"Test Company\",\n  \"name\": \"Admin User\",\n  \"email\": \"admin@testcompany.com\",\n  \"password\": \"password123\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Register successful', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  if (res.data && res.data.token) {",
+                  "    pm.collectionVariables.set('TOKEN', res.data.token);",
+                  "    console.log('TOKEN saved');",
+                  "  }",
+                  "  if (res.data && res.data.tenant) {",
+                  "    pm.collectionVariables.set('TENANT_ID', res.data.tenant.id);",
+                  "    console.log('TENANT_ID saved:', res.data.tenant.id);",
+                  "  }",
+                  "  if (res.data && res.data.user) {",
+                  "    pm.collectionVariables.set('USER_ID', res.data.user.id);",
+                  "    console.log('USER_ID saved:', res.data.user.id);",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "url": "{{BASE_URL}}/api/auth/login",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@testcompany.com\",\n  \"password\": \"password123\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login successful', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  if (res.data && res.data.token) {",
+                  "    pm.collectionVariables.set('TOKEN', res.data.token);",
+                  "    console.log('TOKEN saved');",
+                  "  }",
+                  "  if (res.data && res.data.tenant) {",
+                  "    pm.collectionVariables.set('TENANT_ID', res.data.tenant.id);",
+                  "  }",
+                  "  if (res.data && res.data.user) {",
+                  "    pm.collectionVariables.set('USER_ID', res.data.user.id);",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/api/auth/profile",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Profile fetched', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "🤖 Assistants",
+      "item": [
+        {
+          "name": "Create Assistant",
+          "request": {
+            "method": "POST",
+            "url": "{{BASE_URL}}/api/assistants",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Lead Qualifier Bot\",\n  \"firstMessage\": \"Hello! I'm calling from Test Company. Do you have a moment to discuss our services?\",\n  \"systemPrompt\": \"You are a professional lead qualification assistant. Your goal is to qualify leads by asking about their budget, timeline, and needs. Be friendly and professional. If they are interested and have a budget, mark them as qualified.\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Assistant created', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  if (res.data && res.data.id) {",
+                  "    pm.collectionVariables.set('ASSISTANT_ID', res.data.id);",
+                  "    console.log('ASSISTANT_ID saved:', res.data.id);",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Assistants",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/api/assistants",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Assistants listed', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  pm.expect(res.data).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Assistant",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/api/assistants/{{ASSISTANT_ID}}",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Assistant fetched', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  pm.expect(res.data.id).to.eql(pm.collectionVariables.get('ASSISTANT_ID'));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Assistant",
+          "request": {
+            "method": "PATCH",
+            "url": "{{BASE_URL}}/api/assistants/{{ASSISTANT_ID}}",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Lead Qualifier Bot\",\n  \"firstMessage\": \"Hi! I'm calling to discuss how we can help your business grow.\",\n  \"systemPrompt\": \"You are an expert lead qualifier. Ask about budget, timeline, pain points and decision making process. Be concise and professional.\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Assistant updated', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete Assistant",
+          "request": {
+            "method": "DELETE",
+            "url": "{{BASE_URL}}/api/assistants/{{ASSISTANT_ID}}",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Assistant deleted', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "📋 Campaigns",
+      "item": [
+        {
+          "name": "Create Campaign",
+          "request": {
+            "method": "POST",
+            "url": "{{BASE_URL}}/api/campaigns",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Q1 Lead Campaign\",\n  \"description\": \"First quarter lead qualification campaign\",\n  \"assistantId\": \"{{ASSISTANT_ID}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Campaign created', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  if (res.data && res.data.id) {",
+                  "    pm.collectionVariables.set('CAMPAIGN_ID', res.data.id);",
+                  "    console.log('CAMPAIGN_ID saved:', res.data.id);",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Campaigns",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/api/campaigns",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Campaigns listed', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  pm.expect(res.data).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Campaign",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/api/campaigns/{{CAMPAIGN_ID}}",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Campaign fetched', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Upload CSV Leads",
+          "request": {
+            "method": "POST",
+            "url": "{{BASE_URL}}/api/campaigns/{{CAMPAIGN_ID}}/upload",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": "",
+                  "description": "Upload your CSV file here. CSV must have: name, phone columns"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Leads uploaded', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  console.log('Upload result:', JSON.stringify(res.data));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Start Campaign",
+          "request": {
+            "method": "POST",
+            "url": "{{BASE_URL}}/api/campaigns/{{CAMPAIGN_ID}}/start",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Campaign started', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  console.log('Campaign start result:', JSON.stringify(res.data));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Pause Campaign",
+          "request": {
+            "method": "POST",
+            "url": "{{BASE_URL}}/api/campaigns/{{CAMPAIGN_ID}}/pause",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Campaign paused', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Campaign Stats",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/api/campaigns/{{CAMPAIGN_ID}}/stats",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Campaign stats fetched', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  console.log('Stats:', JSON.stringify(res.data));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "👤 Leads",
+      "item": [
+        {
+          "name": "List Leads",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/api/leads?page=1&limit=20",
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "campaignId", "value": "{{CAMPAIGN_ID}}", "disabled": true },
+                { "key": "status", "value": "PENDING", "disabled": true }
+              ]
+            },
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Leads listed', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  if (res.data.leads && res.data.leads.length > 0) {",
+                  "    pm.collectionVariables.set('LEAD_ID', res.data.leads[0].id);",
+                  "    console.log('LEAD_ID saved:', res.data.leads[0].id);",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Leads - Filter by Campaign",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/api/leads?campaignId={{CAMPAIGN_ID}}&page=1&limit=20",
+              "query": [
+                { "key": "campaignId", "value": "{{CAMPAIGN_ID}}" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Leads filtered by campaign', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Leads - Filter by Status",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/api/leads?status=QUALIFIED&page=1&limit=20",
+              "query": [
+                { "key": "status", "value": "QUALIFIED" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Qualified leads listed', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Lead",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/api/leads/{{LEAD_ID}}",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Lead fetched', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "📞 Calls",
+      "item": [
+        {
+          "name": "List Calls",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/api/calls?page=1&limit=20",
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "campaignId", "value": "{{CAMPAIGN_ID}}", "disabled": true },
+                { "key": "leadId", "value": "{{LEAD_ID}}", "disabled": true },
+                { "key": "status", "value": "COMPLETED", "disabled": true }
+              ]
+            },
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Calls listed', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  if (res.data.calls && res.data.calls.length > 0) {",
+                  "    pm.collectionVariables.set('CALL_ID', res.data.calls[0].id);",
+                  "    console.log('CALL_ID saved:', res.data.calls[0].id);",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Calls - Filter by Campaign",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/api/calls?campaignId={{CAMPAIGN_ID}}&page=1&limit=20",
+              "query": [
+                { "key": "campaignId", "value": "{{CAMPAIGN_ID}}" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Calls filtered by campaign', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Call",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/api/calls/{{CALL_ID}}",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Call fetched', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Call Transcript",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/api/calls/{{CALL_ID}}/transcript",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Transcript fetched', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  console.log('Transcript:', res.data.transcript);",
+                  "  console.log('Summary:', res.data.summary);",
+                  "  console.log('Outcome:', res.data.outcome);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "📊 Dashboard",
+      "item": [
+        {
+          "name": "Overview",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/api/dashboard/overview",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Overview fetched', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  pm.expect(res.data).to.have.property('campaigns');",
+                  "  pm.expect(res.data).to.have.property('leads');",
+                  "  pm.expect(res.data).to.have.property('calls');",
+                  "  console.log('Overview:', JSON.stringify(res.data, null, 2));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Recent Activity",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/api/dashboard/activity",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Activity fetched', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Campaign Performance",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/api/dashboard/campaigns",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Performance fetched', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  console.log('Performance:', JSON.stringify(res.data, null, 2));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "👥 Users",
+      "item": [
+        {
+          "name": "List Users",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/api/users",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Users listed', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  pm.expect(res.data).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "url": "{{BASE_URL}}/api/users",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Team Member\",\n  \"email\": \"member@testcompany.com\",\n  \"password\": \"password123\",\n  \"role\": \"USER\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('User created', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  if (res.data && res.data.id) {",
+                  "    pm.collectionVariables.set('USER_ID', res.data.id);",
+                  "    console.log('USER_ID saved:', res.data.id);",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PATCH",
+            "url": "{{BASE_URL}}/api/users/{{USER_ID}}",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Member\",\n  \"role\": \"USER\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('User updated', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "url": "{{BASE_URL}}/api/users/{{USER_ID}}",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('User deleted', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "🏢 Tenants",
+      "item": [
+        {
+          "name": "List Tenants",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/api/tenants",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Tenants listed', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Tenant",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/api/tenants/{{TENANT_ID}}",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Tenant fetched', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Tenant",
+          "request": {
+            "method": "PATCH",
+            "url": "{{BASE_URL}}/api/tenants/{{TENANT_ID}}",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Company Name\",\n  \"isActive\": true\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Tenant updated', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Tenant Stats",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/api/tenants/{{TENANT_ID}}/stats",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Tenant stats fetched', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  console.log('Tenant Stats:', JSON.stringify(res.data, null, 2));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "🔗 Webhooks",
+      "item": [
+        {
+          "name": "Webhook - Call Started",
+          "request": {
+            "method": "POST",
+            "url": "{{BASE_URL}}/webhooks/vapi",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"call-started\",\n  \"call\": {\n    \"id\": \"vapi-call-test-001\",\n    \"status\": \"active\",\n    \"startedAt\": \"2024-01-01T00:00:00.000Z\"\n  }\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Webhook received', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.received).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Webhook - Call Ended",
+          "request": {
+            "method": "POST",
+            "url": "{{BASE_URL}}/webhooks/vapi",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"call-ended\",\n  \"call\": {\n    \"id\": \"vapi-call-test-001\",\n    \"status\": \"ended\",\n    \"duration\": 180,\n    \"recordingUrl\": \"https://example.com/recording.mp3\",\n    \"startedAt\": \"2024-01-01T00:00:00.000Z\",\n    \"endedAt\": \"2024-01-01T00:03:00.000Z\"\n  }\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Webhook received', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.received).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Webhook - End of Call Report",
+          "request": {
+            "method": "POST",
+            "url": "{{BASE_URL}}/webhooks/vapi",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"end-of-call-report\",\n  \"call\": {\n    \"id\": \"vapi-call-test-001\"\n  },\n  \"endOfCallReport\": {\n    \"summary\": \"The lead was qualified. They have a budget of $10,000 and are ready to purchase within 30 days.\",\n    \"transcript\": \"Agent: Hello! I'm calling from Test Company.\\nLead: Hi, yes I've been expecting your call.\\nAgent: Great! Do you have a budget in mind?\\nLead: Yes, around $10,000.\\nAgent: Perfect, and what's your timeline?\\nLead: Within the next 30 days.\\nAgent: Excellent! You are qualified for our services.\"\n  }\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('End of call report received', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.received).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Webhook - Transcript",
+          "request": {
+            "method": "POST",
+            "url": "{{BASE_URL}}/webhooks/vapi",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"transcript\",\n  \"call\": {\n    \"id\": \"vapi-call-test-001\"\n  },\n  \"transcript\": \"Hello this is a live transcript update from the call.\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Transcript webhook received', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.received).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

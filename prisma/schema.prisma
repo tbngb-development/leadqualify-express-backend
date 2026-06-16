@@ -1,0 +1,146 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id         String      @id @default(uuid())
+  name       String
+  email      String      @unique
+  apiKey     String      @unique @default(uuid())
+  isActive   Boolean     @default(true)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  users      User[]
+  campaigns  Campaign[]
+  leads      Lead[]
+  calls      Call[]
+  assistants Assistant[]
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(USER)
+  tenantId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  USER
+}
+
+model Assistant {
+  id        String   @id @default(uuid())
+  vapiId    String   @unique
+  name      String
+  tenantId  String
+  config    Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant    Tenant    @relation(fields: [tenantId], references: [id])
+  campaigns Campaign[]
+}
+
+model Campaign {
+  id           String         @id @default(uuid())
+  name         String
+  description  String?
+  status       CampaignStatus @default(DRAFT)
+  tenantId     String
+  assistantId  String
+  totalLeads   Int            @default(0)
+  calledLeads  Int            @default(0)
+  successLeads Int            @default(0)
+  failedLeads  Int            @default(0)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  startedAt    DateTime?
+  completedAt  DateTime?
+
+  tenant       Tenant         @relation(fields: [tenantId], references: [id])
+  assistant    Assistant      @relation(fields: [assistantId], references: [id])
+  leads        Lead[]
+  calls        Call[]
+}
+
+enum CampaignStatus {
+  DRAFT
+  RUNNING
+  PAUSED
+  COMPLETED
+  FAILED
+}
+
+model Lead {
+  id         String     @id @default(uuid())
+  name       String
+  phone      String
+  email      String?
+  company    String?
+  status     LeadStatus @default(PENDING)
+  tenantId   String
+  campaignId String
+  metadata   Json?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  tenant     Tenant     @relation(fields: [tenantId], references: [id])
+  campaign   Campaign   @relation(fields: [campaignId], references: [id])
+  calls      Call[]
+}
+
+enum LeadStatus {
+  PENDING
+  CALLING
+  CALLED
+  QUALIFIED
+  NOT_QUALIFIED
+  NO_ANSWER
+  FAILED
+}
+
+model Call {
+  id         String     @id @default(uuid())
+  vapiCallId String?    @unique
+  tenantId   String
+  campaignId String
+  leadId     String
+  status     CallStatus @default(PENDING)
+  duration   Int?
+  recording  String?
+  transcript String?
+  transcriptMessages Json?  
+  summary    String?
+  outcome    String?
+  startedAt  DateTime?
+  endedAt    DateTime?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  tenant     Tenant     @relation(fields: [tenantId], references: [id])
+  campaign   Campaign   @relation(fields: [campaignId], references: [id])
+  lead       Lead       @relation(fields: [leadId], references: [id])
+}
+
+enum CallStatus {
+  PENDING
+  CALLING
+  COMPLETED
+  FAILED
+  NO_ANSWER
+  BUSY
+}
