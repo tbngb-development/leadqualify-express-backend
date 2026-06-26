@@ -30,6 +30,7 @@ export class AssistantService {
     const vapiAssistant = await vapiClient.assistants.create({
       name: data.name,
       firstMessage: data.firstMessage,
+
       model: {
         provider: "openai",
         model: "gpt-4",
@@ -40,13 +41,20 @@ export class AssistantService {
           },
         ],
       },
+
       voice: {
-        provider: "11labs" as const,
-        voiceId:  "paula",
+        provider: "custom-voice",
+
+        server: {
+          url: `https://choice-creatable-facility.ngrok-free.dev/api/tts`,
+        },
       },
     });
 
     if (!vapiAssistant.id) throw new Error("Vapi assistant creation failed");
+
+    console.log("CREATED VOICE:", JSON.stringify(vapiAssistant.voice, null, 2));
+    console.log(JSON.stringify(vapiAssistant.voice, null, 2));
 
     return prisma.assistant.create({
       data: {

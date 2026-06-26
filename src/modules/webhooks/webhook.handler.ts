@@ -8,12 +8,20 @@ export const handleVapiWebhook = async (
 ): Promise<void> => {
   const payload = req.body;
 
-  console.log("[Webhook] Event:", payload.message.type);
+  // console.log("[Webhook] Event:", payload.message.type);
 
   try {
     switch (payload.message.type) {
+      case "assistant.started":
+        console.log(
+          "VOICE CONFIG:",
+          JSON.stringify(payload.message.assistant.voice, null, 2),
+        );
+        break;
+
       case "call-started": {
         console.log("call started: ");
+
         await prisma.call.updateMany({
           where: { vapiCallId: payload.call?.id },
           data: { status: "CALLING", startedAt: new Date() },

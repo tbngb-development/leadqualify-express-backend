@@ -147,9 +147,6 @@ export class CampaignService {
       } catch (error) {
         console.error(`[Campaign] Call failed for lead ${lead.id}:`, error);
       }
-
-      // Delay between calls — avoid rate limiting
-      await this.delay(3000);
     }
 
     // Mark campaign completed
