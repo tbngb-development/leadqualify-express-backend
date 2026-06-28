@@ -159,13 +159,13 @@ export const handleVapiWebhook = async (
       }
 
       case "status-update": {
-        console.log("status update event payload:", payload);
+        // console.log("status update event payload:", payload);
         break;
       }
 
       default:
         console.log("[Webhook] Unhandled event:", payload.message.type);
-        console.log("[Webhook] Unhandled event: payload:", payload);
+        // console.log("[Webhook] Unhandled event: payload:", payload);
     }
   } catch (error) {
     console.error("[Webhook] Error processing event:", error);

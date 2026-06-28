@@ -4,6 +4,7 @@ import fs from "fs";
 import path from "path";
 import rateLimit from "express-rate-limit";
 import cors from "cors";
+import axios from "axios";
 
 import { errorHandler } from "./middleware/errorHandler";
 import authRoutes from "./modules/auth/auth.routes";
@@ -15,7 +16,7 @@ import dashboardRoutes from "./modules/dashboard/dashboard.routes";
 import userRoutes from "./modules/users/user.routes";
 import tenantRoutes from "./modules/tenants/tenant.routes";
 import webhookRoutes from "./modules/webhooks/webhook.routes";
-import axios from "axios";
+import brochureRoutes from "./modules/brochure/brochure.routes";
 
 dotenv.config();
 
@@ -78,6 +79,7 @@ app.use("/api/calls", limiter, callRoutes);
 app.use("/api/dashboard", limiter, dashboardRoutes);
 app.use("/api/users", limiter, userRoutes);
 app.use("/api/tenants", limiter, tenantRoutes);
+app.use("/api/brochure", limiter, brochureRoutes);
 
 // Vapi may actually want the full WAV with header
 // Try this FIRST before stripping
@@ -93,7 +95,6 @@ app.post("/api/tts", async (req, res) => {
 
     console.log("TEXT:", text);
     // console.log("SAMPLE RATE FROM VAPI:", requestedSampleRate);
-
     const sarvamResponse = await axios.post(
       "https://api.sarvam.ai/text-to-speech",
       {

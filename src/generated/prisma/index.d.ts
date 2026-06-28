@@ -29,6 +29,11 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  */
 export type Assistant = $Result.DefaultSelection<Prisma.$AssistantPayload>
 /**
+ * Model Brochure
+ * 
+ */
+export type Brochure = $Result.DefaultSelection<Prisma.$BrochurePayload>
+/**
  * Model Campaign
  * 
  */
@@ -86,7 +91,8 @@ export const CallStatus: {
   CALLING: 'CALLING',
   COMPLETED: 'COMPLETED',
   FAILED: 'FAILED',
-  NO_ANSWER: 'NO_ANSWER'
+  NO_ANSWER: 'NO_ANSWER',
+  BUSY: 'BUSY'
 };
 
 export type CallStatus = (typeof CallStatus)[keyof typeof CallStatus]
@@ -256,6 +262,16 @@ export class PrismaClient<
     * ```
     */
   get assistant(): Prisma.AssistantDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.brochure`: Exposes CRUD operations for the **Brochure** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Brochures
+    * const brochures = await prisma.brochure.findMany()
+    * ```
+    */
+  get brochure(): Prisma.BrochureDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.campaign`: Exposes CRUD operations for the **Campaign** model.
@@ -730,6 +746,7 @@ export namespace Prisma {
     Tenant: 'Tenant',
     User: 'User',
     Assistant: 'Assistant',
+    Brochure: 'Brochure',
     Campaign: 'Campaign',
     Lead: 'Lead',
     Call: 'Call'
@@ -751,7 +768,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "tenant" | "user" | "assistant" | "campaign" | "lead" | "call"
+      modelProps: "tenant" | "user" | "assistant" | "brochure" | "campaign" | "lead" | "call"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -974,6 +991,80 @@ export namespace Prisma {
           count: {
             args: Prisma.AssistantCountArgs<ExtArgs>
             result: $Utils.Optional<AssistantCountAggregateOutputType> | number
+          }
+        }
+      }
+      Brochure: {
+        payload: Prisma.$BrochurePayload<ExtArgs>
+        fields: Prisma.BrochureFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BrochureFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BrochurePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BrochureFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BrochurePayload>
+          }
+          findFirst: {
+            args: Prisma.BrochureFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BrochurePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BrochureFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BrochurePayload>
+          }
+          findMany: {
+            args: Prisma.BrochureFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BrochurePayload>[]
+          }
+          create: {
+            args: Prisma.BrochureCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BrochurePayload>
+          }
+          createMany: {
+            args: Prisma.BrochureCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BrochureCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BrochurePayload>[]
+          }
+          delete: {
+            args: Prisma.BrochureDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BrochurePayload>
+          }
+          update: {
+            args: Prisma.BrochureUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BrochurePayload>
+          }
+          deleteMany: {
+            args: Prisma.BrochureDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BrochureUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BrochureUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BrochurePayload>[]
+          }
+          upsert: {
+            args: Prisma.BrochureUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BrochurePayload>
+          }
+          aggregate: {
+            args: Prisma.BrochureAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBrochure>
+          }
+          groupBy: {
+            args: Prisma.BrochureGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BrochureGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BrochureCountArgs<ExtArgs>
+            result: $Utils.Optional<BrochureCountAggregateOutputType> | number
           }
         }
       }
@@ -1298,6 +1389,7 @@ export namespace Prisma {
     tenant?: TenantOmit
     user?: UserOmit
     assistant?: AssistantOmit
+    brochure?: BrochureOmit
     campaign?: CampaignOmit
     lead?: LeadOmit
     call?: CallOmit
@@ -1386,6 +1478,7 @@ export namespace Prisma {
     leads: number
     calls: number
     assistants: number
+    brochures: number
   }
 
   export type TenantCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1394,6 +1487,7 @@ export namespace Prisma {
     leads?: boolean | TenantCountOutputTypeCountLeadsArgs
     calls?: boolean | TenantCountOutputTypeCountCallsArgs
     assistants?: boolean | TenantCountOutputTypeCountAssistantsArgs
+    brochures?: boolean | TenantCountOutputTypeCountBrochuresArgs
   }
 
   // Custom InputTypes
@@ -1442,6 +1536,13 @@ export namespace Prisma {
     where?: AssistantWhereInput
   }
 
+  /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountBrochuresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BrochureWhereInput
+  }
+
 
   /**
    * Count Type AssistantCountOutputType
@@ -1470,6 +1571,37 @@ export namespace Prisma {
    * AssistantCountOutputType without action
    */
   export type AssistantCountOutputTypeCountCampaignsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CampaignWhereInput
+  }
+
+
+  /**
+   * Count Type BrochureCountOutputType
+   */
+
+  export type BrochureCountOutputType = {
+    campaigns: number
+  }
+
+  export type BrochureCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campaigns?: boolean | BrochureCountOutputTypeCountCampaignsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * BrochureCountOutputType without action
+   */
+  export type BrochureCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BrochureCountOutputType
+     */
+    select?: BrochureCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * BrochureCountOutputType without action
+   */
+  export type BrochureCountOutputTypeCountCampaignsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CampaignWhereInput
   }
 
@@ -1734,6 +1866,7 @@ export namespace Prisma {
     leads?: boolean | Tenant$leadsArgs<ExtArgs>
     calls?: boolean | Tenant$callsArgs<ExtArgs>
     assistants?: boolean | Tenant$assistantsArgs<ExtArgs>
+    brochures?: boolean | Tenant$brochuresArgs<ExtArgs>
     _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["tenant"]>
 
@@ -1774,6 +1907,7 @@ export namespace Prisma {
     leads?: boolean | Tenant$leadsArgs<ExtArgs>
     calls?: boolean | Tenant$callsArgs<ExtArgs>
     assistants?: boolean | Tenant$assistantsArgs<ExtArgs>
+    brochures?: boolean | Tenant$brochuresArgs<ExtArgs>
     _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TenantIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1787,6 +1921,7 @@ export namespace Prisma {
       leads: Prisma.$LeadPayload<ExtArgs>[]
       calls: Prisma.$CallPayload<ExtArgs>[]
       assistants: Prisma.$AssistantPayload<ExtArgs>[]
+      brochures: Prisma.$BrochurePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2195,6 +2330,7 @@ export namespace Prisma {
     leads<T extends Tenant$leadsArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$leadsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     calls<T extends Tenant$callsArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$callsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     assistants<T extends Tenant$assistantsArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$assistantsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssistantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    brochures<T extends Tenant$brochuresArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$brochuresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BrochurePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2736,6 +2872,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AssistantScalarFieldEnum | AssistantScalarFieldEnum[]
+  }
+
+  /**
+   * Tenant.brochures
+   */
+  export type Tenant$brochuresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brochure
+     */
+    select?: BrochureSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brochure
+     */
+    omit?: BrochureOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrochureInclude<ExtArgs> | null
+    where?: BrochureWhereInput
+    orderBy?: BrochureOrderByWithRelationInput | BrochureOrderByWithRelationInput[]
+    cursor?: BrochureWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BrochureScalarFieldEnum | BrochureScalarFieldEnum[]
   }
 
   /**
@@ -4965,6 +5125,1717 @@ export namespace Prisma {
 
 
   /**
+   * Model Brochure
+   */
+
+  export type AggregateBrochure = {
+    _count: BrochureCountAggregateOutputType | null
+    _avg: BrochureAvgAggregateOutputType | null
+    _sum: BrochureSumAggregateOutputType | null
+    _min: BrochureMinAggregateOutputType | null
+    _max: BrochureMaxAggregateOutputType | null
+  }
+
+  export type BrochureAvgAggregateOutputType = {
+    pageCount: number | null
+    rawTextLength: number | null
+    totalUnits: number | null
+    totalTowers: number | null
+    totalFloors: number | null
+    sizeMin: number | null
+    sizeMax: number | null
+    startingPrice: number | null
+    maxPrice: number | null
+    pricePerSqft: number | null
+    minimumBudget: number | null
+    maximumBudget: number | null
+    confidence: number | null
+  }
+
+  export type BrochureSumAggregateOutputType = {
+    pageCount: number | null
+    rawTextLength: number | null
+    totalUnits: number | null
+    totalTowers: number | null
+    totalFloors: number | null
+    sizeMin: number | null
+    sizeMax: number | null
+    startingPrice: number | null
+    maxPrice: number | null
+    pricePerSqft: number | null
+    minimumBudget: number | null
+    maximumBudget: number | null
+    confidence: number | null
+  }
+
+  export type BrochureMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    originalFileName: string | null
+    fileSizeMB: string | null
+    pageCount: number | null
+    rawTextLength: number | null
+    projectName: string | null
+    developerName: string | null
+    reraNumber: string | null
+    projectWebsite: string | null
+    contactNumber: string | null
+    city: string | null
+    area: string | null
+    state: string | null
+    landmark: string | null
+    fullAddress: string | null
+    totalUnits: number | null
+    totalTowers: number | null
+    totalFloors: number | null
+    sizeMin: number | null
+    sizeMax: number | null
+    sizeUnit: string | null
+    startingPrice: number | null
+    maxPrice: number | null
+    pricePerSqft: number | null
+    priceLabel: string | null
+    paymentPlan: string | null
+    maintenanceCharge: string | null
+    possessionDate: string | null
+    launchDate: string | null
+    constructionStatus: string | null
+    minimumBudget: number | null
+    maximumBudget: number | null
+    targetBuyerProfile: string | null
+    confidence: number | null
+    isConfirmed: boolean | null
+    confirmedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BrochureMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    originalFileName: string | null
+    fileSizeMB: string | null
+    pageCount: number | null
+    rawTextLength: number | null
+    projectName: string | null
+    developerName: string | null
+    reraNumber: string | null
+    projectWebsite: string | null
+    contactNumber: string | null
+    city: string | null
+    area: string | null
+    state: string | null
+    landmark: string | null
+    fullAddress: string | null
+    totalUnits: number | null
+    totalTowers: number | null
+    totalFloors: number | null
+    sizeMin: number | null
+    sizeMax: number | null
+    sizeUnit: string | null
+    startingPrice: number | null
+    maxPrice: number | null
+    pricePerSqft: number | null
+    priceLabel: string | null
+    paymentPlan: string | null
+    maintenanceCharge: string | null
+    possessionDate: string | null
+    launchDate: string | null
+    constructionStatus: string | null
+    minimumBudget: number | null
+    maximumBudget: number | null
+    targetBuyerProfile: string | null
+    confidence: number | null
+    isConfirmed: boolean | null
+    confirmedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BrochureCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    originalFileName: number
+    fileSizeMB: number
+    pageCount: number
+    rawTextLength: number
+    projectName: number
+    developerName: number
+    reraNumber: number
+    projectWebsite: number
+    contactNumber: number
+    city: number
+    area: number
+    state: number
+    landmark: number
+    fullAddress: number
+    propertyTypes: number
+    configurations: number
+    totalUnits: number
+    totalTowers: number
+    totalFloors: number
+    sizeMin: number
+    sizeMax: number
+    sizeUnit: number
+    startingPrice: number
+    maxPrice: number
+    pricePerSqft: number
+    priceLabel: number
+    paymentPlan: number
+    bankApprovals: number
+    maintenanceCharge: number
+    possessionDate: number
+    launchDate: number
+    constructionStatus: number
+    amenities: number
+    specifications: number
+    nearbyInfrastructure: number
+    usps: number
+    minimumBudget: number
+    maximumBudget: number
+    targetBuyerProfile: number
+    preferredLocations: number
+    investmentType: number
+    keyQualifyingQuestions: number
+    confidence: number
+    extractionWarnings: number
+    isConfirmed: number
+    confirmedAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type BrochureAvgAggregateInputType = {
+    pageCount?: true
+    rawTextLength?: true
+    totalUnits?: true
+    totalTowers?: true
+    totalFloors?: true
+    sizeMin?: true
+    sizeMax?: true
+    startingPrice?: true
+    maxPrice?: true
+    pricePerSqft?: true
+    minimumBudget?: true
+    maximumBudget?: true
+    confidence?: true
+  }
+
+  export type BrochureSumAggregateInputType = {
+    pageCount?: true
+    rawTextLength?: true
+    totalUnits?: true
+    totalTowers?: true
+    totalFloors?: true
+    sizeMin?: true
+    sizeMax?: true
+    startingPrice?: true
+    maxPrice?: true
+    pricePerSqft?: true
+    minimumBudget?: true
+    maximumBudget?: true
+    confidence?: true
+  }
+
+  export type BrochureMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    originalFileName?: true
+    fileSizeMB?: true
+    pageCount?: true
+    rawTextLength?: true
+    projectName?: true
+    developerName?: true
+    reraNumber?: true
+    projectWebsite?: true
+    contactNumber?: true
+    city?: true
+    area?: true
+    state?: true
+    landmark?: true
+    fullAddress?: true
+    totalUnits?: true
+    totalTowers?: true
+    totalFloors?: true
+    sizeMin?: true
+    sizeMax?: true
+    sizeUnit?: true
+    startingPrice?: true
+    maxPrice?: true
+    pricePerSqft?: true
+    priceLabel?: true
+    paymentPlan?: true
+    maintenanceCharge?: true
+    possessionDate?: true
+    launchDate?: true
+    constructionStatus?: true
+    minimumBudget?: true
+    maximumBudget?: true
+    targetBuyerProfile?: true
+    confidence?: true
+    isConfirmed?: true
+    confirmedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BrochureMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    originalFileName?: true
+    fileSizeMB?: true
+    pageCount?: true
+    rawTextLength?: true
+    projectName?: true
+    developerName?: true
+    reraNumber?: true
+    projectWebsite?: true
+    contactNumber?: true
+    city?: true
+    area?: true
+    state?: true
+    landmark?: true
+    fullAddress?: true
+    totalUnits?: true
+    totalTowers?: true
+    totalFloors?: true
+    sizeMin?: true
+    sizeMax?: true
+    sizeUnit?: true
+    startingPrice?: true
+    maxPrice?: true
+    pricePerSqft?: true
+    priceLabel?: true
+    paymentPlan?: true
+    maintenanceCharge?: true
+    possessionDate?: true
+    launchDate?: true
+    constructionStatus?: true
+    minimumBudget?: true
+    maximumBudget?: true
+    targetBuyerProfile?: true
+    confidence?: true
+    isConfirmed?: true
+    confirmedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BrochureCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    originalFileName?: true
+    fileSizeMB?: true
+    pageCount?: true
+    rawTextLength?: true
+    projectName?: true
+    developerName?: true
+    reraNumber?: true
+    projectWebsite?: true
+    contactNumber?: true
+    city?: true
+    area?: true
+    state?: true
+    landmark?: true
+    fullAddress?: true
+    propertyTypes?: true
+    configurations?: true
+    totalUnits?: true
+    totalTowers?: true
+    totalFloors?: true
+    sizeMin?: true
+    sizeMax?: true
+    sizeUnit?: true
+    startingPrice?: true
+    maxPrice?: true
+    pricePerSqft?: true
+    priceLabel?: true
+    paymentPlan?: true
+    bankApprovals?: true
+    maintenanceCharge?: true
+    possessionDate?: true
+    launchDate?: true
+    constructionStatus?: true
+    amenities?: true
+    specifications?: true
+    nearbyInfrastructure?: true
+    usps?: true
+    minimumBudget?: true
+    maximumBudget?: true
+    targetBuyerProfile?: true
+    preferredLocations?: true
+    investmentType?: true
+    keyQualifyingQuestions?: true
+    confidence?: true
+    extractionWarnings?: true
+    isConfirmed?: true
+    confirmedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type BrochureAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Brochure to aggregate.
+     */
+    where?: BrochureWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Brochures to fetch.
+     */
+    orderBy?: BrochureOrderByWithRelationInput | BrochureOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BrochureWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Brochures from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Brochures.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Brochures
+    **/
+    _count?: true | BrochureCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: BrochureAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BrochureSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BrochureMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BrochureMaxAggregateInputType
+  }
+
+  export type GetBrochureAggregateType<T extends BrochureAggregateArgs> = {
+        [P in keyof T & keyof AggregateBrochure]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBrochure[P]>
+      : GetScalarType<T[P], AggregateBrochure[P]>
+  }
+
+
+
+
+  export type BrochureGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BrochureWhereInput
+    orderBy?: BrochureOrderByWithAggregationInput | BrochureOrderByWithAggregationInput[]
+    by: BrochureScalarFieldEnum[] | BrochureScalarFieldEnum
+    having?: BrochureScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BrochureCountAggregateInputType | true
+    _avg?: BrochureAvgAggregateInputType
+    _sum?: BrochureSumAggregateInputType
+    _min?: BrochureMinAggregateInputType
+    _max?: BrochureMaxAggregateInputType
+  }
+
+  export type BrochureGroupByOutputType = {
+    id: string
+    tenantId: string
+    originalFileName: string
+    fileSizeMB: string
+    pageCount: number
+    rawTextLength: number
+    projectName: string | null
+    developerName: string | null
+    reraNumber: string | null
+    projectWebsite: string | null
+    contactNumber: string | null
+    city: string | null
+    area: string | null
+    state: string | null
+    landmark: string | null
+    fullAddress: string | null
+    propertyTypes: string[]
+    configurations: string[]
+    totalUnits: number | null
+    totalTowers: number | null
+    totalFloors: number | null
+    sizeMin: number | null
+    sizeMax: number | null
+    sizeUnit: string | null
+    startingPrice: number | null
+    maxPrice: number | null
+    pricePerSqft: number | null
+    priceLabel: string | null
+    paymentPlan: string | null
+    bankApprovals: string[]
+    maintenanceCharge: string | null
+    possessionDate: string | null
+    launchDate: string | null
+    constructionStatus: string | null
+    amenities: string[]
+    specifications: string[]
+    nearbyInfrastructure: string[]
+    usps: string[]
+    minimumBudget: number | null
+    maximumBudget: number | null
+    targetBuyerProfile: string | null
+    preferredLocations: string[]
+    investmentType: string[]
+    keyQualifyingQuestions: string[]
+    confidence: number
+    extractionWarnings: string[]
+    isConfirmed: boolean
+    confirmedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: BrochureCountAggregateOutputType | null
+    _avg: BrochureAvgAggregateOutputType | null
+    _sum: BrochureSumAggregateOutputType | null
+    _min: BrochureMinAggregateOutputType | null
+    _max: BrochureMaxAggregateOutputType | null
+  }
+
+  type GetBrochureGroupByPayload<T extends BrochureGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BrochureGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BrochureGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BrochureGroupByOutputType[P]>
+            : GetScalarType<T[P], BrochureGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BrochureSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    originalFileName?: boolean
+    fileSizeMB?: boolean
+    pageCount?: boolean
+    rawTextLength?: boolean
+    projectName?: boolean
+    developerName?: boolean
+    reraNumber?: boolean
+    projectWebsite?: boolean
+    contactNumber?: boolean
+    city?: boolean
+    area?: boolean
+    state?: boolean
+    landmark?: boolean
+    fullAddress?: boolean
+    propertyTypes?: boolean
+    configurations?: boolean
+    totalUnits?: boolean
+    totalTowers?: boolean
+    totalFloors?: boolean
+    sizeMin?: boolean
+    sizeMax?: boolean
+    sizeUnit?: boolean
+    startingPrice?: boolean
+    maxPrice?: boolean
+    pricePerSqft?: boolean
+    priceLabel?: boolean
+    paymentPlan?: boolean
+    bankApprovals?: boolean
+    maintenanceCharge?: boolean
+    possessionDate?: boolean
+    launchDate?: boolean
+    constructionStatus?: boolean
+    amenities?: boolean
+    specifications?: boolean
+    nearbyInfrastructure?: boolean
+    usps?: boolean
+    minimumBudget?: boolean
+    maximumBudget?: boolean
+    targetBuyerProfile?: boolean
+    preferredLocations?: boolean
+    investmentType?: boolean
+    keyQualifyingQuestions?: boolean
+    confidence?: boolean
+    extractionWarnings?: boolean
+    isConfirmed?: boolean
+    confirmedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    campaigns?: boolean | Brochure$campaignsArgs<ExtArgs>
+    _count?: boolean | BrochureCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["brochure"]>
+
+  export type BrochureSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    originalFileName?: boolean
+    fileSizeMB?: boolean
+    pageCount?: boolean
+    rawTextLength?: boolean
+    projectName?: boolean
+    developerName?: boolean
+    reraNumber?: boolean
+    projectWebsite?: boolean
+    contactNumber?: boolean
+    city?: boolean
+    area?: boolean
+    state?: boolean
+    landmark?: boolean
+    fullAddress?: boolean
+    propertyTypes?: boolean
+    configurations?: boolean
+    totalUnits?: boolean
+    totalTowers?: boolean
+    totalFloors?: boolean
+    sizeMin?: boolean
+    sizeMax?: boolean
+    sizeUnit?: boolean
+    startingPrice?: boolean
+    maxPrice?: boolean
+    pricePerSqft?: boolean
+    priceLabel?: boolean
+    paymentPlan?: boolean
+    bankApprovals?: boolean
+    maintenanceCharge?: boolean
+    possessionDate?: boolean
+    launchDate?: boolean
+    constructionStatus?: boolean
+    amenities?: boolean
+    specifications?: boolean
+    nearbyInfrastructure?: boolean
+    usps?: boolean
+    minimumBudget?: boolean
+    maximumBudget?: boolean
+    targetBuyerProfile?: boolean
+    preferredLocations?: boolean
+    investmentType?: boolean
+    keyQualifyingQuestions?: boolean
+    confidence?: boolean
+    extractionWarnings?: boolean
+    isConfirmed?: boolean
+    confirmedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["brochure"]>
+
+  export type BrochureSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    originalFileName?: boolean
+    fileSizeMB?: boolean
+    pageCount?: boolean
+    rawTextLength?: boolean
+    projectName?: boolean
+    developerName?: boolean
+    reraNumber?: boolean
+    projectWebsite?: boolean
+    contactNumber?: boolean
+    city?: boolean
+    area?: boolean
+    state?: boolean
+    landmark?: boolean
+    fullAddress?: boolean
+    propertyTypes?: boolean
+    configurations?: boolean
+    totalUnits?: boolean
+    totalTowers?: boolean
+    totalFloors?: boolean
+    sizeMin?: boolean
+    sizeMax?: boolean
+    sizeUnit?: boolean
+    startingPrice?: boolean
+    maxPrice?: boolean
+    pricePerSqft?: boolean
+    priceLabel?: boolean
+    paymentPlan?: boolean
+    bankApprovals?: boolean
+    maintenanceCharge?: boolean
+    possessionDate?: boolean
+    launchDate?: boolean
+    constructionStatus?: boolean
+    amenities?: boolean
+    specifications?: boolean
+    nearbyInfrastructure?: boolean
+    usps?: boolean
+    minimumBudget?: boolean
+    maximumBudget?: boolean
+    targetBuyerProfile?: boolean
+    preferredLocations?: boolean
+    investmentType?: boolean
+    keyQualifyingQuestions?: boolean
+    confidence?: boolean
+    extractionWarnings?: boolean
+    isConfirmed?: boolean
+    confirmedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["brochure"]>
+
+  export type BrochureSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    originalFileName?: boolean
+    fileSizeMB?: boolean
+    pageCount?: boolean
+    rawTextLength?: boolean
+    projectName?: boolean
+    developerName?: boolean
+    reraNumber?: boolean
+    projectWebsite?: boolean
+    contactNumber?: boolean
+    city?: boolean
+    area?: boolean
+    state?: boolean
+    landmark?: boolean
+    fullAddress?: boolean
+    propertyTypes?: boolean
+    configurations?: boolean
+    totalUnits?: boolean
+    totalTowers?: boolean
+    totalFloors?: boolean
+    sizeMin?: boolean
+    sizeMax?: boolean
+    sizeUnit?: boolean
+    startingPrice?: boolean
+    maxPrice?: boolean
+    pricePerSqft?: boolean
+    priceLabel?: boolean
+    paymentPlan?: boolean
+    bankApprovals?: boolean
+    maintenanceCharge?: boolean
+    possessionDate?: boolean
+    launchDate?: boolean
+    constructionStatus?: boolean
+    amenities?: boolean
+    specifications?: boolean
+    nearbyInfrastructure?: boolean
+    usps?: boolean
+    minimumBudget?: boolean
+    maximumBudget?: boolean
+    targetBuyerProfile?: boolean
+    preferredLocations?: boolean
+    investmentType?: boolean
+    keyQualifyingQuestions?: boolean
+    confidence?: boolean
+    extractionWarnings?: boolean
+    isConfirmed?: boolean
+    confirmedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type BrochureOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "originalFileName" | "fileSizeMB" | "pageCount" | "rawTextLength" | "projectName" | "developerName" | "reraNumber" | "projectWebsite" | "contactNumber" | "city" | "area" | "state" | "landmark" | "fullAddress" | "propertyTypes" | "configurations" | "totalUnits" | "totalTowers" | "totalFloors" | "sizeMin" | "sizeMax" | "sizeUnit" | "startingPrice" | "maxPrice" | "pricePerSqft" | "priceLabel" | "paymentPlan" | "bankApprovals" | "maintenanceCharge" | "possessionDate" | "launchDate" | "constructionStatus" | "amenities" | "specifications" | "nearbyInfrastructure" | "usps" | "minimumBudget" | "maximumBudget" | "targetBuyerProfile" | "preferredLocations" | "investmentType" | "keyQualifyingQuestions" | "confidence" | "extractionWarnings" | "isConfirmed" | "confirmedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["brochure"]>
+  export type BrochureInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    campaigns?: boolean | Brochure$campaignsArgs<ExtArgs>
+    _count?: boolean | BrochureCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type BrochureIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+  }
+  export type BrochureIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+  }
+
+  export type $BrochurePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Brochure"
+    objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>
+      campaigns: Prisma.$CampaignPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      originalFileName: string
+      fileSizeMB: string
+      pageCount: number
+      rawTextLength: number
+      projectName: string | null
+      developerName: string | null
+      reraNumber: string | null
+      projectWebsite: string | null
+      contactNumber: string | null
+      city: string | null
+      area: string | null
+      state: string | null
+      landmark: string | null
+      fullAddress: string | null
+      propertyTypes: string[]
+      configurations: string[]
+      totalUnits: number | null
+      totalTowers: number | null
+      totalFloors: number | null
+      sizeMin: number | null
+      sizeMax: number | null
+      sizeUnit: string | null
+      startingPrice: number | null
+      maxPrice: number | null
+      pricePerSqft: number | null
+      priceLabel: string | null
+      paymentPlan: string | null
+      bankApprovals: string[]
+      maintenanceCharge: string | null
+      possessionDate: string | null
+      launchDate: string | null
+      constructionStatus: string | null
+      amenities: string[]
+      specifications: string[]
+      nearbyInfrastructure: string[]
+      usps: string[]
+      minimumBudget: number | null
+      maximumBudget: number | null
+      targetBuyerProfile: string | null
+      preferredLocations: string[]
+      investmentType: string[]
+      keyQualifyingQuestions: string[]
+      confidence: number
+      extractionWarnings: string[]
+      isConfirmed: boolean
+      confirmedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["brochure"]>
+    composites: {}
+  }
+
+  type BrochureGetPayload<S extends boolean | null | undefined | BrochureDefaultArgs> = $Result.GetResult<Prisma.$BrochurePayload, S>
+
+  type BrochureCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BrochureFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BrochureCountAggregateInputType | true
+    }
+
+  export interface BrochureDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Brochure'], meta: { name: 'Brochure' } }
+    /**
+     * Find zero or one Brochure that matches the filter.
+     * @param {BrochureFindUniqueArgs} args - Arguments to find a Brochure
+     * @example
+     * // Get one Brochure
+     * const brochure = await prisma.brochure.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BrochureFindUniqueArgs>(args: SelectSubset<T, BrochureFindUniqueArgs<ExtArgs>>): Prisma__BrochureClient<$Result.GetResult<Prisma.$BrochurePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Brochure that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BrochureFindUniqueOrThrowArgs} args - Arguments to find a Brochure
+     * @example
+     * // Get one Brochure
+     * const brochure = await prisma.brochure.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BrochureFindUniqueOrThrowArgs>(args: SelectSubset<T, BrochureFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BrochureClient<$Result.GetResult<Prisma.$BrochurePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Brochure that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BrochureFindFirstArgs} args - Arguments to find a Brochure
+     * @example
+     * // Get one Brochure
+     * const brochure = await prisma.brochure.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BrochureFindFirstArgs>(args?: SelectSubset<T, BrochureFindFirstArgs<ExtArgs>>): Prisma__BrochureClient<$Result.GetResult<Prisma.$BrochurePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Brochure that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BrochureFindFirstOrThrowArgs} args - Arguments to find a Brochure
+     * @example
+     * // Get one Brochure
+     * const brochure = await prisma.brochure.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BrochureFindFirstOrThrowArgs>(args?: SelectSubset<T, BrochureFindFirstOrThrowArgs<ExtArgs>>): Prisma__BrochureClient<$Result.GetResult<Prisma.$BrochurePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Brochures that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BrochureFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Brochures
+     * const brochures = await prisma.brochure.findMany()
+     * 
+     * // Get first 10 Brochures
+     * const brochures = await prisma.brochure.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const brochureWithIdOnly = await prisma.brochure.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BrochureFindManyArgs>(args?: SelectSubset<T, BrochureFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BrochurePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Brochure.
+     * @param {BrochureCreateArgs} args - Arguments to create a Brochure.
+     * @example
+     * // Create one Brochure
+     * const Brochure = await prisma.brochure.create({
+     *   data: {
+     *     // ... data to create a Brochure
+     *   }
+     * })
+     * 
+     */
+    create<T extends BrochureCreateArgs>(args: SelectSubset<T, BrochureCreateArgs<ExtArgs>>): Prisma__BrochureClient<$Result.GetResult<Prisma.$BrochurePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Brochures.
+     * @param {BrochureCreateManyArgs} args - Arguments to create many Brochures.
+     * @example
+     * // Create many Brochures
+     * const brochure = await prisma.brochure.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BrochureCreateManyArgs>(args?: SelectSubset<T, BrochureCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Brochures and returns the data saved in the database.
+     * @param {BrochureCreateManyAndReturnArgs} args - Arguments to create many Brochures.
+     * @example
+     * // Create many Brochures
+     * const brochure = await prisma.brochure.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Brochures and only return the `id`
+     * const brochureWithIdOnly = await prisma.brochure.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BrochureCreateManyAndReturnArgs>(args?: SelectSubset<T, BrochureCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BrochurePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Brochure.
+     * @param {BrochureDeleteArgs} args - Arguments to delete one Brochure.
+     * @example
+     * // Delete one Brochure
+     * const Brochure = await prisma.brochure.delete({
+     *   where: {
+     *     // ... filter to delete one Brochure
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BrochureDeleteArgs>(args: SelectSubset<T, BrochureDeleteArgs<ExtArgs>>): Prisma__BrochureClient<$Result.GetResult<Prisma.$BrochurePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Brochure.
+     * @param {BrochureUpdateArgs} args - Arguments to update one Brochure.
+     * @example
+     * // Update one Brochure
+     * const brochure = await prisma.brochure.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BrochureUpdateArgs>(args: SelectSubset<T, BrochureUpdateArgs<ExtArgs>>): Prisma__BrochureClient<$Result.GetResult<Prisma.$BrochurePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Brochures.
+     * @param {BrochureDeleteManyArgs} args - Arguments to filter Brochures to delete.
+     * @example
+     * // Delete a few Brochures
+     * const { count } = await prisma.brochure.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BrochureDeleteManyArgs>(args?: SelectSubset<T, BrochureDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Brochures.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BrochureUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Brochures
+     * const brochure = await prisma.brochure.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BrochureUpdateManyArgs>(args: SelectSubset<T, BrochureUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Brochures and returns the data updated in the database.
+     * @param {BrochureUpdateManyAndReturnArgs} args - Arguments to update many Brochures.
+     * @example
+     * // Update many Brochures
+     * const brochure = await prisma.brochure.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Brochures and only return the `id`
+     * const brochureWithIdOnly = await prisma.brochure.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BrochureUpdateManyAndReturnArgs>(args: SelectSubset<T, BrochureUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BrochurePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Brochure.
+     * @param {BrochureUpsertArgs} args - Arguments to update or create a Brochure.
+     * @example
+     * // Update or create a Brochure
+     * const brochure = await prisma.brochure.upsert({
+     *   create: {
+     *     // ... data to create a Brochure
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Brochure we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BrochureUpsertArgs>(args: SelectSubset<T, BrochureUpsertArgs<ExtArgs>>): Prisma__BrochureClient<$Result.GetResult<Prisma.$BrochurePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Brochures.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BrochureCountArgs} args - Arguments to filter Brochures to count.
+     * @example
+     * // Count the number of Brochures
+     * const count = await prisma.brochure.count({
+     *   where: {
+     *     // ... the filter for the Brochures we want to count
+     *   }
+     * })
+    **/
+    count<T extends BrochureCountArgs>(
+      args?: Subset<T, BrochureCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BrochureCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Brochure.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BrochureAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BrochureAggregateArgs>(args: Subset<T, BrochureAggregateArgs>): Prisma.PrismaPromise<GetBrochureAggregateType<T>>
+
+    /**
+     * Group by Brochure.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BrochureGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BrochureGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BrochureGroupByArgs['orderBy'] }
+        : { orderBy?: BrochureGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BrochureGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBrochureGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Brochure model
+   */
+  readonly fields: BrochureFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Brochure.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BrochureClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    campaigns<T extends Brochure$campaignsArgs<ExtArgs> = {}>(args?: Subset<T, Brochure$campaignsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Brochure model
+   */
+  interface BrochureFieldRefs {
+    readonly id: FieldRef<"Brochure", 'String'>
+    readonly tenantId: FieldRef<"Brochure", 'String'>
+    readonly originalFileName: FieldRef<"Brochure", 'String'>
+    readonly fileSizeMB: FieldRef<"Brochure", 'String'>
+    readonly pageCount: FieldRef<"Brochure", 'Int'>
+    readonly rawTextLength: FieldRef<"Brochure", 'Int'>
+    readonly projectName: FieldRef<"Brochure", 'String'>
+    readonly developerName: FieldRef<"Brochure", 'String'>
+    readonly reraNumber: FieldRef<"Brochure", 'String'>
+    readonly projectWebsite: FieldRef<"Brochure", 'String'>
+    readonly contactNumber: FieldRef<"Brochure", 'String'>
+    readonly city: FieldRef<"Brochure", 'String'>
+    readonly area: FieldRef<"Brochure", 'String'>
+    readonly state: FieldRef<"Brochure", 'String'>
+    readonly landmark: FieldRef<"Brochure", 'String'>
+    readonly fullAddress: FieldRef<"Brochure", 'String'>
+    readonly propertyTypes: FieldRef<"Brochure", 'String[]'>
+    readonly configurations: FieldRef<"Brochure", 'String[]'>
+    readonly totalUnits: FieldRef<"Brochure", 'Int'>
+    readonly totalTowers: FieldRef<"Brochure", 'Int'>
+    readonly totalFloors: FieldRef<"Brochure", 'Int'>
+    readonly sizeMin: FieldRef<"Brochure", 'Float'>
+    readonly sizeMax: FieldRef<"Brochure", 'Float'>
+    readonly sizeUnit: FieldRef<"Brochure", 'String'>
+    readonly startingPrice: FieldRef<"Brochure", 'Float'>
+    readonly maxPrice: FieldRef<"Brochure", 'Float'>
+    readonly pricePerSqft: FieldRef<"Brochure", 'Float'>
+    readonly priceLabel: FieldRef<"Brochure", 'String'>
+    readonly paymentPlan: FieldRef<"Brochure", 'String'>
+    readonly bankApprovals: FieldRef<"Brochure", 'String[]'>
+    readonly maintenanceCharge: FieldRef<"Brochure", 'String'>
+    readonly possessionDate: FieldRef<"Brochure", 'String'>
+    readonly launchDate: FieldRef<"Brochure", 'String'>
+    readonly constructionStatus: FieldRef<"Brochure", 'String'>
+    readonly amenities: FieldRef<"Brochure", 'String[]'>
+    readonly specifications: FieldRef<"Brochure", 'String[]'>
+    readonly nearbyInfrastructure: FieldRef<"Brochure", 'String[]'>
+    readonly usps: FieldRef<"Brochure", 'String[]'>
+    readonly minimumBudget: FieldRef<"Brochure", 'Float'>
+    readonly maximumBudget: FieldRef<"Brochure", 'Float'>
+    readonly targetBuyerProfile: FieldRef<"Brochure", 'String'>
+    readonly preferredLocations: FieldRef<"Brochure", 'String[]'>
+    readonly investmentType: FieldRef<"Brochure", 'String[]'>
+    readonly keyQualifyingQuestions: FieldRef<"Brochure", 'String[]'>
+    readonly confidence: FieldRef<"Brochure", 'Float'>
+    readonly extractionWarnings: FieldRef<"Brochure", 'String[]'>
+    readonly isConfirmed: FieldRef<"Brochure", 'Boolean'>
+    readonly confirmedAt: FieldRef<"Brochure", 'DateTime'>
+    readonly createdAt: FieldRef<"Brochure", 'DateTime'>
+    readonly updatedAt: FieldRef<"Brochure", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Brochure findUnique
+   */
+  export type BrochureFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brochure
+     */
+    select?: BrochureSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brochure
+     */
+    omit?: BrochureOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrochureInclude<ExtArgs> | null
+    /**
+     * Filter, which Brochure to fetch.
+     */
+    where: BrochureWhereUniqueInput
+  }
+
+  /**
+   * Brochure findUniqueOrThrow
+   */
+  export type BrochureFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brochure
+     */
+    select?: BrochureSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brochure
+     */
+    omit?: BrochureOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrochureInclude<ExtArgs> | null
+    /**
+     * Filter, which Brochure to fetch.
+     */
+    where: BrochureWhereUniqueInput
+  }
+
+  /**
+   * Brochure findFirst
+   */
+  export type BrochureFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brochure
+     */
+    select?: BrochureSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brochure
+     */
+    omit?: BrochureOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrochureInclude<ExtArgs> | null
+    /**
+     * Filter, which Brochure to fetch.
+     */
+    where?: BrochureWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Brochures to fetch.
+     */
+    orderBy?: BrochureOrderByWithRelationInput | BrochureOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Brochures.
+     */
+    cursor?: BrochureWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Brochures from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Brochures.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Brochures.
+     */
+    distinct?: BrochureScalarFieldEnum | BrochureScalarFieldEnum[]
+  }
+
+  /**
+   * Brochure findFirstOrThrow
+   */
+  export type BrochureFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brochure
+     */
+    select?: BrochureSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brochure
+     */
+    omit?: BrochureOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrochureInclude<ExtArgs> | null
+    /**
+     * Filter, which Brochure to fetch.
+     */
+    where?: BrochureWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Brochures to fetch.
+     */
+    orderBy?: BrochureOrderByWithRelationInput | BrochureOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Brochures.
+     */
+    cursor?: BrochureWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Brochures from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Brochures.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Brochures.
+     */
+    distinct?: BrochureScalarFieldEnum | BrochureScalarFieldEnum[]
+  }
+
+  /**
+   * Brochure findMany
+   */
+  export type BrochureFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brochure
+     */
+    select?: BrochureSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brochure
+     */
+    omit?: BrochureOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrochureInclude<ExtArgs> | null
+    /**
+     * Filter, which Brochures to fetch.
+     */
+    where?: BrochureWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Brochures to fetch.
+     */
+    orderBy?: BrochureOrderByWithRelationInput | BrochureOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Brochures.
+     */
+    cursor?: BrochureWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Brochures from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Brochures.
+     */
+    skip?: number
+    distinct?: BrochureScalarFieldEnum | BrochureScalarFieldEnum[]
+  }
+
+  /**
+   * Brochure create
+   */
+  export type BrochureCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brochure
+     */
+    select?: BrochureSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brochure
+     */
+    omit?: BrochureOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrochureInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Brochure.
+     */
+    data: XOR<BrochureCreateInput, BrochureUncheckedCreateInput>
+  }
+
+  /**
+   * Brochure createMany
+   */
+  export type BrochureCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Brochures.
+     */
+    data: BrochureCreateManyInput | BrochureCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Brochure createManyAndReturn
+   */
+  export type BrochureCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brochure
+     */
+    select?: BrochureSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brochure
+     */
+    omit?: BrochureOmit<ExtArgs> | null
+    /**
+     * The data used to create many Brochures.
+     */
+    data: BrochureCreateManyInput | BrochureCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrochureIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Brochure update
+   */
+  export type BrochureUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brochure
+     */
+    select?: BrochureSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brochure
+     */
+    omit?: BrochureOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrochureInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Brochure.
+     */
+    data: XOR<BrochureUpdateInput, BrochureUncheckedUpdateInput>
+    /**
+     * Choose, which Brochure to update.
+     */
+    where: BrochureWhereUniqueInput
+  }
+
+  /**
+   * Brochure updateMany
+   */
+  export type BrochureUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Brochures.
+     */
+    data: XOR<BrochureUpdateManyMutationInput, BrochureUncheckedUpdateManyInput>
+    /**
+     * Filter which Brochures to update
+     */
+    where?: BrochureWhereInput
+    /**
+     * Limit how many Brochures to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Brochure updateManyAndReturn
+   */
+  export type BrochureUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brochure
+     */
+    select?: BrochureSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brochure
+     */
+    omit?: BrochureOmit<ExtArgs> | null
+    /**
+     * The data used to update Brochures.
+     */
+    data: XOR<BrochureUpdateManyMutationInput, BrochureUncheckedUpdateManyInput>
+    /**
+     * Filter which Brochures to update
+     */
+    where?: BrochureWhereInput
+    /**
+     * Limit how many Brochures to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrochureIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Brochure upsert
+   */
+  export type BrochureUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brochure
+     */
+    select?: BrochureSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brochure
+     */
+    omit?: BrochureOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrochureInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Brochure to update in case it exists.
+     */
+    where: BrochureWhereUniqueInput
+    /**
+     * In case the Brochure found by the `where` argument doesn't exist, create a new Brochure with this data.
+     */
+    create: XOR<BrochureCreateInput, BrochureUncheckedCreateInput>
+    /**
+     * In case the Brochure was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BrochureUpdateInput, BrochureUncheckedUpdateInput>
+  }
+
+  /**
+   * Brochure delete
+   */
+  export type BrochureDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brochure
+     */
+    select?: BrochureSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brochure
+     */
+    omit?: BrochureOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrochureInclude<ExtArgs> | null
+    /**
+     * Filter which Brochure to delete.
+     */
+    where: BrochureWhereUniqueInput
+  }
+
+  /**
+   * Brochure deleteMany
+   */
+  export type BrochureDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Brochures to delete
+     */
+    where?: BrochureWhereInput
+    /**
+     * Limit how many Brochures to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Brochure.campaigns
+   */
+  export type Brochure$campaignsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Campaign
+     */
+    select?: CampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Campaign
+     */
+    omit?: CampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignInclude<ExtArgs> | null
+    where?: CampaignWhereInput
+    orderBy?: CampaignOrderByWithRelationInput | CampaignOrderByWithRelationInput[]
+    cursor?: CampaignWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CampaignScalarFieldEnum | CampaignScalarFieldEnum[]
+  }
+
+  /**
+   * Brochure without action
+   */
+  export type BrochureDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brochure
+     */
+    select?: BrochureSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brochure
+     */
+    omit?: BrochureOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrochureInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Campaign
    */
 
@@ -4997,6 +6868,7 @@ export namespace Prisma {
     status: $Enums.CampaignStatus | null
     tenantId: string | null
     assistantId: string | null
+    brochureId: string | null
     totalLeads: number | null
     calledLeads: number | null
     successLeads: number | null
@@ -5014,6 +6886,7 @@ export namespace Prisma {
     status: $Enums.CampaignStatus | null
     tenantId: string | null
     assistantId: string | null
+    brochureId: string | null
     totalLeads: number | null
     calledLeads: number | null
     successLeads: number | null
@@ -5031,6 +6904,7 @@ export namespace Prisma {
     status: number
     tenantId: number
     assistantId: number
+    brochureId: number
     totalLeads: number
     calledLeads: number
     successLeads: number
@@ -5064,6 +6938,7 @@ export namespace Prisma {
     status?: true
     tenantId?: true
     assistantId?: true
+    brochureId?: true
     totalLeads?: true
     calledLeads?: true
     successLeads?: true
@@ -5081,6 +6956,7 @@ export namespace Prisma {
     status?: true
     tenantId?: true
     assistantId?: true
+    brochureId?: true
     totalLeads?: true
     calledLeads?: true
     successLeads?: true
@@ -5098,6 +6974,7 @@ export namespace Prisma {
     status?: true
     tenantId?: true
     assistantId?: true
+    brochureId?: true
     totalLeads?: true
     calledLeads?: true
     successLeads?: true
@@ -5202,6 +7079,7 @@ export namespace Prisma {
     status: $Enums.CampaignStatus
     tenantId: string
     assistantId: string
+    brochureId: string | null
     totalLeads: number
     calledLeads: number
     successLeads: number
@@ -5238,6 +7116,7 @@ export namespace Prisma {
     status?: boolean
     tenantId?: boolean
     assistantId?: boolean
+    brochureId?: boolean
     totalLeads?: boolean
     calledLeads?: boolean
     successLeads?: boolean
@@ -5248,6 +7127,7 @@ export namespace Prisma {
     completedAt?: boolean
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     assistant?: boolean | AssistantDefaultArgs<ExtArgs>
+    brochure?: boolean | Campaign$brochureArgs<ExtArgs>
     leads?: boolean | Campaign$leadsArgs<ExtArgs>
     calls?: boolean | Campaign$callsArgs<ExtArgs>
     _count?: boolean | CampaignCountOutputTypeDefaultArgs<ExtArgs>
@@ -5260,6 +7140,7 @@ export namespace Prisma {
     status?: boolean
     tenantId?: boolean
     assistantId?: boolean
+    brochureId?: boolean
     totalLeads?: boolean
     calledLeads?: boolean
     successLeads?: boolean
@@ -5270,6 +7151,7 @@ export namespace Prisma {
     completedAt?: boolean
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     assistant?: boolean | AssistantDefaultArgs<ExtArgs>
+    brochure?: boolean | Campaign$brochureArgs<ExtArgs>
   }, ExtArgs["result"]["campaign"]>
 
   export type CampaignSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5279,6 +7161,7 @@ export namespace Prisma {
     status?: boolean
     tenantId?: boolean
     assistantId?: boolean
+    brochureId?: boolean
     totalLeads?: boolean
     calledLeads?: boolean
     successLeads?: boolean
@@ -5289,6 +7172,7 @@ export namespace Prisma {
     completedAt?: boolean
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     assistant?: boolean | AssistantDefaultArgs<ExtArgs>
+    brochure?: boolean | Campaign$brochureArgs<ExtArgs>
   }, ExtArgs["result"]["campaign"]>
 
   export type CampaignSelectScalar = {
@@ -5298,6 +7182,7 @@ export namespace Prisma {
     status?: boolean
     tenantId?: boolean
     assistantId?: boolean
+    brochureId?: boolean
     totalLeads?: boolean
     calledLeads?: boolean
     successLeads?: boolean
@@ -5308,10 +7193,11 @@ export namespace Prisma {
     completedAt?: boolean
   }
 
-  export type CampaignOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "status" | "tenantId" | "assistantId" | "totalLeads" | "calledLeads" | "successLeads" | "failedLeads" | "createdAt" | "updatedAt" | "startedAt" | "completedAt", ExtArgs["result"]["campaign"]>
+  export type CampaignOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "status" | "tenantId" | "assistantId" | "brochureId" | "totalLeads" | "calledLeads" | "successLeads" | "failedLeads" | "createdAt" | "updatedAt" | "startedAt" | "completedAt", ExtArgs["result"]["campaign"]>
   export type CampaignInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     assistant?: boolean | AssistantDefaultArgs<ExtArgs>
+    brochure?: boolean | Campaign$brochureArgs<ExtArgs>
     leads?: boolean | Campaign$leadsArgs<ExtArgs>
     calls?: boolean | Campaign$callsArgs<ExtArgs>
     _count?: boolean | CampaignCountOutputTypeDefaultArgs<ExtArgs>
@@ -5319,10 +7205,12 @@ export namespace Prisma {
   export type CampaignIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     assistant?: boolean | AssistantDefaultArgs<ExtArgs>
+    brochure?: boolean | Campaign$brochureArgs<ExtArgs>
   }
   export type CampaignIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     assistant?: boolean | AssistantDefaultArgs<ExtArgs>
+    brochure?: boolean | Campaign$brochureArgs<ExtArgs>
   }
 
   export type $CampaignPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5330,6 +7218,7 @@ export namespace Prisma {
     objects: {
       tenant: Prisma.$TenantPayload<ExtArgs>
       assistant: Prisma.$AssistantPayload<ExtArgs>
+      brochure: Prisma.$BrochurePayload<ExtArgs> | null
       leads: Prisma.$LeadPayload<ExtArgs>[]
       calls: Prisma.$CallPayload<ExtArgs>[]
     }
@@ -5340,6 +7229,7 @@ export namespace Prisma {
       status: $Enums.CampaignStatus
       tenantId: string
       assistantId: string
+      brochureId: string | null
       totalLeads: number
       calledLeads: number
       successLeads: number
@@ -5744,6 +7634,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     assistant<T extends AssistantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AssistantDefaultArgs<ExtArgs>>): Prisma__AssistantClient<$Result.GetResult<Prisma.$AssistantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    brochure<T extends Campaign$brochureArgs<ExtArgs> = {}>(args?: Subset<T, Campaign$brochureArgs<ExtArgs>>): Prisma__BrochureClient<$Result.GetResult<Prisma.$BrochurePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     leads<T extends Campaign$leadsArgs<ExtArgs> = {}>(args?: Subset<T, Campaign$leadsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     calls<T extends Campaign$callsArgs<ExtArgs> = {}>(args?: Subset<T, Campaign$callsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -5781,6 +7672,7 @@ export namespace Prisma {
     readonly status: FieldRef<"Campaign", 'CampaignStatus'>
     readonly tenantId: FieldRef<"Campaign", 'String'>
     readonly assistantId: FieldRef<"Campaign", 'String'>
+    readonly brochureId: FieldRef<"Campaign", 'String'>
     readonly totalLeads: FieldRef<"Campaign", 'Int'>
     readonly calledLeads: FieldRef<"Campaign", 'Int'>
     readonly successLeads: FieldRef<"Campaign", 'Int'>
@@ -6182,6 +8074,25 @@ export namespace Prisma {
      * Limit how many Campaigns to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Campaign.brochure
+   */
+  export type Campaign$brochureArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brochure
+     */
+    select?: BrochureSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brochure
+     */
+    omit?: BrochureOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrochureInclude<ExtArgs> | null
+    where?: BrochureWhereInput
   }
 
   /**
@@ -7487,6 +9398,7 @@ export namespace Prisma {
     duration: number
     recording: number
     transcript: number
+    transcriptMessages: number
     summary: number
     outcome: number
     startedAt: number
@@ -7551,6 +9463,7 @@ export namespace Prisma {
     duration?: true
     recording?: true
     transcript?: true
+    transcriptMessages?: true
     summary?: true
     outcome?: true
     startedAt?: true
@@ -7656,6 +9569,7 @@ export namespace Prisma {
     duration: number | null
     recording: string | null
     transcript: string | null
+    transcriptMessages: JsonValue | null
     summary: string | null
     outcome: string | null
     startedAt: Date | null
@@ -7693,6 +9607,7 @@ export namespace Prisma {
     duration?: boolean
     recording?: boolean
     transcript?: boolean
+    transcriptMessages?: boolean
     summary?: boolean
     outcome?: boolean
     startedAt?: boolean
@@ -7714,6 +9629,7 @@ export namespace Prisma {
     duration?: boolean
     recording?: boolean
     transcript?: boolean
+    transcriptMessages?: boolean
     summary?: boolean
     outcome?: boolean
     startedAt?: boolean
@@ -7735,6 +9651,7 @@ export namespace Prisma {
     duration?: boolean
     recording?: boolean
     transcript?: boolean
+    transcriptMessages?: boolean
     summary?: boolean
     outcome?: boolean
     startedAt?: boolean
@@ -7756,6 +9673,7 @@ export namespace Prisma {
     duration?: boolean
     recording?: boolean
     transcript?: boolean
+    transcriptMessages?: boolean
     summary?: boolean
     outcome?: boolean
     startedAt?: boolean
@@ -7764,7 +9682,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type CallOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "vapiCallId" | "tenantId" | "campaignId" | "leadId" | "status" | "duration" | "recording" | "transcript" | "summary" | "outcome" | "startedAt" | "endedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["call"]>
+  export type CallOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "vapiCallId" | "tenantId" | "campaignId" | "leadId" | "status" | "duration" | "recording" | "transcript" | "transcriptMessages" | "summary" | "outcome" | "startedAt" | "endedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["call"]>
   export type CallInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
@@ -7798,6 +9716,7 @@ export namespace Prisma {
       duration: number | null
       recording: string | null
       transcript: string | null
+      transcriptMessages: Prisma.JsonValue | null
       summary: string | null
       outcome: string | null
       startedAt: Date | null
@@ -8239,6 +10158,7 @@ export namespace Prisma {
     readonly duration: FieldRef<"Call", 'Int'>
     readonly recording: FieldRef<"Call", 'String'>
     readonly transcript: FieldRef<"Call", 'String'>
+    readonly transcriptMessages: FieldRef<"Call", 'Json'>
     readonly summary: FieldRef<"Call", 'String'>
     readonly outcome: FieldRef<"Call", 'String'>
     readonly startedAt: FieldRef<"Call", 'DateTime'>
@@ -8713,6 +10633,62 @@ export namespace Prisma {
   export type AssistantScalarFieldEnum = (typeof AssistantScalarFieldEnum)[keyof typeof AssistantScalarFieldEnum]
 
 
+  export const BrochureScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    originalFileName: 'originalFileName',
+    fileSizeMB: 'fileSizeMB',
+    pageCount: 'pageCount',
+    rawTextLength: 'rawTextLength',
+    projectName: 'projectName',
+    developerName: 'developerName',
+    reraNumber: 'reraNumber',
+    projectWebsite: 'projectWebsite',
+    contactNumber: 'contactNumber',
+    city: 'city',
+    area: 'area',
+    state: 'state',
+    landmark: 'landmark',
+    fullAddress: 'fullAddress',
+    propertyTypes: 'propertyTypes',
+    configurations: 'configurations',
+    totalUnits: 'totalUnits',
+    totalTowers: 'totalTowers',
+    totalFloors: 'totalFloors',
+    sizeMin: 'sizeMin',
+    sizeMax: 'sizeMax',
+    sizeUnit: 'sizeUnit',
+    startingPrice: 'startingPrice',
+    maxPrice: 'maxPrice',
+    pricePerSqft: 'pricePerSqft',
+    priceLabel: 'priceLabel',
+    paymentPlan: 'paymentPlan',
+    bankApprovals: 'bankApprovals',
+    maintenanceCharge: 'maintenanceCharge',
+    possessionDate: 'possessionDate',
+    launchDate: 'launchDate',
+    constructionStatus: 'constructionStatus',
+    amenities: 'amenities',
+    specifications: 'specifications',
+    nearbyInfrastructure: 'nearbyInfrastructure',
+    usps: 'usps',
+    minimumBudget: 'minimumBudget',
+    maximumBudget: 'maximumBudget',
+    targetBuyerProfile: 'targetBuyerProfile',
+    preferredLocations: 'preferredLocations',
+    investmentType: 'investmentType',
+    keyQualifyingQuestions: 'keyQualifyingQuestions',
+    confidence: 'confidence',
+    extractionWarnings: 'extractionWarnings',
+    isConfirmed: 'isConfirmed',
+    confirmedAt: 'confirmedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type BrochureScalarFieldEnum = (typeof BrochureScalarFieldEnum)[keyof typeof BrochureScalarFieldEnum]
+
+
   export const CampaignScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -8720,6 +10696,7 @@ export namespace Prisma {
     status: 'status',
     tenantId: 'tenantId',
     assistantId: 'assistantId',
+    brochureId: 'brochureId',
     totalLeads: 'totalLeads',
     calledLeads: 'calledLeads',
     successLeads: 'successLeads',
@@ -8760,6 +10737,7 @@ export namespace Prisma {
     duration: 'duration',
     recording: 'recording',
     transcript: 'transcript',
+    transcriptMessages: 'transcriptMessages',
     summary: 'summary',
     outcome: 'outcome',
     startedAt: 'startedAt',
@@ -8888,20 +10866,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'CampaignStatus'
-   */
-  export type EnumCampaignStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignStatus'>
-    
-
-
-  /**
-   * Reference to a field of type 'CampaignStatus[]'
-   */
-  export type ListEnumCampaignStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignStatus[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -8912,6 +10876,34 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'CampaignStatus'
+   */
+  export type EnumCampaignStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'CampaignStatus[]'
+   */
+  export type ListEnumCampaignStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignStatus[]'>
     
 
 
@@ -8941,20 +10933,6 @@ export namespace Prisma {
    */
   export type ListEnumCallStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CallStatus[]'>
     
-
-
-  /**
-   * Reference to a field of type 'Float'
-   */
-  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-  /**
-   * Reference to a field of type 'Float[]'
-   */
-  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
-    
   /**
    * Deep Input Types
    */
@@ -8976,6 +10954,7 @@ export namespace Prisma {
     leads?: LeadListRelationFilter
     calls?: CallListRelationFilter
     assistants?: AssistantListRelationFilter
+    brochures?: BrochureListRelationFilter
   }
 
   export type TenantOrderByWithRelationInput = {
@@ -8991,6 +10970,7 @@ export namespace Prisma {
     leads?: LeadOrderByRelationAggregateInput
     calls?: CallOrderByRelationAggregateInput
     assistants?: AssistantOrderByRelationAggregateInput
+    brochures?: BrochureOrderByRelationAggregateInput
   }
 
   export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -9009,6 +10989,7 @@ export namespace Prisma {
     leads?: LeadListRelationFilter
     calls?: CallListRelationFilter
     assistants?: AssistantListRelationFilter
+    brochures?: BrochureListRelationFilter
   }, "id" | "email" | "apiKey">
 
   export type TenantOrderByWithAggregationInput = {
@@ -9175,6 +11156,291 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Assistant"> | Date | string
   }
 
+  export type BrochureWhereInput = {
+    AND?: BrochureWhereInput | BrochureWhereInput[]
+    OR?: BrochureWhereInput[]
+    NOT?: BrochureWhereInput | BrochureWhereInput[]
+    id?: StringFilter<"Brochure"> | string
+    tenantId?: StringFilter<"Brochure"> | string
+    originalFileName?: StringFilter<"Brochure"> | string
+    fileSizeMB?: StringFilter<"Brochure"> | string
+    pageCount?: IntFilter<"Brochure"> | number
+    rawTextLength?: IntFilter<"Brochure"> | number
+    projectName?: StringNullableFilter<"Brochure"> | string | null
+    developerName?: StringNullableFilter<"Brochure"> | string | null
+    reraNumber?: StringNullableFilter<"Brochure"> | string | null
+    projectWebsite?: StringNullableFilter<"Brochure"> | string | null
+    contactNumber?: StringNullableFilter<"Brochure"> | string | null
+    city?: StringNullableFilter<"Brochure"> | string | null
+    area?: StringNullableFilter<"Brochure"> | string | null
+    state?: StringNullableFilter<"Brochure"> | string | null
+    landmark?: StringNullableFilter<"Brochure"> | string | null
+    fullAddress?: StringNullableFilter<"Brochure"> | string | null
+    propertyTypes?: StringNullableListFilter<"Brochure">
+    configurations?: StringNullableListFilter<"Brochure">
+    totalUnits?: IntNullableFilter<"Brochure"> | number | null
+    totalTowers?: IntNullableFilter<"Brochure"> | number | null
+    totalFloors?: IntNullableFilter<"Brochure"> | number | null
+    sizeMin?: FloatNullableFilter<"Brochure"> | number | null
+    sizeMax?: FloatNullableFilter<"Brochure"> | number | null
+    sizeUnit?: StringNullableFilter<"Brochure"> | string | null
+    startingPrice?: FloatNullableFilter<"Brochure"> | number | null
+    maxPrice?: FloatNullableFilter<"Brochure"> | number | null
+    pricePerSqft?: FloatNullableFilter<"Brochure"> | number | null
+    priceLabel?: StringNullableFilter<"Brochure"> | string | null
+    paymentPlan?: StringNullableFilter<"Brochure"> | string | null
+    bankApprovals?: StringNullableListFilter<"Brochure">
+    maintenanceCharge?: StringNullableFilter<"Brochure"> | string | null
+    possessionDate?: StringNullableFilter<"Brochure"> | string | null
+    launchDate?: StringNullableFilter<"Brochure"> | string | null
+    constructionStatus?: StringNullableFilter<"Brochure"> | string | null
+    amenities?: StringNullableListFilter<"Brochure">
+    specifications?: StringNullableListFilter<"Brochure">
+    nearbyInfrastructure?: StringNullableListFilter<"Brochure">
+    usps?: StringNullableListFilter<"Brochure">
+    minimumBudget?: FloatNullableFilter<"Brochure"> | number | null
+    maximumBudget?: FloatNullableFilter<"Brochure"> | number | null
+    targetBuyerProfile?: StringNullableFilter<"Brochure"> | string | null
+    preferredLocations?: StringNullableListFilter<"Brochure">
+    investmentType?: StringNullableListFilter<"Brochure">
+    keyQualifyingQuestions?: StringNullableListFilter<"Brochure">
+    confidence?: FloatFilter<"Brochure"> | number
+    extractionWarnings?: StringNullableListFilter<"Brochure">
+    isConfirmed?: BoolFilter<"Brochure"> | boolean
+    confirmedAt?: DateTimeNullableFilter<"Brochure"> | Date | string | null
+    createdAt?: DateTimeFilter<"Brochure"> | Date | string
+    updatedAt?: DateTimeFilter<"Brochure"> | Date | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
+    campaigns?: CampaignListRelationFilter
+  }
+
+  export type BrochureOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    originalFileName?: SortOrder
+    fileSizeMB?: SortOrder
+    pageCount?: SortOrder
+    rawTextLength?: SortOrder
+    projectName?: SortOrderInput | SortOrder
+    developerName?: SortOrderInput | SortOrder
+    reraNumber?: SortOrderInput | SortOrder
+    projectWebsite?: SortOrderInput | SortOrder
+    contactNumber?: SortOrderInput | SortOrder
+    city?: SortOrderInput | SortOrder
+    area?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
+    landmark?: SortOrderInput | SortOrder
+    fullAddress?: SortOrderInput | SortOrder
+    propertyTypes?: SortOrder
+    configurations?: SortOrder
+    totalUnits?: SortOrderInput | SortOrder
+    totalTowers?: SortOrderInput | SortOrder
+    totalFloors?: SortOrderInput | SortOrder
+    sizeMin?: SortOrderInput | SortOrder
+    sizeMax?: SortOrderInput | SortOrder
+    sizeUnit?: SortOrderInput | SortOrder
+    startingPrice?: SortOrderInput | SortOrder
+    maxPrice?: SortOrderInput | SortOrder
+    pricePerSqft?: SortOrderInput | SortOrder
+    priceLabel?: SortOrderInput | SortOrder
+    paymentPlan?: SortOrderInput | SortOrder
+    bankApprovals?: SortOrder
+    maintenanceCharge?: SortOrderInput | SortOrder
+    possessionDate?: SortOrderInput | SortOrder
+    launchDate?: SortOrderInput | SortOrder
+    constructionStatus?: SortOrderInput | SortOrder
+    amenities?: SortOrder
+    specifications?: SortOrder
+    nearbyInfrastructure?: SortOrder
+    usps?: SortOrder
+    minimumBudget?: SortOrderInput | SortOrder
+    maximumBudget?: SortOrderInput | SortOrder
+    targetBuyerProfile?: SortOrderInput | SortOrder
+    preferredLocations?: SortOrder
+    investmentType?: SortOrder
+    keyQualifyingQuestions?: SortOrder
+    confidence?: SortOrder
+    extractionWarnings?: SortOrder
+    isConfirmed?: SortOrder
+    confirmedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    tenant?: TenantOrderByWithRelationInput
+    campaigns?: CampaignOrderByRelationAggregateInput
+  }
+
+  export type BrochureWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: BrochureWhereInput | BrochureWhereInput[]
+    OR?: BrochureWhereInput[]
+    NOT?: BrochureWhereInput | BrochureWhereInput[]
+    tenantId?: StringFilter<"Brochure"> | string
+    originalFileName?: StringFilter<"Brochure"> | string
+    fileSizeMB?: StringFilter<"Brochure"> | string
+    pageCount?: IntFilter<"Brochure"> | number
+    rawTextLength?: IntFilter<"Brochure"> | number
+    projectName?: StringNullableFilter<"Brochure"> | string | null
+    developerName?: StringNullableFilter<"Brochure"> | string | null
+    reraNumber?: StringNullableFilter<"Brochure"> | string | null
+    projectWebsite?: StringNullableFilter<"Brochure"> | string | null
+    contactNumber?: StringNullableFilter<"Brochure"> | string | null
+    city?: StringNullableFilter<"Brochure"> | string | null
+    area?: StringNullableFilter<"Brochure"> | string | null
+    state?: StringNullableFilter<"Brochure"> | string | null
+    landmark?: StringNullableFilter<"Brochure"> | string | null
+    fullAddress?: StringNullableFilter<"Brochure"> | string | null
+    propertyTypes?: StringNullableListFilter<"Brochure">
+    configurations?: StringNullableListFilter<"Brochure">
+    totalUnits?: IntNullableFilter<"Brochure"> | number | null
+    totalTowers?: IntNullableFilter<"Brochure"> | number | null
+    totalFloors?: IntNullableFilter<"Brochure"> | number | null
+    sizeMin?: FloatNullableFilter<"Brochure"> | number | null
+    sizeMax?: FloatNullableFilter<"Brochure"> | number | null
+    sizeUnit?: StringNullableFilter<"Brochure"> | string | null
+    startingPrice?: FloatNullableFilter<"Brochure"> | number | null
+    maxPrice?: FloatNullableFilter<"Brochure"> | number | null
+    pricePerSqft?: FloatNullableFilter<"Brochure"> | number | null
+    priceLabel?: StringNullableFilter<"Brochure"> | string | null
+    paymentPlan?: StringNullableFilter<"Brochure"> | string | null
+    bankApprovals?: StringNullableListFilter<"Brochure">
+    maintenanceCharge?: StringNullableFilter<"Brochure"> | string | null
+    possessionDate?: StringNullableFilter<"Brochure"> | string | null
+    launchDate?: StringNullableFilter<"Brochure"> | string | null
+    constructionStatus?: StringNullableFilter<"Brochure"> | string | null
+    amenities?: StringNullableListFilter<"Brochure">
+    specifications?: StringNullableListFilter<"Brochure">
+    nearbyInfrastructure?: StringNullableListFilter<"Brochure">
+    usps?: StringNullableListFilter<"Brochure">
+    minimumBudget?: FloatNullableFilter<"Brochure"> | number | null
+    maximumBudget?: FloatNullableFilter<"Brochure"> | number | null
+    targetBuyerProfile?: StringNullableFilter<"Brochure"> | string | null
+    preferredLocations?: StringNullableListFilter<"Brochure">
+    investmentType?: StringNullableListFilter<"Brochure">
+    keyQualifyingQuestions?: StringNullableListFilter<"Brochure">
+    confidence?: FloatFilter<"Brochure"> | number
+    extractionWarnings?: StringNullableListFilter<"Brochure">
+    isConfirmed?: BoolFilter<"Brochure"> | boolean
+    confirmedAt?: DateTimeNullableFilter<"Brochure"> | Date | string | null
+    createdAt?: DateTimeFilter<"Brochure"> | Date | string
+    updatedAt?: DateTimeFilter<"Brochure"> | Date | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
+    campaigns?: CampaignListRelationFilter
+  }, "id">
+
+  export type BrochureOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    originalFileName?: SortOrder
+    fileSizeMB?: SortOrder
+    pageCount?: SortOrder
+    rawTextLength?: SortOrder
+    projectName?: SortOrderInput | SortOrder
+    developerName?: SortOrderInput | SortOrder
+    reraNumber?: SortOrderInput | SortOrder
+    projectWebsite?: SortOrderInput | SortOrder
+    contactNumber?: SortOrderInput | SortOrder
+    city?: SortOrderInput | SortOrder
+    area?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
+    landmark?: SortOrderInput | SortOrder
+    fullAddress?: SortOrderInput | SortOrder
+    propertyTypes?: SortOrder
+    configurations?: SortOrder
+    totalUnits?: SortOrderInput | SortOrder
+    totalTowers?: SortOrderInput | SortOrder
+    totalFloors?: SortOrderInput | SortOrder
+    sizeMin?: SortOrderInput | SortOrder
+    sizeMax?: SortOrderInput | SortOrder
+    sizeUnit?: SortOrderInput | SortOrder
+    startingPrice?: SortOrderInput | SortOrder
+    maxPrice?: SortOrderInput | SortOrder
+    pricePerSqft?: SortOrderInput | SortOrder
+    priceLabel?: SortOrderInput | SortOrder
+    paymentPlan?: SortOrderInput | SortOrder
+    bankApprovals?: SortOrder
+    maintenanceCharge?: SortOrderInput | SortOrder
+    possessionDate?: SortOrderInput | SortOrder
+    launchDate?: SortOrderInput | SortOrder
+    constructionStatus?: SortOrderInput | SortOrder
+    amenities?: SortOrder
+    specifications?: SortOrder
+    nearbyInfrastructure?: SortOrder
+    usps?: SortOrder
+    minimumBudget?: SortOrderInput | SortOrder
+    maximumBudget?: SortOrderInput | SortOrder
+    targetBuyerProfile?: SortOrderInput | SortOrder
+    preferredLocations?: SortOrder
+    investmentType?: SortOrder
+    keyQualifyingQuestions?: SortOrder
+    confidence?: SortOrder
+    extractionWarnings?: SortOrder
+    isConfirmed?: SortOrder
+    confirmedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: BrochureCountOrderByAggregateInput
+    _avg?: BrochureAvgOrderByAggregateInput
+    _max?: BrochureMaxOrderByAggregateInput
+    _min?: BrochureMinOrderByAggregateInput
+    _sum?: BrochureSumOrderByAggregateInput
+  }
+
+  export type BrochureScalarWhereWithAggregatesInput = {
+    AND?: BrochureScalarWhereWithAggregatesInput | BrochureScalarWhereWithAggregatesInput[]
+    OR?: BrochureScalarWhereWithAggregatesInput[]
+    NOT?: BrochureScalarWhereWithAggregatesInput | BrochureScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Brochure"> | string
+    tenantId?: StringWithAggregatesFilter<"Brochure"> | string
+    originalFileName?: StringWithAggregatesFilter<"Brochure"> | string
+    fileSizeMB?: StringWithAggregatesFilter<"Brochure"> | string
+    pageCount?: IntWithAggregatesFilter<"Brochure"> | number
+    rawTextLength?: IntWithAggregatesFilter<"Brochure"> | number
+    projectName?: StringNullableWithAggregatesFilter<"Brochure"> | string | null
+    developerName?: StringNullableWithAggregatesFilter<"Brochure"> | string | null
+    reraNumber?: StringNullableWithAggregatesFilter<"Brochure"> | string | null
+    projectWebsite?: StringNullableWithAggregatesFilter<"Brochure"> | string | null
+    contactNumber?: StringNullableWithAggregatesFilter<"Brochure"> | string | null
+    city?: StringNullableWithAggregatesFilter<"Brochure"> | string | null
+    area?: StringNullableWithAggregatesFilter<"Brochure"> | string | null
+    state?: StringNullableWithAggregatesFilter<"Brochure"> | string | null
+    landmark?: StringNullableWithAggregatesFilter<"Brochure"> | string | null
+    fullAddress?: StringNullableWithAggregatesFilter<"Brochure"> | string | null
+    propertyTypes?: StringNullableListFilter<"Brochure">
+    configurations?: StringNullableListFilter<"Brochure">
+    totalUnits?: IntNullableWithAggregatesFilter<"Brochure"> | number | null
+    totalTowers?: IntNullableWithAggregatesFilter<"Brochure"> | number | null
+    totalFloors?: IntNullableWithAggregatesFilter<"Brochure"> | number | null
+    sizeMin?: FloatNullableWithAggregatesFilter<"Brochure"> | number | null
+    sizeMax?: FloatNullableWithAggregatesFilter<"Brochure"> | number | null
+    sizeUnit?: StringNullableWithAggregatesFilter<"Brochure"> | string | null
+    startingPrice?: FloatNullableWithAggregatesFilter<"Brochure"> | number | null
+    maxPrice?: FloatNullableWithAggregatesFilter<"Brochure"> | number | null
+    pricePerSqft?: FloatNullableWithAggregatesFilter<"Brochure"> | number | null
+    priceLabel?: StringNullableWithAggregatesFilter<"Brochure"> | string | null
+    paymentPlan?: StringNullableWithAggregatesFilter<"Brochure"> | string | null
+    bankApprovals?: StringNullableListFilter<"Brochure">
+    maintenanceCharge?: StringNullableWithAggregatesFilter<"Brochure"> | string | null
+    possessionDate?: StringNullableWithAggregatesFilter<"Brochure"> | string | null
+    launchDate?: StringNullableWithAggregatesFilter<"Brochure"> | string | null
+    constructionStatus?: StringNullableWithAggregatesFilter<"Brochure"> | string | null
+    amenities?: StringNullableListFilter<"Brochure">
+    specifications?: StringNullableListFilter<"Brochure">
+    nearbyInfrastructure?: StringNullableListFilter<"Brochure">
+    usps?: StringNullableListFilter<"Brochure">
+    minimumBudget?: FloatNullableWithAggregatesFilter<"Brochure"> | number | null
+    maximumBudget?: FloatNullableWithAggregatesFilter<"Brochure"> | number | null
+    targetBuyerProfile?: StringNullableWithAggregatesFilter<"Brochure"> | string | null
+    preferredLocations?: StringNullableListFilter<"Brochure">
+    investmentType?: StringNullableListFilter<"Brochure">
+    keyQualifyingQuestions?: StringNullableListFilter<"Brochure">
+    confidence?: FloatWithAggregatesFilter<"Brochure"> | number
+    extractionWarnings?: StringNullableListFilter<"Brochure">
+    isConfirmed?: BoolWithAggregatesFilter<"Brochure"> | boolean
+    confirmedAt?: DateTimeNullableWithAggregatesFilter<"Brochure"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Brochure"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Brochure"> | Date | string
+  }
+
   export type CampaignWhereInput = {
     AND?: CampaignWhereInput | CampaignWhereInput[]
     OR?: CampaignWhereInput[]
@@ -9185,6 +11451,7 @@ export namespace Prisma {
     status?: EnumCampaignStatusFilter<"Campaign"> | $Enums.CampaignStatus
     tenantId?: StringFilter<"Campaign"> | string
     assistantId?: StringFilter<"Campaign"> | string
+    brochureId?: StringNullableFilter<"Campaign"> | string | null
     totalLeads?: IntFilter<"Campaign"> | number
     calledLeads?: IntFilter<"Campaign"> | number
     successLeads?: IntFilter<"Campaign"> | number
@@ -9195,6 +11462,7 @@ export namespace Prisma {
     completedAt?: DateTimeNullableFilter<"Campaign"> | Date | string | null
     tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     assistant?: XOR<AssistantScalarRelationFilter, AssistantWhereInput>
+    brochure?: XOR<BrochureNullableScalarRelationFilter, BrochureWhereInput> | null
     leads?: LeadListRelationFilter
     calls?: CallListRelationFilter
   }
@@ -9206,6 +11474,7 @@ export namespace Prisma {
     status?: SortOrder
     tenantId?: SortOrder
     assistantId?: SortOrder
+    brochureId?: SortOrderInput | SortOrder
     totalLeads?: SortOrder
     calledLeads?: SortOrder
     successLeads?: SortOrder
@@ -9216,6 +11485,7 @@ export namespace Prisma {
     completedAt?: SortOrderInput | SortOrder
     tenant?: TenantOrderByWithRelationInput
     assistant?: AssistantOrderByWithRelationInput
+    brochure?: BrochureOrderByWithRelationInput
     leads?: LeadOrderByRelationAggregateInput
     calls?: CallOrderByRelationAggregateInput
   }
@@ -9230,6 +11500,7 @@ export namespace Prisma {
     status?: EnumCampaignStatusFilter<"Campaign"> | $Enums.CampaignStatus
     tenantId?: StringFilter<"Campaign"> | string
     assistantId?: StringFilter<"Campaign"> | string
+    brochureId?: StringNullableFilter<"Campaign"> | string | null
     totalLeads?: IntFilter<"Campaign"> | number
     calledLeads?: IntFilter<"Campaign"> | number
     successLeads?: IntFilter<"Campaign"> | number
@@ -9240,6 +11511,7 @@ export namespace Prisma {
     completedAt?: DateTimeNullableFilter<"Campaign"> | Date | string | null
     tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     assistant?: XOR<AssistantScalarRelationFilter, AssistantWhereInput>
+    brochure?: XOR<BrochureNullableScalarRelationFilter, BrochureWhereInput> | null
     leads?: LeadListRelationFilter
     calls?: CallListRelationFilter
   }, "id">
@@ -9251,6 +11523,7 @@ export namespace Prisma {
     status?: SortOrder
     tenantId?: SortOrder
     assistantId?: SortOrder
+    brochureId?: SortOrderInput | SortOrder
     totalLeads?: SortOrder
     calledLeads?: SortOrder
     successLeads?: SortOrder
@@ -9276,6 +11549,7 @@ export namespace Prisma {
     status?: EnumCampaignStatusWithAggregatesFilter<"Campaign"> | $Enums.CampaignStatus
     tenantId?: StringWithAggregatesFilter<"Campaign"> | string
     assistantId?: StringWithAggregatesFilter<"Campaign"> | string
+    brochureId?: StringNullableWithAggregatesFilter<"Campaign"> | string | null
     totalLeads?: IntWithAggregatesFilter<"Campaign"> | number
     calledLeads?: IntWithAggregatesFilter<"Campaign"> | number
     successLeads?: IntWithAggregatesFilter<"Campaign"> | number
@@ -9390,6 +11664,7 @@ export namespace Prisma {
     duration?: IntNullableFilter<"Call"> | number | null
     recording?: StringNullableFilter<"Call"> | string | null
     transcript?: StringNullableFilter<"Call"> | string | null
+    transcriptMessages?: JsonNullableFilter<"Call">
     summary?: StringNullableFilter<"Call"> | string | null
     outcome?: StringNullableFilter<"Call"> | string | null
     startedAt?: DateTimeNullableFilter<"Call"> | Date | string | null
@@ -9411,6 +11686,7 @@ export namespace Prisma {
     duration?: SortOrderInput | SortOrder
     recording?: SortOrderInput | SortOrder
     transcript?: SortOrderInput | SortOrder
+    transcriptMessages?: SortOrderInput | SortOrder
     summary?: SortOrderInput | SortOrder
     outcome?: SortOrderInput | SortOrder
     startedAt?: SortOrderInput | SortOrder
@@ -9435,6 +11711,7 @@ export namespace Prisma {
     duration?: IntNullableFilter<"Call"> | number | null
     recording?: StringNullableFilter<"Call"> | string | null
     transcript?: StringNullableFilter<"Call"> | string | null
+    transcriptMessages?: JsonNullableFilter<"Call">
     summary?: StringNullableFilter<"Call"> | string | null
     outcome?: StringNullableFilter<"Call"> | string | null
     startedAt?: DateTimeNullableFilter<"Call"> | Date | string | null
@@ -9456,6 +11733,7 @@ export namespace Prisma {
     duration?: SortOrderInput | SortOrder
     recording?: SortOrderInput | SortOrder
     transcript?: SortOrderInput | SortOrder
+    transcriptMessages?: SortOrderInput | SortOrder
     summary?: SortOrderInput | SortOrder
     outcome?: SortOrderInput | SortOrder
     startedAt?: SortOrderInput | SortOrder
@@ -9482,6 +11760,7 @@ export namespace Prisma {
     duration?: IntNullableWithAggregatesFilter<"Call"> | number | null
     recording?: StringNullableWithAggregatesFilter<"Call"> | string | null
     transcript?: StringNullableWithAggregatesFilter<"Call"> | string | null
+    transcriptMessages?: JsonNullableWithAggregatesFilter<"Call">
     summary?: StringNullableWithAggregatesFilter<"Call"> | string | null
     outcome?: StringNullableWithAggregatesFilter<"Call"> | string | null
     startedAt?: DateTimeNullableWithAggregatesFilter<"Call"> | Date | string | null
@@ -9503,6 +11782,7 @@ export namespace Prisma {
     leads?: LeadCreateNestedManyWithoutTenantInput
     calls?: CallCreateNestedManyWithoutTenantInput
     assistants?: AssistantCreateNestedManyWithoutTenantInput
+    brochures?: BrochureCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateInput = {
@@ -9518,6 +11798,7 @@ export namespace Prisma {
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
     assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
+    brochures?: BrochureUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUpdateInput = {
@@ -9533,6 +11814,7 @@ export namespace Prisma {
     leads?: LeadUpdateManyWithoutTenantNestedInput
     calls?: CallUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUpdateManyWithoutTenantNestedInput
+    brochures?: BrochureUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateInput = {
@@ -9548,6 +11830,7 @@ export namespace Prisma {
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
+    brochures?: BrochureUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantCreateManyInput = {
@@ -9729,6 +12012,380 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type BrochureCreateInput = {
+    id?: string
+    originalFileName: string
+    fileSizeMB: string
+    pageCount: number
+    rawTextLength: number
+    projectName?: string | null
+    developerName?: string | null
+    reraNumber?: string | null
+    projectWebsite?: string | null
+    contactNumber?: string | null
+    city?: string | null
+    area?: string | null
+    state?: string | null
+    landmark?: string | null
+    fullAddress?: string | null
+    propertyTypes?: BrochureCreatepropertyTypesInput | string[]
+    configurations?: BrochureCreateconfigurationsInput | string[]
+    totalUnits?: number | null
+    totalTowers?: number | null
+    totalFloors?: number | null
+    sizeMin?: number | null
+    sizeMax?: number | null
+    sizeUnit?: string | null
+    startingPrice?: number | null
+    maxPrice?: number | null
+    pricePerSqft?: number | null
+    priceLabel?: string | null
+    paymentPlan?: string | null
+    bankApprovals?: BrochureCreatebankApprovalsInput | string[]
+    maintenanceCharge?: string | null
+    possessionDate?: string | null
+    launchDate?: string | null
+    constructionStatus?: string | null
+    amenities?: BrochureCreateamenitiesInput | string[]
+    specifications?: BrochureCreatespecificationsInput | string[]
+    nearbyInfrastructure?: BrochureCreatenearbyInfrastructureInput | string[]
+    usps?: BrochureCreateuspsInput | string[]
+    minimumBudget?: number | null
+    maximumBudget?: number | null
+    targetBuyerProfile?: string | null
+    preferredLocations?: BrochureCreatepreferredLocationsInput | string[]
+    investmentType?: BrochureCreateinvestmentTypeInput | string[]
+    keyQualifyingQuestions?: BrochureCreatekeyQualifyingQuestionsInput | string[]
+    confidence?: number
+    extractionWarnings?: BrochureCreateextractionWarningsInput | string[]
+    isConfirmed?: boolean
+    confirmedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutBrochuresInput
+    campaigns?: CampaignCreateNestedManyWithoutBrochureInput
+  }
+
+  export type BrochureUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    originalFileName: string
+    fileSizeMB: string
+    pageCount: number
+    rawTextLength: number
+    projectName?: string | null
+    developerName?: string | null
+    reraNumber?: string | null
+    projectWebsite?: string | null
+    contactNumber?: string | null
+    city?: string | null
+    area?: string | null
+    state?: string | null
+    landmark?: string | null
+    fullAddress?: string | null
+    propertyTypes?: BrochureCreatepropertyTypesInput | string[]
+    configurations?: BrochureCreateconfigurationsInput | string[]
+    totalUnits?: number | null
+    totalTowers?: number | null
+    totalFloors?: number | null
+    sizeMin?: number | null
+    sizeMax?: number | null
+    sizeUnit?: string | null
+    startingPrice?: number | null
+    maxPrice?: number | null
+    pricePerSqft?: number | null
+    priceLabel?: string | null
+    paymentPlan?: string | null
+    bankApprovals?: BrochureCreatebankApprovalsInput | string[]
+    maintenanceCharge?: string | null
+    possessionDate?: string | null
+    launchDate?: string | null
+    constructionStatus?: string | null
+    amenities?: BrochureCreateamenitiesInput | string[]
+    specifications?: BrochureCreatespecificationsInput | string[]
+    nearbyInfrastructure?: BrochureCreatenearbyInfrastructureInput | string[]
+    usps?: BrochureCreateuspsInput | string[]
+    minimumBudget?: number | null
+    maximumBudget?: number | null
+    targetBuyerProfile?: string | null
+    preferredLocations?: BrochureCreatepreferredLocationsInput | string[]
+    investmentType?: BrochureCreateinvestmentTypeInput | string[]
+    keyQualifyingQuestions?: BrochureCreatekeyQualifyingQuestionsInput | string[]
+    confidence?: number
+    extractionWarnings?: BrochureCreateextractionWarningsInput | string[]
+    isConfirmed?: boolean
+    confirmedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutBrochureInput
+  }
+
+  export type BrochureUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    originalFileName?: StringFieldUpdateOperationsInput | string
+    fileSizeMB?: StringFieldUpdateOperationsInput | string
+    pageCount?: IntFieldUpdateOperationsInput | number
+    rawTextLength?: IntFieldUpdateOperationsInput | number
+    projectName?: NullableStringFieldUpdateOperationsInput | string | null
+    developerName?: NullableStringFieldUpdateOperationsInput | string | null
+    reraNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    projectWebsite?: NullableStringFieldUpdateOperationsInput | string | null
+    contactNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    area?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    fullAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    propertyTypes?: BrochureUpdatepropertyTypesInput | string[]
+    configurations?: BrochureUpdateconfigurationsInput | string[]
+    totalUnits?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTowers?: NullableIntFieldUpdateOperationsInput | number | null
+    totalFloors?: NullableIntFieldUpdateOperationsInput | number | null
+    sizeMin?: NullableFloatFieldUpdateOperationsInput | number | null
+    sizeMax?: NullableFloatFieldUpdateOperationsInput | number | null
+    sizeUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    startingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    pricePerSqft?: NullableFloatFieldUpdateOperationsInput | number | null
+    priceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    bankApprovals?: BrochureUpdatebankApprovalsInput | string[]
+    maintenanceCharge?: NullableStringFieldUpdateOperationsInput | string | null
+    possessionDate?: NullableStringFieldUpdateOperationsInput | string | null
+    launchDate?: NullableStringFieldUpdateOperationsInput | string | null
+    constructionStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    amenities?: BrochureUpdateamenitiesInput | string[]
+    specifications?: BrochureUpdatespecificationsInput | string[]
+    nearbyInfrastructure?: BrochureUpdatenearbyInfrastructureInput | string[]
+    usps?: BrochureUpdateuspsInput | string[]
+    minimumBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    maximumBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    targetBuyerProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLocations?: BrochureUpdatepreferredLocationsInput | string[]
+    investmentType?: BrochureUpdateinvestmentTypeInput | string[]
+    keyQualifyingQuestions?: BrochureUpdatekeyQualifyingQuestionsInput | string[]
+    confidence?: FloatFieldUpdateOperationsInput | number
+    extractionWarnings?: BrochureUpdateextractionWarningsInput | string[]
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutBrochuresNestedInput
+    campaigns?: CampaignUpdateManyWithoutBrochureNestedInput
+  }
+
+  export type BrochureUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    originalFileName?: StringFieldUpdateOperationsInput | string
+    fileSizeMB?: StringFieldUpdateOperationsInput | string
+    pageCount?: IntFieldUpdateOperationsInput | number
+    rawTextLength?: IntFieldUpdateOperationsInput | number
+    projectName?: NullableStringFieldUpdateOperationsInput | string | null
+    developerName?: NullableStringFieldUpdateOperationsInput | string | null
+    reraNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    projectWebsite?: NullableStringFieldUpdateOperationsInput | string | null
+    contactNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    area?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    fullAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    propertyTypes?: BrochureUpdatepropertyTypesInput | string[]
+    configurations?: BrochureUpdateconfigurationsInput | string[]
+    totalUnits?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTowers?: NullableIntFieldUpdateOperationsInput | number | null
+    totalFloors?: NullableIntFieldUpdateOperationsInput | number | null
+    sizeMin?: NullableFloatFieldUpdateOperationsInput | number | null
+    sizeMax?: NullableFloatFieldUpdateOperationsInput | number | null
+    sizeUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    startingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    pricePerSqft?: NullableFloatFieldUpdateOperationsInput | number | null
+    priceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    bankApprovals?: BrochureUpdatebankApprovalsInput | string[]
+    maintenanceCharge?: NullableStringFieldUpdateOperationsInput | string | null
+    possessionDate?: NullableStringFieldUpdateOperationsInput | string | null
+    launchDate?: NullableStringFieldUpdateOperationsInput | string | null
+    constructionStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    amenities?: BrochureUpdateamenitiesInput | string[]
+    specifications?: BrochureUpdatespecificationsInput | string[]
+    nearbyInfrastructure?: BrochureUpdatenearbyInfrastructureInput | string[]
+    usps?: BrochureUpdateuspsInput | string[]
+    minimumBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    maximumBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    targetBuyerProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLocations?: BrochureUpdatepreferredLocationsInput | string[]
+    investmentType?: BrochureUpdateinvestmentTypeInput | string[]
+    keyQualifyingQuestions?: BrochureUpdatekeyQualifyingQuestionsInput | string[]
+    confidence?: FloatFieldUpdateOperationsInput | number
+    extractionWarnings?: BrochureUpdateextractionWarningsInput | string[]
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaigns?: CampaignUncheckedUpdateManyWithoutBrochureNestedInput
+  }
+
+  export type BrochureCreateManyInput = {
+    id?: string
+    tenantId: string
+    originalFileName: string
+    fileSizeMB: string
+    pageCount: number
+    rawTextLength: number
+    projectName?: string | null
+    developerName?: string | null
+    reraNumber?: string | null
+    projectWebsite?: string | null
+    contactNumber?: string | null
+    city?: string | null
+    area?: string | null
+    state?: string | null
+    landmark?: string | null
+    fullAddress?: string | null
+    propertyTypes?: BrochureCreatepropertyTypesInput | string[]
+    configurations?: BrochureCreateconfigurationsInput | string[]
+    totalUnits?: number | null
+    totalTowers?: number | null
+    totalFloors?: number | null
+    sizeMin?: number | null
+    sizeMax?: number | null
+    sizeUnit?: string | null
+    startingPrice?: number | null
+    maxPrice?: number | null
+    pricePerSqft?: number | null
+    priceLabel?: string | null
+    paymentPlan?: string | null
+    bankApprovals?: BrochureCreatebankApprovalsInput | string[]
+    maintenanceCharge?: string | null
+    possessionDate?: string | null
+    launchDate?: string | null
+    constructionStatus?: string | null
+    amenities?: BrochureCreateamenitiesInput | string[]
+    specifications?: BrochureCreatespecificationsInput | string[]
+    nearbyInfrastructure?: BrochureCreatenearbyInfrastructureInput | string[]
+    usps?: BrochureCreateuspsInput | string[]
+    minimumBudget?: number | null
+    maximumBudget?: number | null
+    targetBuyerProfile?: string | null
+    preferredLocations?: BrochureCreatepreferredLocationsInput | string[]
+    investmentType?: BrochureCreateinvestmentTypeInput | string[]
+    keyQualifyingQuestions?: BrochureCreatekeyQualifyingQuestionsInput | string[]
+    confidence?: number
+    extractionWarnings?: BrochureCreateextractionWarningsInput | string[]
+    isConfirmed?: boolean
+    confirmedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BrochureUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    originalFileName?: StringFieldUpdateOperationsInput | string
+    fileSizeMB?: StringFieldUpdateOperationsInput | string
+    pageCount?: IntFieldUpdateOperationsInput | number
+    rawTextLength?: IntFieldUpdateOperationsInput | number
+    projectName?: NullableStringFieldUpdateOperationsInput | string | null
+    developerName?: NullableStringFieldUpdateOperationsInput | string | null
+    reraNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    projectWebsite?: NullableStringFieldUpdateOperationsInput | string | null
+    contactNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    area?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    fullAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    propertyTypes?: BrochureUpdatepropertyTypesInput | string[]
+    configurations?: BrochureUpdateconfigurationsInput | string[]
+    totalUnits?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTowers?: NullableIntFieldUpdateOperationsInput | number | null
+    totalFloors?: NullableIntFieldUpdateOperationsInput | number | null
+    sizeMin?: NullableFloatFieldUpdateOperationsInput | number | null
+    sizeMax?: NullableFloatFieldUpdateOperationsInput | number | null
+    sizeUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    startingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    pricePerSqft?: NullableFloatFieldUpdateOperationsInput | number | null
+    priceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    bankApprovals?: BrochureUpdatebankApprovalsInput | string[]
+    maintenanceCharge?: NullableStringFieldUpdateOperationsInput | string | null
+    possessionDate?: NullableStringFieldUpdateOperationsInput | string | null
+    launchDate?: NullableStringFieldUpdateOperationsInput | string | null
+    constructionStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    amenities?: BrochureUpdateamenitiesInput | string[]
+    specifications?: BrochureUpdatespecificationsInput | string[]
+    nearbyInfrastructure?: BrochureUpdatenearbyInfrastructureInput | string[]
+    usps?: BrochureUpdateuspsInput | string[]
+    minimumBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    maximumBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    targetBuyerProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLocations?: BrochureUpdatepreferredLocationsInput | string[]
+    investmentType?: BrochureUpdateinvestmentTypeInput | string[]
+    keyQualifyingQuestions?: BrochureUpdatekeyQualifyingQuestionsInput | string[]
+    confidence?: FloatFieldUpdateOperationsInput | number
+    extractionWarnings?: BrochureUpdateextractionWarningsInput | string[]
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BrochureUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    originalFileName?: StringFieldUpdateOperationsInput | string
+    fileSizeMB?: StringFieldUpdateOperationsInput | string
+    pageCount?: IntFieldUpdateOperationsInput | number
+    rawTextLength?: IntFieldUpdateOperationsInput | number
+    projectName?: NullableStringFieldUpdateOperationsInput | string | null
+    developerName?: NullableStringFieldUpdateOperationsInput | string | null
+    reraNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    projectWebsite?: NullableStringFieldUpdateOperationsInput | string | null
+    contactNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    area?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    fullAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    propertyTypes?: BrochureUpdatepropertyTypesInput | string[]
+    configurations?: BrochureUpdateconfigurationsInput | string[]
+    totalUnits?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTowers?: NullableIntFieldUpdateOperationsInput | number | null
+    totalFloors?: NullableIntFieldUpdateOperationsInput | number | null
+    sizeMin?: NullableFloatFieldUpdateOperationsInput | number | null
+    sizeMax?: NullableFloatFieldUpdateOperationsInput | number | null
+    sizeUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    startingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    pricePerSqft?: NullableFloatFieldUpdateOperationsInput | number | null
+    priceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    bankApprovals?: BrochureUpdatebankApprovalsInput | string[]
+    maintenanceCharge?: NullableStringFieldUpdateOperationsInput | string | null
+    possessionDate?: NullableStringFieldUpdateOperationsInput | string | null
+    launchDate?: NullableStringFieldUpdateOperationsInput | string | null
+    constructionStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    amenities?: BrochureUpdateamenitiesInput | string[]
+    specifications?: BrochureUpdatespecificationsInput | string[]
+    nearbyInfrastructure?: BrochureUpdatenearbyInfrastructureInput | string[]
+    usps?: BrochureUpdateuspsInput | string[]
+    minimumBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    maximumBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    targetBuyerProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLocations?: BrochureUpdatepreferredLocationsInput | string[]
+    investmentType?: BrochureUpdateinvestmentTypeInput | string[]
+    keyQualifyingQuestions?: BrochureUpdatekeyQualifyingQuestionsInput | string[]
+    confidence?: FloatFieldUpdateOperationsInput | number
+    extractionWarnings?: BrochureUpdateextractionWarningsInput | string[]
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type CampaignCreateInput = {
     id?: string
     name: string
@@ -9744,6 +12401,7 @@ export namespace Prisma {
     completedAt?: Date | string | null
     tenant: TenantCreateNestedOneWithoutCampaignsInput
     assistant: AssistantCreateNestedOneWithoutCampaignsInput
+    brochure?: BrochureCreateNestedOneWithoutCampaignsInput
     leads?: LeadCreateNestedManyWithoutCampaignInput
     calls?: CallCreateNestedManyWithoutCampaignInput
   }
@@ -9755,6 +12413,7 @@ export namespace Prisma {
     status?: $Enums.CampaignStatus
     tenantId: string
     assistantId: string
+    brochureId?: string | null
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -9782,6 +12441,7 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     tenant?: TenantUpdateOneRequiredWithoutCampaignsNestedInput
     assistant?: AssistantUpdateOneRequiredWithoutCampaignsNestedInput
+    brochure?: BrochureUpdateOneWithoutCampaignsNestedInput
     leads?: LeadUpdateManyWithoutCampaignNestedInput
     calls?: CallUpdateManyWithoutCampaignNestedInput
   }
@@ -9793,6 +12453,7 @@ export namespace Prisma {
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     tenantId?: StringFieldUpdateOperationsInput | string
     assistantId?: StringFieldUpdateOperationsInput | string
+    brochureId?: NullableStringFieldUpdateOperationsInput | string | null
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -9812,6 +12473,7 @@ export namespace Prisma {
     status?: $Enums.CampaignStatus
     tenantId: string
     assistantId: string
+    brochureId?: string | null
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -9844,6 +12506,7 @@ export namespace Prisma {
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     tenantId?: StringFieldUpdateOperationsInput | string
     assistantId?: StringFieldUpdateOperationsInput | string
+    brochureId?: NullableStringFieldUpdateOperationsInput | string | null
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -9961,6 +12624,7 @@ export namespace Prisma {
     duration?: number | null
     recording?: string | null
     transcript?: string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
     outcome?: string | null
     startedAt?: Date | string | null
@@ -9982,6 +12646,7 @@ export namespace Prisma {
     duration?: number | null
     recording?: string | null
     transcript?: string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
     outcome?: string | null
     startedAt?: Date | string | null
@@ -9997,6 +12662,7 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -10018,6 +12684,7 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -10036,6 +12703,7 @@ export namespace Prisma {
     duration?: number | null
     recording?: string | null
     transcript?: string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
     outcome?: string | null
     startedAt?: Date | string | null
@@ -10051,6 +12719,7 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -10069,6 +12738,7 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -10138,6 +12808,12 @@ export namespace Prisma {
     none?: AssistantWhereInput
   }
 
+  export type BrochureListRelationFilter = {
+    every?: BrochureWhereInput
+    some?: BrochureWhereInput
+    none?: BrochureWhereInput
+  }
+
   export type UserOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -10155,6 +12831,10 @@ export namespace Prisma {
   }
 
   export type AssistantOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BrochureOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -10360,6 +13040,17 @@ export namespace Prisma {
     _max?: NestedJsonFilter<$PrismaModel>
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type StringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -10375,22 +13066,45 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type EnumCampaignStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.CampaignStatus | EnumCampaignStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.CampaignStatus[] | ListEnumCampaignStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.CampaignStatus[] | ListEnumCampaignStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumCampaignStatusFilter<$PrismaModel> | $Enums.CampaignStatus
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
   }
 
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -10404,14 +13118,291 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
+  export type BrochureCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    originalFileName?: SortOrder
+    fileSizeMB?: SortOrder
+    pageCount?: SortOrder
+    rawTextLength?: SortOrder
+    projectName?: SortOrder
+    developerName?: SortOrder
+    reraNumber?: SortOrder
+    projectWebsite?: SortOrder
+    contactNumber?: SortOrder
+    city?: SortOrder
+    area?: SortOrder
+    state?: SortOrder
+    landmark?: SortOrder
+    fullAddress?: SortOrder
+    propertyTypes?: SortOrder
+    configurations?: SortOrder
+    totalUnits?: SortOrder
+    totalTowers?: SortOrder
+    totalFloors?: SortOrder
+    sizeMin?: SortOrder
+    sizeMax?: SortOrder
+    sizeUnit?: SortOrder
+    startingPrice?: SortOrder
+    maxPrice?: SortOrder
+    pricePerSqft?: SortOrder
+    priceLabel?: SortOrder
+    paymentPlan?: SortOrder
+    bankApprovals?: SortOrder
+    maintenanceCharge?: SortOrder
+    possessionDate?: SortOrder
+    launchDate?: SortOrder
+    constructionStatus?: SortOrder
+    amenities?: SortOrder
+    specifications?: SortOrder
+    nearbyInfrastructure?: SortOrder
+    usps?: SortOrder
+    minimumBudget?: SortOrder
+    maximumBudget?: SortOrder
+    targetBuyerProfile?: SortOrder
+    preferredLocations?: SortOrder
+    investmentType?: SortOrder
+    keyQualifyingQuestions?: SortOrder
+    confidence?: SortOrder
+    extractionWarnings?: SortOrder
+    isConfirmed?: SortOrder
+    confirmedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BrochureAvgOrderByAggregateInput = {
+    pageCount?: SortOrder
+    rawTextLength?: SortOrder
+    totalUnits?: SortOrder
+    totalTowers?: SortOrder
+    totalFloors?: SortOrder
+    sizeMin?: SortOrder
+    sizeMax?: SortOrder
+    startingPrice?: SortOrder
+    maxPrice?: SortOrder
+    pricePerSqft?: SortOrder
+    minimumBudget?: SortOrder
+    maximumBudget?: SortOrder
+    confidence?: SortOrder
+  }
+
+  export type BrochureMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    originalFileName?: SortOrder
+    fileSizeMB?: SortOrder
+    pageCount?: SortOrder
+    rawTextLength?: SortOrder
+    projectName?: SortOrder
+    developerName?: SortOrder
+    reraNumber?: SortOrder
+    projectWebsite?: SortOrder
+    contactNumber?: SortOrder
+    city?: SortOrder
+    area?: SortOrder
+    state?: SortOrder
+    landmark?: SortOrder
+    fullAddress?: SortOrder
+    totalUnits?: SortOrder
+    totalTowers?: SortOrder
+    totalFloors?: SortOrder
+    sizeMin?: SortOrder
+    sizeMax?: SortOrder
+    sizeUnit?: SortOrder
+    startingPrice?: SortOrder
+    maxPrice?: SortOrder
+    pricePerSqft?: SortOrder
+    priceLabel?: SortOrder
+    paymentPlan?: SortOrder
+    maintenanceCharge?: SortOrder
+    possessionDate?: SortOrder
+    launchDate?: SortOrder
+    constructionStatus?: SortOrder
+    minimumBudget?: SortOrder
+    maximumBudget?: SortOrder
+    targetBuyerProfile?: SortOrder
+    confidence?: SortOrder
+    isConfirmed?: SortOrder
+    confirmedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BrochureMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    originalFileName?: SortOrder
+    fileSizeMB?: SortOrder
+    pageCount?: SortOrder
+    rawTextLength?: SortOrder
+    projectName?: SortOrder
+    developerName?: SortOrder
+    reraNumber?: SortOrder
+    projectWebsite?: SortOrder
+    contactNumber?: SortOrder
+    city?: SortOrder
+    area?: SortOrder
+    state?: SortOrder
+    landmark?: SortOrder
+    fullAddress?: SortOrder
+    totalUnits?: SortOrder
+    totalTowers?: SortOrder
+    totalFloors?: SortOrder
+    sizeMin?: SortOrder
+    sizeMax?: SortOrder
+    sizeUnit?: SortOrder
+    startingPrice?: SortOrder
+    maxPrice?: SortOrder
+    pricePerSqft?: SortOrder
+    priceLabel?: SortOrder
+    paymentPlan?: SortOrder
+    maintenanceCharge?: SortOrder
+    possessionDate?: SortOrder
+    launchDate?: SortOrder
+    constructionStatus?: SortOrder
+    minimumBudget?: SortOrder
+    maximumBudget?: SortOrder
+    targetBuyerProfile?: SortOrder
+    confidence?: SortOrder
+    isConfirmed?: SortOrder
+    confirmedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BrochureSumOrderByAggregateInput = {
+    pageCount?: SortOrder
+    rawTextLength?: SortOrder
+    totalUnits?: SortOrder
+    totalTowers?: SortOrder
+    totalFloors?: SortOrder
+    sizeMin?: SortOrder
+    sizeMax?: SortOrder
+    startingPrice?: SortOrder
+    maxPrice?: SortOrder
+    pricePerSqft?: SortOrder
+    minimumBudget?: SortOrder
+    maximumBudget?: SortOrder
+    confidence?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type EnumCampaignStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.CampaignStatus | EnumCampaignStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CampaignStatus[] | ListEnumCampaignStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CampaignStatus[] | ListEnumCampaignStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCampaignStatusFilter<$PrismaModel> | $Enums.CampaignStatus
+  }
+
   export type AssistantScalarRelationFilter = {
     is?: AssistantWhereInput
     isNot?: AssistantWhereInput
   }
 
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
+  export type BrochureNullableScalarRelationFilter = {
+    is?: BrochureWhereInput | null
+    isNot?: BrochureWhereInput | null
   }
 
   export type CampaignCountOrderByAggregateInput = {
@@ -10421,6 +13412,7 @@ export namespace Prisma {
     status?: SortOrder
     tenantId?: SortOrder
     assistantId?: SortOrder
+    brochureId?: SortOrder
     totalLeads?: SortOrder
     calledLeads?: SortOrder
     successLeads?: SortOrder
@@ -10445,6 +13437,7 @@ export namespace Prisma {
     status?: SortOrder
     tenantId?: SortOrder
     assistantId?: SortOrder
+    brochureId?: SortOrder
     totalLeads?: SortOrder
     calledLeads?: SortOrder
     successLeads?: SortOrder
@@ -10462,6 +13455,7 @@ export namespace Prisma {
     status?: SortOrder
     tenantId?: SortOrder
     assistantId?: SortOrder
+    brochureId?: SortOrder
     totalLeads?: SortOrder
     calledLeads?: SortOrder
     successLeads?: SortOrder
@@ -10479,24 +13473,6 @@ export namespace Prisma {
     failedLeads?: SortOrder
   }
 
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
   export type EnumCampaignStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.CampaignStatus | EnumCampaignStatusFieldRefInput<$PrismaModel>
     in?: $Enums.CampaignStatus[] | ListEnumCampaignStatusFieldRefInput<$PrismaModel>
@@ -10505,36 +13481,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumCampaignStatusFilter<$PrismaModel>
     _max?: NestedEnumCampaignStatusFilter<$PrismaModel>
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type EnumLeadStatusFilter<$PrismaModel = never> = {
@@ -10655,17 +13601,6 @@ export namespace Prisma {
     not?: NestedEnumCallStatusFilter<$PrismaModel> | $Enums.CallStatus
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type LeadScalarRelationFilter = {
     is?: LeadWhereInput
     isNot?: LeadWhereInput
@@ -10681,6 +13616,7 @@ export namespace Prisma {
     duration?: SortOrder
     recording?: SortOrder
     transcript?: SortOrder
+    transcriptMessages?: SortOrder
     summary?: SortOrder
     outcome?: SortOrder
     startedAt?: SortOrder
@@ -10743,22 +13679,6 @@ export namespace Prisma {
     _max?: NestedEnumCallStatusFilter<$PrismaModel>
   }
 
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
   export type UserCreateNestedManyWithoutTenantInput = {
     create?: XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput> | UserCreateWithoutTenantInput[] | UserUncheckedCreateWithoutTenantInput[]
     connectOrCreate?: UserCreateOrConnectWithoutTenantInput | UserCreateOrConnectWithoutTenantInput[]
@@ -10794,6 +13714,13 @@ export namespace Prisma {
     connect?: AssistantWhereUniqueInput | AssistantWhereUniqueInput[]
   }
 
+  export type BrochureCreateNestedManyWithoutTenantInput = {
+    create?: XOR<BrochureCreateWithoutTenantInput, BrochureUncheckedCreateWithoutTenantInput> | BrochureCreateWithoutTenantInput[] | BrochureUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: BrochureCreateOrConnectWithoutTenantInput | BrochureCreateOrConnectWithoutTenantInput[]
+    createMany?: BrochureCreateManyTenantInputEnvelope
+    connect?: BrochureWhereUniqueInput | BrochureWhereUniqueInput[]
+  }
+
   export type UserUncheckedCreateNestedManyWithoutTenantInput = {
     create?: XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput> | UserCreateWithoutTenantInput[] | UserUncheckedCreateWithoutTenantInput[]
     connectOrCreate?: UserCreateOrConnectWithoutTenantInput | UserCreateOrConnectWithoutTenantInput[]
@@ -10827,6 +13754,13 @@ export namespace Prisma {
     connectOrCreate?: AssistantCreateOrConnectWithoutTenantInput | AssistantCreateOrConnectWithoutTenantInput[]
     createMany?: AssistantCreateManyTenantInputEnvelope
     connect?: AssistantWhereUniqueInput | AssistantWhereUniqueInput[]
+  }
+
+  export type BrochureUncheckedCreateNestedManyWithoutTenantInput = {
+    create?: XOR<BrochureCreateWithoutTenantInput, BrochureUncheckedCreateWithoutTenantInput> | BrochureCreateWithoutTenantInput[] | BrochureUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: BrochureCreateOrConnectWithoutTenantInput | BrochureCreateOrConnectWithoutTenantInput[]
+    createMany?: BrochureCreateManyTenantInputEnvelope
+    connect?: BrochureWhereUniqueInput | BrochureWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -10911,6 +13845,20 @@ export namespace Prisma {
     deleteMany?: AssistantScalarWhereInput | AssistantScalarWhereInput[]
   }
 
+  export type BrochureUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<BrochureCreateWithoutTenantInput, BrochureUncheckedCreateWithoutTenantInput> | BrochureCreateWithoutTenantInput[] | BrochureUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: BrochureCreateOrConnectWithoutTenantInput | BrochureCreateOrConnectWithoutTenantInput[]
+    upsert?: BrochureUpsertWithWhereUniqueWithoutTenantInput | BrochureUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: BrochureCreateManyTenantInputEnvelope
+    set?: BrochureWhereUniqueInput | BrochureWhereUniqueInput[]
+    disconnect?: BrochureWhereUniqueInput | BrochureWhereUniqueInput[]
+    delete?: BrochureWhereUniqueInput | BrochureWhereUniqueInput[]
+    connect?: BrochureWhereUniqueInput | BrochureWhereUniqueInput[]
+    update?: BrochureUpdateWithWhereUniqueWithoutTenantInput | BrochureUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: BrochureUpdateManyWithWhereWithoutTenantInput | BrochureUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: BrochureScalarWhereInput | BrochureScalarWhereInput[]
+  }
+
   export type UserUncheckedUpdateManyWithoutTenantNestedInput = {
     create?: XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput> | UserCreateWithoutTenantInput[] | UserUncheckedCreateWithoutTenantInput[]
     connectOrCreate?: UserCreateOrConnectWithoutTenantInput | UserCreateOrConnectWithoutTenantInput[]
@@ -10979,6 +13927,20 @@ export namespace Prisma {
     update?: AssistantUpdateWithWhereUniqueWithoutTenantInput | AssistantUpdateWithWhereUniqueWithoutTenantInput[]
     updateMany?: AssistantUpdateManyWithWhereWithoutTenantInput | AssistantUpdateManyWithWhereWithoutTenantInput[]
     deleteMany?: AssistantScalarWhereInput | AssistantScalarWhereInput[]
+  }
+
+  export type BrochureUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<BrochureCreateWithoutTenantInput, BrochureUncheckedCreateWithoutTenantInput> | BrochureCreateWithoutTenantInput[] | BrochureUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: BrochureCreateOrConnectWithoutTenantInput | BrochureCreateOrConnectWithoutTenantInput[]
+    upsert?: BrochureUpsertWithWhereUniqueWithoutTenantInput | BrochureUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: BrochureCreateManyTenantInputEnvelope
+    set?: BrochureWhereUniqueInput | BrochureWhereUniqueInput[]
+    disconnect?: BrochureWhereUniqueInput | BrochureWhereUniqueInput[]
+    delete?: BrochureWhereUniqueInput | BrochureWhereUniqueInput[]
+    connect?: BrochureWhereUniqueInput | BrochureWhereUniqueInput[]
+    update?: BrochureUpdateWithWhereUniqueWithoutTenantInput | BrochureUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: BrochureUpdateManyWithWhereWithoutTenantInput | BrochureUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: BrochureScalarWhereInput | BrochureScalarWhereInput[]
   }
 
   export type TenantCreateNestedOneWithoutUsersInput = {
@@ -11055,6 +14017,201 @@ export namespace Prisma {
     deleteMany?: CampaignScalarWhereInput | CampaignScalarWhereInput[]
   }
 
+  export type BrochureCreatepropertyTypesInput = {
+    set: string[]
+  }
+
+  export type BrochureCreateconfigurationsInput = {
+    set: string[]
+  }
+
+  export type BrochureCreatebankApprovalsInput = {
+    set: string[]
+  }
+
+  export type BrochureCreateamenitiesInput = {
+    set: string[]
+  }
+
+  export type BrochureCreatespecificationsInput = {
+    set: string[]
+  }
+
+  export type BrochureCreatenearbyInfrastructureInput = {
+    set: string[]
+  }
+
+  export type BrochureCreateuspsInput = {
+    set: string[]
+  }
+
+  export type BrochureCreatepreferredLocationsInput = {
+    set: string[]
+  }
+
+  export type BrochureCreateinvestmentTypeInput = {
+    set: string[]
+  }
+
+  export type BrochureCreatekeyQualifyingQuestionsInput = {
+    set: string[]
+  }
+
+  export type BrochureCreateextractionWarningsInput = {
+    set: string[]
+  }
+
+  export type TenantCreateNestedOneWithoutBrochuresInput = {
+    create?: XOR<TenantCreateWithoutBrochuresInput, TenantUncheckedCreateWithoutBrochuresInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutBrochuresInput
+    connect?: TenantWhereUniqueInput
+  }
+
+  export type CampaignCreateNestedManyWithoutBrochureInput = {
+    create?: XOR<CampaignCreateWithoutBrochureInput, CampaignUncheckedCreateWithoutBrochureInput> | CampaignCreateWithoutBrochureInput[] | CampaignUncheckedCreateWithoutBrochureInput[]
+    connectOrCreate?: CampaignCreateOrConnectWithoutBrochureInput | CampaignCreateOrConnectWithoutBrochureInput[]
+    createMany?: CampaignCreateManyBrochureInputEnvelope
+    connect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+  }
+
+  export type CampaignUncheckedCreateNestedManyWithoutBrochureInput = {
+    create?: XOR<CampaignCreateWithoutBrochureInput, CampaignUncheckedCreateWithoutBrochureInput> | CampaignCreateWithoutBrochureInput[] | CampaignUncheckedCreateWithoutBrochureInput[]
+    connectOrCreate?: CampaignCreateOrConnectWithoutBrochureInput | CampaignCreateOrConnectWithoutBrochureInput[]
+    createMany?: CampaignCreateManyBrochureInputEnvelope
+    connect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
+  export type BrochureUpdatepropertyTypesInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type BrochureUpdateconfigurationsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type BrochureUpdatebankApprovalsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type BrochureUpdateamenitiesInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type BrochureUpdatespecificationsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type BrochureUpdatenearbyInfrastructureInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type BrochureUpdateuspsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type BrochureUpdatepreferredLocationsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type BrochureUpdateinvestmentTypeInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type BrochureUpdatekeyQualifyingQuestionsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type BrochureUpdateextractionWarningsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
+  export type TenantUpdateOneRequiredWithoutBrochuresNestedInput = {
+    create?: XOR<TenantCreateWithoutBrochuresInput, TenantUncheckedCreateWithoutBrochuresInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutBrochuresInput
+    upsert?: TenantUpsertWithoutBrochuresInput
+    connect?: TenantWhereUniqueInput
+    update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutBrochuresInput, TenantUpdateWithoutBrochuresInput>, TenantUncheckedUpdateWithoutBrochuresInput>
+  }
+
+  export type CampaignUpdateManyWithoutBrochureNestedInput = {
+    create?: XOR<CampaignCreateWithoutBrochureInput, CampaignUncheckedCreateWithoutBrochureInput> | CampaignCreateWithoutBrochureInput[] | CampaignUncheckedCreateWithoutBrochureInput[]
+    connectOrCreate?: CampaignCreateOrConnectWithoutBrochureInput | CampaignCreateOrConnectWithoutBrochureInput[]
+    upsert?: CampaignUpsertWithWhereUniqueWithoutBrochureInput | CampaignUpsertWithWhereUniqueWithoutBrochureInput[]
+    createMany?: CampaignCreateManyBrochureInputEnvelope
+    set?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    disconnect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    delete?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    connect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    update?: CampaignUpdateWithWhereUniqueWithoutBrochureInput | CampaignUpdateWithWhereUniqueWithoutBrochureInput[]
+    updateMany?: CampaignUpdateManyWithWhereWithoutBrochureInput | CampaignUpdateManyWithWhereWithoutBrochureInput[]
+    deleteMany?: CampaignScalarWhereInput | CampaignScalarWhereInput[]
+  }
+
+  export type CampaignUncheckedUpdateManyWithoutBrochureNestedInput = {
+    create?: XOR<CampaignCreateWithoutBrochureInput, CampaignUncheckedCreateWithoutBrochureInput> | CampaignCreateWithoutBrochureInput[] | CampaignUncheckedCreateWithoutBrochureInput[]
+    connectOrCreate?: CampaignCreateOrConnectWithoutBrochureInput | CampaignCreateOrConnectWithoutBrochureInput[]
+    upsert?: CampaignUpsertWithWhereUniqueWithoutBrochureInput | CampaignUpsertWithWhereUniqueWithoutBrochureInput[]
+    createMany?: CampaignCreateManyBrochureInputEnvelope
+    set?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    disconnect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    delete?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    connect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    update?: CampaignUpdateWithWhereUniqueWithoutBrochureInput | CampaignUpdateWithWhereUniqueWithoutBrochureInput[]
+    updateMany?: CampaignUpdateManyWithWhereWithoutBrochureInput | CampaignUpdateManyWithWhereWithoutBrochureInput[]
+    deleteMany?: CampaignScalarWhereInput | CampaignScalarWhereInput[]
+  }
+
   export type TenantCreateNestedOneWithoutCampaignsInput = {
     create?: XOR<TenantCreateWithoutCampaignsInput, TenantUncheckedCreateWithoutCampaignsInput>
     connectOrCreate?: TenantCreateOrConnectWithoutCampaignsInput
@@ -11065,6 +14222,12 @@ export namespace Prisma {
     create?: XOR<AssistantCreateWithoutCampaignsInput, AssistantUncheckedCreateWithoutCampaignsInput>
     connectOrCreate?: AssistantCreateOrConnectWithoutCampaignsInput
     connect?: AssistantWhereUniqueInput
+  }
+
+  export type BrochureCreateNestedOneWithoutCampaignsInput = {
+    create?: XOR<BrochureCreateWithoutCampaignsInput, BrochureUncheckedCreateWithoutCampaignsInput>
+    connectOrCreate?: BrochureCreateOrConnectWithoutCampaignsInput
+    connect?: BrochureWhereUniqueInput
   }
 
   export type LeadCreateNestedManyWithoutCampaignInput = {
@@ -11095,24 +14258,8 @@ export namespace Prisma {
     connect?: CallWhereUniqueInput | CallWhereUniqueInput[]
   }
 
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
-  }
-
   export type EnumCampaignStatusFieldUpdateOperationsInput = {
     set?: $Enums.CampaignStatus
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
   }
 
   export type TenantUpdateOneRequiredWithoutCampaignsNestedInput = {
@@ -11129,6 +14276,16 @@ export namespace Prisma {
     upsert?: AssistantUpsertWithoutCampaignsInput
     connect?: AssistantWhereUniqueInput
     update?: XOR<XOR<AssistantUpdateToOneWithWhereWithoutCampaignsInput, AssistantUpdateWithoutCampaignsInput>, AssistantUncheckedUpdateWithoutCampaignsInput>
+  }
+
+  export type BrochureUpdateOneWithoutCampaignsNestedInput = {
+    create?: XOR<BrochureCreateWithoutCampaignsInput, BrochureUncheckedCreateWithoutCampaignsInput>
+    connectOrCreate?: BrochureCreateOrConnectWithoutCampaignsInput
+    upsert?: BrochureUpsertWithoutCampaignsInput
+    disconnect?: BrochureWhereInput | boolean
+    delete?: BrochureWhereInput | boolean
+    connect?: BrochureWhereUniqueInput
+    update?: XOR<XOR<BrochureUpdateToOneWithWhereWithoutCampaignsInput, BrochureUpdateWithoutCampaignsInput>, BrochureUncheckedUpdateWithoutCampaignsInput>
   }
 
   export type LeadUpdateManyWithoutCampaignNestedInput = {
@@ -11281,14 +14438,6 @@ export namespace Prisma {
 
   export type EnumCallStatusFieldUpdateOperationsInput = {
     set?: $Enums.CallStatus
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type TenantUpdateOneRequiredWithoutCallsNestedInput = {
@@ -11449,11 +14598,37 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type NestedEnumCampaignStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.CampaignStatus | EnumCampaignStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.CampaignStatus[] | ListEnumCampaignStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.CampaignStatus[] | ListEnumCampaignStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumCampaignStatusFilter<$PrismaModel> | $Enums.CampaignStatus
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -11465,6 +14640,22 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -11484,7 +14675,7 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
     notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -11492,36 +14683,31 @@ export namespace Prisma {
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type NestedEnumCampaignStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.CampaignStatus | EnumCampaignStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.CampaignStatus[] | ListEnumCampaignStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.CampaignStatus[] | ListEnumCampaignStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumCampaignStatusWithAggregatesFilter<$PrismaModel> | $Enums.CampaignStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumCampaignStatusFilter<$PrismaModel>
-    _max?: NestedEnumCampaignStatusFilter<$PrismaModel>
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type NestedFloatFilter<$PrismaModel = never> = {
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
     notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -11529,7 +14715,12 @@ export namespace Prisma {
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -11544,6 +14735,23 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumCampaignStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.CampaignStatus | EnumCampaignStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CampaignStatus[] | ListEnumCampaignStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CampaignStatus[] | ListEnumCampaignStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCampaignStatusFilter<$PrismaModel> | $Enums.CampaignStatus
+  }
+
+  export type NestedEnumCampaignStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CampaignStatus | EnumCampaignStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CampaignStatus[] | ListEnumCampaignStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CampaignStatus[] | ListEnumCampaignStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCampaignStatusWithAggregatesFilter<$PrismaModel> | $Enums.CampaignStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCampaignStatusFilter<$PrismaModel>
+    _max?: NestedEnumCampaignStatusFilter<$PrismaModel>
   }
 
   export type NestedEnumLeadStatusFilter<$PrismaModel = never> = {
@@ -11603,33 +14811,6 @@ export namespace Prisma {
     _max?: NestedEnumCallStatusFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
   export type UserCreateWithoutTenantInput = {
     id?: string
     email: string
@@ -11674,6 +14855,7 @@ export namespace Prisma {
     startedAt?: Date | string | null
     completedAt?: Date | string | null
     assistant: AssistantCreateNestedOneWithoutCampaignsInput
+    brochure?: BrochureCreateNestedOneWithoutCampaignsInput
     leads?: LeadCreateNestedManyWithoutCampaignInput
     calls?: CallCreateNestedManyWithoutCampaignInput
   }
@@ -11684,6 +14866,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.CampaignStatus
     assistantId: string
+    brochureId?: string | null
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -11751,6 +14934,7 @@ export namespace Prisma {
     duration?: number | null
     recording?: string | null
     transcript?: string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
     outcome?: string | null
     startedAt?: Date | string | null
@@ -11770,6 +14954,7 @@ export namespace Prisma {
     duration?: number | null
     recording?: string | null
     transcript?: string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
     outcome?: string | null
     startedAt?: Date | string | null
@@ -11815,6 +15000,122 @@ export namespace Prisma {
 
   export type AssistantCreateManyTenantInputEnvelope = {
     data: AssistantCreateManyTenantInput | AssistantCreateManyTenantInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BrochureCreateWithoutTenantInput = {
+    id?: string
+    originalFileName: string
+    fileSizeMB: string
+    pageCount: number
+    rawTextLength: number
+    projectName?: string | null
+    developerName?: string | null
+    reraNumber?: string | null
+    projectWebsite?: string | null
+    contactNumber?: string | null
+    city?: string | null
+    area?: string | null
+    state?: string | null
+    landmark?: string | null
+    fullAddress?: string | null
+    propertyTypes?: BrochureCreatepropertyTypesInput | string[]
+    configurations?: BrochureCreateconfigurationsInput | string[]
+    totalUnits?: number | null
+    totalTowers?: number | null
+    totalFloors?: number | null
+    sizeMin?: number | null
+    sizeMax?: number | null
+    sizeUnit?: string | null
+    startingPrice?: number | null
+    maxPrice?: number | null
+    pricePerSqft?: number | null
+    priceLabel?: string | null
+    paymentPlan?: string | null
+    bankApprovals?: BrochureCreatebankApprovalsInput | string[]
+    maintenanceCharge?: string | null
+    possessionDate?: string | null
+    launchDate?: string | null
+    constructionStatus?: string | null
+    amenities?: BrochureCreateamenitiesInput | string[]
+    specifications?: BrochureCreatespecificationsInput | string[]
+    nearbyInfrastructure?: BrochureCreatenearbyInfrastructureInput | string[]
+    usps?: BrochureCreateuspsInput | string[]
+    minimumBudget?: number | null
+    maximumBudget?: number | null
+    targetBuyerProfile?: string | null
+    preferredLocations?: BrochureCreatepreferredLocationsInput | string[]
+    investmentType?: BrochureCreateinvestmentTypeInput | string[]
+    keyQualifyingQuestions?: BrochureCreatekeyQualifyingQuestionsInput | string[]
+    confidence?: number
+    extractionWarnings?: BrochureCreateextractionWarningsInput | string[]
+    isConfirmed?: boolean
+    confirmedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    campaigns?: CampaignCreateNestedManyWithoutBrochureInput
+  }
+
+  export type BrochureUncheckedCreateWithoutTenantInput = {
+    id?: string
+    originalFileName: string
+    fileSizeMB: string
+    pageCount: number
+    rawTextLength: number
+    projectName?: string | null
+    developerName?: string | null
+    reraNumber?: string | null
+    projectWebsite?: string | null
+    contactNumber?: string | null
+    city?: string | null
+    area?: string | null
+    state?: string | null
+    landmark?: string | null
+    fullAddress?: string | null
+    propertyTypes?: BrochureCreatepropertyTypesInput | string[]
+    configurations?: BrochureCreateconfigurationsInput | string[]
+    totalUnits?: number | null
+    totalTowers?: number | null
+    totalFloors?: number | null
+    sizeMin?: number | null
+    sizeMax?: number | null
+    sizeUnit?: string | null
+    startingPrice?: number | null
+    maxPrice?: number | null
+    pricePerSqft?: number | null
+    priceLabel?: string | null
+    paymentPlan?: string | null
+    bankApprovals?: BrochureCreatebankApprovalsInput | string[]
+    maintenanceCharge?: string | null
+    possessionDate?: string | null
+    launchDate?: string | null
+    constructionStatus?: string | null
+    amenities?: BrochureCreateamenitiesInput | string[]
+    specifications?: BrochureCreatespecificationsInput | string[]
+    nearbyInfrastructure?: BrochureCreatenearbyInfrastructureInput | string[]
+    usps?: BrochureCreateuspsInput | string[]
+    minimumBudget?: number | null
+    maximumBudget?: number | null
+    targetBuyerProfile?: string | null
+    preferredLocations?: BrochureCreatepreferredLocationsInput | string[]
+    investmentType?: BrochureCreateinvestmentTypeInput | string[]
+    keyQualifyingQuestions?: BrochureCreatekeyQualifyingQuestionsInput | string[]
+    confidence?: number
+    extractionWarnings?: BrochureCreateextractionWarningsInput | string[]
+    isConfirmed?: boolean
+    confirmedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutBrochureInput
+  }
+
+  export type BrochureCreateOrConnectWithoutTenantInput = {
+    where: BrochureWhereUniqueInput
+    create: XOR<BrochureCreateWithoutTenantInput, BrochureUncheckedCreateWithoutTenantInput>
+  }
+
+  export type BrochureCreateManyTenantInputEnvelope = {
+    data: BrochureCreateManyTenantInput | BrochureCreateManyTenantInput[]
     skipDuplicates?: boolean
   }
 
@@ -11874,6 +15175,7 @@ export namespace Prisma {
     status?: EnumCampaignStatusFilter<"Campaign"> | $Enums.CampaignStatus
     tenantId?: StringFilter<"Campaign"> | string
     assistantId?: StringFilter<"Campaign"> | string
+    brochureId?: StringNullableFilter<"Campaign"> | string | null
     totalLeads?: IntFilter<"Campaign"> | number
     calledLeads?: IntFilter<"Campaign"> | number
     successLeads?: IntFilter<"Campaign"> | number
@@ -11946,6 +15248,7 @@ export namespace Prisma {
     duration?: IntNullableFilter<"Call"> | number | null
     recording?: StringNullableFilter<"Call"> | string | null
     transcript?: StringNullableFilter<"Call"> | string | null
+    transcriptMessages?: JsonNullableFilter<"Call">
     summary?: StringNullableFilter<"Call"> | string | null
     outcome?: StringNullableFilter<"Call"> | string | null
     startedAt?: DateTimeNullableFilter<"Call"> | Date | string | null
@@ -11983,6 +15286,78 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Assistant"> | Date | string
   }
 
+  export type BrochureUpsertWithWhereUniqueWithoutTenantInput = {
+    where: BrochureWhereUniqueInput
+    update: XOR<BrochureUpdateWithoutTenantInput, BrochureUncheckedUpdateWithoutTenantInput>
+    create: XOR<BrochureCreateWithoutTenantInput, BrochureUncheckedCreateWithoutTenantInput>
+  }
+
+  export type BrochureUpdateWithWhereUniqueWithoutTenantInput = {
+    where: BrochureWhereUniqueInput
+    data: XOR<BrochureUpdateWithoutTenantInput, BrochureUncheckedUpdateWithoutTenantInput>
+  }
+
+  export type BrochureUpdateManyWithWhereWithoutTenantInput = {
+    where: BrochureScalarWhereInput
+    data: XOR<BrochureUpdateManyMutationInput, BrochureUncheckedUpdateManyWithoutTenantInput>
+  }
+
+  export type BrochureScalarWhereInput = {
+    AND?: BrochureScalarWhereInput | BrochureScalarWhereInput[]
+    OR?: BrochureScalarWhereInput[]
+    NOT?: BrochureScalarWhereInput | BrochureScalarWhereInput[]
+    id?: StringFilter<"Brochure"> | string
+    tenantId?: StringFilter<"Brochure"> | string
+    originalFileName?: StringFilter<"Brochure"> | string
+    fileSizeMB?: StringFilter<"Brochure"> | string
+    pageCount?: IntFilter<"Brochure"> | number
+    rawTextLength?: IntFilter<"Brochure"> | number
+    projectName?: StringNullableFilter<"Brochure"> | string | null
+    developerName?: StringNullableFilter<"Brochure"> | string | null
+    reraNumber?: StringNullableFilter<"Brochure"> | string | null
+    projectWebsite?: StringNullableFilter<"Brochure"> | string | null
+    contactNumber?: StringNullableFilter<"Brochure"> | string | null
+    city?: StringNullableFilter<"Brochure"> | string | null
+    area?: StringNullableFilter<"Brochure"> | string | null
+    state?: StringNullableFilter<"Brochure"> | string | null
+    landmark?: StringNullableFilter<"Brochure"> | string | null
+    fullAddress?: StringNullableFilter<"Brochure"> | string | null
+    propertyTypes?: StringNullableListFilter<"Brochure">
+    configurations?: StringNullableListFilter<"Brochure">
+    totalUnits?: IntNullableFilter<"Brochure"> | number | null
+    totalTowers?: IntNullableFilter<"Brochure"> | number | null
+    totalFloors?: IntNullableFilter<"Brochure"> | number | null
+    sizeMin?: FloatNullableFilter<"Brochure"> | number | null
+    sizeMax?: FloatNullableFilter<"Brochure"> | number | null
+    sizeUnit?: StringNullableFilter<"Brochure"> | string | null
+    startingPrice?: FloatNullableFilter<"Brochure"> | number | null
+    maxPrice?: FloatNullableFilter<"Brochure"> | number | null
+    pricePerSqft?: FloatNullableFilter<"Brochure"> | number | null
+    priceLabel?: StringNullableFilter<"Brochure"> | string | null
+    paymentPlan?: StringNullableFilter<"Brochure"> | string | null
+    bankApprovals?: StringNullableListFilter<"Brochure">
+    maintenanceCharge?: StringNullableFilter<"Brochure"> | string | null
+    possessionDate?: StringNullableFilter<"Brochure"> | string | null
+    launchDate?: StringNullableFilter<"Brochure"> | string | null
+    constructionStatus?: StringNullableFilter<"Brochure"> | string | null
+    amenities?: StringNullableListFilter<"Brochure">
+    specifications?: StringNullableListFilter<"Brochure">
+    nearbyInfrastructure?: StringNullableListFilter<"Brochure">
+    usps?: StringNullableListFilter<"Brochure">
+    minimumBudget?: FloatNullableFilter<"Brochure"> | number | null
+    maximumBudget?: FloatNullableFilter<"Brochure"> | number | null
+    targetBuyerProfile?: StringNullableFilter<"Brochure"> | string | null
+    preferredLocations?: StringNullableListFilter<"Brochure">
+    investmentType?: StringNullableListFilter<"Brochure">
+    keyQualifyingQuestions?: StringNullableListFilter<"Brochure">
+    confidence?: FloatFilter<"Brochure"> | number
+    extractionWarnings?: StringNullableListFilter<"Brochure">
+    isConfirmed?: BoolFilter<"Brochure"> | boolean
+    confirmedAt?: DateTimeNullableFilter<"Brochure"> | Date | string | null
+    createdAt?: DateTimeFilter<"Brochure"> | Date | string
+    updatedAt?: DateTimeFilter<"Brochure"> | Date | string
+  }
+
   export type TenantCreateWithoutUsersInput = {
     id?: string
     name: string
@@ -11995,6 +15370,7 @@ export namespace Prisma {
     leads?: LeadCreateNestedManyWithoutTenantInput
     calls?: CallCreateNestedManyWithoutTenantInput
     assistants?: AssistantCreateNestedManyWithoutTenantInput
+    brochures?: BrochureCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutUsersInput = {
@@ -12009,6 +15385,7 @@ export namespace Prisma {
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
     assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
+    brochures?: BrochureUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutUsersInput = {
@@ -12039,6 +15416,7 @@ export namespace Prisma {
     leads?: LeadUpdateManyWithoutTenantNestedInput
     calls?: CallUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUpdateManyWithoutTenantNestedInput
+    brochures?: BrochureUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -12053,6 +15431,7 @@ export namespace Prisma {
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
+    brochures?: BrochureUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantCreateWithoutAssistantsInput = {
@@ -12067,6 +15446,7 @@ export namespace Prisma {
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
     calls?: CallCreateNestedManyWithoutTenantInput
+    brochures?: BrochureCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutAssistantsInput = {
@@ -12081,6 +15461,7 @@ export namespace Prisma {
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
+    brochures?: BrochureUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutAssistantsInput = {
@@ -12102,6 +15483,7 @@ export namespace Prisma {
     startedAt?: Date | string | null
     completedAt?: Date | string | null
     tenant: TenantCreateNestedOneWithoutCampaignsInput
+    brochure?: BrochureCreateNestedOneWithoutCampaignsInput
     leads?: LeadCreateNestedManyWithoutCampaignInput
     calls?: CallCreateNestedManyWithoutCampaignInput
   }
@@ -12112,6 +15494,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.CampaignStatus
     tenantId: string
+    brochureId?: string | null
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -12157,6 +15540,7 @@ export namespace Prisma {
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
     calls?: CallUpdateManyWithoutTenantNestedInput
+    brochures?: BrochureUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutAssistantsInput = {
@@ -12171,6 +15555,7 @@ export namespace Prisma {
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
+    brochures?: BrochureUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type CampaignUpsertWithWhereUniqueWithoutAssistantInput = {
@@ -12189,6 +15574,146 @@ export namespace Prisma {
     data: XOR<CampaignUpdateManyMutationInput, CampaignUncheckedUpdateManyWithoutAssistantInput>
   }
 
+  export type TenantCreateWithoutBrochuresInput = {
+    id?: string
+    name: string
+    email: string
+    apiKey?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserCreateNestedManyWithoutTenantInput
+    campaigns?: CampaignCreateNestedManyWithoutTenantInput
+    leads?: LeadCreateNestedManyWithoutTenantInput
+    calls?: CallCreateNestedManyWithoutTenantInput
+    assistants?: AssistantCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutBrochuresInput = {
+    id?: string
+    name: string
+    email: string
+    apiKey?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserUncheckedCreateNestedManyWithoutTenantInput
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
+    leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
+    calls?: CallUncheckedCreateNestedManyWithoutTenantInput
+    assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutBrochuresInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutBrochuresInput, TenantUncheckedCreateWithoutBrochuresInput>
+  }
+
+  export type CampaignCreateWithoutBrochureInput = {
+    id?: string
+    name: string
+    description?: string | null
+    status?: $Enums.CampaignStatus
+    totalLeads?: number
+    calledLeads?: number
+    successLeads?: number
+    failedLeads?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    tenant: TenantCreateNestedOneWithoutCampaignsInput
+    assistant: AssistantCreateNestedOneWithoutCampaignsInput
+    leads?: LeadCreateNestedManyWithoutCampaignInput
+    calls?: CallCreateNestedManyWithoutCampaignInput
+  }
+
+  export type CampaignUncheckedCreateWithoutBrochureInput = {
+    id?: string
+    name: string
+    description?: string | null
+    status?: $Enums.CampaignStatus
+    tenantId: string
+    assistantId: string
+    totalLeads?: number
+    calledLeads?: number
+    successLeads?: number
+    failedLeads?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    leads?: LeadUncheckedCreateNestedManyWithoutCampaignInput
+    calls?: CallUncheckedCreateNestedManyWithoutCampaignInput
+  }
+
+  export type CampaignCreateOrConnectWithoutBrochureInput = {
+    where: CampaignWhereUniqueInput
+    create: XOR<CampaignCreateWithoutBrochureInput, CampaignUncheckedCreateWithoutBrochureInput>
+  }
+
+  export type CampaignCreateManyBrochureInputEnvelope = {
+    data: CampaignCreateManyBrochureInput | CampaignCreateManyBrochureInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TenantUpsertWithoutBrochuresInput = {
+    update: XOR<TenantUpdateWithoutBrochuresInput, TenantUncheckedUpdateWithoutBrochuresInput>
+    create: XOR<TenantCreateWithoutBrochuresInput, TenantUncheckedCreateWithoutBrochuresInput>
+    where?: TenantWhereInput
+  }
+
+  export type TenantUpdateToOneWithWhereWithoutBrochuresInput = {
+    where?: TenantWhereInput
+    data: XOR<TenantUpdateWithoutBrochuresInput, TenantUncheckedUpdateWithoutBrochuresInput>
+  }
+
+  export type TenantUpdateWithoutBrochuresInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    apiKey?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUpdateManyWithoutTenantNestedInput
+    campaigns?: CampaignUpdateManyWithoutTenantNestedInput
+    leads?: LeadUpdateManyWithoutTenantNestedInput
+    calls?: CallUpdateManyWithoutTenantNestedInput
+    assistants?: AssistantUpdateManyWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutBrochuresInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    apiKey?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUncheckedUpdateManyWithoutTenantNestedInput
+    campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
+    calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
+    assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
+  }
+
+  export type CampaignUpsertWithWhereUniqueWithoutBrochureInput = {
+    where: CampaignWhereUniqueInput
+    update: XOR<CampaignUpdateWithoutBrochureInput, CampaignUncheckedUpdateWithoutBrochureInput>
+    create: XOR<CampaignCreateWithoutBrochureInput, CampaignUncheckedCreateWithoutBrochureInput>
+  }
+
+  export type CampaignUpdateWithWhereUniqueWithoutBrochureInput = {
+    where: CampaignWhereUniqueInput
+    data: XOR<CampaignUpdateWithoutBrochureInput, CampaignUncheckedUpdateWithoutBrochureInput>
+  }
+
+  export type CampaignUpdateManyWithWhereWithoutBrochureInput = {
+    where: CampaignScalarWhereInput
+    data: XOR<CampaignUpdateManyMutationInput, CampaignUncheckedUpdateManyWithoutBrochureInput>
+  }
+
   export type TenantCreateWithoutCampaignsInput = {
     id?: string
     name: string
@@ -12201,6 +15726,7 @@ export namespace Prisma {
     leads?: LeadCreateNestedManyWithoutTenantInput
     calls?: CallCreateNestedManyWithoutTenantInput
     assistants?: AssistantCreateNestedManyWithoutTenantInput
+    brochures?: BrochureCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutCampaignsInput = {
@@ -12215,6 +15741,7 @@ export namespace Prisma {
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
     assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
+    brochures?: BrochureUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutCampaignsInput = {
@@ -12245,6 +15772,117 @@ export namespace Prisma {
   export type AssistantCreateOrConnectWithoutCampaignsInput = {
     where: AssistantWhereUniqueInput
     create: XOR<AssistantCreateWithoutCampaignsInput, AssistantUncheckedCreateWithoutCampaignsInput>
+  }
+
+  export type BrochureCreateWithoutCampaignsInput = {
+    id?: string
+    originalFileName: string
+    fileSizeMB: string
+    pageCount: number
+    rawTextLength: number
+    projectName?: string | null
+    developerName?: string | null
+    reraNumber?: string | null
+    projectWebsite?: string | null
+    contactNumber?: string | null
+    city?: string | null
+    area?: string | null
+    state?: string | null
+    landmark?: string | null
+    fullAddress?: string | null
+    propertyTypes?: BrochureCreatepropertyTypesInput | string[]
+    configurations?: BrochureCreateconfigurationsInput | string[]
+    totalUnits?: number | null
+    totalTowers?: number | null
+    totalFloors?: number | null
+    sizeMin?: number | null
+    sizeMax?: number | null
+    sizeUnit?: string | null
+    startingPrice?: number | null
+    maxPrice?: number | null
+    pricePerSqft?: number | null
+    priceLabel?: string | null
+    paymentPlan?: string | null
+    bankApprovals?: BrochureCreatebankApprovalsInput | string[]
+    maintenanceCharge?: string | null
+    possessionDate?: string | null
+    launchDate?: string | null
+    constructionStatus?: string | null
+    amenities?: BrochureCreateamenitiesInput | string[]
+    specifications?: BrochureCreatespecificationsInput | string[]
+    nearbyInfrastructure?: BrochureCreatenearbyInfrastructureInput | string[]
+    usps?: BrochureCreateuspsInput | string[]
+    minimumBudget?: number | null
+    maximumBudget?: number | null
+    targetBuyerProfile?: string | null
+    preferredLocations?: BrochureCreatepreferredLocationsInput | string[]
+    investmentType?: BrochureCreateinvestmentTypeInput | string[]
+    keyQualifyingQuestions?: BrochureCreatekeyQualifyingQuestionsInput | string[]
+    confidence?: number
+    extractionWarnings?: BrochureCreateextractionWarningsInput | string[]
+    isConfirmed?: boolean
+    confirmedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutBrochuresInput
+  }
+
+  export type BrochureUncheckedCreateWithoutCampaignsInput = {
+    id?: string
+    tenantId: string
+    originalFileName: string
+    fileSizeMB: string
+    pageCount: number
+    rawTextLength: number
+    projectName?: string | null
+    developerName?: string | null
+    reraNumber?: string | null
+    projectWebsite?: string | null
+    contactNumber?: string | null
+    city?: string | null
+    area?: string | null
+    state?: string | null
+    landmark?: string | null
+    fullAddress?: string | null
+    propertyTypes?: BrochureCreatepropertyTypesInput | string[]
+    configurations?: BrochureCreateconfigurationsInput | string[]
+    totalUnits?: number | null
+    totalTowers?: number | null
+    totalFloors?: number | null
+    sizeMin?: number | null
+    sizeMax?: number | null
+    sizeUnit?: string | null
+    startingPrice?: number | null
+    maxPrice?: number | null
+    pricePerSqft?: number | null
+    priceLabel?: string | null
+    paymentPlan?: string | null
+    bankApprovals?: BrochureCreatebankApprovalsInput | string[]
+    maintenanceCharge?: string | null
+    possessionDate?: string | null
+    launchDate?: string | null
+    constructionStatus?: string | null
+    amenities?: BrochureCreateamenitiesInput | string[]
+    specifications?: BrochureCreatespecificationsInput | string[]
+    nearbyInfrastructure?: BrochureCreatenearbyInfrastructureInput | string[]
+    usps?: BrochureCreateuspsInput | string[]
+    minimumBudget?: number | null
+    maximumBudget?: number | null
+    targetBuyerProfile?: string | null
+    preferredLocations?: BrochureCreatepreferredLocationsInput | string[]
+    investmentType?: BrochureCreateinvestmentTypeInput | string[]
+    keyQualifyingQuestions?: BrochureCreatekeyQualifyingQuestionsInput | string[]
+    confidence?: number
+    extractionWarnings?: BrochureCreateextractionWarningsInput | string[]
+    isConfirmed?: boolean
+    confirmedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BrochureCreateOrConnectWithoutCampaignsInput = {
+    where: BrochureWhereUniqueInput
+    create: XOR<BrochureCreateWithoutCampaignsInput, BrochureUncheckedCreateWithoutCampaignsInput>
   }
 
   export type LeadCreateWithoutCampaignInput = {
@@ -12292,6 +15930,7 @@ export namespace Prisma {
     duration?: number | null
     recording?: string | null
     transcript?: string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
     outcome?: string | null
     startedAt?: Date | string | null
@@ -12311,6 +15950,7 @@ export namespace Prisma {
     duration?: number | null
     recording?: string | null
     transcript?: string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
     outcome?: string | null
     startedAt?: Date | string | null
@@ -12352,6 +15992,7 @@ export namespace Prisma {
     leads?: LeadUpdateManyWithoutTenantNestedInput
     calls?: CallUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUpdateManyWithoutTenantNestedInput
+    brochures?: BrochureUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutCampaignsInput = {
@@ -12366,6 +16007,7 @@ export namespace Prisma {
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
+    brochures?: BrochureUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type AssistantUpsertWithoutCampaignsInput = {
@@ -12395,6 +16037,123 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     config?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BrochureUpsertWithoutCampaignsInput = {
+    update: XOR<BrochureUpdateWithoutCampaignsInput, BrochureUncheckedUpdateWithoutCampaignsInput>
+    create: XOR<BrochureCreateWithoutCampaignsInput, BrochureUncheckedCreateWithoutCampaignsInput>
+    where?: BrochureWhereInput
+  }
+
+  export type BrochureUpdateToOneWithWhereWithoutCampaignsInput = {
+    where?: BrochureWhereInput
+    data: XOR<BrochureUpdateWithoutCampaignsInput, BrochureUncheckedUpdateWithoutCampaignsInput>
+  }
+
+  export type BrochureUpdateWithoutCampaignsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    originalFileName?: StringFieldUpdateOperationsInput | string
+    fileSizeMB?: StringFieldUpdateOperationsInput | string
+    pageCount?: IntFieldUpdateOperationsInput | number
+    rawTextLength?: IntFieldUpdateOperationsInput | number
+    projectName?: NullableStringFieldUpdateOperationsInput | string | null
+    developerName?: NullableStringFieldUpdateOperationsInput | string | null
+    reraNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    projectWebsite?: NullableStringFieldUpdateOperationsInput | string | null
+    contactNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    area?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    fullAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    propertyTypes?: BrochureUpdatepropertyTypesInput | string[]
+    configurations?: BrochureUpdateconfigurationsInput | string[]
+    totalUnits?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTowers?: NullableIntFieldUpdateOperationsInput | number | null
+    totalFloors?: NullableIntFieldUpdateOperationsInput | number | null
+    sizeMin?: NullableFloatFieldUpdateOperationsInput | number | null
+    sizeMax?: NullableFloatFieldUpdateOperationsInput | number | null
+    sizeUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    startingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    pricePerSqft?: NullableFloatFieldUpdateOperationsInput | number | null
+    priceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    bankApprovals?: BrochureUpdatebankApprovalsInput | string[]
+    maintenanceCharge?: NullableStringFieldUpdateOperationsInput | string | null
+    possessionDate?: NullableStringFieldUpdateOperationsInput | string | null
+    launchDate?: NullableStringFieldUpdateOperationsInput | string | null
+    constructionStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    amenities?: BrochureUpdateamenitiesInput | string[]
+    specifications?: BrochureUpdatespecificationsInput | string[]
+    nearbyInfrastructure?: BrochureUpdatenearbyInfrastructureInput | string[]
+    usps?: BrochureUpdateuspsInput | string[]
+    minimumBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    maximumBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    targetBuyerProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLocations?: BrochureUpdatepreferredLocationsInput | string[]
+    investmentType?: BrochureUpdateinvestmentTypeInput | string[]
+    keyQualifyingQuestions?: BrochureUpdatekeyQualifyingQuestionsInput | string[]
+    confidence?: FloatFieldUpdateOperationsInput | number
+    extractionWarnings?: BrochureUpdateextractionWarningsInput | string[]
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutBrochuresNestedInput
+  }
+
+  export type BrochureUncheckedUpdateWithoutCampaignsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    originalFileName?: StringFieldUpdateOperationsInput | string
+    fileSizeMB?: StringFieldUpdateOperationsInput | string
+    pageCount?: IntFieldUpdateOperationsInput | number
+    rawTextLength?: IntFieldUpdateOperationsInput | number
+    projectName?: NullableStringFieldUpdateOperationsInput | string | null
+    developerName?: NullableStringFieldUpdateOperationsInput | string | null
+    reraNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    projectWebsite?: NullableStringFieldUpdateOperationsInput | string | null
+    contactNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    area?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    fullAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    propertyTypes?: BrochureUpdatepropertyTypesInput | string[]
+    configurations?: BrochureUpdateconfigurationsInput | string[]
+    totalUnits?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTowers?: NullableIntFieldUpdateOperationsInput | number | null
+    totalFloors?: NullableIntFieldUpdateOperationsInput | number | null
+    sizeMin?: NullableFloatFieldUpdateOperationsInput | number | null
+    sizeMax?: NullableFloatFieldUpdateOperationsInput | number | null
+    sizeUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    startingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    pricePerSqft?: NullableFloatFieldUpdateOperationsInput | number | null
+    priceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    bankApprovals?: BrochureUpdatebankApprovalsInput | string[]
+    maintenanceCharge?: NullableStringFieldUpdateOperationsInput | string | null
+    possessionDate?: NullableStringFieldUpdateOperationsInput | string | null
+    launchDate?: NullableStringFieldUpdateOperationsInput | string | null
+    constructionStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    amenities?: BrochureUpdateamenitiesInput | string[]
+    specifications?: BrochureUpdatespecificationsInput | string[]
+    nearbyInfrastructure?: BrochureUpdatenearbyInfrastructureInput | string[]
+    usps?: BrochureUpdateuspsInput | string[]
+    minimumBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    maximumBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    targetBuyerProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLocations?: BrochureUpdatepreferredLocationsInput | string[]
+    investmentType?: BrochureUpdateinvestmentTypeInput | string[]
+    keyQualifyingQuestions?: BrochureUpdatekeyQualifyingQuestionsInput | string[]
+    confidence?: FloatFieldUpdateOperationsInput | number
+    extractionWarnings?: BrochureUpdateextractionWarningsInput | string[]
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12443,6 +16202,7 @@ export namespace Prisma {
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
     calls?: CallCreateNestedManyWithoutTenantInput
     assistants?: AssistantCreateNestedManyWithoutTenantInput
+    brochures?: BrochureCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutLeadsInput = {
@@ -12457,6 +16217,7 @@ export namespace Prisma {
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
     assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
+    brochures?: BrochureUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutLeadsInput = {
@@ -12479,6 +16240,7 @@ export namespace Prisma {
     completedAt?: Date | string | null
     tenant: TenantCreateNestedOneWithoutCampaignsInput
     assistant: AssistantCreateNestedOneWithoutCampaignsInput
+    brochure?: BrochureCreateNestedOneWithoutCampaignsInput
     calls?: CallCreateNestedManyWithoutCampaignInput
   }
 
@@ -12489,6 +16251,7 @@ export namespace Prisma {
     status?: $Enums.CampaignStatus
     tenantId: string
     assistantId: string
+    brochureId?: string | null
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -12512,6 +16275,7 @@ export namespace Prisma {
     duration?: number | null
     recording?: string | null
     transcript?: string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
     outcome?: string | null
     startedAt?: Date | string | null
@@ -12531,6 +16295,7 @@ export namespace Prisma {
     duration?: number | null
     recording?: string | null
     transcript?: string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
     outcome?: string | null
     startedAt?: Date | string | null
@@ -12572,6 +16337,7 @@ export namespace Prisma {
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
     calls?: CallUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUpdateManyWithoutTenantNestedInput
+    brochures?: BrochureUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutLeadsInput = {
@@ -12586,6 +16352,7 @@ export namespace Prisma {
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
+    brochures?: BrochureUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type CampaignUpsertWithoutLeadsInput = {
@@ -12614,6 +16381,7 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     tenant?: TenantUpdateOneRequiredWithoutCampaignsNestedInput
     assistant?: AssistantUpdateOneRequiredWithoutCampaignsNestedInput
+    brochure?: BrochureUpdateOneWithoutCampaignsNestedInput
     calls?: CallUpdateManyWithoutCampaignNestedInput
   }
 
@@ -12624,6 +16392,7 @@ export namespace Prisma {
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     tenantId?: StringFieldUpdateOperationsInput | string
     assistantId?: StringFieldUpdateOperationsInput | string
+    brochureId?: NullableStringFieldUpdateOperationsInput | string | null
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -12663,6 +16432,7 @@ export namespace Prisma {
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
     assistants?: AssistantCreateNestedManyWithoutTenantInput
+    brochures?: BrochureCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutCallsInput = {
@@ -12677,6 +16447,7 @@ export namespace Prisma {
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
     assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
+    brochures?: BrochureUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutCallsInput = {
@@ -12699,6 +16470,7 @@ export namespace Prisma {
     completedAt?: Date | string | null
     tenant: TenantCreateNestedOneWithoutCampaignsInput
     assistant: AssistantCreateNestedOneWithoutCampaignsInput
+    brochure?: BrochureCreateNestedOneWithoutCampaignsInput
     leads?: LeadCreateNestedManyWithoutCampaignInput
   }
 
@@ -12709,6 +16481,7 @@ export namespace Prisma {
     status?: $Enums.CampaignStatus
     tenantId: string
     assistantId: string
+    brochureId?: string | null
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -12781,6 +16554,7 @@ export namespace Prisma {
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUpdateManyWithoutTenantNestedInput
+    brochures?: BrochureUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutCallsInput = {
@@ -12795,6 +16569,7 @@ export namespace Prisma {
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
+    brochures?: BrochureUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type CampaignUpsertWithoutCallsInput = {
@@ -12823,6 +16598,7 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     tenant?: TenantUpdateOneRequiredWithoutCampaignsNestedInput
     assistant?: AssistantUpdateOneRequiredWithoutCampaignsNestedInput
+    brochure?: BrochureUpdateOneWithoutCampaignsNestedInput
     leads?: LeadUpdateManyWithoutCampaignNestedInput
   }
 
@@ -12833,6 +16609,7 @@ export namespace Prisma {
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     tenantId?: StringFieldUpdateOperationsInput | string
     assistantId?: StringFieldUpdateOperationsInput | string
+    brochureId?: NullableStringFieldUpdateOperationsInput | string | null
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -12899,6 +16676,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.CampaignStatus
     assistantId: string
+    brochureId?: string | null
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -12931,6 +16709,7 @@ export namespace Prisma {
     duration?: number | null
     recording?: string | null
     transcript?: string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
     outcome?: string | null
     startedAt?: Date | string | null
@@ -12944,6 +16723,58 @@ export namespace Prisma {
     vapiId: string
     name: string
     config: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BrochureCreateManyTenantInput = {
+    id?: string
+    originalFileName: string
+    fileSizeMB: string
+    pageCount: number
+    rawTextLength: number
+    projectName?: string | null
+    developerName?: string | null
+    reraNumber?: string | null
+    projectWebsite?: string | null
+    contactNumber?: string | null
+    city?: string | null
+    area?: string | null
+    state?: string | null
+    landmark?: string | null
+    fullAddress?: string | null
+    propertyTypes?: BrochureCreatepropertyTypesInput | string[]
+    configurations?: BrochureCreateconfigurationsInput | string[]
+    totalUnits?: number | null
+    totalTowers?: number | null
+    totalFloors?: number | null
+    sizeMin?: number | null
+    sizeMax?: number | null
+    sizeUnit?: string | null
+    startingPrice?: number | null
+    maxPrice?: number | null
+    pricePerSqft?: number | null
+    priceLabel?: string | null
+    paymentPlan?: string | null
+    bankApprovals?: BrochureCreatebankApprovalsInput | string[]
+    maintenanceCharge?: string | null
+    possessionDate?: string | null
+    launchDate?: string | null
+    constructionStatus?: string | null
+    amenities?: BrochureCreateamenitiesInput | string[]
+    specifications?: BrochureCreatespecificationsInput | string[]
+    nearbyInfrastructure?: BrochureCreatenearbyInfrastructureInput | string[]
+    usps?: BrochureCreateuspsInput | string[]
+    minimumBudget?: number | null
+    maximumBudget?: number | null
+    targetBuyerProfile?: string | null
+    preferredLocations?: BrochureCreatepreferredLocationsInput | string[]
+    investmentType?: BrochureCreateinvestmentTypeInput | string[]
+    keyQualifyingQuestions?: BrochureCreatekeyQualifyingQuestionsInput | string[]
+    confidence?: number
+    extractionWarnings?: BrochureCreateextractionWarningsInput | string[]
+    isConfirmed?: boolean
+    confirmedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12992,6 +16823,7 @@ export namespace Prisma {
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     assistant?: AssistantUpdateOneRequiredWithoutCampaignsNestedInput
+    brochure?: BrochureUpdateOneWithoutCampaignsNestedInput
     leads?: LeadUpdateManyWithoutCampaignNestedInput
     calls?: CallUpdateManyWithoutCampaignNestedInput
   }
@@ -13002,6 +16834,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     assistantId?: StringFieldUpdateOperationsInput | string
+    brochureId?: NullableStringFieldUpdateOperationsInput | string | null
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -13020,6 +16853,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     assistantId?: StringFieldUpdateOperationsInput | string
+    brochureId?: NullableStringFieldUpdateOperationsInput | string | null
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -13078,6 +16912,7 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13097,6 +16932,7 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13114,6 +16950,7 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13151,12 +16988,171 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type BrochureUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    originalFileName?: StringFieldUpdateOperationsInput | string
+    fileSizeMB?: StringFieldUpdateOperationsInput | string
+    pageCount?: IntFieldUpdateOperationsInput | number
+    rawTextLength?: IntFieldUpdateOperationsInput | number
+    projectName?: NullableStringFieldUpdateOperationsInput | string | null
+    developerName?: NullableStringFieldUpdateOperationsInput | string | null
+    reraNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    projectWebsite?: NullableStringFieldUpdateOperationsInput | string | null
+    contactNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    area?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    fullAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    propertyTypes?: BrochureUpdatepropertyTypesInput | string[]
+    configurations?: BrochureUpdateconfigurationsInput | string[]
+    totalUnits?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTowers?: NullableIntFieldUpdateOperationsInput | number | null
+    totalFloors?: NullableIntFieldUpdateOperationsInput | number | null
+    sizeMin?: NullableFloatFieldUpdateOperationsInput | number | null
+    sizeMax?: NullableFloatFieldUpdateOperationsInput | number | null
+    sizeUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    startingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    pricePerSqft?: NullableFloatFieldUpdateOperationsInput | number | null
+    priceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    bankApprovals?: BrochureUpdatebankApprovalsInput | string[]
+    maintenanceCharge?: NullableStringFieldUpdateOperationsInput | string | null
+    possessionDate?: NullableStringFieldUpdateOperationsInput | string | null
+    launchDate?: NullableStringFieldUpdateOperationsInput | string | null
+    constructionStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    amenities?: BrochureUpdateamenitiesInput | string[]
+    specifications?: BrochureUpdatespecificationsInput | string[]
+    nearbyInfrastructure?: BrochureUpdatenearbyInfrastructureInput | string[]
+    usps?: BrochureUpdateuspsInput | string[]
+    minimumBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    maximumBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    targetBuyerProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLocations?: BrochureUpdatepreferredLocationsInput | string[]
+    investmentType?: BrochureUpdateinvestmentTypeInput | string[]
+    keyQualifyingQuestions?: BrochureUpdatekeyQualifyingQuestionsInput | string[]
+    confidence?: FloatFieldUpdateOperationsInput | number
+    extractionWarnings?: BrochureUpdateextractionWarningsInput | string[]
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaigns?: CampaignUpdateManyWithoutBrochureNestedInput
+  }
+
+  export type BrochureUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    originalFileName?: StringFieldUpdateOperationsInput | string
+    fileSizeMB?: StringFieldUpdateOperationsInput | string
+    pageCount?: IntFieldUpdateOperationsInput | number
+    rawTextLength?: IntFieldUpdateOperationsInput | number
+    projectName?: NullableStringFieldUpdateOperationsInput | string | null
+    developerName?: NullableStringFieldUpdateOperationsInput | string | null
+    reraNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    projectWebsite?: NullableStringFieldUpdateOperationsInput | string | null
+    contactNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    area?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    fullAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    propertyTypes?: BrochureUpdatepropertyTypesInput | string[]
+    configurations?: BrochureUpdateconfigurationsInput | string[]
+    totalUnits?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTowers?: NullableIntFieldUpdateOperationsInput | number | null
+    totalFloors?: NullableIntFieldUpdateOperationsInput | number | null
+    sizeMin?: NullableFloatFieldUpdateOperationsInput | number | null
+    sizeMax?: NullableFloatFieldUpdateOperationsInput | number | null
+    sizeUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    startingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    pricePerSqft?: NullableFloatFieldUpdateOperationsInput | number | null
+    priceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    bankApprovals?: BrochureUpdatebankApprovalsInput | string[]
+    maintenanceCharge?: NullableStringFieldUpdateOperationsInput | string | null
+    possessionDate?: NullableStringFieldUpdateOperationsInput | string | null
+    launchDate?: NullableStringFieldUpdateOperationsInput | string | null
+    constructionStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    amenities?: BrochureUpdateamenitiesInput | string[]
+    specifications?: BrochureUpdatespecificationsInput | string[]
+    nearbyInfrastructure?: BrochureUpdatenearbyInfrastructureInput | string[]
+    usps?: BrochureUpdateuspsInput | string[]
+    minimumBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    maximumBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    targetBuyerProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLocations?: BrochureUpdatepreferredLocationsInput | string[]
+    investmentType?: BrochureUpdateinvestmentTypeInput | string[]
+    keyQualifyingQuestions?: BrochureUpdatekeyQualifyingQuestionsInput | string[]
+    confidence?: FloatFieldUpdateOperationsInput | number
+    extractionWarnings?: BrochureUpdateextractionWarningsInput | string[]
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaigns?: CampaignUncheckedUpdateManyWithoutBrochureNestedInput
+  }
+
+  export type BrochureUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    originalFileName?: StringFieldUpdateOperationsInput | string
+    fileSizeMB?: StringFieldUpdateOperationsInput | string
+    pageCount?: IntFieldUpdateOperationsInput | number
+    rawTextLength?: IntFieldUpdateOperationsInput | number
+    projectName?: NullableStringFieldUpdateOperationsInput | string | null
+    developerName?: NullableStringFieldUpdateOperationsInput | string | null
+    reraNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    projectWebsite?: NullableStringFieldUpdateOperationsInput | string | null
+    contactNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    area?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    fullAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    propertyTypes?: BrochureUpdatepropertyTypesInput | string[]
+    configurations?: BrochureUpdateconfigurationsInput | string[]
+    totalUnits?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTowers?: NullableIntFieldUpdateOperationsInput | number | null
+    totalFloors?: NullableIntFieldUpdateOperationsInput | number | null
+    sizeMin?: NullableFloatFieldUpdateOperationsInput | number | null
+    sizeMax?: NullableFloatFieldUpdateOperationsInput | number | null
+    sizeUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    startingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    pricePerSqft?: NullableFloatFieldUpdateOperationsInput | number | null
+    priceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    bankApprovals?: BrochureUpdatebankApprovalsInput | string[]
+    maintenanceCharge?: NullableStringFieldUpdateOperationsInput | string | null
+    possessionDate?: NullableStringFieldUpdateOperationsInput | string | null
+    launchDate?: NullableStringFieldUpdateOperationsInput | string | null
+    constructionStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    amenities?: BrochureUpdateamenitiesInput | string[]
+    specifications?: BrochureUpdatespecificationsInput | string[]
+    nearbyInfrastructure?: BrochureUpdatenearbyInfrastructureInput | string[]
+    usps?: BrochureUpdateuspsInput | string[]
+    minimumBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    maximumBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    targetBuyerProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLocations?: BrochureUpdatepreferredLocationsInput | string[]
+    investmentType?: BrochureUpdateinvestmentTypeInput | string[]
+    keyQualifyingQuestions?: BrochureUpdatekeyQualifyingQuestionsInput | string[]
+    confidence?: FloatFieldUpdateOperationsInput | number
+    extractionWarnings?: BrochureUpdateextractionWarningsInput | string[]
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type CampaignCreateManyAssistantInput = {
     id?: string
     name: string
     description?: string | null
     status?: $Enums.CampaignStatus
     tenantId: string
+    brochureId?: string | null
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -13181,6 +17177,7 @@ export namespace Prisma {
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     tenant?: TenantUpdateOneRequiredWithoutCampaignsNestedInput
+    brochure?: BrochureUpdateOneWithoutCampaignsNestedInput
     leads?: LeadUpdateManyWithoutCampaignNestedInput
     calls?: CallUpdateManyWithoutCampaignNestedInput
   }
@@ -13191,6 +17188,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     tenantId?: StringFieldUpdateOperationsInput | string
+    brochureId?: NullableStringFieldUpdateOperationsInput | string | null
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -13209,6 +17207,79 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     tenantId?: StringFieldUpdateOperationsInput | string
+    brochureId?: NullableStringFieldUpdateOperationsInput | string | null
+    totalLeads?: IntFieldUpdateOperationsInput | number
+    calledLeads?: IntFieldUpdateOperationsInput | number
+    successLeads?: IntFieldUpdateOperationsInput | number
+    failedLeads?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CampaignCreateManyBrochureInput = {
+    id?: string
+    name: string
+    description?: string | null
+    status?: $Enums.CampaignStatus
+    tenantId: string
+    assistantId: string
+    totalLeads?: number
+    calledLeads?: number
+    successLeads?: number
+    failedLeads?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+  }
+
+  export type CampaignUpdateWithoutBrochureInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    totalLeads?: IntFieldUpdateOperationsInput | number
+    calledLeads?: IntFieldUpdateOperationsInput | number
+    successLeads?: IntFieldUpdateOperationsInput | number
+    failedLeads?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tenant?: TenantUpdateOneRequiredWithoutCampaignsNestedInput
+    assistant?: AssistantUpdateOneRequiredWithoutCampaignsNestedInput
+    leads?: LeadUpdateManyWithoutCampaignNestedInput
+    calls?: CallUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type CampaignUncheckedUpdateWithoutBrochureInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    tenantId?: StringFieldUpdateOperationsInput | string
+    assistantId?: StringFieldUpdateOperationsInput | string
+    totalLeads?: IntFieldUpdateOperationsInput | number
+    calledLeads?: IntFieldUpdateOperationsInput | number
+    successLeads?: IntFieldUpdateOperationsInput | number
+    failedLeads?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leads?: LeadUncheckedUpdateManyWithoutCampaignNestedInput
+    calls?: CallUncheckedUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type CampaignUncheckedUpdateManyWithoutBrochureInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    tenantId?: StringFieldUpdateOperationsInput | string
+    assistantId?: StringFieldUpdateOperationsInput | string
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -13241,6 +17312,7 @@ export namespace Prisma {
     duration?: number | null
     recording?: string | null
     transcript?: string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
     outcome?: string | null
     startedAt?: Date | string | null
@@ -13297,6 +17369,7 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13316,6 +17389,7 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13333,6 +17407,7 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13350,6 +17425,7 @@ export namespace Prisma {
     duration?: number | null
     recording?: string | null
     transcript?: string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
     outcome?: string | null
     startedAt?: Date | string | null
@@ -13365,6 +17441,7 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13384,6 +17461,7 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13401,6 +17479,7 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

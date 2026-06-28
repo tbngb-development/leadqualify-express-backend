@@ -1,6 +1,9 @@
+// src/modules/campaigns/campaign.service.ts — FULL REPLACE
+
 import prisma from "../../config/database";
 import { vapiClient } from "../../config/vapi";
 import { parseCSV } from "../../utils/csvParser";
+import brochureService from "../brochure/brochure.service";
 import fs from "fs";
 
 export class CampaignService {
@@ -8,7 +11,17 @@ export class CampaignService {
   async list(tenantId: string) {
     return prisma.campaign.findMany({
       where: { tenantId },
-      include: { assistant: true },
+      include: {
+        assistant: true,
+        brochure: {
+          select: {
+            id: true,
+            projectName: true,
+            city: true,
+            configurations: true,
+          },
+        },
+      },
       orderBy: { createdAt: "desc" },
     });
   }
@@ -17,7 +30,10 @@ export class CampaignService {
   async get(tenantId: string, id: string) {
     const campaign = await prisma.campaign.findFirst({
       where: { id, tenantId },
-      include: { assistant: true },
+      include: {
+        assistant: true,
+        brochure: true,
+      },
     });
 
     if (!campaign) throw new Error("Campaign not found");
@@ -27,13 +43,31 @@ export class CampaignService {
   // ─── Create ────────────────────────────────────────────────────────────────
   async create(
     tenantId: string,
-    data: { name: string; description?: string; assistantId: string },
+    data: {
+      name: string;
+      description?: string;
+      assistantId: string;
+      brochureId?: string; // ← NEW: optional
+    },
   ) {
+    // Verify assistant belongs to tenant
     const assistant = await prisma.assistant.findFirst({
       where: { id: data.assistantId, tenantId },
     });
-
     if (!assistant) throw new Error("Assistant not found");
+
+    // Verify brochure belongs to tenant (if provided)
+    if (data.brochureId) {
+      const brochure = await prisma.brochure.findFirst({
+        where: { id: data.brochureId, tenantId },
+      });
+      if (!brochure) throw new Error("Brochure not found");
+      if (!brochure.isConfirmed) {
+        throw new Error(
+          "Brochure must be confirmed before linking to a campaign",
+        );
+      }
+    }
 
     return prisma.campaign.create({
       data: {
@@ -41,6 +75,17 @@ export class CampaignService {
         description: data.description,
         tenantId,
         assistantId: data.assistantId,
+        brochureId: data.brochureId ?? null,
+      },
+      include: {
+        assistant: true,
+        brochure: {
+          select: {
+            id: true,
+            projectName: true,
+            configurations: true,
+          },
+        },
       },
     });
   }
@@ -50,7 +95,6 @@ export class CampaignService {
     const campaign = await prisma.campaign.findFirst({
       where: { id: campaignId, tenantId },
     });
-
     if (!campaign) throw new Error("Campaign not found");
 
     const rows = parseCSV(filePath);
@@ -78,7 +122,6 @@ export class CampaignService {
       data: { totalLeads: { increment: validLeads.length } },
     });
 
-    // Cleanup uploaded file
     if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
 
     return {
@@ -88,7 +131,7 @@ export class CampaignService {
     };
   }
 
-  // ─── Start Campaign ────────────────────────────────────────────────────────
+  // ─── Start Campaign ──────────────────────────────────────────────────────────
   async start(tenantId: string, campaignId: string) {
     const campaign = await prisma.campaign.findFirst({
       where: { id: campaignId, tenantId },
@@ -101,38 +144,59 @@ export class CampaignService {
     const leads = await prisma.lead.findMany({
       where: { campaignId, status: "PENDING" },
     });
-
     if (leads.length === 0) throw new Error("No pending leads found");
+
+    // ── Fetch brochure variable values once — reused for every call ──────────
+    let brochureVariables: Record<string, string> | null = null;
+
+    if (campaign.brochureId) {
+      const brochureData = await brochureService.getBrochureForPrompt(
+        campaign.brochureId,
+      );
+
+      if (brochureData) {
+        // Build variable map — same shape as variableValues in VAPI
+        brochureVariables = brochureService.buildVariableValues(brochureData);
+        console.log(
+          `[Campaign] Brochure variables ready for campaign: ${campaignId}`,
+          Object.keys(brochureVariables),
+        );
+      }
+    }
 
     await prisma.campaign.update({
       where: { id: campaignId },
       data: { status: "RUNNING", startedAt: new Date() },
     });
 
-    // Process in background — don't await
-    this.processLeads(tenantId, campaignId, leads, campaign.assistant.vapiId)
-      .then(() => {
-        console.log(`[Campaign] ${campaignId} completed`);
-      })
-      .catch((err) => {
-        console.error(`[Campaign] ${campaignId} failed:`, err);
-      });
+    // Pass brochure variables into the background process
+    this.processLeads(
+      tenantId,
+      campaignId,
+      leads,
+      campaign.assistant.vapiId,
+      brochureVariables, // ← pass variable map, not a prompt string
+    )
+      .then(() => console.log(`[Campaign] ${campaignId} completed`))
+      .catch((err) => console.error(`[Campaign] ${campaignId} failed:`, err));
 
     return {
       message: `Campaign started — ${leads.length} calls queued`,
       totalLeads: leads.length,
+      hasBrochure: !!brochureVariables,
+      brochureVars: brochureVariables ? Object.keys(brochureVariables) : [],
     };
   }
 
-  // ─── Process Leads in Background ──────────────────────────────────────────
+  // ─── Process Leads ───────────────────────────────────────────────────────────
   private async processLeads(
     tenantId: string,
     campaignId: string,
     leads: { id: string; phone: string; name: string }[],
     vapiAssistantId: string,
+    brochureVariables: Record<string, string> | null,
   ) {
     for (const lead of leads) {
-      // Check if campaign is still running
       const campaign = await prisma.campaign.findUnique({
         where: { id: campaignId },
       });
@@ -143,13 +207,18 @@ export class CampaignService {
       }
 
       try {
-        await this.makeCall(tenantId, campaignId, lead, vapiAssistantId);
+        await this.makeCall(
+          tenantId,
+          campaignId,
+          lead,
+          vapiAssistantId,
+          brochureVariables,
+        );
       } catch (error) {
         console.error(`[Campaign] Call failed for lead ${lead.id}:`, error);
       }
     }
 
-    // Mark campaign completed
     const remaining = await prisma.lead.count({
       where: { campaignId, status: "PENDING" },
     });
@@ -162,12 +231,13 @@ export class CampaignService {
     }
   }
 
-  // ─── Make Single Call ──────────────────────────────────────────────────────
+  // ─── Make Single Call ─────────────────────────────────────────────────────────
   async makeCall(
     tenantId: string,
     campaignId: string,
     lead: { id: string; phone: string; name: string },
     vapiAssistantId: string,
+    brochureVariables: Record<string, string> | null = null,
   ) {
     await prisma.lead.update({
       where: { id: lead.id },
@@ -188,8 +258,10 @@ export class CampaignService {
         phoneNumberId: process.env.TWILIO_PHONE_NUMBER_ID || "",
         assistantId: vapiAssistantId,
         assistantOverrides: {
+          // ── Merge lead variables + brochure variables ─────────────────────
           variableValues: {
-            customer_name: lead.name,
+            customer_name: lead.name, // ← always present
+            ...(brochureVariables ?? {}), // ← spread brochure vars if exist
           },
         },
         customer: {
@@ -198,7 +270,6 @@ export class CampaignService {
         },
       });
 
-      // ✅ Fix — safely access id from response
       const vapiCallId =
         "id" in vapiCall && typeof vapiCall.id === "string"
           ? vapiCall.id
@@ -235,7 +306,6 @@ export class CampaignService {
     const campaign = await prisma.campaign.findFirst({
       where: { id: campaignId, tenantId },
     });
-
     if (!campaign) throw new Error("Campaign not found");
     if (campaign.status !== "RUNNING")
       throw new Error("Campaign is not running");
@@ -250,9 +320,18 @@ export class CampaignService {
   async stats(tenantId: string, campaignId: string) {
     const campaign = await prisma.campaign.findFirst({
       where: { id: campaignId, tenantId },
-      include: { assistant: true },
+      include: {
+        assistant: true,
+        brochure: {
+          select: {
+            id: true,
+            projectName: true,
+            configurations: true,
+            startingPrice: true,
+          },
+        },
+      },
     });
-
     if (!campaign) throw new Error("Campaign not found");
 
     const leadStats = await prisma.lead.groupBy({
@@ -267,15 +346,7 @@ export class CampaignService {
       _count: true,
     });
 
-    return {
-      campaign,
-      leads: leadStats,
-      calls: callStats,
-    };
-  }
-
-  private delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+    return { campaign, leads: leadStats, calls: callStats };
   }
 }
 
