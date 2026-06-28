@@ -144,7 +144,7 @@ exports.Prisma.UserScalarFieldEnum = {
 
 exports.Prisma.AssistantScalarFieldEnum = {
   id: 'id',
-  vapiId: 'vapiId',
+  bolnaId: 'bolnaId',
   name: 'name',
   tenantId: 'tenantId',
   config: 'config',
@@ -239,7 +239,7 @@ exports.Prisma.LeadScalarFieldEnum = {
 
 exports.Prisma.CallScalarFieldEnum = {
   id: 'id',
-  vapiCallId: 'vapiCallId',
+  bolnaCallId: 'bolnaCallId',
   tenantId: 'tenantId',
   campaignId: 'campaignId',
   leadId: 'leadId',

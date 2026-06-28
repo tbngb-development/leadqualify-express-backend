@@ -1,7 +1,7 @@
 // src/modules/campaigns/campaign.service.ts — FULL REPLACE
 
 import prisma from "../../config/database";
-import { vapiClient } from "../../config/vapi";
+import { bolnaClient } from "../../config/bolna";
 import { parseCSV } from "../../utils/csvParser";
 import brochureService from "../brochure/brochure.service";
 import fs from "fs";
@@ -174,7 +174,7 @@ export class CampaignService {
       tenantId,
       campaignId,
       leads,
-      campaign.assistant.vapiId,
+      campaign.assistant.bolnaId,
       brochureVariables, // ← pass variable map, not a prompt string
     )
       .then(() => console.log(`[Campaign] ${campaignId} completed`))
@@ -193,7 +193,7 @@ export class CampaignService {
     tenantId: string,
     campaignId: string,
     leads: { id: string; phone: string; name: string }[],
-    vapiAssistantId: string,
+    bolnaAgentId: string,
     brochureVariables: Record<string, string> | null,
   ) {
     for (const lead of leads) {
@@ -211,7 +211,7 @@ export class CampaignService {
           tenantId,
           campaignId,
           lead,
-          vapiAssistantId,
+          bolnaAgentId,
           brochureVariables,
         );
       } catch (error) {
@@ -236,7 +236,7 @@ export class CampaignService {
     tenantId: string,
     campaignId: string,
     lead: { id: string; phone: string; name: string },
-    vapiAssistantId: string,
+    bolnaAgentId: string,
     brochureVariables: Record<string, string> | null = null,
   ) {
     await prisma.lead.update({
@@ -254,31 +254,27 @@ export class CampaignService {
     });
 
     try {
-      const vapiCall = await vapiClient.calls.create({
-        phoneNumberId: process.env.TWILIO_PHONE_NUMBER_ID || "",
-        assistantId: vapiAssistantId,
-        assistantOverrides: {
-          // ── Merge lead variables + brochure variables ─────────────────────
-          variableValues: {
-            customer_name: lead.name, // ← always present
-            ...(brochureVariables ?? {}), // ← spread brochure vars if exist
-          },
-        },
-        customer: {
-          number: lead.phone,
-          name: lead.name,
+      const bolnaCall = await bolnaClient.calls.create({
+        agent_id: bolnaAgentId,
+        recipient_phone_number: lead.phone,
+        user_data: {
+          customer_name: lead.name,
+          ...(brochureVariables ?? {}),
         },
       });
 
-      const vapiCallId =
-        "id" in vapiCall && typeof vapiCall.id === "string"
-          ? vapiCall.id
-          : undefined;
+      const callId =
+        bolnaCall.id ?? // primary
+        bolnaCall.execution_id ?? //Fallback
+        bolnaCall.run_id ?? // fallback (same value)
+        null;
+
+      console.log(`[Bolna] Resolved callId: ${callId}`);
 
       await prisma.call.update({
         where: { id: callRecord.id },
         data: {
-          vapiCallId: vapiCallId ?? null,
+          bolnaCallId: callId,
           startedAt: new Date(),
         },
       });

@@ -4026,7 +4026,7 @@ export namespace Prisma {
 
   export type AssistantMinAggregateOutputType = {
     id: string | null
-    vapiId: string | null
+    bolnaId: string | null
     name: string | null
     tenantId: string | null
     createdAt: Date | null
@@ -4035,7 +4035,7 @@ export namespace Prisma {
 
   export type AssistantMaxAggregateOutputType = {
     id: string | null
-    vapiId: string | null
+    bolnaId: string | null
     name: string | null
     tenantId: string | null
     createdAt: Date | null
@@ -4044,7 +4044,7 @@ export namespace Prisma {
 
   export type AssistantCountAggregateOutputType = {
     id: number
-    vapiId: number
+    bolnaId: number
     name: number
     tenantId: number
     config: number
@@ -4056,7 +4056,7 @@ export namespace Prisma {
 
   export type AssistantMinAggregateInputType = {
     id?: true
-    vapiId?: true
+    bolnaId?: true
     name?: true
     tenantId?: true
     createdAt?: true
@@ -4065,7 +4065,7 @@ export namespace Prisma {
 
   export type AssistantMaxAggregateInputType = {
     id?: true
-    vapiId?: true
+    bolnaId?: true
     name?: true
     tenantId?: true
     createdAt?: true
@@ -4074,7 +4074,7 @@ export namespace Prisma {
 
   export type AssistantCountAggregateInputType = {
     id?: true
-    vapiId?: true
+    bolnaId?: true
     name?: true
     tenantId?: true
     config?: true
@@ -4157,7 +4157,7 @@ export namespace Prisma {
 
   export type AssistantGroupByOutputType = {
     id: string
-    vapiId: string
+    bolnaId: string
     name: string
     tenantId: string
     config: JsonValue
@@ -4184,7 +4184,7 @@ export namespace Prisma {
 
   export type AssistantSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    vapiId?: boolean
+    bolnaId?: boolean
     name?: boolean
     tenantId?: boolean
     config?: boolean
@@ -4197,7 +4197,7 @@ export namespace Prisma {
 
   export type AssistantSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    vapiId?: boolean
+    bolnaId?: boolean
     name?: boolean
     tenantId?: boolean
     config?: boolean
@@ -4208,7 +4208,7 @@ export namespace Prisma {
 
   export type AssistantSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    vapiId?: boolean
+    bolnaId?: boolean
     name?: boolean
     tenantId?: boolean
     config?: boolean
@@ -4219,7 +4219,7 @@ export namespace Prisma {
 
   export type AssistantSelectScalar = {
     id?: boolean
-    vapiId?: boolean
+    bolnaId?: boolean
     name?: boolean
     tenantId?: boolean
     config?: boolean
@@ -4227,7 +4227,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type AssistantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "vapiId" | "name" | "tenantId" | "config" | "createdAt" | "updatedAt", ExtArgs["result"]["assistant"]>
+  export type AssistantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bolnaId" | "name" | "tenantId" | "config" | "createdAt" | "updatedAt", ExtArgs["result"]["assistant"]>
   export type AssistantInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     campaigns?: boolean | Assistant$campaignsArgs<ExtArgs>
@@ -4248,7 +4248,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      vapiId: string
+      bolnaId: string
       name: string
       tenantId: string
       config: Prisma.JsonValue
@@ -4680,7 +4680,7 @@ export namespace Prisma {
    */
   interface AssistantFieldRefs {
     readonly id: FieldRef<"Assistant", 'String'>
-    readonly vapiId: FieldRef<"Assistant", 'String'>
+    readonly bolnaId: FieldRef<"Assistant", 'String'>
     readonly name: FieldRef<"Assistant", 'String'>
     readonly tenantId: FieldRef<"Assistant", 'String'>
     readonly config: FieldRef<"Assistant", 'Json'>
@@ -9354,7 +9354,7 @@ export namespace Prisma {
 
   export type CallMinAggregateOutputType = {
     id: string | null
-    vapiCallId: string | null
+    bolnaCallId: string | null
     tenantId: string | null
     campaignId: string | null
     leadId: string | null
@@ -9372,7 +9372,7 @@ export namespace Prisma {
 
   export type CallMaxAggregateOutputType = {
     id: string | null
-    vapiCallId: string | null
+    bolnaCallId: string | null
     tenantId: string | null
     campaignId: string | null
     leadId: string | null
@@ -9390,7 +9390,7 @@ export namespace Prisma {
 
   export type CallCountAggregateOutputType = {
     id: number
-    vapiCallId: number
+    bolnaCallId: number
     tenantId: number
     campaignId: number
     leadId: number
@@ -9419,7 +9419,7 @@ export namespace Prisma {
 
   export type CallMinAggregateInputType = {
     id?: true
-    vapiCallId?: true
+    bolnaCallId?: true
     tenantId?: true
     campaignId?: true
     leadId?: true
@@ -9437,7 +9437,7 @@ export namespace Prisma {
 
   export type CallMaxAggregateInputType = {
     id?: true
-    vapiCallId?: true
+    bolnaCallId?: true
     tenantId?: true
     campaignId?: true
     leadId?: true
@@ -9455,7 +9455,7 @@ export namespace Prisma {
 
   export type CallCountAggregateInputType = {
     id?: true
-    vapiCallId?: true
+    bolnaCallId?: true
     tenantId?: true
     campaignId?: true
     leadId?: true
@@ -9561,7 +9561,7 @@ export namespace Prisma {
 
   export type CallGroupByOutputType = {
     id: string
-    vapiCallId: string | null
+    bolnaCallId: string | null
     tenantId: string
     campaignId: string
     leadId: string
@@ -9599,7 +9599,7 @@ export namespace Prisma {
 
   export type CallSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    vapiCallId?: boolean
+    bolnaCallId?: boolean
     tenantId?: boolean
     campaignId?: boolean
     leadId?: boolean
@@ -9621,7 +9621,7 @@ export namespace Prisma {
 
   export type CallSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    vapiCallId?: boolean
+    bolnaCallId?: boolean
     tenantId?: boolean
     campaignId?: boolean
     leadId?: boolean
@@ -9643,7 +9643,7 @@ export namespace Prisma {
 
   export type CallSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    vapiCallId?: boolean
+    bolnaCallId?: boolean
     tenantId?: boolean
     campaignId?: boolean
     leadId?: boolean
@@ -9665,7 +9665,7 @@ export namespace Prisma {
 
   export type CallSelectScalar = {
     id?: boolean
-    vapiCallId?: boolean
+    bolnaCallId?: boolean
     tenantId?: boolean
     campaignId?: boolean
     leadId?: boolean
@@ -9682,7 +9682,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type CallOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "vapiCallId" | "tenantId" | "campaignId" | "leadId" | "status" | "duration" | "recording" | "transcript" | "transcriptMessages" | "summary" | "outcome" | "startedAt" | "endedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["call"]>
+  export type CallOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bolnaCallId" | "tenantId" | "campaignId" | "leadId" | "status" | "duration" | "recording" | "transcript" | "transcriptMessages" | "summary" | "outcome" | "startedAt" | "endedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["call"]>
   export type CallInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
@@ -9708,7 +9708,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      vapiCallId: string | null
+      bolnaCallId: string | null
       tenantId: string
       campaignId: string
       leadId: string
@@ -10150,7 +10150,7 @@ export namespace Prisma {
    */
   interface CallFieldRefs {
     readonly id: FieldRef<"Call", 'String'>
-    readonly vapiCallId: FieldRef<"Call", 'String'>
+    readonly bolnaCallId: FieldRef<"Call", 'String'>
     readonly tenantId: FieldRef<"Call", 'String'>
     readonly campaignId: FieldRef<"Call", 'String'>
     readonly leadId: FieldRef<"Call", 'String'>
@@ -10622,7 +10622,7 @@ export namespace Prisma {
 
   export const AssistantScalarFieldEnum: {
     id: 'id',
-    vapiId: 'vapiId',
+    bolnaId: 'bolnaId',
     name: 'name',
     tenantId: 'tenantId',
     config: 'config',
@@ -10729,7 +10729,7 @@ export namespace Prisma {
 
   export const CallScalarFieldEnum: {
     id: 'id',
-    vapiCallId: 'vapiCallId',
+    bolnaCallId: 'bolnaCallId',
     tenantId: 'tenantId',
     campaignId: 'campaignId',
     leadId: 'leadId',
@@ -11093,7 +11093,7 @@ export namespace Prisma {
     OR?: AssistantWhereInput[]
     NOT?: AssistantWhereInput | AssistantWhereInput[]
     id?: StringFilter<"Assistant"> | string
-    vapiId?: StringFilter<"Assistant"> | string
+    bolnaId?: StringFilter<"Assistant"> | string
     name?: StringFilter<"Assistant"> | string
     tenantId?: StringFilter<"Assistant"> | string
     config?: JsonFilter<"Assistant">
@@ -11105,7 +11105,7 @@ export namespace Prisma {
 
   export type AssistantOrderByWithRelationInput = {
     id?: SortOrder
-    vapiId?: SortOrder
+    bolnaId?: SortOrder
     name?: SortOrder
     tenantId?: SortOrder
     config?: SortOrder
@@ -11117,7 +11117,7 @@ export namespace Prisma {
 
   export type AssistantWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    vapiId?: string
+    bolnaId?: string
     AND?: AssistantWhereInput | AssistantWhereInput[]
     OR?: AssistantWhereInput[]
     NOT?: AssistantWhereInput | AssistantWhereInput[]
@@ -11128,11 +11128,11 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Assistant"> | Date | string
     tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     campaigns?: CampaignListRelationFilter
-  }, "id" | "vapiId">
+  }, "id" | "bolnaId">
 
   export type AssistantOrderByWithAggregationInput = {
     id?: SortOrder
-    vapiId?: SortOrder
+    bolnaId?: SortOrder
     name?: SortOrder
     tenantId?: SortOrder
     config?: SortOrder
@@ -11148,7 +11148,7 @@ export namespace Prisma {
     OR?: AssistantScalarWhereWithAggregatesInput[]
     NOT?: AssistantScalarWhereWithAggregatesInput | AssistantScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Assistant"> | string
-    vapiId?: StringWithAggregatesFilter<"Assistant"> | string
+    bolnaId?: StringWithAggregatesFilter<"Assistant"> | string
     name?: StringWithAggregatesFilter<"Assistant"> | string
     tenantId?: StringWithAggregatesFilter<"Assistant"> | string
     config?: JsonWithAggregatesFilter<"Assistant">
@@ -11656,7 +11656,7 @@ export namespace Prisma {
     OR?: CallWhereInput[]
     NOT?: CallWhereInput | CallWhereInput[]
     id?: StringFilter<"Call"> | string
-    vapiCallId?: StringNullableFilter<"Call"> | string | null
+    bolnaCallId?: StringNullableFilter<"Call"> | string | null
     tenantId?: StringFilter<"Call"> | string
     campaignId?: StringFilter<"Call"> | string
     leadId?: StringFilter<"Call"> | string
@@ -11678,7 +11678,7 @@ export namespace Prisma {
 
   export type CallOrderByWithRelationInput = {
     id?: SortOrder
-    vapiCallId?: SortOrderInput | SortOrder
+    bolnaCallId?: SortOrderInput | SortOrder
     tenantId?: SortOrder
     campaignId?: SortOrder
     leadId?: SortOrder
@@ -11700,7 +11700,7 @@ export namespace Prisma {
 
   export type CallWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    vapiCallId?: string
+    bolnaCallId?: string
     AND?: CallWhereInput | CallWhereInput[]
     OR?: CallWhereInput[]
     NOT?: CallWhereInput | CallWhereInput[]
@@ -11721,11 +11721,11 @@ export namespace Prisma {
     tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     campaign?: XOR<CampaignScalarRelationFilter, CampaignWhereInput>
     lead?: XOR<LeadScalarRelationFilter, LeadWhereInput>
-  }, "id" | "vapiCallId">
+  }, "id" | "bolnaCallId">
 
   export type CallOrderByWithAggregationInput = {
     id?: SortOrder
-    vapiCallId?: SortOrderInput | SortOrder
+    bolnaCallId?: SortOrderInput | SortOrder
     tenantId?: SortOrder
     campaignId?: SortOrder
     leadId?: SortOrder
@@ -11752,7 +11752,7 @@ export namespace Prisma {
     OR?: CallScalarWhereWithAggregatesInput[]
     NOT?: CallScalarWhereWithAggregatesInput | CallScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Call"> | string
-    vapiCallId?: StringNullableWithAggregatesFilter<"Call"> | string | null
+    bolnaCallId?: StringNullableWithAggregatesFilter<"Call"> | string | null
     tenantId?: StringWithAggregatesFilter<"Call"> | string
     campaignId?: StringWithAggregatesFilter<"Call"> | string
     leadId?: StringWithAggregatesFilter<"Call"> | string
@@ -11941,7 +11941,7 @@ export namespace Prisma {
 
   export type AssistantCreateInput = {
     id?: string
-    vapiId: string
+    bolnaId: string
     name: string
     config: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
@@ -11952,7 +11952,7 @@ export namespace Prisma {
 
   export type AssistantUncheckedCreateInput = {
     id?: string
-    vapiId: string
+    bolnaId: string
     name: string
     tenantId: string
     config: JsonNullValueInput | InputJsonValue
@@ -11963,7 +11963,7 @@ export namespace Prisma {
 
   export type AssistantUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    vapiId?: StringFieldUpdateOperationsInput | string
+    bolnaId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     config?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11974,7 +11974,7 @@ export namespace Prisma {
 
   export type AssistantUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    vapiId?: StringFieldUpdateOperationsInput | string
+    bolnaId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     config?: JsonNullValueInput | InputJsonValue
@@ -11985,7 +11985,7 @@ export namespace Prisma {
 
   export type AssistantCreateManyInput = {
     id?: string
-    vapiId: string
+    bolnaId: string
     name: string
     tenantId: string
     config: JsonNullValueInput | InputJsonValue
@@ -11995,7 +11995,7 @@ export namespace Prisma {
 
   export type AssistantUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    vapiId?: StringFieldUpdateOperationsInput | string
+    bolnaId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     config?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12004,7 +12004,7 @@ export namespace Prisma {
 
   export type AssistantUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    vapiId?: StringFieldUpdateOperationsInput | string
+    bolnaId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     config?: JsonNullValueInput | InputJsonValue
@@ -12619,7 +12619,7 @@ export namespace Prisma {
 
   export type CallCreateInput = {
     id?: string
-    vapiCallId?: string | null
+    bolnaCallId?: string | null
     status?: $Enums.CallStatus
     duration?: number | null
     recording?: string | null
@@ -12638,7 +12638,7 @@ export namespace Prisma {
 
   export type CallUncheckedCreateInput = {
     id?: string
-    vapiCallId?: string | null
+    bolnaCallId?: string | null
     tenantId: string
     campaignId: string
     leadId: string
@@ -12657,7 +12657,7 @@ export namespace Prisma {
 
   export type CallUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    vapiCallId?: NullableStringFieldUpdateOperationsInput | string | null
+    bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12676,7 +12676,7 @@ export namespace Prisma {
 
   export type CallUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    vapiCallId?: NullableStringFieldUpdateOperationsInput | string | null
+    bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     tenantId?: StringFieldUpdateOperationsInput | string
     campaignId?: StringFieldUpdateOperationsInput | string
     leadId?: StringFieldUpdateOperationsInput | string
@@ -12695,7 +12695,7 @@ export namespace Prisma {
 
   export type CallCreateManyInput = {
     id?: string
-    vapiCallId?: string | null
+    bolnaCallId?: string | null
     tenantId: string
     campaignId: string
     leadId: string
@@ -12714,7 +12714,7 @@ export namespace Prisma {
 
   export type CallUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    vapiCallId?: NullableStringFieldUpdateOperationsInput | string | null
+    bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12730,7 +12730,7 @@ export namespace Prisma {
 
   export type CallUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    vapiCallId?: NullableStringFieldUpdateOperationsInput | string | null
+    bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     tenantId?: StringFieldUpdateOperationsInput | string
     campaignId?: StringFieldUpdateOperationsInput | string
     leadId?: StringFieldUpdateOperationsInput | string
@@ -12988,7 +12988,7 @@ export namespace Prisma {
 
   export type AssistantCountOrderByAggregateInput = {
     id?: SortOrder
-    vapiId?: SortOrder
+    bolnaId?: SortOrder
     name?: SortOrder
     tenantId?: SortOrder
     config?: SortOrder
@@ -12998,7 +12998,7 @@ export namespace Prisma {
 
   export type AssistantMaxOrderByAggregateInput = {
     id?: SortOrder
-    vapiId?: SortOrder
+    bolnaId?: SortOrder
     name?: SortOrder
     tenantId?: SortOrder
     createdAt?: SortOrder
@@ -13007,7 +13007,7 @@ export namespace Prisma {
 
   export type AssistantMinOrderByAggregateInput = {
     id?: SortOrder
-    vapiId?: SortOrder
+    bolnaId?: SortOrder
     name?: SortOrder
     tenantId?: SortOrder
     createdAt?: SortOrder
@@ -13608,7 +13608,7 @@ export namespace Prisma {
 
   export type CallCountOrderByAggregateInput = {
     id?: SortOrder
-    vapiCallId?: SortOrder
+    bolnaCallId?: SortOrder
     tenantId?: SortOrder
     campaignId?: SortOrder
     leadId?: SortOrder
@@ -13631,7 +13631,7 @@ export namespace Prisma {
 
   export type CallMaxOrderByAggregateInput = {
     id?: SortOrder
-    vapiCallId?: SortOrder
+    bolnaCallId?: SortOrder
     tenantId?: SortOrder
     campaignId?: SortOrder
     leadId?: SortOrder
@@ -13649,7 +13649,7 @@ export namespace Prisma {
 
   export type CallMinOrderByAggregateInput = {
     id?: SortOrder
-    vapiCallId?: SortOrder
+    bolnaCallId?: SortOrder
     tenantId?: SortOrder
     campaignId?: SortOrder
     leadId?: SortOrder
@@ -14929,7 +14929,7 @@ export namespace Prisma {
 
   export type CallCreateWithoutTenantInput = {
     id?: string
-    vapiCallId?: string | null
+    bolnaCallId?: string | null
     status?: $Enums.CallStatus
     duration?: number | null
     recording?: string | null
@@ -14947,7 +14947,7 @@ export namespace Prisma {
 
   export type CallUncheckedCreateWithoutTenantInput = {
     id?: string
-    vapiCallId?: string | null
+    bolnaCallId?: string | null
     campaignId: string
     leadId: string
     status?: $Enums.CallStatus
@@ -14975,7 +14975,7 @@ export namespace Prisma {
 
   export type AssistantCreateWithoutTenantInput = {
     id?: string
-    vapiId: string
+    bolnaId: string
     name: string
     config: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
@@ -14985,7 +14985,7 @@ export namespace Prisma {
 
   export type AssistantUncheckedCreateWithoutTenantInput = {
     id?: string
-    vapiId: string
+    bolnaId: string
     name: string
     config: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
@@ -15240,7 +15240,7 @@ export namespace Prisma {
     OR?: CallScalarWhereInput[]
     NOT?: CallScalarWhereInput | CallScalarWhereInput[]
     id?: StringFilter<"Call"> | string
-    vapiCallId?: StringNullableFilter<"Call"> | string | null
+    bolnaCallId?: StringNullableFilter<"Call"> | string | null
     tenantId?: StringFilter<"Call"> | string
     campaignId?: StringFilter<"Call"> | string
     leadId?: StringFilter<"Call"> | string
@@ -15278,7 +15278,7 @@ export namespace Prisma {
     OR?: AssistantScalarWhereInput[]
     NOT?: AssistantScalarWhereInput | AssistantScalarWhereInput[]
     id?: StringFilter<"Assistant"> | string
-    vapiId?: StringFilter<"Assistant"> | string
+    bolnaId?: StringFilter<"Assistant"> | string
     name?: StringFilter<"Assistant"> | string
     tenantId?: StringFilter<"Assistant"> | string
     config?: JsonFilter<"Assistant">
@@ -15751,7 +15751,7 @@ export namespace Prisma {
 
   export type AssistantCreateWithoutCampaignsInput = {
     id?: string
-    vapiId: string
+    bolnaId: string
     name: string
     config: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
@@ -15761,7 +15761,7 @@ export namespace Prisma {
 
   export type AssistantUncheckedCreateWithoutCampaignsInput = {
     id?: string
-    vapiId: string
+    bolnaId: string
     name: string
     tenantId: string
     config: JsonNullValueInput | InputJsonValue
@@ -15925,7 +15925,7 @@ export namespace Prisma {
 
   export type CallCreateWithoutCampaignInput = {
     id?: string
-    vapiCallId?: string | null
+    bolnaCallId?: string | null
     status?: $Enums.CallStatus
     duration?: number | null
     recording?: string | null
@@ -15943,7 +15943,7 @@ export namespace Prisma {
 
   export type CallUncheckedCreateWithoutCampaignInput = {
     id?: string
-    vapiCallId?: string | null
+    bolnaCallId?: string | null
     tenantId: string
     leadId: string
     status?: $Enums.CallStatus
@@ -16023,7 +16023,7 @@ export namespace Prisma {
 
   export type AssistantUpdateWithoutCampaignsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    vapiId?: StringFieldUpdateOperationsInput | string
+    bolnaId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     config?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16033,7 +16033,7 @@ export namespace Prisma {
 
   export type AssistantUncheckedUpdateWithoutCampaignsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    vapiId?: StringFieldUpdateOperationsInput | string
+    bolnaId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     tenantId?: StringFieldUpdateOperationsInput | string
     config?: JsonNullValueInput | InputJsonValue
@@ -16270,7 +16270,7 @@ export namespace Prisma {
 
   export type CallCreateWithoutLeadInput = {
     id?: string
-    vapiCallId?: string | null
+    bolnaCallId?: string | null
     status?: $Enums.CallStatus
     duration?: number | null
     recording?: string | null
@@ -16288,7 +16288,7 @@ export namespace Prisma {
 
   export type CallUncheckedCreateWithoutLeadInput = {
     id?: string
-    vapiCallId?: string | null
+    bolnaCallId?: string | null
     tenantId: string
     campaignId: string
     status?: $Enums.CallStatus
@@ -16702,7 +16702,7 @@ export namespace Prisma {
 
   export type CallCreateManyTenantInput = {
     id?: string
-    vapiCallId?: string | null
+    bolnaCallId?: string | null
     campaignId: string
     leadId: string
     status?: $Enums.CallStatus
@@ -16720,7 +16720,7 @@ export namespace Prisma {
 
   export type AssistantCreateManyTenantInput = {
     id?: string
-    vapiId: string
+    bolnaId: string
     name: string
     config: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
@@ -16907,7 +16907,7 @@ export namespace Prisma {
 
   export type CallUpdateWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string
-    vapiCallId?: NullableStringFieldUpdateOperationsInput | string | null
+    bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16925,7 +16925,7 @@ export namespace Prisma {
 
   export type CallUncheckedUpdateWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string
-    vapiCallId?: NullableStringFieldUpdateOperationsInput | string | null
+    bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     campaignId?: StringFieldUpdateOperationsInput | string
     leadId?: StringFieldUpdateOperationsInput | string
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
@@ -16943,7 +16943,7 @@ export namespace Prisma {
 
   export type CallUncheckedUpdateManyWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string
-    vapiCallId?: NullableStringFieldUpdateOperationsInput | string | null
+    bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     campaignId?: StringFieldUpdateOperationsInput | string
     leadId?: StringFieldUpdateOperationsInput | string
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
@@ -16961,7 +16961,7 @@ export namespace Prisma {
 
   export type AssistantUpdateWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string
-    vapiId?: StringFieldUpdateOperationsInput | string
+    bolnaId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     config?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16971,7 +16971,7 @@ export namespace Prisma {
 
   export type AssistantUncheckedUpdateWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string
-    vapiId?: StringFieldUpdateOperationsInput | string
+    bolnaId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     config?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16981,7 +16981,7 @@ export namespace Prisma {
 
   export type AssistantUncheckedUpdateManyWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string
-    vapiId?: StringFieldUpdateOperationsInput | string
+    bolnaId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     config?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17305,7 +17305,7 @@ export namespace Prisma {
 
   export type CallCreateManyCampaignInput = {
     id?: string
-    vapiCallId?: string | null
+    bolnaCallId?: string | null
     tenantId: string
     leadId: string
     status?: $Enums.CallStatus
@@ -17364,7 +17364,7 @@ export namespace Prisma {
 
   export type CallUpdateWithoutCampaignInput = {
     id?: StringFieldUpdateOperationsInput | string
-    vapiCallId?: NullableStringFieldUpdateOperationsInput | string | null
+    bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17382,7 +17382,7 @@ export namespace Prisma {
 
   export type CallUncheckedUpdateWithoutCampaignInput = {
     id?: StringFieldUpdateOperationsInput | string
-    vapiCallId?: NullableStringFieldUpdateOperationsInput | string | null
+    bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     tenantId?: StringFieldUpdateOperationsInput | string
     leadId?: StringFieldUpdateOperationsInput | string
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
@@ -17400,7 +17400,7 @@ export namespace Prisma {
 
   export type CallUncheckedUpdateManyWithoutCampaignInput = {
     id?: StringFieldUpdateOperationsInput | string
-    vapiCallId?: NullableStringFieldUpdateOperationsInput | string | null
+    bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     tenantId?: StringFieldUpdateOperationsInput | string
     leadId?: StringFieldUpdateOperationsInput | string
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
@@ -17418,7 +17418,7 @@ export namespace Prisma {
 
   export type CallCreateManyLeadInput = {
     id?: string
-    vapiCallId?: string | null
+    bolnaCallId?: string | null
     tenantId: string
     campaignId: string
     status?: $Enums.CallStatus
@@ -17436,7 +17436,7 @@ export namespace Prisma {
 
   export type CallUpdateWithoutLeadInput = {
     id?: StringFieldUpdateOperationsInput | string
-    vapiCallId?: NullableStringFieldUpdateOperationsInput | string | null
+    bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17454,7 +17454,7 @@ export namespace Prisma {
 
   export type CallUncheckedUpdateWithoutLeadInput = {
     id?: StringFieldUpdateOperationsInput | string
-    vapiCallId?: NullableStringFieldUpdateOperationsInput | string | null
+    bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     tenantId?: StringFieldUpdateOperationsInput | string
     campaignId?: StringFieldUpdateOperationsInput | string
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
@@ -17472,7 +17472,7 @@ export namespace Prisma {
 
   export type CallUncheckedUpdateManyWithoutLeadInput = {
     id?: StringFieldUpdateOperationsInput | string
-    vapiCallId?: NullableStringFieldUpdateOperationsInput | string | null
+    bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     tenantId?: StringFieldUpdateOperationsInput | string
     campaignId?: StringFieldUpdateOperationsInput | string
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
