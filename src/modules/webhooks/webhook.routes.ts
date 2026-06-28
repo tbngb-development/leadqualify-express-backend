@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { handleVapiWebhook } from "./webhook.handler";
+import { handleBolnaWebhook } from "./webhook.handler";
 
 const router = Router();
 
-router.post("/vapi", handleVapiWebhook);
+router.post("/bolna", handleBolnaWebhook);
 
 export default router;
