@@ -95,7 +95,6 @@ app.post("/api/tts", async (req, res) => {
 
     console.log("TEXT:", text);
     // console.log("SAMPLE RATE FROM VAPI:", requestedSampleRate);
-
     const sarvamResponse = await axios.post(
       "https://api.sarvam.ai/text-to-speech",
       {

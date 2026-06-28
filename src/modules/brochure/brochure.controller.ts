@@ -1,71 +1,201 @@
-import { Request, Response, NextFunction } from "express";
-import { brochureService } from "./brochure.service";
+// src/modules/brochure/brochure.controller.ts — FULL REPLACE
 
-export class BrochureController {
-  /**
-   * POST /api/brochure/extract
-   * Accepts a PDF file upload and returns extracted property details
-   */
-  async extractBrochure(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    try {
-      // ── Validate file was uploaded ─────────────────────────────────────────
-      if (!req.file) {
-        res.status(400).json({
-          success: false,
-          message: "No file uploaded. Please upload a PDF file.",
-          error: "MISSING_FILE",
-        });
-        return;
-      }
+import { Response, NextFunction } from "express";
+import { AuthRequest } from "../../middleware/auth";
+import { getParam } from "../../utils/paramHelper";
+import brochureService from "./brochure.service";
+import { SaveBrochureSchema, UpdateBrochureSchema } from "./brochure.types";
+import { cleanupUploadedFile } from "../../middleware/upload";
 
-      const { path: filePath, originalname: fileName, size } = req.file;
+// ─── POST /api/brochure/extract ───────────────────────────────────────────────
+// Upload PDF → extract → return structured data (does NOT save to DB)
+export const extract = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  const filePath = req.file?.path;
 
-      console.log(
-        `[BrochureController] Received: ${fileName} | ${(size / 1024 / 1024).toFixed(2)}MB`
-      );
-
-      // ── Run extraction pipeline ────────────────────────────────────────────
-      const result = await brochureService.extractFromBrochure(
-        filePath,
-        fileName
-      );
-
-      // ── Warn if low quality but still return data ──────────────────────────
-      if (result.data.textQuality.warning) {
-        result.message = `${result.message}. Warning: ${result.data.textQuality.warning}`;
-      }
-
-      res.status(200).json(result);
-    } catch (error: any) {
-      console.error("[BrochureController] Error:", error.message);
-
-      // ── Known errors with user-friendly messages ───────────────────────────
-      const knownErrors: Record<string, { status: number; code: string }> = {
-        "password protected": { status: 422, code: "PDF_PASSWORD_PROTECTED" },
-        "corrupted": { status: 422, code: "PDF_CORRUPTED" },
-        "No text content": { status: 422, code: "PDF_NO_TEXT" },
-        "quota exceeded": { status: 429, code: "AI_QUOTA_EXCEEDED" },
-        "GEMINI_API_KEY": { status: 500, code: "AI_NOT_CONFIGURED" },
-      };
-
-      for (const [keyword, errorInfo] of Object.entries(knownErrors)) {
-        if (error.message?.toLowerCase().includes(keyword.toLowerCase())) {
-          res.status(errorInfo.status).json({
-            success: false,
-            message: error.message,
-            error: errorInfo.code,
-          });
-          return;
-        }
-      }
-
-      next(error);
+  try {
+    if (!req.file || !filePath) {
+      res.status(400).json({
+        success: false,
+        error:   "PDF file is required",
+      });
+      return;
     }
-  }
-}
 
-export const brochureController = new BrochureController();
+    const fileSizeMB = (req.file.size / (1024 * 1024)).toFixed(2);
+    console.log(
+      `[BrochureController] Received: ${req.file.originalname} | ${fileSizeMB}MB`,
+    );
+
+    const result = await brochureService.extract(
+      filePath,
+      req.file.originalname,
+      fileSizeMB,
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Brochure extracted successfully",
+      data:    result,
+    });
+  } catch (error: any) {
+    // File cleanup is handled inside service.extract()
+    // but if it threw before reaching cleanup, do it here
+    if (filePath) cleanupUploadedFile(filePath);
+
+    console.error(`[BrochureController] Error:`, error.message);
+
+    // Map known error types to proper HTTP status codes
+    if (error.message?.includes("No text content")) {
+      res.status(422).json({
+        success: false,
+        message: error.message,
+        error:   "UNPROCESSABLE_PDF",
+      });
+      return;
+    }
+
+    if (error.message?.includes("quota") || error.message?.includes("QUOTA")) {
+      res.status(503).json({
+        success: false,
+        message: error.message,
+        error:   "AI_QUOTA_EXCEEDED",
+      });
+      return;
+    }
+
+    next(error);
+  }
+};
+
+// ─── POST /api/brochure/save ──────────────────────────────────────────────────
+// Save confirmed (user-reviewed) extracted data to DB
+export const save = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const parsed = SaveBrochureSchema.safeParse(req.body);
+
+    if (!parsed.success) {
+      res.status(400).json({
+        success: false,
+        error:   "Invalid brochure data",
+        details: parsed.error.flatten().fieldErrors,
+      });
+      return;
+    }
+
+    const brochure = await brochureService.save(
+      req.user!.tenantId,
+      parsed.data,
+    );
+
+    res.status(201).json({
+      success: true,
+      message: "Brochure saved successfully",
+      data:    { brochureId: brochure.id, brochure },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// ─── GET /api/brochure ────────────────────────────────────────────────────────
+export const list = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const data = await brochureService.list(req.user!.tenantId);
+    res.json({ success: true, data });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// ─── GET /api/brochure/:id ────────────────────────────────────────────────────
+export const get = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const id   = getParam(req.params["id"]);
+    const data = await brochureService.get(req.user!.tenantId, id);
+    res.json({ success: true, data });
+  } catch (error: any) {
+    if (error.message === "Brochure not found") {
+      res.status(404).json({ success: false, error: error.message });
+      return;
+    }
+    next(error);
+  }
+};
+
+// ─── PATCH /api/brochure/:id ──────────────────────────────────────────────────
+export const update = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const id     = getParam(req.params["id"]);
+    const parsed = UpdateBrochureSchema.safeParse(req.body);
+
+    if (!parsed.success) {
+      res.status(400).json({
+        success: false,
+        error:   "Invalid update data",
+        details: parsed.error.flatten().fieldErrors,
+      });
+      return;
+    }
+
+    const data = await brochureService.update(
+      req.user!.tenantId,
+      id,
+      parsed.data,
+    );
+
+    res.json({
+      success: true,
+      message: "Brochure updated successfully",
+      data,
+    });
+  } catch (error: any) {
+    if (error.message === "Brochure not found") {
+      res.status(404).json({ success: false, error: error.message });
+      return;
+    }
+    next(error);
+  }
+};
+
+// ─── DELETE /api/brochure/:id ─────────────────────────────────────────────────
+export const remove = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const id   = getParam(req.params["id"]);
+    const data = await brochureService.delete(req.user!.tenantId, id);
+    res.json({ success: true, data });
+  } catch (error: any) {
+    if (error.message === "Brochure not found") {
+      res.status(404).json({ success: false, error: error.message });
+      return;
+    }
+    if (error.message?.includes("Cannot delete")) {
+      res.status(409).json({ success: false, error: error.message });
+      return;
+    }
+    next(error);
+  }
+};

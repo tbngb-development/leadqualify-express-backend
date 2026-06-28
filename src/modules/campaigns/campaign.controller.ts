@@ -6,7 +6,7 @@ import { getParam } from "../../utils/paramHelper";
 export const list = async (
   req: AuthRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const data = await campaignService.list(req.user!.tenantId);
@@ -19,7 +19,7 @@ export const list = async (
 export const get = async (
   req: AuthRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const id = getParam(req.params["id"]);
@@ -33,10 +33,10 @@ export const get = async (
 export const create = async (
   req: AuthRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
-    const { name, description, assistantId } = req.body;
+    const { name, description, assistantId, brochureId } = req.body;
 
     if (!name || !assistantId) {
       res.status(400).json({
@@ -50,6 +50,7 @@ export const create = async (
       name,
       description,
       assistantId,
+      brochureId,
     });
 
     res.status(201).json({ success: true, data });
@@ -61,7 +62,7 @@ export const create = async (
 export const uploadLeads = async (
   req: AuthRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     if (!req.file) {
@@ -73,7 +74,7 @@ export const uploadLeads = async (
     const data = await campaignService.uploadLeads(
       req.user!.tenantId,
       id,
-      req.file.path
+      req.file.path,
     );
 
     res.json({ success: true, data });
@@ -85,7 +86,7 @@ export const uploadLeads = async (
 export const start = async (
   req: AuthRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const id = getParam(req.params["id"]);
@@ -99,7 +100,7 @@ export const start = async (
 export const pause = async (
   req: AuthRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const id = getParam(req.params["id"]);
@@ -113,7 +114,7 @@ export const pause = async (
 export const stats = async (
   req: AuthRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const id = getParam(req.params["id"]);

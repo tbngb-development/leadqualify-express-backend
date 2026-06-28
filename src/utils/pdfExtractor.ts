@@ -9,6 +9,7 @@ export interface PDFExtractionResult {
   pageCount: number;
   textLength: number;
   fileSizeBytes: number;
+  fileSizeMB: string;
   fileName: string;
   extractedAt: string;
   truncated: boolean;
@@ -20,7 +21,7 @@ const MAX_TEXT_CHARS = 3_200_000;
 // ─── Main Extractor ───────────────────────────────────────────────────────────
 export async function extractTextFromPDF(
   filePath: string,
-  fileName: string
+  fileName: string,
 ): Promise<PDFExtractionResult> {
   if (!fs.existsSync(filePath)) {
     throw new Error(`PDF file not found at path: ${filePath}`);
@@ -30,7 +31,7 @@ export async function extractTextFromPDF(
   const fileSizeMB = fileSizeBytes / (1024 * 1024);
 
   console.log(
-    `[PDFExtractor] Processing: ${fileName} | Size: ${fileSizeMB.toFixed(2)}MB`
+    `[PDFExtractor] Processing: ${fileName} | Size: ${fileSizeMB.toFixed(2)}MB`,
   );
 
   const dataBuffer = fs.readFileSync(filePath);
@@ -44,10 +45,14 @@ export async function extractTextFromPDF(
     rawText = pdfData.text;
   } catch (parseError: any) {
     if (parseError.message?.includes("No password")) {
-      throw new Error("PDF is password protected. Please upload an unlocked PDF.");
+      throw new Error(
+        "PDF is password protected. Please upload an unlocked PDF.",
+      );
     }
     if (parseError.message?.includes("Invalid")) {
-      throw new Error("PDF appears to be corrupted or is not a valid PDF file.");
+      throw new Error(
+        "PDF appears to be corrupted or is not a valid PDF file.",
+      );
     }
     throw new Error(`PDF parsing failed: ${parseError.message}`);
   }
@@ -57,7 +62,7 @@ export async function extractTextFromPDF(
   let truncated = false;
   if (rawText.length > MAX_TEXT_CHARS) {
     console.warn(
-      `[PDFExtractor] Text exceeds ${MAX_TEXT_CHARS} chars. Truncating.`
+      `[PDFExtractor] Text exceeds ${MAX_TEXT_CHARS} chars. Truncating.`,
     );
     rawText = rawText.substring(0, MAX_TEXT_CHARS);
     truncated = true;
@@ -68,13 +73,14 @@ export async function extractTextFromPDF(
     pageCount,
     textLength: rawText.length,
     fileSizeBytes,
+    fileSizeMB: fileSizeMB.toFixed(2),
     fileName,
     extractedAt: new Date().toISOString(),
     truncated,
   };
 
   console.log(
-    `[PDFExtractor] Done: ${pageCount} pages | ${rawText.length} chars | Truncated: ${truncated}`
+    `[PDFExtractor] Done: ${pageCount} pages | ${rawText.length} chars | Truncated: ${truncated}`,
   );
 
   return result;
@@ -102,9 +108,7 @@ export function assessTextQuality(result: PDFExtractionResult): {
   warning: string | null;
 } {
   const avgCharsPerPage =
-    result.pageCount > 0
-      ? Math.round(result.textLength / result.pageCount)
-      : 0;
+    result.pageCount > 0 ? Math.round(result.textLength / result.pageCount) : 0;
 
   const hasUsableText = avgCharsPerPage > 100;
 

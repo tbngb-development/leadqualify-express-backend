@@ -152,6 +152,59 @@ exports.Prisma.AssistantScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.BrochureScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  originalFileName: 'originalFileName',
+  fileSizeMB: 'fileSizeMB',
+  pageCount: 'pageCount',
+  rawTextLength: 'rawTextLength',
+  projectName: 'projectName',
+  developerName: 'developerName',
+  reraNumber: 'reraNumber',
+  projectWebsite: 'projectWebsite',
+  contactNumber: 'contactNumber',
+  city: 'city',
+  area: 'area',
+  state: 'state',
+  landmark: 'landmark',
+  fullAddress: 'fullAddress',
+  propertyTypes: 'propertyTypes',
+  configurations: 'configurations',
+  totalUnits: 'totalUnits',
+  totalTowers: 'totalTowers',
+  totalFloors: 'totalFloors',
+  sizeMin: 'sizeMin',
+  sizeMax: 'sizeMax',
+  sizeUnit: 'sizeUnit',
+  startingPrice: 'startingPrice',
+  maxPrice: 'maxPrice',
+  pricePerSqft: 'pricePerSqft',
+  priceLabel: 'priceLabel',
+  paymentPlan: 'paymentPlan',
+  bankApprovals: 'bankApprovals',
+  maintenanceCharge: 'maintenanceCharge',
+  possessionDate: 'possessionDate',
+  launchDate: 'launchDate',
+  constructionStatus: 'constructionStatus',
+  amenities: 'amenities',
+  specifications: 'specifications',
+  nearbyInfrastructure: 'nearbyInfrastructure',
+  usps: 'usps',
+  minimumBudget: 'minimumBudget',
+  maximumBudget: 'maximumBudget',
+  targetBuyerProfile: 'targetBuyerProfile',
+  preferredLocations: 'preferredLocations',
+  investmentType: 'investmentType',
+  keyQualifyingQuestions: 'keyQualifyingQuestions',
+  confidence: 'confidence',
+  extractionWarnings: 'extractionWarnings',
+  isConfirmed: 'isConfirmed',
+  confirmedAt: 'confirmedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.CampaignScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -159,6 +212,7 @@ exports.Prisma.CampaignScalarFieldEnum = {
   status: 'status',
   tenantId: 'tenantId',
   assistantId: 'assistantId',
+  brochureId: 'brochureId',
   totalLeads: 'totalLeads',
   calledLeads: 'calledLeads',
   successLeads: 'successLeads',
@@ -193,6 +247,7 @@ exports.Prisma.CallScalarFieldEnum = {
   duration: 'duration',
   recording: 'recording',
   transcript: 'transcript',
+  transcriptMessages: 'transcriptMessages',
   summary: 'summary',
   outcome: 'outcome',
   startedAt: 'startedAt',
@@ -259,13 +314,15 @@ exports.CallStatus = exports.$Enums.CallStatus = {
   CALLING: 'CALLING',
   COMPLETED: 'COMPLETED',
   FAILED: 'FAILED',
-  NO_ANSWER: 'NO_ANSWER'
+  NO_ANSWER: 'NO_ANSWER',
+  BUSY: 'BUSY'
 };
 
 exports.Prisma.ModelName = {
   Tenant: 'Tenant',
   User: 'User',
   Assistant: 'Assistant',
+  Brochure: 'Brochure',
   Campaign: 'Campaign',
   Lead: 'Lead',
   Call: 'Call'

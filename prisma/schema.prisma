@@ -1,5 +1,8 @@
+// prisma/schema.prisma — FULL FILE, replace existing
+
 generator client {
   provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -8,19 +11,20 @@ datasource db {
 }
 
 model Tenant {
-  id         String      @id @default(uuid())
-  name       String
-  email      String      @unique
-  apiKey     String      @unique @default(uuid())
-  isActive   Boolean     @default(true)
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  apiKey    String   @unique @default(uuid())
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   users      User[]
   campaigns  Campaign[]
   leads      Lead[]
   calls      Call[]
   assistants Assistant[]
+  brochures  Brochure[]
 }
 
 model User {
@@ -33,7 +37,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  tenant Tenant @relation(fields: [tenantId], references: [id])
 }
 
 enum Role {
@@ -51,8 +55,88 @@ model Assistant {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  tenant    Tenant    @relation(fields: [tenantId], references: [id])
+  tenant    Tenant     @relation(fields: [tenantId], references: [id])
   campaigns Campaign[]
+}
+
+model Brochure {
+  id       String @id @default(uuid())
+  tenantId String
+
+  // ── PDF Meta ──────────────────────────────────────────────────
+  originalFileName String
+  fileSizeMB       String
+  pageCount        Int
+  rawTextLength    Int
+
+  // ── Core Identity ─────────────────────────────────────────────
+  projectName    String?
+  developerName  String?
+  reraNumber     String?
+  projectWebsite String?
+  contactNumber  String?
+
+  // ── Location ──────────────────────────────────────────────────
+  city        String?
+  area        String?
+  state       String?
+  landmark    String?
+  fullAddress String?
+
+  // ── Property Specs ────────────────────────────────────────────
+  propertyTypes  String[]
+  configurations String[]
+  totalUnits     Int?
+  totalTowers    Int?
+  totalFloors    Int?
+  sizeMin        Float?
+  sizeMax        Float?
+  sizeUnit       String?
+
+  // ── Financials ────────────────────────────────────────────────
+  startingPrice     Float?
+  maxPrice          Float?
+  pricePerSqft      Float?
+  priceLabel        String?
+  paymentPlan       String?
+  bankApprovals     String[]
+  maintenanceCharge String?
+
+  // ── Timeline ──────────────────────────────────────────────────
+  possessionDate     String?
+  launchDate         String?
+  constructionStatus String? @default("unknown")
+
+  // ── Features ──────────────────────────────────────────────────
+  amenities            String[]
+  specifications       String[]
+  nearbyInfrastructure String[]
+  usps                 String[]
+
+  // ── Lead Qualification ────────────────────────────────────────
+  minimumBudget          Float?
+  maximumBudget          Float?
+  targetBuyerProfile     String?
+  preferredLocations     String[]
+  investmentType         String[]
+  keyQualifyingQuestions String[]
+
+  // ── Extraction Meta ───────────────────────────────────────────
+  confidence         Float    @default(0)
+  extractionWarnings String[]
+
+  // ── Status ────────────────────────────────────────────────────
+  isConfirmed Boolean   @default(false)
+  confirmedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // ── Relations ─────────────────────────────────────────────────
+  tenant    Tenant     @relation(fields: [tenantId], references: [id])
+  campaigns Campaign[]
+
+  @@index([tenantId])
 }
 
 model Campaign {
@@ -62,6 +146,7 @@ model Campaign {
   status       CampaignStatus @default(DRAFT)
   tenantId     String
   assistantId  String
+  brochureId   String?        // ← NEW: optional brochure link
   totalLeads   Int            @default(0)
   calledLeads  Int            @default(0)
   successLeads Int            @default(0)
@@ -71,10 +156,13 @@ model Campaign {
   startedAt    DateTime?
   completedAt  DateTime?
 
-  tenant       Tenant         @relation(fields: [tenantId], references: [id])
-  assistant    Assistant      @relation(fields: [assistantId], references: [id])
-  leads        Lead[]
-  calls        Call[]
+  tenant    Tenant    @relation(fields: [tenantId], references: [id])
+  assistant Assistant @relation(fields: [assistantId], references: [id])
+  brochure  Brochure? @relation(fields: [brochureId], references: [id])
+  leads     Lead[]
+  calls     Call[]
+
+  @@index([brochureId])
 }
 
 enum CampaignStatus {
@@ -98,9 +186,9 @@ model Lead {
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 
-  tenant     Tenant     @relation(fields: [tenantId], references: [id])
-  campaign   Campaign   @relation(fields: [campaignId], references: [id])
-  calls      Call[]
+  tenant   Tenant   @relation(fields: [tenantId], references: [id])
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+  calls    Call[]
 }
 
 enum LeadStatus {
@@ -114,26 +202,26 @@ enum LeadStatus {
 }
 
 model Call {
-  id         String     @id @default(uuid())
-  vapiCallId String?    @unique
-  tenantId   String
-  campaignId String
-  leadId     String
-  status     CallStatus @default(PENDING)
-  duration   Int?
-  recording  String?
-  transcript String?
-  transcriptMessages Json?  
-  summary    String?
-  outcome    String?
-  startedAt  DateTime?
-  endedAt    DateTime?
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  id                 String     @id @default(uuid())
+  vapiCallId         String?    @unique
+  tenantId           String
+  campaignId         String
+  leadId             String
+  status             CallStatus @default(PENDING)
+  duration           Int?
+  recording          String?
+  transcript         String?
+  transcriptMessages Json?
+  summary            String?
+  outcome            String?
+  startedAt          DateTime?
+  endedAt            DateTime?
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
 
-  tenant     Tenant     @relation(fields: [tenantId], references: [id])
-  campaign   Campaign   @relation(fields: [campaignId], references: [id])
-  lead       Lead       @relation(fields: [leadId], references: [id])
+  tenant   Tenant   @relation(fields: [tenantId], references: [id])
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+  lead     Lead     @relation(fields: [leadId], references: [id])
 }
 
 enum CallStatus {

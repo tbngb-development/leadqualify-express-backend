@@ -40,6 +40,7 @@ export class AssistantService {
             content: data.systemPrompt,
           },
         ],
+        toolIds: ["a606a869-1aee-4963-9643-a7bd8708e34b"],
       },
 
       voice: {

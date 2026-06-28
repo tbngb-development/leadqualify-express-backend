@@ -1,7 +1,8 @@
+// prisma/schema.prisma — FULL FILE, replace existing
+
 generator client {
-  provider        = "prisma-client-js"
-  output          = "../src/generated/prisma"
-  previewFeatures = ["driverAdapters"]
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -9,7 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ─── Tenant ───────────────────────────────────────────────────────────────────
 model Tenant {
   id        String   @id @default(uuid())
   name      String
@@ -24,9 +24,9 @@ model Tenant {
   leads      Lead[]
   calls      Call[]
   assistants Assistant[]
+  brochures  Brochure[]
 }
 
-// ─── User ─────────────────────────────────────────────────────────────────────
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
@@ -46,7 +46,6 @@ enum Role {
   USER
 }
 
-// ─── Assistant ────────────────────────────────────────────────────────────────
 model Assistant {
   id        String   @id @default(uuid())
   vapiId    String   @unique
@@ -60,7 +59,86 @@ model Assistant {
   campaigns Campaign[]
 }
 
-// ─── Campaign ─────────────────────────────────────────────────────────────────
+model Brochure {
+  id       String @id @default(uuid())
+  tenantId String
+
+  // ── PDF Meta ──────────────────────────────────────────────────
+  originalFileName String
+  fileSizeMB       String
+  pageCount        Int
+  rawTextLength    Int
+
+  // ── Core Identity ─────────────────────────────────────────────
+  projectName    String?
+  developerName  String?
+  reraNumber     String?
+  projectWebsite String?
+  contactNumber  String?
+
+  // ── Location ──────────────────────────────────────────────────
+  city        String?
+  area        String?
+  state       String?
+  landmark    String?
+  fullAddress String?
+
+  // ── Property Specs ────────────────────────────────────────────
+  propertyTypes  String[]
+  configurations String[]
+  totalUnits     Int?
+  totalTowers    Int?
+  totalFloors    Int?
+  sizeMin        Float?
+  sizeMax        Float?
+  sizeUnit       String?
+
+  // ── Financials ────────────────────────────────────────────────
+  startingPrice     Float?
+  maxPrice          Float?
+  pricePerSqft      Float?
+  priceLabel        String?
+  paymentPlan       String?
+  bankApprovals     String[]
+  maintenanceCharge String?
+
+  // ── Timeline ──────────────────────────────────────────────────
+  possessionDate     String?
+  launchDate         String?
+  constructionStatus String? @default("unknown")
+
+  // ── Features ──────────────────────────────────────────────────
+  amenities            String[]
+  specifications       String[]
+  nearbyInfrastructure String[]
+  usps                 String[]
+
+  // ── Lead Qualification ────────────────────────────────────────
+  minimumBudget          Float?
+  maximumBudget          Float?
+  targetBuyerProfile     String?
+  preferredLocations     String[]
+  investmentType         String[]
+  keyQualifyingQuestions String[]
+
+  // ── Extraction Meta ───────────────────────────────────────────
+  confidence         Float    @default(0)
+  extractionWarnings String[]
+
+  // ── Status ────────────────────────────────────────────────────
+  isConfirmed Boolean   @default(false)
+  confirmedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // ── Relations ─────────────────────────────────────────────────
+  tenant    Tenant     @relation(fields: [tenantId], references: [id])
+  campaigns Campaign[]
+
+  @@index([tenantId])
+}
+
 model Campaign {
   id           String         @id @default(uuid())
   name         String
@@ -68,6 +146,7 @@ model Campaign {
   status       CampaignStatus @default(DRAFT)
   tenantId     String
   assistantId  String
+  brochureId   String? // ← NEW: optional brochure link
   totalLeads   Int            @default(0)
   calledLeads  Int            @default(0)
   successLeads Int            @default(0)
@@ -79,8 +158,11 @@ model Campaign {
 
   tenant    Tenant    @relation(fields: [tenantId], references: [id])
   assistant Assistant @relation(fields: [assistantId], references: [id])
+  brochure  Brochure? @relation(fields: [brochureId], references: [id])
   leads     Lead[]
   calls     Call[]
+
+  @@index([brochureId])
 }
 
 enum CampaignStatus {
@@ -91,7 +173,6 @@ enum CampaignStatus {
   FAILED
 }
 
-// ─── Lead ─────────────────────────────────────────────────────────────────────
 model Lead {
   id         String     @id @default(uuid())
   name       String
@@ -120,23 +201,23 @@ enum LeadStatus {
   FAILED
 }
 
-// ─── Call ─────────────────────────────────────────────────────────────────────
 model Call {
-  id         String     @id @default(uuid())
-  vapiCallId String?    @unique
-  tenantId   String
-  campaignId String
-  leadId     String
-  status     CallStatus @default(PENDING)
-  duration   Int?
-  recording  String?
-  transcript String?
-  summary    String?
-  outcome    String?
-  startedAt  DateTime?
-  endedAt    DateTime?
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  id                 String     @id @default(uuid())
+  vapiCallId         String?    @unique
+  tenantId           String
+  campaignId         String
+  leadId             String
+  status             CallStatus @default(PENDING)
+  duration           Int?
+  recording          String?
+  transcript         String?
+  transcriptMessages Json?
+  summary            String?
+  outcome            String?
+  startedAt          DateTime?
+  endedAt            DateTime?
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
 
   tenant   Tenant   @relation(fields: [tenantId], references: [id])
   campaign Campaign @relation(fields: [campaignId], references: [id])
@@ -149,4 +230,5 @@ enum CallStatus {
   COMPLETED
   FAILED
   NO_ANSWER
+  BUSY
 }
