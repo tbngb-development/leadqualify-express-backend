@@ -3,35 +3,41 @@ import path from "path";
 import fs from "fs";
 import { Request } from "express";
 
-// ─── Ensure upload dir exists ─────────────────────────────────────────────────
-const UPLOAD_DIR = path.join(process.cwd(), "uploads", "brochures");
+// ─── Ensure upload directories exist ─────────────────────────────────────────
+const BROCHURE_UPLOAD_DIR = path.join(process.cwd(), "uploads", "brochures");
+const LEADS_UPLOAD_DIR = path.join(process.cwd(), "uploads", "leads");
 
-if (!fs.existsSync(UPLOAD_DIR)) {
-  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-}
-
-// ─── Storage Config ───────────────────────────────────────────────────────────
-const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => {
-    cb(null, UPLOAD_DIR);
-  },
-  filename: (_req, file, cb) => {
-    // Sanitize original name — remove spaces and special chars
-    const sanitized = file.originalname
-      .replace(/\s+/g, "_")
-      .replace(/[^a-zA-Z0-9._-]/g, "");
-
-    // Add timestamp prefix to avoid collisions
-    const uniqueName = `${Date.now()}_${sanitized}`;
-    cb(null, uniqueName);
-  },
+[BROCHURE_UPLOAD_DIR, LEADS_UPLOAD_DIR].forEach((dir) => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
 });
 
-// ─── File Filter — PDFs only ──────────────────────────────────────────────────
+// ─── Shared filename sanitizer ────────────────────────────────────────────────
+const buildFilename = (
+  _req: Request,
+  file: Express.Multer.File,
+  cb: (error: Error | null, filename: string) => void,
+) => {
+  const sanitized = file.originalname
+    .replace(/\s+/g, "_")
+    .replace(/[^a-zA-Z0-9._-]/g, "");
+  cb(null, `${Date.now()}_${sanitized}`);
+};
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// BROCHURE UPLOAD  (PDF only — unchanged)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const brochureStorage = multer.diskStorage({
+  destination: (_req, _file, cb) => cb(null, BROCHURE_UPLOAD_DIR),
+  filename: buildFilename,
+});
+
 const pdfFileFilter = (
   _req: Request,
   file: Express.Multer.File,
-  cb: FileFilterCallback
+  cb: FileFilterCallback,
 ) => {
   const allowedMimeTypes = ["application/pdf", "application/x-pdf"];
   const allowedExtensions = [".pdf"];
@@ -45,24 +51,65 @@ const pdfFileFilter = (
   } else {
     cb(
       new Error(
-        `Invalid file type. Only PDF files are accepted. Got: ${file.mimetype}`
-      )
+        `Invalid file type. Only PDF files are accepted. Got: ${file.mimetype}`,
+      ),
     );
   }
 };
 
-// ─── Multer Instance ─────────────────────────────────────────────────────────
-// 80MB limit to match requirement
 export const brochureUpload = multer({
-  storage,
+  storage: brochureStorage,
   fileFilter: pdfFileFilter,
   limits: {
-    fileSize: 100 * 1024 * 1024, // 100MB
-    files: 1,                    // Only one file at a time
+    fileSize: 100 * 1024 * 1024, // 100 MB
+    files: 1,
   },
 });
 
-// ─── Cleanup helper — delete temp file after processing ───────────────────────
+// ═══════════════════════════════════════════════════════════════════════════════
+// LEADS UPLOAD  (CSV / XLS / XLSX)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const leadsStorage = multer.diskStorage({
+  destination: (_req, _file, cb) => cb(null, LEADS_UPLOAD_DIR),
+  filename: buildFilename,
+});
+
+const LEADS_ALLOWED_EXTENSIONS = [".csv", ".xls", ".xlsx"];
+
+// NOTE: Browsers/clients send inconsistent MIME types for xls/xlsx,
+// so we validate by file extension only (more reliable).
+const leadsFileFilter = (
+  _req: Request,
+  file: Express.Multer.File,
+  cb: FileFilterCallback,
+) => {
+  const ext = path.extname(file.originalname).toLowerCase();
+
+  if (LEADS_ALLOWED_EXTENSIONS.includes(ext)) {
+    cb(null, true);
+  } else {
+    cb(
+      new Error(
+        `Invalid file type "${ext}". Only CSV, XLS, and XLSX files are allowed.`,
+      ),
+    );
+  }
+};
+
+export const leadsUpload = multer({
+  storage: leadsStorage,
+  fileFilter: leadsFileFilter,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10 MB
+    files: 1,
+  },
+});
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// Shared cleanup helper
+// ═══════════════════════════════════════════════════════════════════════════════
+
 export function cleanupUploadedFile(filePath: string): void {
   try {
     if (fs.existsSync(filePath)) {
@@ -70,7 +117,6 @@ export function cleanupUploadedFile(filePath: string): void {
       console.log(`[Upload] Cleaned up temp file: ${filePath}`);
     }
   } catch (err) {
-    // Non-fatal — just log it
     console.warn(`[Upload] Failed to cleanup file ${filePath}:`, err);
   }
 }

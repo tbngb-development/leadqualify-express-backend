@@ -2,7 +2,7 @@
 
 import prisma from "../../config/database";
 import { bolnaClient } from "../../config/bolna";
-import { parseCSV } from "../../utils/csvParser";
+import { LeadRow, parseLeadFile } from "../../utils/leadParser";
 import brochureService from "../brochure/brochure.service";
 import fs from "fs";
 
@@ -92,19 +92,46 @@ export class CampaignService {
 
   // ─── Upload CSV ────────────────────────────────────────────────────────────
   async uploadLeads(tenantId: string, campaignId: string, filePath: string) {
+    // ── 1. Verify campaign ownership ──────────────────────────────────────────
     const campaign = await prisma.campaign.findFirst({
       where: { id: campaignId, tenantId },
     });
     if (!campaign) throw new Error("Campaign not found");
 
-    const rows = parseCSV(filePath);
-    const validLeads = rows.filter((r) => r.phone);
-    const invalidCount = rows.length - validLeads.length;
-
-    if (validLeads.length === 0) {
-      throw new Error("No valid leads found in CSV — phone column is required");
+    // ── 2. Parse file (auto-detects csv / xls / xlsx) ─────────────────────────
+    let rows: LeadRow[];
+    try {
+      rows = parseLeadFile(filePath);
+    } catch (parseError: unknown) {
+      // Clean up before throwing
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+      const message =
+        parseError instanceof Error
+          ? parseError.message
+          : "Failed to parse file";
+      throw new Error(`File parsing failed: ${message}`);
     }
 
+    // ── 3. Validate ────────────────────────────────────────────────────────────
+    const validLeads = rows.filter((r) => r.phone && r.phone.trim() !== "");
+    const invalidCount = rows.length - validLeads.length;
+
+    if (rows.length === 0) {
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+      throw new Error("File is empty — no rows found");
+    }
+
+    if (validLeads.length === 0) {
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+      throw new Error(
+        "No valid leads found — every row is missing a phone number. " +
+          "Ensure your file has a column named: phone, Phone, phone_number, or mobile",
+      );
+    }
+
+    for(let i of validLeads) console.log("Valid lead: ", i)
+
+    // ── 4. Persist leads ───────────────────────────────────────────────────────
     await prisma.lead.createMany({
       data: validLeads.map((row) => ({
         name: row.name,
@@ -117,11 +144,13 @@ export class CampaignService {
       })),
     });
 
+    // ── 5. Update campaign total ───────────────────────────────────────────────
     await prisma.campaign.update({
       where: { id: campaignId },
       data: { totalLeads: { increment: validLeads.length } },
     });
 
+    // ── 6. Clean up uploaded file ──────────────────────────────────────────────
     if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
 
     return {
