@@ -737,7 +737,7 @@
           ]
         },
         {
-          "name": "Upload CSV Leads",
+          "name": "Upload CSV/XLS/XLSX Leads",
           "request": {
             "method": "POST",
             "url": "{{BASE_URL}}/api/campaigns/{{CAMPAIGN_ID}}/upload",
@@ -749,7 +749,7 @@
                   "key": "file",
                   "type": "file",
                   "src": "",
-                  "description": "CSV must have: name, phone columns. email, company optional."
+                  "description": "Supported: .csv, .xls, .xlsx — Required columns: name, phone. Optional: email, company."
                 }
               ]
             }
@@ -759,13 +759,22 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.test('Leads uploaded', function () {",
+                  "pm.test('Leads uploaded successfully', function () {",
                   "  pm.response.to.have.status(200);",
                   "  const res = pm.response.json();",
                   "  pm.expect(res.success).to.be.true;",
+                  "  pm.expect(res.data).to.have.property('total');",
+                  "  pm.expect(res.data).to.have.property('valid');",
+                  "  pm.expect(res.data).to.have.property('invalid');",
+                  "  console.log('File format accepted ✓');",
                   "  console.log('Total rows:', res.data.total);",
                   "  console.log('Valid leads:', res.data.valid);",
                   "  console.log('Invalid (no phone):', res.data.invalid);",
+                  "});",
+                  "",
+                  "pm.test('At least one valid lead uploaded', function () {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.data.valid).to.be.greaterThan(0);",
                   "});"
                 ]
               }
