@@ -1,7 +1,11 @@
 // src/config/bolna.ts
 
 import axios, { AxiosInstance } from "axios";
-import { BolnaAgentResponse, BolnaCallPayload, BolnaCallResponse } from "../types/bolna.types";
+import {
+  BolnaAgentResponse,
+  BolnaCallPayload,
+  BolnaCallResponse,
+} from "../types/bolna.types";
 
 const BOLNA_BASE_URL = "https://api.bolna.dev";
 
@@ -23,6 +27,50 @@ function createHttpClient(): AxiosInstance {
   });
 }
 
+// ─── Phone Normalizer ─────────────────────────────────────────────────────────
+/**
+ * Ensures phone number has a country code prefix.
+ *
+ * Rules:
+ *  - Already has "+" prefix          → return as-is
+ *  - 10-digit Indian number           → prepend "+91"
+ *  - 12-digit starting with "91"      → prepend "+"
+ *  - Anything else                    → prepend "+" and hope for the best
+ *
+ * Strips all spaces, dashes, parentheses before processing.
+ */
+export const normalizePhoneNumber = (
+  raw: string,
+  defaultCountryCode = "91",
+): string => {
+  // Strip whitespace, dashes, dots, parentheses
+  const cleaned = raw.replace(/[\s\-().]/g, "");
+
+  // Already has "+" — trust the caller
+  if (cleaned.startsWith("+")) {
+    return cleaned;
+  }
+
+  // Starts with "00" — international dialing prefix
+  if (cleaned.startsWith("00")) {
+    return `+${cleaned.slice(2)}`;
+  }
+
+  // 12 digits starting with "91" — Indian number without "+"
+  if (cleaned.length === 12 && cleaned.startsWith("91")) {
+    return `+${cleaned}`;
+  }
+
+  // 10 digits — bare Indian mobile number
+  if (cleaned.length === 10) {
+    return `+${defaultCountryCode}${cleaned}`;
+  }
+
+  // Fallback — prepend "+" and send
+  console.warn(`[Bolna] Ambiguous phone "${raw}" → sending as "+${cleaned}"`);
+  return `+${cleaned}`;
+};
+
 // ─── Bolna Client — only what we actually use ─────────────────────────────────
 
 export const bolnaClient = {
@@ -31,11 +79,18 @@ export const bolnaClient = {
     create: async (payload: BolnaCallPayload): Promise<BolnaCallResponse> => {
       const http = createHttpClient();
 
-      console.log(
-        `[Bolna] Initiating call → agent: ${payload.agent_id} | phone: ${payload.recipient_phone_number}`,
+      const normalizedPhone = normalizePhoneNumber(
+        payload.recipient_phone_number,
       );
 
-      const response = await http.post<BolnaCallResponse>("/call", payload);
+      console.log(
+        `[Bolna] Initiating call → agent: ${payload.agent_id} | phone: ${normalizedPhone}`,
+      );
+
+      const response = await http.post<BolnaCallResponse>("/call", {
+        ...payload,
+        recipient_phone_number: normalizedPhone,
+      });
 
       console.log(
         `[Bolna] Call Response Data: ${JSON.stringify(response.data)}`,

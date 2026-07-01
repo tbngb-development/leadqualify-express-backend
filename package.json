@@ -1,5 +1,5 @@
 {
-  "name": "vapi-server",
+  "name": "bolna-server",
   "version": "1.0.0",
   "main": "dist/index.js",
   "scripts": {
@@ -25,6 +25,7 @@
     "prisma": "^6.19.3",
     "sarvamai": "^1.1.7",
     "wav": "^1.0.2",
+    "xlsx": "^0.18.5",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -36,6 +37,7 @@
     "@types/node": "^25.9.3",
     "@types/pdf-parse": "^1.1.5",
     "@types/wav": "^1.0.4",
+    "@types/xlsx": "^0.0.35",
     "nodemon": "^3.1.14",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.3"
