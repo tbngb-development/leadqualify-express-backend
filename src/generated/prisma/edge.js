@@ -310,7 +310,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "D:\\BROCAMP\\Ibrahim Thekkumkara\\ai_lead_qualification\\MVP\\vapi-server\\src\\generated\\prisma",
+      "value": "D:\\BROCAMP\\Ibrahim Thekkumkara\\ai_lead_qualification\\MVP\\express-backend\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -324,7 +324,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "D:\\BROCAMP\\Ibrahim Thekkumkara\\ai_lead_qualification\\MVP\\vapi-server\\prisma\\schema.prisma",
+    "sourceFilePath": "D:\\BROCAMP\\Ibrahim Thekkumkara\\ai_lead_qualification\\MVP\\express-backend\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
