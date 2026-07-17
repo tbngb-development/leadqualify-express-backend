@@ -2,7 +2,7 @@ import { Router, Response, NextFunction } from "express";
 import { authenticate, authorize, AuthRequest } from "../../middleware/auth";
 import prisma from "../../config/database";
 import bcrypt from "bcryptjs";
-import { Role } from "@prisma/client";
+import { Role } from "../../generated/prisma";
 import { getParam } from "../../utils/paramHelper";
 
 const router = Router();
