@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt, { SignOptions } from "jsonwebtoken";
 import prisma from "../../config/database";
-import { Role } from "@prisma/client";
+import { Role } from "../../generated/prisma";
 
 class AuthService {
   async register(data: {

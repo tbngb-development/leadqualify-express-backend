@@ -1,5 +1,5 @@
 import prisma from "../../config/database";
-import { CallStatus } from "@prisma/client";
+import { CallStatus } from "../../generated/prisma";
 
 export class CallService {
   async list(

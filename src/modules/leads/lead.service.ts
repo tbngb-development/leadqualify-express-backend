@@ -1,5 +1,5 @@
 import prisma from "../../config/database";
-import { LeadStatus } from "@prisma/client";
+import { LeadStatus } from "../../generated/prisma";
 
 export class LeadService {
   async list(
