@@ -6905,6 +6905,7 @@ export namespace Prisma {
     tenantId: number
     assistantId: number
     brochureId: number
+    variables: number
     totalLeads: number
     calledLeads: number
     successLeads: number
@@ -6975,6 +6976,7 @@ export namespace Prisma {
     tenantId?: true
     assistantId?: true
     brochureId?: true
+    variables?: true
     totalLeads?: true
     calledLeads?: true
     successLeads?: true
@@ -7080,6 +7082,7 @@ export namespace Prisma {
     tenantId: string
     assistantId: string
     brochureId: string | null
+    variables: JsonValue | null
     totalLeads: number
     calledLeads: number
     successLeads: number
@@ -7117,6 +7120,7 @@ export namespace Prisma {
     tenantId?: boolean
     assistantId?: boolean
     brochureId?: boolean
+    variables?: boolean
     totalLeads?: boolean
     calledLeads?: boolean
     successLeads?: boolean
@@ -7141,6 +7145,7 @@ export namespace Prisma {
     tenantId?: boolean
     assistantId?: boolean
     brochureId?: boolean
+    variables?: boolean
     totalLeads?: boolean
     calledLeads?: boolean
     successLeads?: boolean
@@ -7162,6 +7167,7 @@ export namespace Prisma {
     tenantId?: boolean
     assistantId?: boolean
     brochureId?: boolean
+    variables?: boolean
     totalLeads?: boolean
     calledLeads?: boolean
     successLeads?: boolean
@@ -7183,6 +7189,7 @@ export namespace Prisma {
     tenantId?: boolean
     assistantId?: boolean
     brochureId?: boolean
+    variables?: boolean
     totalLeads?: boolean
     calledLeads?: boolean
     successLeads?: boolean
@@ -7193,7 +7200,7 @@ export namespace Prisma {
     completedAt?: boolean
   }
 
-  export type CampaignOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "status" | "tenantId" | "assistantId" | "brochureId" | "totalLeads" | "calledLeads" | "successLeads" | "failedLeads" | "createdAt" | "updatedAt" | "startedAt" | "completedAt", ExtArgs["result"]["campaign"]>
+  export type CampaignOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "status" | "tenantId" | "assistantId" | "brochureId" | "variables" | "totalLeads" | "calledLeads" | "successLeads" | "failedLeads" | "createdAt" | "updatedAt" | "startedAt" | "completedAt", ExtArgs["result"]["campaign"]>
   export type CampaignInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     assistant?: boolean | AssistantDefaultArgs<ExtArgs>
@@ -7230,6 +7237,7 @@ export namespace Prisma {
       tenantId: string
       assistantId: string
       brochureId: string | null
+      variables: Prisma.JsonValue | null
       totalLeads: number
       calledLeads: number
       successLeads: number
@@ -7673,6 +7681,7 @@ export namespace Prisma {
     readonly tenantId: FieldRef<"Campaign", 'String'>
     readonly assistantId: FieldRef<"Campaign", 'String'>
     readonly brochureId: FieldRef<"Campaign", 'String'>
+    readonly variables: FieldRef<"Campaign", 'Json'>
     readonly totalLeads: FieldRef<"Campaign", 'Int'>
     readonly calledLeads: FieldRef<"Campaign", 'Int'>
     readonly successLeads: FieldRef<"Campaign", 'Int'>
@@ -10697,6 +10706,7 @@ export namespace Prisma {
     tenantId: 'tenantId',
     assistantId: 'assistantId',
     brochureId: 'brochureId',
+    variables: 'variables',
     totalLeads: 'totalLeads',
     calledLeads: 'calledLeads',
     successLeads: 'successLeads',
@@ -11452,6 +11462,7 @@ export namespace Prisma {
     tenantId?: StringFilter<"Campaign"> | string
     assistantId?: StringFilter<"Campaign"> | string
     brochureId?: StringNullableFilter<"Campaign"> | string | null
+    variables?: JsonNullableFilter<"Campaign">
     totalLeads?: IntFilter<"Campaign"> | number
     calledLeads?: IntFilter<"Campaign"> | number
     successLeads?: IntFilter<"Campaign"> | number
@@ -11475,6 +11486,7 @@ export namespace Prisma {
     tenantId?: SortOrder
     assistantId?: SortOrder
     brochureId?: SortOrderInput | SortOrder
+    variables?: SortOrderInput | SortOrder
     totalLeads?: SortOrder
     calledLeads?: SortOrder
     successLeads?: SortOrder
@@ -11501,6 +11513,7 @@ export namespace Prisma {
     tenantId?: StringFilter<"Campaign"> | string
     assistantId?: StringFilter<"Campaign"> | string
     brochureId?: StringNullableFilter<"Campaign"> | string | null
+    variables?: JsonNullableFilter<"Campaign">
     totalLeads?: IntFilter<"Campaign"> | number
     calledLeads?: IntFilter<"Campaign"> | number
     successLeads?: IntFilter<"Campaign"> | number
@@ -11524,6 +11537,7 @@ export namespace Prisma {
     tenantId?: SortOrder
     assistantId?: SortOrder
     brochureId?: SortOrderInput | SortOrder
+    variables?: SortOrderInput | SortOrder
     totalLeads?: SortOrder
     calledLeads?: SortOrder
     successLeads?: SortOrder
@@ -11550,6 +11564,7 @@ export namespace Prisma {
     tenantId?: StringWithAggregatesFilter<"Campaign"> | string
     assistantId?: StringWithAggregatesFilter<"Campaign"> | string
     brochureId?: StringNullableWithAggregatesFilter<"Campaign"> | string | null
+    variables?: JsonNullableWithAggregatesFilter<"Campaign">
     totalLeads?: IntWithAggregatesFilter<"Campaign"> | number
     calledLeads?: IntWithAggregatesFilter<"Campaign"> | number
     successLeads?: IntWithAggregatesFilter<"Campaign"> | number
@@ -12391,6 +12406,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     status?: $Enums.CampaignStatus
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -12414,6 +12430,7 @@ export namespace Prisma {
     tenantId: string
     assistantId: string
     brochureId?: string | null
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -12431,6 +12448,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -12454,6 +12472,7 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     assistantId?: StringFieldUpdateOperationsInput | string
     brochureId?: NullableStringFieldUpdateOperationsInput | string | null
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -12474,6 +12493,7 @@ export namespace Prisma {
     tenantId: string
     assistantId: string
     brochureId?: string | null
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -12489,6 +12509,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -12507,6 +12528,7 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     assistantId?: StringFieldUpdateOperationsInput | string
     brochureId?: NullableStringFieldUpdateOperationsInput | string | null
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -13394,6 +13416,29 @@ export namespace Prisma {
     notIn?: $Enums.CampaignStatus[] | ListEnumCampaignStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumCampaignStatusFilter<$PrismaModel> | $Enums.CampaignStatus
   }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type AssistantScalarRelationFilter = {
     is?: AssistantWhereInput
@@ -13413,6 +13458,7 @@ export namespace Prisma {
     tenantId?: SortOrder
     assistantId?: SortOrder
     brochureId?: SortOrder
+    variables?: SortOrder
     totalLeads?: SortOrder
     calledLeads?: SortOrder
     successLeads?: SortOrder
@@ -13482,21 +13528,14 @@ export namespace Prisma {
     _min?: NestedEnumCampaignStatusFilter<$PrismaModel>
     _max?: NestedEnumCampaignStatusFilter<$PrismaModel>
   }
-
-  export type EnumLeadStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumLeadStatusFilter<$PrismaModel> | $Enums.LeadStatus
-  }
-  export type JsonNullableFilter<$PrismaModel = never> =
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
     | PatchUndefined<
-        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableFilterBase<$PrismaModel>>
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
       >
-    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
 
-  export type JsonNullableFilterBase<$PrismaModel = never> = {
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
     path?: string[]
     mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
@@ -13511,6 +13550,16 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type EnumLeadStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumLeadStatusFilter<$PrismaModel> | $Enums.LeadStatus
   }
 
   export type CampaignScalarRelationFilter = {
@@ -13566,32 +13615,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumLeadStatusFilter<$PrismaModel>
     _max?: NestedEnumLeadStatusFilter<$PrismaModel>
-  }
-  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedJsonNullableFilter<$PrismaModel>
-    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type EnumCallStatusFilter<$PrismaModel = never> = {
@@ -14753,23 +14776,6 @@ export namespace Prisma {
     _min?: NestedEnumCampaignStatusFilter<$PrismaModel>
     _max?: NestedEnumCampaignStatusFilter<$PrismaModel>
   }
-
-  export type NestedEnumLeadStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumLeadStatusFilter<$PrismaModel> | $Enums.LeadStatus
-  }
-
-  export type NestedEnumLeadStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumLeadStatusWithAggregatesFilter<$PrismaModel> | $Enums.LeadStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumLeadStatusFilter<$PrismaModel>
-    _max?: NestedEnumLeadStatusFilter<$PrismaModel>
-  }
   export type NestedJsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
@@ -14792,6 +14798,23 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedEnumLeadStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumLeadStatusFilter<$PrismaModel> | $Enums.LeadStatus
+  }
+
+  export type NestedEnumLeadStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumLeadStatusWithAggregatesFilter<$PrismaModel> | $Enums.LeadStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLeadStatusFilter<$PrismaModel>
+    _max?: NestedEnumLeadStatusFilter<$PrismaModel>
   }
 
   export type NestedEnumCallStatusFilter<$PrismaModel = never> = {
@@ -14846,6 +14869,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     status?: $Enums.CampaignStatus
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -14867,6 +14891,7 @@ export namespace Prisma {
     status?: $Enums.CampaignStatus
     assistantId: string
     brochureId?: string | null
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -15176,6 +15201,7 @@ export namespace Prisma {
     tenantId?: StringFilter<"Campaign"> | string
     assistantId?: StringFilter<"Campaign"> | string
     brochureId?: StringNullableFilter<"Campaign"> | string | null
+    variables?: JsonNullableFilter<"Campaign">
     totalLeads?: IntFilter<"Campaign"> | number
     calledLeads?: IntFilter<"Campaign"> | number
     successLeads?: IntFilter<"Campaign"> | number
@@ -15474,6 +15500,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     status?: $Enums.CampaignStatus
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -15495,6 +15522,7 @@ export namespace Prisma {
     status?: $Enums.CampaignStatus
     tenantId: string
     brochureId?: string | null
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -15614,6 +15642,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     status?: $Enums.CampaignStatus
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -15635,6 +15664,7 @@ export namespace Prisma {
     status?: $Enums.CampaignStatus
     tenantId: string
     assistantId: string
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -16230,6 +16260,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     status?: $Enums.CampaignStatus
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -16252,6 +16283,7 @@ export namespace Prisma {
     tenantId: string
     assistantId: string
     brochureId?: string | null
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -16371,6 +16403,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -16393,6 +16426,7 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     assistantId?: StringFieldUpdateOperationsInput | string
     brochureId?: NullableStringFieldUpdateOperationsInput | string | null
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -16460,6 +16494,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     status?: $Enums.CampaignStatus
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -16482,6 +16517,7 @@ export namespace Prisma {
     tenantId: string
     assistantId: string
     brochureId?: string | null
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -16588,6 +16624,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -16610,6 +16647,7 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     assistantId?: StringFieldUpdateOperationsInput | string
     brochureId?: NullableStringFieldUpdateOperationsInput | string | null
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -16677,6 +16715,7 @@ export namespace Prisma {
     status?: $Enums.CampaignStatus
     assistantId: string
     brochureId?: string | null
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -16814,6 +16853,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -16835,6 +16875,7 @@ export namespace Prisma {
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     assistantId?: StringFieldUpdateOperationsInput | string
     brochureId?: NullableStringFieldUpdateOperationsInput | string | null
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -16854,6 +16895,7 @@ export namespace Prisma {
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     assistantId?: StringFieldUpdateOperationsInput | string
     brochureId?: NullableStringFieldUpdateOperationsInput | string | null
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -17153,6 +17195,7 @@ export namespace Prisma {
     status?: $Enums.CampaignStatus
     tenantId: string
     brochureId?: string | null
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -17168,6 +17211,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -17189,6 +17233,7 @@ export namespace Prisma {
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     tenantId?: StringFieldUpdateOperationsInput | string
     brochureId?: NullableStringFieldUpdateOperationsInput | string | null
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -17208,6 +17253,7 @@ export namespace Prisma {
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     tenantId?: StringFieldUpdateOperationsInput | string
     brochureId?: NullableStringFieldUpdateOperationsInput | string | null
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -17225,6 +17271,7 @@ export namespace Prisma {
     status?: $Enums.CampaignStatus
     tenantId: string
     assistantId: string
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
     successLeads?: number
@@ -17240,6 +17287,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -17261,6 +17309,7 @@ export namespace Prisma {
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     tenantId?: StringFieldUpdateOperationsInput | string
     assistantId?: StringFieldUpdateOperationsInput | string
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
@@ -17280,6 +17329,7 @@ export namespace Prisma {
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     tenantId?: StringFieldUpdateOperationsInput | string
     assistantId?: StringFieldUpdateOperationsInput | string
+    variables?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number

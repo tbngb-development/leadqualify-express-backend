@@ -213,6 +213,7 @@ exports.Prisma.CampaignScalarFieldEnum = {
   tenantId: 'tenantId',
   assistantId: 'assistantId',
   brochureId: 'brochureId',
+  variables: 'variables',
   totalLeads: 'totalLeads',
   calledLeads: 'calledLeads',
   successLeads: 'successLeads',

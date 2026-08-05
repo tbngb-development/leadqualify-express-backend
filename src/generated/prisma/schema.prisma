@@ -146,7 +146,8 @@ model Campaign {
   status       CampaignStatus @default(DRAFT)
   tenantId     String
   assistantId  String
-  brochureId   String? // ← NEW: optional brochure link
+  brochureId   String?
+  variables    Json?
   totalLeads   Int            @default(0)
   calledLeads  Int            @default(0)
   successLeads Int            @default(0)

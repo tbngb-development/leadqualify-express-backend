@@ -40,23 +40,22 @@ export class CampaignService {
     return campaign;
   }
 
-  // ─── Create ────────────────────────────────────────────────────────────────
+  // ─── Create ─────────────────────────────────────────────────────────────────
   async create(
     tenantId: string,
     data: {
       name: string;
       description?: string;
       assistantId: string;
-      brochureId?: string; // ← NEW: optional
+      brochureId?: string;
+      variables?: Record<string, string>;
     },
   ) {
-    // Verify assistant belongs to tenant
     const assistant = await prisma.assistant.findFirst({
       where: { id: data.assistantId, tenantId },
     });
     if (!assistant) throw new Error("Assistant not found");
 
-    // Verify brochure belongs to tenant (if provided)
     if (data.brochureId) {
       const brochure = await prisma.brochure.findFirst({
         where: { id: data.brochureId, tenantId },
@@ -75,17 +74,11 @@ export class CampaignService {
         description: data.description,
         tenantId,
         assistantId: data.assistantId,
-        brochureId: data.brochureId ?? null,
+        brochureId: data.brochureId,
+        variables: data.variables,
       },
       include: {
         assistant: true,
-        brochure: {
-          select: {
-            id: true,
-            projectName: true,
-            configurations: true,
-          },
-        },
       },
     });
   }
@@ -129,7 +122,7 @@ export class CampaignService {
       );
     }
 
-    for(let i of validLeads) console.log("Valid lead: ", i)
+    for (let i of validLeads) console.log("Valid lead: ", i);
 
     // ── 4. Persist leads ───────────────────────────────────────────────────────
     await prisma.lead.createMany({
@@ -160,7 +153,7 @@ export class CampaignService {
     };
   }
 
-  // ─── Start Campaign ──────────────────────────────────────────────────────────
+  // ─── Start Campaign ────────────────────────────────────────────────────────
   async start(tenantId: string, campaignId: string) {
     const campaign = await prisma.campaign.findFirst({
       where: { id: campaignId, tenantId },
@@ -175,36 +168,21 @@ export class CampaignService {
     });
     if (leads.length === 0) throw new Error("No pending leads found");
 
-    // ── Fetch brochure variable values once — reused for every call ──────────
-    let brochureVariables: Record<string, string> | null = null;
-
-    if (campaign.brochureId) {
-      const brochureData = await brochureService.getBrochureForPrompt(
-        campaign.brochureId,
-      );
-
-      if (brochureData) {
-        // Build variable map — same shape as variableValues in VAPI
-        brochureVariables = brochureService.buildVariableValues(brochureData);
-        console.log(
-          `[Campaign] Brochure variables ready for campaign: ${campaignId}`,
-          Object.keys(brochureVariables),
-        );
-      }
-    }
+    // Campaign variables — already stored as JSON from frontend
+    const campaignVariables =
+      (campaign.variables as Record<string, string>) ?? {};
 
     await prisma.campaign.update({
       where: { id: campaignId },
       data: { status: "RUNNING", startedAt: new Date() },
     });
 
-    // Pass brochure variables into the background process
     this.processLeads(
       tenantId,
       campaignId,
       leads,
       campaign.assistant.bolnaId,
-      brochureVariables, // ← pass variable map, not a prompt string
+      campaignVariables,
     )
       .then(() => console.log(`[Campaign] ${campaignId} completed`))
       .catch((err) => console.error(`[Campaign] ${campaignId} failed:`, err));
@@ -212,18 +190,17 @@ export class CampaignService {
     return {
       message: `Campaign started — ${leads.length} calls queued`,
       totalLeads: leads.length,
-      hasBrochure: !!brochureVariables,
-      brochureVars: brochureVariables ? Object.keys(brochureVariables) : [],
+      variableKeys: Object.keys(campaignVariables),
     };
   }
 
-  // ─── Process Leads ───────────────────────────────────────────────────────────
+  // ─── Process Leads ──────────────────────────────────────────────────────────
   private async processLeads(
     tenantId: string,
     campaignId: string,
     leads: { id: string; phone: string; name: string }[],
     bolnaAgentId: string,
-    brochureVariables: Record<string, string> | null,
+    campaignVariables: Record<string, string>,
   ) {
     for (const lead of leads) {
       const campaign = await prisma.campaign.findUnique({
@@ -241,7 +218,7 @@ export class CampaignService {
           campaignId,
           lead,
           bolnaAgentId,
-          brochureVariables,
+          campaignVariables,
         );
       } catch (error) {
         console.error(`[Campaign] Call failed for lead ${lead.id}:`, error);
@@ -260,13 +237,13 @@ export class CampaignService {
     }
   }
 
-  // ─── Make Single Call ─────────────────────────────────────────────────────────
+  // ─── Make Single Call ───────────────────────────────────────────────────────
   async makeCall(
     tenantId: string,
     campaignId: string,
     lead: { id: string; phone: string; name: string },
     bolnaAgentId: string,
-    brochureVariables: Record<string, string> | null = null,
+    campaignVariables: Record<string, string>,
   ) {
     await prisma.lead.update({
       where: { id: lead.id },
@@ -283,20 +260,22 @@ export class CampaignService {
     });
 
     try {
+      // Merge campaign variables + lead-specific data
+      // Lead fields override campaign fields if same key exists
+      const callVariables: Record<string, string> = {
+        ...campaignVariables,
+        customer_name: lead.name ?? "",
+        customer_phone: lead.phone,
+      };
+
       const bolnaCall = await bolnaClient.calls.create({
         agent_id: bolnaAgentId,
         recipient_phone_number: lead.phone,
-        user_data: {
-          customer_name: lead.name,
-          ...(brochureVariables ?? {}),
-        },
+        user_data: callVariables,
       });
 
       const callId =
-        bolnaCall.id ?? // primary
-        bolnaCall.execution_id ?? //Fallback
-        bolnaCall.run_id ?? // fallback (same value)
-        null;
+        bolnaCall.id ?? bolnaCall.execution_id ?? bolnaCall.run_id ?? null;
 
       console.log(`[Bolna] Resolved callId: ${callId}`);
 
