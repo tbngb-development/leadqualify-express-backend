@@ -1,7 +1,10 @@
+// src/modules/calls/call.service.ts
+
 import prisma from "../../config/database";
 import { CallStatus } from "../../generated/prisma";
 
 export class CallService {
+  // ─── List ──────────────────────────────────────────────────────────────────
   async list(
     tenantId: string,
     filters: {
@@ -31,6 +34,7 @@ export class CallService {
         include: {
           lead: { select: { id: true, name: true, phone: true } },
           campaign: { select: { id: true, name: true } },
+          callAnalysis: true,
         },
       }),
       prisma.call.count({ where }),
@@ -47,12 +51,14 @@ export class CallService {
     };
   }
 
+  // ─── Get ───────────────────────────────────────────────────────────────────
   async get(tenantId: string, id: string) {
     const call = await prisma.call.findFirst({
       where: { id, tenantId },
       include: {
         lead: true,
         campaign: true,
+        callAnalysis: true,
       },
     });
 
@@ -60,9 +66,13 @@ export class CallService {
     return call;
   }
 
+  // ─── Get Transcript ────────────────────────────────────────────────────────
   async getTranscript(tenantId: string, id: string) {
     const call = await prisma.call.findFirst({
       where: { id, tenantId },
+      include: {
+        callAnalysis: true,
+      },
     });
 
     if (!call) throw new Error("Call not found");
@@ -71,9 +81,9 @@ export class CallService {
       transcript: call.transcript,
       transcriptMessages: call.transcriptMessages,
       summary: call.summary,
-      outcome: call.outcome,
       duration: call.duration,
       recording: call.recording,
+      callAnalysis: call.callAnalysis ?? null,
     };
   }
 }

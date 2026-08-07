@@ -213,6 +213,7 @@ exports.Prisma.CampaignScalarFieldEnum = {
   tenantId: 'tenantId',
   assistantId: 'assistantId',
   brochureId: 'brochureId',
+  variables: 'variables',
   totalLeads: 'totalLeads',
   calledLeads: 'calledLeads',
   successLeads: 'successLeads',
@@ -230,6 +231,7 @@ exports.Prisma.LeadScalarFieldEnum = {
   email: 'email',
   company: 'company',
   status: 'status',
+  doNotCall: 'doNotCall',
   tenantId: 'tenantId',
   campaignId: 'campaignId',
   metadata: 'metadata',
@@ -249,9 +251,29 @@ exports.Prisma.CallScalarFieldEnum = {
   transcript: 'transcript',
   transcriptMessages: 'transcriptMessages',
   summary: 'summary',
-  outcome: 'outcome',
   startedAt: 'startedAt',
   endedAt: 'endedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CallAnalysisScalarFieldEnum = {
+  id: 'id',
+  callId: 'callId',
+  tenantId: 'tenantId',
+  disposition: 'disposition',
+  leadTemperature: 'leadTemperature',
+  preferredConfiguration: 'preferredConfiguration',
+  budgetRange: 'budgetRange',
+  purchaseTimeline: 'purchaseTimeline',
+  purchasePurpose: 'purchasePurpose',
+  locationMatch: 'locationMatch',
+  customerLocationPref: 'customerLocationPref',
+  preferredNextAction: 'preferredNextAction',
+  preferredContactChannel: 'preferredContactChannel',
+  followupSchedule: 'followupSchedule',
+  doNotCall: 'doNotCall',
+  languageSupportRequired: 'languageSupportRequired',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -318,6 +340,74 @@ exports.CallStatus = exports.$Enums.CallStatus = {
   BUSY: 'BUSY'
 };
 
+exports.Disposition = exports.$Enums.Disposition = {
+  INTERESTED_SEND_DETAILS: 'INTERESTED_SEND_DETAILS',
+  QUALIFIED_CONSULTANT_FOLLOWUP: 'QUALIFIED_CONSULTANT_FOLLOWUP',
+  SITE_VISIT_INTEREST: 'SITE_VISIT_INTEREST',
+  INTERESTED_GENERAL: 'INTERESTED_GENERAL',
+  FOLLOWUP_REQUESTED: 'FOLLOWUP_REQUESTED',
+  NOT_INTERESTED: 'NOT_INTERESTED',
+  DO_NOT_CALL: 'DO_NOT_CALL',
+  WRONG_NUMBER: 'WRONG_NUMBER',
+  ALREADY_PURCHASED: 'ALREADY_PURCHASED',
+  BROKER: 'BROKER',
+  LANGUAGE_CALLBACK_REQUIRED: 'LANGUAGE_CALLBACK_REQUIRED',
+  CALL_ENDED_BY_CUSTOMER: 'CALL_ENDED_BY_CUSTOMER',
+  CALL_ENDED_ABUSIVE: 'CALL_ENDED_ABUSIVE',
+  NO_RESPONSE: 'NO_RESPONSE',
+  CALL_DROPPED: 'CALL_DROPPED'
+};
+
+exports.LeadTemperature = exports.$Enums.LeadTemperature = {
+  HOT: 'HOT',
+  WARM: 'WARM',
+  NURTURE: 'NURTURE',
+  COLD: 'COLD',
+  NOT_APPLICABLE: 'NOT_APPLICABLE'
+};
+
+exports.PurchaseTimeline = exports.$Enums.PurchaseTimeline = {
+  WITHIN_3_MONTHS: 'WITHIN_3_MONTHS',
+  WITHIN_6_MONTHS: 'WITHIN_6_MONTHS',
+  WITHIN_1_YEAR: 'WITHIN_1_YEAR',
+  AFTER_1_YEAR: 'AFTER_1_YEAR',
+  FLEXIBLE: 'FLEXIBLE',
+  NOT_SHARED: 'NOT_SHARED'
+};
+
+exports.PurchasePurpose = exports.$Enums.PurchasePurpose = {
+  OWN_USE: 'OWN_USE',
+  INVESTMENT: 'INVESTMENT',
+  BOTH: 'BOTH',
+  NOT_SHARED: 'NOT_SHARED'
+};
+
+exports.LocationMatch = exports.$Enums.LocationMatch = {
+  MATCH: 'MATCH',
+  MISMATCH: 'MISMATCH',
+  NOT_ASKED: 'NOT_ASKED',
+  NOT_MENTIONED: 'NOT_MENTIONED'
+};
+
+exports.PreferredNextAction = exports.$Enums.PreferredNextAction = {
+  SEND_DETAILS: 'SEND_DETAILS',
+  CONSULTANT_CALL: 'CONSULTANT_CALL',
+  SITE_VISIT: 'SITE_VISIT',
+  FOLLOWUP_CALL: 'FOLLOWUP_CALL',
+  NONE: 'NONE'
+};
+
+exports.ContactChannel = exports.$Enums.ContactChannel = {
+  WHATSAPP: 'WHATSAPP',
+  EMAIL: 'EMAIL',
+  NOT_ASKED: 'NOT_ASKED'
+};
+
+exports.ExtractionFlag = exports.$Enums.ExtractionFlag = {
+  YES: 'YES',
+  NO: 'NO'
+};
+
 exports.Prisma.ModelName = {
   Tenant: 'Tenant',
   User: 'User',
@@ -325,7 +415,8 @@ exports.Prisma.ModelName = {
   Brochure: 'Brochure',
   Campaign: 'Campaign',
   Lead: 'Lead',
-  Call: 'Call'
+  Call: 'Call',
+  CallAnalysis: 'CallAnalysis'
 };
 
 /**

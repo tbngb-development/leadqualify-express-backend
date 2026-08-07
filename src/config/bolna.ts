@@ -7,7 +7,7 @@ import {
   BolnaCallResponse,
 } from "../types/bolna.types";
 
-const BOLNA_BASE_URL = "https://api.bolna.dev";
+const BOLNA_BASE_URL = "https://api.bolna.ai";
 
 // ─── HTTP Client ──────────────────────────────────────────────────────────────
 
@@ -105,7 +105,7 @@ export const bolnaClient = {
     verify: async (agentId: string): Promise<BolnaAgentResponse> => {
       const http = createHttpClient();
 
-      const response = await http.get<BolnaAgentResponse>(`/agent/${agentId}`);
+      const response = await http.get<BolnaAgentResponse>(`/v2/agent/${agentId}`);
 
       return response.data;
     },
@@ -113,7 +113,7 @@ export const bolnaClient = {
     // List all agents in Bolna dashboard — useful for dropdown in frontend
     list: async (): Promise<BolnaAgentResponse[]> => {
       const http = createHttpClient();
-      const response = await http.get<BolnaAgentResponse[]>("/agent/all");
+      const response = await http.get<BolnaAgentResponse[]>("/v2/agent/all");
       return response.data;
     },
   },

@@ -113,16 +113,13 @@ export async function extractPropertyDetails(
   }
 
   const genAI = getGeminiClient();
+  const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
 
   // Use gemini-1.5-flash for speed and large context
   const model = genAI.getGenerativeModel({
-    model: "gemini-2.5-flash",
+    model: GEMINI_MODEL,
     generationConfig: {
-      // Force JSON output
       responseMimeType: "application/json",
-      temperature: 0.1, // Low temp = more deterministic, factual extraction
-      topP: 0.8,
-      topK: 40,
     },
   });
 

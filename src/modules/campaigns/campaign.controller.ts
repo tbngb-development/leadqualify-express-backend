@@ -38,7 +38,7 @@ export const create = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const { name, description, assistantId, brochureId } = req.body;
+    const { name, description, assistantId, brochureId, variables } = req.body;
 
     if (!name || !assistantId) {
       res.status(400).json({
@@ -53,6 +53,7 @@ export const create = async (
       description,
       assistantId,
       brochureId,
+      variables,
     });
 
     res.status(201).json({ success: true, data });
