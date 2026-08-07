@@ -48,6 +48,11 @@ export type Lead = $Result.DefaultSelection<Prisma.$LeadPayload>
  * 
  */
 export type Call = $Result.DefaultSelection<Prisma.$CallPayload>
+/**
+ * Model CallAnalysis
+ * 
+ */
+export type CallAnalysis = $Result.DefaultSelection<Prisma.$CallAnalysisPayload>
 
 /**
  * Enums
@@ -97,6 +102,98 @@ export const CallStatus: {
 
 export type CallStatus = (typeof CallStatus)[keyof typeof CallStatus]
 
+
+export const Disposition: {
+  INTERESTED_SEND_DETAILS: 'INTERESTED_SEND_DETAILS',
+  QUALIFIED_CONSULTANT_FOLLOWUP: 'QUALIFIED_CONSULTANT_FOLLOWUP',
+  SITE_VISIT_INTEREST: 'SITE_VISIT_INTEREST',
+  INTERESTED_GENERAL: 'INTERESTED_GENERAL',
+  FOLLOWUP_REQUESTED: 'FOLLOWUP_REQUESTED',
+  NOT_INTERESTED: 'NOT_INTERESTED',
+  DO_NOT_CALL: 'DO_NOT_CALL',
+  WRONG_NUMBER: 'WRONG_NUMBER',
+  ALREADY_PURCHASED: 'ALREADY_PURCHASED',
+  BROKER: 'BROKER',
+  LANGUAGE_CALLBACK_REQUIRED: 'LANGUAGE_CALLBACK_REQUIRED',
+  CALL_ENDED_BY_CUSTOMER: 'CALL_ENDED_BY_CUSTOMER',
+  CALL_ENDED_ABUSIVE: 'CALL_ENDED_ABUSIVE',
+  NO_RESPONSE: 'NO_RESPONSE',
+  CALL_DROPPED: 'CALL_DROPPED'
+};
+
+export type Disposition = (typeof Disposition)[keyof typeof Disposition]
+
+
+export const LeadTemperature: {
+  HOT: 'HOT',
+  WARM: 'WARM',
+  NURTURE: 'NURTURE',
+  COLD: 'COLD',
+  NOT_APPLICABLE: 'NOT_APPLICABLE'
+};
+
+export type LeadTemperature = (typeof LeadTemperature)[keyof typeof LeadTemperature]
+
+
+export const PurchaseTimeline: {
+  WITHIN_3_MONTHS: 'WITHIN_3_MONTHS',
+  WITHIN_6_MONTHS: 'WITHIN_6_MONTHS',
+  WITHIN_1_YEAR: 'WITHIN_1_YEAR',
+  AFTER_1_YEAR: 'AFTER_1_YEAR',
+  FLEXIBLE: 'FLEXIBLE',
+  NOT_SHARED: 'NOT_SHARED'
+};
+
+export type PurchaseTimeline = (typeof PurchaseTimeline)[keyof typeof PurchaseTimeline]
+
+
+export const PurchasePurpose: {
+  OWN_USE: 'OWN_USE',
+  INVESTMENT: 'INVESTMENT',
+  BOTH: 'BOTH',
+  NOT_SHARED: 'NOT_SHARED'
+};
+
+export type PurchasePurpose = (typeof PurchasePurpose)[keyof typeof PurchasePurpose]
+
+
+export const PreferredNextAction: {
+  SEND_DETAILS: 'SEND_DETAILS',
+  CONSULTANT_CALL: 'CONSULTANT_CALL',
+  SITE_VISIT: 'SITE_VISIT',
+  FOLLOWUP_CALL: 'FOLLOWUP_CALL',
+  NONE: 'NONE'
+};
+
+export type PreferredNextAction = (typeof PreferredNextAction)[keyof typeof PreferredNextAction]
+
+
+export const ContactChannel: {
+  WHATSAPP: 'WHATSAPP',
+  EMAIL: 'EMAIL',
+  NOT_ASKED: 'NOT_ASKED'
+};
+
+export type ContactChannel = (typeof ContactChannel)[keyof typeof ContactChannel]
+
+
+export const LocationMatch: {
+  MATCH: 'MATCH',
+  MISMATCH: 'MISMATCH',
+  NOT_ASKED: 'NOT_ASKED',
+  NOT_MENTIONED: 'NOT_MENTIONED'
+};
+
+export type LocationMatch = (typeof LocationMatch)[keyof typeof LocationMatch]
+
+
+export const ExtractionFlag: {
+  YES: 'YES',
+  NO: 'NO'
+};
+
+export type ExtractionFlag = (typeof ExtractionFlag)[keyof typeof ExtractionFlag]
+
 }
 
 export type Role = $Enums.Role
@@ -114,6 +211,38 @@ export const LeadStatus: typeof $Enums.LeadStatus
 export type CallStatus = $Enums.CallStatus
 
 export const CallStatus: typeof $Enums.CallStatus
+
+export type Disposition = $Enums.Disposition
+
+export const Disposition: typeof $Enums.Disposition
+
+export type LeadTemperature = $Enums.LeadTemperature
+
+export const LeadTemperature: typeof $Enums.LeadTemperature
+
+export type PurchaseTimeline = $Enums.PurchaseTimeline
+
+export const PurchaseTimeline: typeof $Enums.PurchaseTimeline
+
+export type PurchasePurpose = $Enums.PurchasePurpose
+
+export const PurchasePurpose: typeof $Enums.PurchasePurpose
+
+export type PreferredNextAction = $Enums.PreferredNextAction
+
+export const PreferredNextAction: typeof $Enums.PreferredNextAction
+
+export type ContactChannel = $Enums.ContactChannel
+
+export const ContactChannel: typeof $Enums.ContactChannel
+
+export type LocationMatch = $Enums.LocationMatch
+
+export const LocationMatch: typeof $Enums.LocationMatch
+
+export type ExtractionFlag = $Enums.ExtractionFlag
+
+export const ExtractionFlag: typeof $Enums.ExtractionFlag
 
 /**
  * ##  Prisma Client ʲˢ
@@ -302,6 +431,16 @@ export class PrismaClient<
     * ```
     */
   get call(): Prisma.CallDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.callAnalysis`: Exposes CRUD operations for the **CallAnalysis** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CallAnalyses
+    * const callAnalyses = await prisma.callAnalysis.findMany()
+    * ```
+    */
+  get callAnalysis(): Prisma.CallAnalysisDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -749,7 +888,8 @@ export namespace Prisma {
     Brochure: 'Brochure',
     Campaign: 'Campaign',
     Lead: 'Lead',
-    Call: 'Call'
+    Call: 'Call',
+    CallAnalysis: 'CallAnalysis'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -768,7 +908,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "tenant" | "user" | "assistant" | "brochure" | "campaign" | "lead" | "call"
+      modelProps: "tenant" | "user" | "assistant" | "brochure" | "campaign" | "lead" | "call" | "callAnalysis"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1290,6 +1430,80 @@ export namespace Prisma {
           }
         }
       }
+      CallAnalysis: {
+        payload: Prisma.$CallAnalysisPayload<ExtArgs>
+        fields: Prisma.CallAnalysisFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CallAnalysisFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallAnalysisPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CallAnalysisFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallAnalysisPayload>
+          }
+          findFirst: {
+            args: Prisma.CallAnalysisFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallAnalysisPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CallAnalysisFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallAnalysisPayload>
+          }
+          findMany: {
+            args: Prisma.CallAnalysisFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallAnalysisPayload>[]
+          }
+          create: {
+            args: Prisma.CallAnalysisCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallAnalysisPayload>
+          }
+          createMany: {
+            args: Prisma.CallAnalysisCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CallAnalysisCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallAnalysisPayload>[]
+          }
+          delete: {
+            args: Prisma.CallAnalysisDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallAnalysisPayload>
+          }
+          update: {
+            args: Prisma.CallAnalysisUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallAnalysisPayload>
+          }
+          deleteMany: {
+            args: Prisma.CallAnalysisDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CallAnalysisUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CallAnalysisUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallAnalysisPayload>[]
+          }
+          upsert: {
+            args: Prisma.CallAnalysisUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallAnalysisPayload>
+          }
+          aggregate: {
+            args: Prisma.CallAnalysisAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCallAnalysis>
+          }
+          groupBy: {
+            args: Prisma.CallAnalysisGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CallAnalysisGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CallAnalysisCountArgs<ExtArgs>
+            result: $Utils.Optional<CallAnalysisCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1393,6 +1607,7 @@ export namespace Prisma {
     campaign?: CampaignOmit
     lead?: LeadOmit
     call?: CallOmit
+    callAnalysis?: CallAnalysisOmit
   }
 
   /* Types for Logging */
@@ -1479,6 +1694,7 @@ export namespace Prisma {
     calls: number
     assistants: number
     brochures: number
+    callAnalyses: number
   }
 
   export type TenantCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1488,6 +1704,7 @@ export namespace Prisma {
     calls?: boolean | TenantCountOutputTypeCountCallsArgs
     assistants?: boolean | TenantCountOutputTypeCountAssistantsArgs
     brochures?: boolean | TenantCountOutputTypeCountBrochuresArgs
+    callAnalyses?: boolean | TenantCountOutputTypeCountCallAnalysesArgs
   }
 
   // Custom InputTypes
@@ -1541,6 +1758,13 @@ export namespace Prisma {
    */
   export type TenantCountOutputTypeCountBrochuresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BrochureWhereInput
+  }
+
+  /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountCallAnalysesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CallAnalysisWhereInput
   }
 
 
@@ -1867,6 +2091,7 @@ export namespace Prisma {
     calls?: boolean | Tenant$callsArgs<ExtArgs>
     assistants?: boolean | Tenant$assistantsArgs<ExtArgs>
     brochures?: boolean | Tenant$brochuresArgs<ExtArgs>
+    callAnalyses?: boolean | Tenant$callAnalysesArgs<ExtArgs>
     _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["tenant"]>
 
@@ -1908,6 +2133,7 @@ export namespace Prisma {
     calls?: boolean | Tenant$callsArgs<ExtArgs>
     assistants?: boolean | Tenant$assistantsArgs<ExtArgs>
     brochures?: boolean | Tenant$brochuresArgs<ExtArgs>
+    callAnalyses?: boolean | Tenant$callAnalysesArgs<ExtArgs>
     _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TenantIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1922,6 +2148,7 @@ export namespace Prisma {
       calls: Prisma.$CallPayload<ExtArgs>[]
       assistants: Prisma.$AssistantPayload<ExtArgs>[]
       brochures: Prisma.$BrochurePayload<ExtArgs>[]
+      callAnalyses: Prisma.$CallAnalysisPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2331,6 +2558,7 @@ export namespace Prisma {
     calls<T extends Tenant$callsArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$callsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     assistants<T extends Tenant$assistantsArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$assistantsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssistantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     brochures<T extends Tenant$brochuresArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$brochuresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BrochurePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    callAnalyses<T extends Tenant$callAnalysesArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$callAnalysesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallAnalysisPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2896,6 +3124,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BrochureScalarFieldEnum | BrochureScalarFieldEnum[]
+  }
+
+  /**
+   * Tenant.callAnalyses
+   */
+  export type Tenant$callAnalysesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallAnalysis
+     */
+    select?: CallAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallAnalysis
+     */
+    omit?: CallAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallAnalysisInclude<ExtArgs> | null
+    where?: CallAnalysisWhereInput
+    orderBy?: CallAnalysisOrderByWithRelationInput | CallAnalysisOrderByWithRelationInput[]
+    cursor?: CallAnalysisWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CallAnalysisScalarFieldEnum | CallAnalysisScalarFieldEnum[]
   }
 
   /**
@@ -8188,6 +8440,7 @@ export namespace Prisma {
     email: string | null
     company: string | null
     status: $Enums.LeadStatus | null
+    doNotCall: boolean | null
     tenantId: string | null
     campaignId: string | null
     createdAt: Date | null
@@ -8201,6 +8454,7 @@ export namespace Prisma {
     email: string | null
     company: string | null
     status: $Enums.LeadStatus | null
+    doNotCall: boolean | null
     tenantId: string | null
     campaignId: string | null
     createdAt: Date | null
@@ -8214,6 +8468,7 @@ export namespace Prisma {
     email: number
     company: number
     status: number
+    doNotCall: number
     tenantId: number
     campaignId: number
     metadata: number
@@ -8230,6 +8485,7 @@ export namespace Prisma {
     email?: true
     company?: true
     status?: true
+    doNotCall?: true
     tenantId?: true
     campaignId?: true
     createdAt?: true
@@ -8243,6 +8499,7 @@ export namespace Prisma {
     email?: true
     company?: true
     status?: true
+    doNotCall?: true
     tenantId?: true
     campaignId?: true
     createdAt?: true
@@ -8256,6 +8513,7 @@ export namespace Prisma {
     email?: true
     company?: true
     status?: true
+    doNotCall?: true
     tenantId?: true
     campaignId?: true
     metadata?: true
@@ -8343,6 +8601,7 @@ export namespace Prisma {
     email: string | null
     company: string | null
     status: $Enums.LeadStatus
+    doNotCall: boolean
     tenantId: string
     campaignId: string
     metadata: JsonValue | null
@@ -8374,6 +8633,7 @@ export namespace Prisma {
     email?: boolean
     company?: boolean
     status?: boolean
+    doNotCall?: boolean
     tenantId?: boolean
     campaignId?: boolean
     metadata?: boolean
@@ -8392,6 +8652,7 @@ export namespace Prisma {
     email?: boolean
     company?: boolean
     status?: boolean
+    doNotCall?: boolean
     tenantId?: boolean
     campaignId?: boolean
     metadata?: boolean
@@ -8408,6 +8669,7 @@ export namespace Prisma {
     email?: boolean
     company?: boolean
     status?: boolean
+    doNotCall?: boolean
     tenantId?: boolean
     campaignId?: boolean
     metadata?: boolean
@@ -8424,6 +8686,7 @@ export namespace Prisma {
     email?: boolean
     company?: boolean
     status?: boolean
+    doNotCall?: boolean
     tenantId?: boolean
     campaignId?: boolean
     metadata?: boolean
@@ -8431,7 +8694,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type LeadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "phone" | "email" | "company" | "status" | "tenantId" | "campaignId" | "metadata" | "createdAt" | "updatedAt", ExtArgs["result"]["lead"]>
+  export type LeadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "phone" | "email" | "company" | "status" | "doNotCall" | "tenantId" | "campaignId" | "metadata" | "createdAt" | "updatedAt", ExtArgs["result"]["lead"]>
   export type LeadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
@@ -8461,6 +8724,7 @@ export namespace Prisma {
       email: string | null
       company: string | null
       status: $Enums.LeadStatus
+      doNotCall: boolean
       tenantId: string
       campaignId: string
       metadata: Prisma.JsonValue | null
@@ -8898,6 +9162,7 @@ export namespace Prisma {
     readonly email: FieldRef<"Lead", 'String'>
     readonly company: FieldRef<"Lead", 'String'>
     readonly status: FieldRef<"Lead", 'LeadStatus'>
+    readonly doNotCall: FieldRef<"Lead", 'Boolean'>
     readonly tenantId: FieldRef<"Lead", 'String'>
     readonly campaignId: FieldRef<"Lead", 'String'>
     readonly metadata: FieldRef<"Lead", 'Json'>
@@ -9372,7 +9637,6 @@ export namespace Prisma {
     recording: string | null
     transcript: string | null
     summary: string | null
-    outcome: string | null
     startedAt: Date | null
     endedAt: Date | null
     createdAt: Date | null
@@ -9390,7 +9654,6 @@ export namespace Prisma {
     recording: string | null
     transcript: string | null
     summary: string | null
-    outcome: string | null
     startedAt: Date | null
     endedAt: Date | null
     createdAt: Date | null
@@ -9409,7 +9672,6 @@ export namespace Prisma {
     transcript: number
     transcriptMessages: number
     summary: number
-    outcome: number
     startedAt: number
     endedAt: number
     createdAt: number
@@ -9437,7 +9699,6 @@ export namespace Prisma {
     recording?: true
     transcript?: true
     summary?: true
-    outcome?: true
     startedAt?: true
     endedAt?: true
     createdAt?: true
@@ -9455,7 +9716,6 @@ export namespace Prisma {
     recording?: true
     transcript?: true
     summary?: true
-    outcome?: true
     startedAt?: true
     endedAt?: true
     createdAt?: true
@@ -9474,7 +9734,6 @@ export namespace Prisma {
     transcript?: true
     transcriptMessages?: true
     summary?: true
-    outcome?: true
     startedAt?: true
     endedAt?: true
     createdAt?: true
@@ -9580,7 +9839,6 @@ export namespace Prisma {
     transcript: string | null
     transcriptMessages: JsonValue | null
     summary: string | null
-    outcome: string | null
     startedAt: Date | null
     endedAt: Date | null
     createdAt: Date
@@ -9618,7 +9876,6 @@ export namespace Prisma {
     transcript?: boolean
     transcriptMessages?: boolean
     summary?: boolean
-    outcome?: boolean
     startedAt?: boolean
     endedAt?: boolean
     createdAt?: boolean
@@ -9626,6 +9883,7 @@ export namespace Prisma {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
     lead?: boolean | LeadDefaultArgs<ExtArgs>
+    callAnalysis?: boolean | Call$callAnalysisArgs<ExtArgs>
   }, ExtArgs["result"]["call"]>
 
   export type CallSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -9640,7 +9898,6 @@ export namespace Prisma {
     transcript?: boolean
     transcriptMessages?: boolean
     summary?: boolean
-    outcome?: boolean
     startedAt?: boolean
     endedAt?: boolean
     createdAt?: boolean
@@ -9662,7 +9919,6 @@ export namespace Prisma {
     transcript?: boolean
     transcriptMessages?: boolean
     summary?: boolean
-    outcome?: boolean
     startedAt?: boolean
     endedAt?: boolean
     createdAt?: boolean
@@ -9684,18 +9940,18 @@ export namespace Prisma {
     transcript?: boolean
     transcriptMessages?: boolean
     summary?: boolean
-    outcome?: boolean
     startedAt?: boolean
     endedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CallOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bolnaCallId" | "tenantId" | "campaignId" | "leadId" | "status" | "duration" | "recording" | "transcript" | "transcriptMessages" | "summary" | "outcome" | "startedAt" | "endedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["call"]>
+  export type CallOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bolnaCallId" | "tenantId" | "campaignId" | "leadId" | "status" | "duration" | "recording" | "transcript" | "transcriptMessages" | "summary" | "startedAt" | "endedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["call"]>
   export type CallInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
     lead?: boolean | LeadDefaultArgs<ExtArgs>
+    callAnalysis?: boolean | Call$callAnalysisArgs<ExtArgs>
   }
   export type CallIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
@@ -9714,6 +9970,7 @@ export namespace Prisma {
       tenant: Prisma.$TenantPayload<ExtArgs>
       campaign: Prisma.$CampaignPayload<ExtArgs>
       lead: Prisma.$LeadPayload<ExtArgs>
+      callAnalysis: Prisma.$CallAnalysisPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9727,7 +9984,6 @@ export namespace Prisma {
       transcript: string | null
       transcriptMessages: Prisma.JsonValue | null
       summary: string | null
-      outcome: string | null
       startedAt: Date | null
       endedAt: Date | null
       createdAt: Date
@@ -10129,6 +10385,7 @@ export namespace Prisma {
     tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     campaign<T extends CampaignDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CampaignDefaultArgs<ExtArgs>>): Prisma__CampaignClient<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     lead<T extends LeadDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LeadDefaultArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    callAnalysis<T extends Call$callAnalysisArgs<ExtArgs> = {}>(args?: Subset<T, Call$callAnalysisArgs<ExtArgs>>): Prisma__CallAnalysisClient<$Result.GetResult<Prisma.$CallAnalysisPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10169,7 +10426,6 @@ export namespace Prisma {
     readonly transcript: FieldRef<"Call", 'String'>
     readonly transcriptMessages: FieldRef<"Call", 'Json'>
     readonly summary: FieldRef<"Call", 'String'>
-    readonly outcome: FieldRef<"Call", 'String'>
     readonly startedAt: FieldRef<"Call", 'DateTime'>
     readonly endedAt: FieldRef<"Call", 'DateTime'>
     readonly createdAt: FieldRef<"Call", 'DateTime'>
@@ -10570,6 +10826,25 @@ export namespace Prisma {
   }
 
   /**
+   * Call.callAnalysis
+   */
+  export type Call$callAnalysisArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallAnalysis
+     */
+    select?: CallAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallAnalysis
+     */
+    omit?: CallAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallAnalysisInclude<ExtArgs> | null
+    where?: CallAnalysisWhereInput
+  }
+
+  /**
    * Call without action
    */
   export type CallDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10585,6 +10860,1241 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: CallInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CallAnalysis
+   */
+
+  export type AggregateCallAnalysis = {
+    _count: CallAnalysisCountAggregateOutputType | null
+    _min: CallAnalysisMinAggregateOutputType | null
+    _max: CallAnalysisMaxAggregateOutputType | null
+  }
+
+  export type CallAnalysisMinAggregateOutputType = {
+    id: string | null
+    callId: string | null
+    tenantId: string | null
+    disposition: $Enums.Disposition | null
+    leadTemperature: $Enums.LeadTemperature | null
+    preferredConfiguration: string | null
+    budgetRange: string | null
+    purchaseTimeline: $Enums.PurchaseTimeline | null
+    purchasePurpose: $Enums.PurchasePurpose | null
+    locationMatch: $Enums.LocationMatch | null
+    customerLocationPref: string | null
+    preferredNextAction: $Enums.PreferredNextAction | null
+    preferredContactChannel: $Enums.ContactChannel | null
+    followupSchedule: string | null
+    doNotCall: $Enums.ExtractionFlag | null
+    languageSupportRequired: $Enums.ExtractionFlag | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CallAnalysisMaxAggregateOutputType = {
+    id: string | null
+    callId: string | null
+    tenantId: string | null
+    disposition: $Enums.Disposition | null
+    leadTemperature: $Enums.LeadTemperature | null
+    preferredConfiguration: string | null
+    budgetRange: string | null
+    purchaseTimeline: $Enums.PurchaseTimeline | null
+    purchasePurpose: $Enums.PurchasePurpose | null
+    locationMatch: $Enums.LocationMatch | null
+    customerLocationPref: string | null
+    preferredNextAction: $Enums.PreferredNextAction | null
+    preferredContactChannel: $Enums.ContactChannel | null
+    followupSchedule: string | null
+    doNotCall: $Enums.ExtractionFlag | null
+    languageSupportRequired: $Enums.ExtractionFlag | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CallAnalysisCountAggregateOutputType = {
+    id: number
+    callId: number
+    tenantId: number
+    disposition: number
+    leadTemperature: number
+    preferredConfiguration: number
+    budgetRange: number
+    purchaseTimeline: number
+    purchasePurpose: number
+    locationMatch: number
+    customerLocationPref: number
+    preferredNextAction: number
+    preferredContactChannel: number
+    followupSchedule: number
+    doNotCall: number
+    languageSupportRequired: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type CallAnalysisMinAggregateInputType = {
+    id?: true
+    callId?: true
+    tenantId?: true
+    disposition?: true
+    leadTemperature?: true
+    preferredConfiguration?: true
+    budgetRange?: true
+    purchaseTimeline?: true
+    purchasePurpose?: true
+    locationMatch?: true
+    customerLocationPref?: true
+    preferredNextAction?: true
+    preferredContactChannel?: true
+    followupSchedule?: true
+    doNotCall?: true
+    languageSupportRequired?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CallAnalysisMaxAggregateInputType = {
+    id?: true
+    callId?: true
+    tenantId?: true
+    disposition?: true
+    leadTemperature?: true
+    preferredConfiguration?: true
+    budgetRange?: true
+    purchaseTimeline?: true
+    purchasePurpose?: true
+    locationMatch?: true
+    customerLocationPref?: true
+    preferredNextAction?: true
+    preferredContactChannel?: true
+    followupSchedule?: true
+    doNotCall?: true
+    languageSupportRequired?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CallAnalysisCountAggregateInputType = {
+    id?: true
+    callId?: true
+    tenantId?: true
+    disposition?: true
+    leadTemperature?: true
+    preferredConfiguration?: true
+    budgetRange?: true
+    purchaseTimeline?: true
+    purchasePurpose?: true
+    locationMatch?: true
+    customerLocationPref?: true
+    preferredNextAction?: true
+    preferredContactChannel?: true
+    followupSchedule?: true
+    doNotCall?: true
+    languageSupportRequired?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type CallAnalysisAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CallAnalysis to aggregate.
+     */
+    where?: CallAnalysisWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CallAnalyses to fetch.
+     */
+    orderBy?: CallAnalysisOrderByWithRelationInput | CallAnalysisOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CallAnalysisWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CallAnalyses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CallAnalyses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CallAnalyses
+    **/
+    _count?: true | CallAnalysisCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CallAnalysisMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CallAnalysisMaxAggregateInputType
+  }
+
+  export type GetCallAnalysisAggregateType<T extends CallAnalysisAggregateArgs> = {
+        [P in keyof T & keyof AggregateCallAnalysis]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCallAnalysis[P]>
+      : GetScalarType<T[P], AggregateCallAnalysis[P]>
+  }
+
+
+
+
+  export type CallAnalysisGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CallAnalysisWhereInput
+    orderBy?: CallAnalysisOrderByWithAggregationInput | CallAnalysisOrderByWithAggregationInput[]
+    by: CallAnalysisScalarFieldEnum[] | CallAnalysisScalarFieldEnum
+    having?: CallAnalysisScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CallAnalysisCountAggregateInputType | true
+    _min?: CallAnalysisMinAggregateInputType
+    _max?: CallAnalysisMaxAggregateInputType
+  }
+
+  export type CallAnalysisGroupByOutputType = {
+    id: string
+    callId: string
+    tenantId: string
+    disposition: $Enums.Disposition | null
+    leadTemperature: $Enums.LeadTemperature | null
+    preferredConfiguration: string | null
+    budgetRange: string | null
+    purchaseTimeline: $Enums.PurchaseTimeline | null
+    purchasePurpose: $Enums.PurchasePurpose | null
+    locationMatch: $Enums.LocationMatch | null
+    customerLocationPref: string | null
+    preferredNextAction: $Enums.PreferredNextAction | null
+    preferredContactChannel: $Enums.ContactChannel | null
+    followupSchedule: string | null
+    doNotCall: $Enums.ExtractionFlag | null
+    languageSupportRequired: $Enums.ExtractionFlag | null
+    createdAt: Date
+    updatedAt: Date
+    _count: CallAnalysisCountAggregateOutputType | null
+    _min: CallAnalysisMinAggregateOutputType | null
+    _max: CallAnalysisMaxAggregateOutputType | null
+  }
+
+  type GetCallAnalysisGroupByPayload<T extends CallAnalysisGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CallAnalysisGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CallAnalysisGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CallAnalysisGroupByOutputType[P]>
+            : GetScalarType<T[P], CallAnalysisGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CallAnalysisSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    callId?: boolean
+    tenantId?: boolean
+    disposition?: boolean
+    leadTemperature?: boolean
+    preferredConfiguration?: boolean
+    budgetRange?: boolean
+    purchaseTimeline?: boolean
+    purchasePurpose?: boolean
+    locationMatch?: boolean
+    customerLocationPref?: boolean
+    preferredNextAction?: boolean
+    preferredContactChannel?: boolean
+    followupSchedule?: boolean
+    doNotCall?: boolean
+    languageSupportRequired?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    call?: boolean | CallDefaultArgs<ExtArgs>
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["callAnalysis"]>
+
+  export type CallAnalysisSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    callId?: boolean
+    tenantId?: boolean
+    disposition?: boolean
+    leadTemperature?: boolean
+    preferredConfiguration?: boolean
+    budgetRange?: boolean
+    purchaseTimeline?: boolean
+    purchasePurpose?: boolean
+    locationMatch?: boolean
+    customerLocationPref?: boolean
+    preferredNextAction?: boolean
+    preferredContactChannel?: boolean
+    followupSchedule?: boolean
+    doNotCall?: boolean
+    languageSupportRequired?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    call?: boolean | CallDefaultArgs<ExtArgs>
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["callAnalysis"]>
+
+  export type CallAnalysisSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    callId?: boolean
+    tenantId?: boolean
+    disposition?: boolean
+    leadTemperature?: boolean
+    preferredConfiguration?: boolean
+    budgetRange?: boolean
+    purchaseTimeline?: boolean
+    purchasePurpose?: boolean
+    locationMatch?: boolean
+    customerLocationPref?: boolean
+    preferredNextAction?: boolean
+    preferredContactChannel?: boolean
+    followupSchedule?: boolean
+    doNotCall?: boolean
+    languageSupportRequired?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    call?: boolean | CallDefaultArgs<ExtArgs>
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["callAnalysis"]>
+
+  export type CallAnalysisSelectScalar = {
+    id?: boolean
+    callId?: boolean
+    tenantId?: boolean
+    disposition?: boolean
+    leadTemperature?: boolean
+    preferredConfiguration?: boolean
+    budgetRange?: boolean
+    purchaseTimeline?: boolean
+    purchasePurpose?: boolean
+    locationMatch?: boolean
+    customerLocationPref?: boolean
+    preferredNextAction?: boolean
+    preferredContactChannel?: boolean
+    followupSchedule?: boolean
+    doNotCall?: boolean
+    languageSupportRequired?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type CallAnalysisOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "callId" | "tenantId" | "disposition" | "leadTemperature" | "preferredConfiguration" | "budgetRange" | "purchaseTimeline" | "purchasePurpose" | "locationMatch" | "customerLocationPref" | "preferredNextAction" | "preferredContactChannel" | "followupSchedule" | "doNotCall" | "languageSupportRequired" | "createdAt" | "updatedAt", ExtArgs["result"]["callAnalysis"]>
+  export type CallAnalysisInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    call?: boolean | CallDefaultArgs<ExtArgs>
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+  }
+  export type CallAnalysisIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    call?: boolean | CallDefaultArgs<ExtArgs>
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+  }
+  export type CallAnalysisIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    call?: boolean | CallDefaultArgs<ExtArgs>
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+  }
+
+  export type $CallAnalysisPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CallAnalysis"
+    objects: {
+      call: Prisma.$CallPayload<ExtArgs>
+      tenant: Prisma.$TenantPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      callId: string
+      tenantId: string
+      disposition: $Enums.Disposition | null
+      leadTemperature: $Enums.LeadTemperature | null
+      preferredConfiguration: string | null
+      budgetRange: string | null
+      purchaseTimeline: $Enums.PurchaseTimeline | null
+      purchasePurpose: $Enums.PurchasePurpose | null
+      locationMatch: $Enums.LocationMatch | null
+      customerLocationPref: string | null
+      preferredNextAction: $Enums.PreferredNextAction | null
+      preferredContactChannel: $Enums.ContactChannel | null
+      followupSchedule: string | null
+      doNotCall: $Enums.ExtractionFlag | null
+      languageSupportRequired: $Enums.ExtractionFlag | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["callAnalysis"]>
+    composites: {}
+  }
+
+  type CallAnalysisGetPayload<S extends boolean | null | undefined | CallAnalysisDefaultArgs> = $Result.GetResult<Prisma.$CallAnalysisPayload, S>
+
+  type CallAnalysisCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CallAnalysisFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CallAnalysisCountAggregateInputType | true
+    }
+
+  export interface CallAnalysisDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CallAnalysis'], meta: { name: 'CallAnalysis' } }
+    /**
+     * Find zero or one CallAnalysis that matches the filter.
+     * @param {CallAnalysisFindUniqueArgs} args - Arguments to find a CallAnalysis
+     * @example
+     * // Get one CallAnalysis
+     * const callAnalysis = await prisma.callAnalysis.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CallAnalysisFindUniqueArgs>(args: SelectSubset<T, CallAnalysisFindUniqueArgs<ExtArgs>>): Prisma__CallAnalysisClient<$Result.GetResult<Prisma.$CallAnalysisPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CallAnalysis that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CallAnalysisFindUniqueOrThrowArgs} args - Arguments to find a CallAnalysis
+     * @example
+     * // Get one CallAnalysis
+     * const callAnalysis = await prisma.callAnalysis.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CallAnalysisFindUniqueOrThrowArgs>(args: SelectSubset<T, CallAnalysisFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CallAnalysisClient<$Result.GetResult<Prisma.$CallAnalysisPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CallAnalysis that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallAnalysisFindFirstArgs} args - Arguments to find a CallAnalysis
+     * @example
+     * // Get one CallAnalysis
+     * const callAnalysis = await prisma.callAnalysis.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CallAnalysisFindFirstArgs>(args?: SelectSubset<T, CallAnalysisFindFirstArgs<ExtArgs>>): Prisma__CallAnalysisClient<$Result.GetResult<Prisma.$CallAnalysisPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CallAnalysis that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallAnalysisFindFirstOrThrowArgs} args - Arguments to find a CallAnalysis
+     * @example
+     * // Get one CallAnalysis
+     * const callAnalysis = await prisma.callAnalysis.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CallAnalysisFindFirstOrThrowArgs>(args?: SelectSubset<T, CallAnalysisFindFirstOrThrowArgs<ExtArgs>>): Prisma__CallAnalysisClient<$Result.GetResult<Prisma.$CallAnalysisPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CallAnalyses that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallAnalysisFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CallAnalyses
+     * const callAnalyses = await prisma.callAnalysis.findMany()
+     * 
+     * // Get first 10 CallAnalyses
+     * const callAnalyses = await prisma.callAnalysis.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const callAnalysisWithIdOnly = await prisma.callAnalysis.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CallAnalysisFindManyArgs>(args?: SelectSubset<T, CallAnalysisFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallAnalysisPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CallAnalysis.
+     * @param {CallAnalysisCreateArgs} args - Arguments to create a CallAnalysis.
+     * @example
+     * // Create one CallAnalysis
+     * const CallAnalysis = await prisma.callAnalysis.create({
+     *   data: {
+     *     // ... data to create a CallAnalysis
+     *   }
+     * })
+     * 
+     */
+    create<T extends CallAnalysisCreateArgs>(args: SelectSubset<T, CallAnalysisCreateArgs<ExtArgs>>): Prisma__CallAnalysisClient<$Result.GetResult<Prisma.$CallAnalysisPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CallAnalyses.
+     * @param {CallAnalysisCreateManyArgs} args - Arguments to create many CallAnalyses.
+     * @example
+     * // Create many CallAnalyses
+     * const callAnalysis = await prisma.callAnalysis.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CallAnalysisCreateManyArgs>(args?: SelectSubset<T, CallAnalysisCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CallAnalyses and returns the data saved in the database.
+     * @param {CallAnalysisCreateManyAndReturnArgs} args - Arguments to create many CallAnalyses.
+     * @example
+     * // Create many CallAnalyses
+     * const callAnalysis = await prisma.callAnalysis.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CallAnalyses and only return the `id`
+     * const callAnalysisWithIdOnly = await prisma.callAnalysis.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CallAnalysisCreateManyAndReturnArgs>(args?: SelectSubset<T, CallAnalysisCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallAnalysisPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CallAnalysis.
+     * @param {CallAnalysisDeleteArgs} args - Arguments to delete one CallAnalysis.
+     * @example
+     * // Delete one CallAnalysis
+     * const CallAnalysis = await prisma.callAnalysis.delete({
+     *   where: {
+     *     // ... filter to delete one CallAnalysis
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CallAnalysisDeleteArgs>(args: SelectSubset<T, CallAnalysisDeleteArgs<ExtArgs>>): Prisma__CallAnalysisClient<$Result.GetResult<Prisma.$CallAnalysisPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CallAnalysis.
+     * @param {CallAnalysisUpdateArgs} args - Arguments to update one CallAnalysis.
+     * @example
+     * // Update one CallAnalysis
+     * const callAnalysis = await prisma.callAnalysis.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CallAnalysisUpdateArgs>(args: SelectSubset<T, CallAnalysisUpdateArgs<ExtArgs>>): Prisma__CallAnalysisClient<$Result.GetResult<Prisma.$CallAnalysisPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CallAnalyses.
+     * @param {CallAnalysisDeleteManyArgs} args - Arguments to filter CallAnalyses to delete.
+     * @example
+     * // Delete a few CallAnalyses
+     * const { count } = await prisma.callAnalysis.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CallAnalysisDeleteManyArgs>(args?: SelectSubset<T, CallAnalysisDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CallAnalyses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallAnalysisUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CallAnalyses
+     * const callAnalysis = await prisma.callAnalysis.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CallAnalysisUpdateManyArgs>(args: SelectSubset<T, CallAnalysisUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CallAnalyses and returns the data updated in the database.
+     * @param {CallAnalysisUpdateManyAndReturnArgs} args - Arguments to update many CallAnalyses.
+     * @example
+     * // Update many CallAnalyses
+     * const callAnalysis = await prisma.callAnalysis.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CallAnalyses and only return the `id`
+     * const callAnalysisWithIdOnly = await prisma.callAnalysis.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CallAnalysisUpdateManyAndReturnArgs>(args: SelectSubset<T, CallAnalysisUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallAnalysisPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CallAnalysis.
+     * @param {CallAnalysisUpsertArgs} args - Arguments to update or create a CallAnalysis.
+     * @example
+     * // Update or create a CallAnalysis
+     * const callAnalysis = await prisma.callAnalysis.upsert({
+     *   create: {
+     *     // ... data to create a CallAnalysis
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CallAnalysis we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CallAnalysisUpsertArgs>(args: SelectSubset<T, CallAnalysisUpsertArgs<ExtArgs>>): Prisma__CallAnalysisClient<$Result.GetResult<Prisma.$CallAnalysisPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CallAnalyses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallAnalysisCountArgs} args - Arguments to filter CallAnalyses to count.
+     * @example
+     * // Count the number of CallAnalyses
+     * const count = await prisma.callAnalysis.count({
+     *   where: {
+     *     // ... the filter for the CallAnalyses we want to count
+     *   }
+     * })
+    **/
+    count<T extends CallAnalysisCountArgs>(
+      args?: Subset<T, CallAnalysisCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CallAnalysisCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CallAnalysis.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallAnalysisAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CallAnalysisAggregateArgs>(args: Subset<T, CallAnalysisAggregateArgs>): Prisma.PrismaPromise<GetCallAnalysisAggregateType<T>>
+
+    /**
+     * Group by CallAnalysis.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallAnalysisGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CallAnalysisGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CallAnalysisGroupByArgs['orderBy'] }
+        : { orderBy?: CallAnalysisGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CallAnalysisGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCallAnalysisGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CallAnalysis model
+   */
+  readonly fields: CallAnalysisFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CallAnalysis.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CallAnalysisClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    call<T extends CallDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CallDefaultArgs<ExtArgs>>): Prisma__CallClient<$Result.GetResult<Prisma.$CallPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CallAnalysis model
+   */
+  interface CallAnalysisFieldRefs {
+    readonly id: FieldRef<"CallAnalysis", 'String'>
+    readonly callId: FieldRef<"CallAnalysis", 'String'>
+    readonly tenantId: FieldRef<"CallAnalysis", 'String'>
+    readonly disposition: FieldRef<"CallAnalysis", 'Disposition'>
+    readonly leadTemperature: FieldRef<"CallAnalysis", 'LeadTemperature'>
+    readonly preferredConfiguration: FieldRef<"CallAnalysis", 'String'>
+    readonly budgetRange: FieldRef<"CallAnalysis", 'String'>
+    readonly purchaseTimeline: FieldRef<"CallAnalysis", 'PurchaseTimeline'>
+    readonly purchasePurpose: FieldRef<"CallAnalysis", 'PurchasePurpose'>
+    readonly locationMatch: FieldRef<"CallAnalysis", 'LocationMatch'>
+    readonly customerLocationPref: FieldRef<"CallAnalysis", 'String'>
+    readonly preferredNextAction: FieldRef<"CallAnalysis", 'PreferredNextAction'>
+    readonly preferredContactChannel: FieldRef<"CallAnalysis", 'ContactChannel'>
+    readonly followupSchedule: FieldRef<"CallAnalysis", 'String'>
+    readonly doNotCall: FieldRef<"CallAnalysis", 'ExtractionFlag'>
+    readonly languageSupportRequired: FieldRef<"CallAnalysis", 'ExtractionFlag'>
+    readonly createdAt: FieldRef<"CallAnalysis", 'DateTime'>
+    readonly updatedAt: FieldRef<"CallAnalysis", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CallAnalysis findUnique
+   */
+  export type CallAnalysisFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallAnalysis
+     */
+    select?: CallAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallAnalysis
+     */
+    omit?: CallAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallAnalysisInclude<ExtArgs> | null
+    /**
+     * Filter, which CallAnalysis to fetch.
+     */
+    where: CallAnalysisWhereUniqueInput
+  }
+
+  /**
+   * CallAnalysis findUniqueOrThrow
+   */
+  export type CallAnalysisFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallAnalysis
+     */
+    select?: CallAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallAnalysis
+     */
+    omit?: CallAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallAnalysisInclude<ExtArgs> | null
+    /**
+     * Filter, which CallAnalysis to fetch.
+     */
+    where: CallAnalysisWhereUniqueInput
+  }
+
+  /**
+   * CallAnalysis findFirst
+   */
+  export type CallAnalysisFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallAnalysis
+     */
+    select?: CallAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallAnalysis
+     */
+    omit?: CallAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallAnalysisInclude<ExtArgs> | null
+    /**
+     * Filter, which CallAnalysis to fetch.
+     */
+    where?: CallAnalysisWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CallAnalyses to fetch.
+     */
+    orderBy?: CallAnalysisOrderByWithRelationInput | CallAnalysisOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CallAnalyses.
+     */
+    cursor?: CallAnalysisWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CallAnalyses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CallAnalyses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CallAnalyses.
+     */
+    distinct?: CallAnalysisScalarFieldEnum | CallAnalysisScalarFieldEnum[]
+  }
+
+  /**
+   * CallAnalysis findFirstOrThrow
+   */
+  export type CallAnalysisFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallAnalysis
+     */
+    select?: CallAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallAnalysis
+     */
+    omit?: CallAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallAnalysisInclude<ExtArgs> | null
+    /**
+     * Filter, which CallAnalysis to fetch.
+     */
+    where?: CallAnalysisWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CallAnalyses to fetch.
+     */
+    orderBy?: CallAnalysisOrderByWithRelationInput | CallAnalysisOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CallAnalyses.
+     */
+    cursor?: CallAnalysisWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CallAnalyses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CallAnalyses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CallAnalyses.
+     */
+    distinct?: CallAnalysisScalarFieldEnum | CallAnalysisScalarFieldEnum[]
+  }
+
+  /**
+   * CallAnalysis findMany
+   */
+  export type CallAnalysisFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallAnalysis
+     */
+    select?: CallAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallAnalysis
+     */
+    omit?: CallAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallAnalysisInclude<ExtArgs> | null
+    /**
+     * Filter, which CallAnalyses to fetch.
+     */
+    where?: CallAnalysisWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CallAnalyses to fetch.
+     */
+    orderBy?: CallAnalysisOrderByWithRelationInput | CallAnalysisOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CallAnalyses.
+     */
+    cursor?: CallAnalysisWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CallAnalyses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CallAnalyses.
+     */
+    skip?: number
+    distinct?: CallAnalysisScalarFieldEnum | CallAnalysisScalarFieldEnum[]
+  }
+
+  /**
+   * CallAnalysis create
+   */
+  export type CallAnalysisCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallAnalysis
+     */
+    select?: CallAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallAnalysis
+     */
+    omit?: CallAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallAnalysisInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CallAnalysis.
+     */
+    data: XOR<CallAnalysisCreateInput, CallAnalysisUncheckedCreateInput>
+  }
+
+  /**
+   * CallAnalysis createMany
+   */
+  export type CallAnalysisCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CallAnalyses.
+     */
+    data: CallAnalysisCreateManyInput | CallAnalysisCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CallAnalysis createManyAndReturn
+   */
+  export type CallAnalysisCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallAnalysis
+     */
+    select?: CallAnalysisSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallAnalysis
+     */
+    omit?: CallAnalysisOmit<ExtArgs> | null
+    /**
+     * The data used to create many CallAnalyses.
+     */
+    data: CallAnalysisCreateManyInput | CallAnalysisCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallAnalysisIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CallAnalysis update
+   */
+  export type CallAnalysisUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallAnalysis
+     */
+    select?: CallAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallAnalysis
+     */
+    omit?: CallAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallAnalysisInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CallAnalysis.
+     */
+    data: XOR<CallAnalysisUpdateInput, CallAnalysisUncheckedUpdateInput>
+    /**
+     * Choose, which CallAnalysis to update.
+     */
+    where: CallAnalysisWhereUniqueInput
+  }
+
+  /**
+   * CallAnalysis updateMany
+   */
+  export type CallAnalysisUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CallAnalyses.
+     */
+    data: XOR<CallAnalysisUpdateManyMutationInput, CallAnalysisUncheckedUpdateManyInput>
+    /**
+     * Filter which CallAnalyses to update
+     */
+    where?: CallAnalysisWhereInput
+    /**
+     * Limit how many CallAnalyses to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CallAnalysis updateManyAndReturn
+   */
+  export type CallAnalysisUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallAnalysis
+     */
+    select?: CallAnalysisSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallAnalysis
+     */
+    omit?: CallAnalysisOmit<ExtArgs> | null
+    /**
+     * The data used to update CallAnalyses.
+     */
+    data: XOR<CallAnalysisUpdateManyMutationInput, CallAnalysisUncheckedUpdateManyInput>
+    /**
+     * Filter which CallAnalyses to update
+     */
+    where?: CallAnalysisWhereInput
+    /**
+     * Limit how many CallAnalyses to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallAnalysisIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CallAnalysis upsert
+   */
+  export type CallAnalysisUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallAnalysis
+     */
+    select?: CallAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallAnalysis
+     */
+    omit?: CallAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallAnalysisInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CallAnalysis to update in case it exists.
+     */
+    where: CallAnalysisWhereUniqueInput
+    /**
+     * In case the CallAnalysis found by the `where` argument doesn't exist, create a new CallAnalysis with this data.
+     */
+    create: XOR<CallAnalysisCreateInput, CallAnalysisUncheckedCreateInput>
+    /**
+     * In case the CallAnalysis was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CallAnalysisUpdateInput, CallAnalysisUncheckedUpdateInput>
+  }
+
+  /**
+   * CallAnalysis delete
+   */
+  export type CallAnalysisDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallAnalysis
+     */
+    select?: CallAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallAnalysis
+     */
+    omit?: CallAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallAnalysisInclude<ExtArgs> | null
+    /**
+     * Filter which CallAnalysis to delete.
+     */
+    where: CallAnalysisWhereUniqueInput
+  }
+
+  /**
+   * CallAnalysis deleteMany
+   */
+  export type CallAnalysisDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CallAnalyses to delete
+     */
+    where?: CallAnalysisWhereInput
+    /**
+     * Limit how many CallAnalyses to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CallAnalysis without action
+   */
+  export type CallAnalysisDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallAnalysis
+     */
+    select?: CallAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallAnalysis
+     */
+    omit?: CallAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallAnalysisInclude<ExtArgs> | null
   }
 
 
@@ -10727,6 +12237,7 @@ export namespace Prisma {
     email: 'email',
     company: 'company',
     status: 'status',
+    doNotCall: 'doNotCall',
     tenantId: 'tenantId',
     campaignId: 'campaignId',
     metadata: 'metadata',
@@ -10749,7 +12260,6 @@ export namespace Prisma {
     transcript: 'transcript',
     transcriptMessages: 'transcriptMessages',
     summary: 'summary',
-    outcome: 'outcome',
     startedAt: 'startedAt',
     endedAt: 'endedAt',
     createdAt: 'createdAt',
@@ -10757,6 +12267,30 @@ export namespace Prisma {
   };
 
   export type CallScalarFieldEnum = (typeof CallScalarFieldEnum)[keyof typeof CallScalarFieldEnum]
+
+
+  export const CallAnalysisScalarFieldEnum: {
+    id: 'id',
+    callId: 'callId',
+    tenantId: 'tenantId',
+    disposition: 'disposition',
+    leadTemperature: 'leadTemperature',
+    preferredConfiguration: 'preferredConfiguration',
+    budgetRange: 'budgetRange',
+    purchaseTimeline: 'purchaseTimeline',
+    purchasePurpose: 'purchasePurpose',
+    locationMatch: 'locationMatch',
+    customerLocationPref: 'customerLocationPref',
+    preferredNextAction: 'preferredNextAction',
+    preferredContactChannel: 'preferredContactChannel',
+    followupSchedule: 'followupSchedule',
+    doNotCall: 'doNotCall',
+    languageSupportRequired: 'languageSupportRequired',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type CallAnalysisScalarFieldEnum = (typeof CallAnalysisScalarFieldEnum)[keyof typeof CallAnalysisScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -10943,6 +12477,118 @@ export namespace Prisma {
    */
   export type ListEnumCallStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CallStatus[]'>
     
+
+
+  /**
+   * Reference to a field of type 'Disposition'
+   */
+  export type EnumDispositionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Disposition'>
+    
+
+
+  /**
+   * Reference to a field of type 'Disposition[]'
+   */
+  export type ListEnumDispositionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Disposition[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'LeadTemperature'
+   */
+  export type EnumLeadTemperatureFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadTemperature'>
+    
+
+
+  /**
+   * Reference to a field of type 'LeadTemperature[]'
+   */
+  export type ListEnumLeadTemperatureFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadTemperature[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'PurchaseTimeline'
+   */
+  export type EnumPurchaseTimelineFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PurchaseTimeline'>
+    
+
+
+  /**
+   * Reference to a field of type 'PurchaseTimeline[]'
+   */
+  export type ListEnumPurchaseTimelineFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PurchaseTimeline[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'PurchasePurpose'
+   */
+  export type EnumPurchasePurposeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PurchasePurpose'>
+    
+
+
+  /**
+   * Reference to a field of type 'PurchasePurpose[]'
+   */
+  export type ListEnumPurchasePurposeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PurchasePurpose[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'LocationMatch'
+   */
+  export type EnumLocationMatchFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LocationMatch'>
+    
+
+
+  /**
+   * Reference to a field of type 'LocationMatch[]'
+   */
+  export type ListEnumLocationMatchFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LocationMatch[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'PreferredNextAction'
+   */
+  export type EnumPreferredNextActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PreferredNextAction'>
+    
+
+
+  /**
+   * Reference to a field of type 'PreferredNextAction[]'
+   */
+  export type ListEnumPreferredNextActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PreferredNextAction[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ContactChannel'
+   */
+  export type EnumContactChannelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContactChannel'>
+    
+
+
+  /**
+   * Reference to a field of type 'ContactChannel[]'
+   */
+  export type ListEnumContactChannelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContactChannel[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ExtractionFlag'
+   */
+  export type EnumExtractionFlagFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExtractionFlag'>
+    
+
+
+  /**
+   * Reference to a field of type 'ExtractionFlag[]'
+   */
+  export type ListEnumExtractionFlagFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExtractionFlag[]'>
+    
   /**
    * Deep Input Types
    */
@@ -10965,6 +12611,7 @@ export namespace Prisma {
     calls?: CallListRelationFilter
     assistants?: AssistantListRelationFilter
     brochures?: BrochureListRelationFilter
+    callAnalyses?: CallAnalysisListRelationFilter
   }
 
   export type TenantOrderByWithRelationInput = {
@@ -10981,6 +12628,7 @@ export namespace Prisma {
     calls?: CallOrderByRelationAggregateInput
     assistants?: AssistantOrderByRelationAggregateInput
     brochures?: BrochureOrderByRelationAggregateInput
+    callAnalyses?: CallAnalysisOrderByRelationAggregateInput
   }
 
   export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -11000,6 +12648,7 @@ export namespace Prisma {
     calls?: CallListRelationFilter
     assistants?: AssistantListRelationFilter
     brochures?: BrochureListRelationFilter
+    callAnalyses?: CallAnalysisListRelationFilter
   }, "id" | "email" | "apiKey">
 
   export type TenantOrderByWithAggregationInput = {
@@ -11585,6 +13234,7 @@ export namespace Prisma {
     email?: StringNullableFilter<"Lead"> | string | null
     company?: StringNullableFilter<"Lead"> | string | null
     status?: EnumLeadStatusFilter<"Lead"> | $Enums.LeadStatus
+    doNotCall?: BoolFilter<"Lead"> | boolean
     tenantId?: StringFilter<"Lead"> | string
     campaignId?: StringFilter<"Lead"> | string
     metadata?: JsonNullableFilter<"Lead">
@@ -11602,6 +13252,7 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     company?: SortOrderInput | SortOrder
     status?: SortOrder
+    doNotCall?: SortOrder
     tenantId?: SortOrder
     campaignId?: SortOrder
     metadata?: SortOrderInput | SortOrder
@@ -11622,6 +13273,7 @@ export namespace Prisma {
     email?: StringNullableFilter<"Lead"> | string | null
     company?: StringNullableFilter<"Lead"> | string | null
     status?: EnumLeadStatusFilter<"Lead"> | $Enums.LeadStatus
+    doNotCall?: BoolFilter<"Lead"> | boolean
     tenantId?: StringFilter<"Lead"> | string
     campaignId?: StringFilter<"Lead"> | string
     metadata?: JsonNullableFilter<"Lead">
@@ -11639,6 +13291,7 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     company?: SortOrderInput | SortOrder
     status?: SortOrder
+    doNotCall?: SortOrder
     tenantId?: SortOrder
     campaignId?: SortOrder
     metadata?: SortOrderInput | SortOrder
@@ -11659,6 +13312,7 @@ export namespace Prisma {
     email?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     company?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     status?: EnumLeadStatusWithAggregatesFilter<"Lead"> | $Enums.LeadStatus
+    doNotCall?: BoolWithAggregatesFilter<"Lead"> | boolean
     tenantId?: StringWithAggregatesFilter<"Lead"> | string
     campaignId?: StringWithAggregatesFilter<"Lead"> | string
     metadata?: JsonNullableWithAggregatesFilter<"Lead">
@@ -11681,7 +13335,6 @@ export namespace Prisma {
     transcript?: StringNullableFilter<"Call"> | string | null
     transcriptMessages?: JsonNullableFilter<"Call">
     summary?: StringNullableFilter<"Call"> | string | null
-    outcome?: StringNullableFilter<"Call"> | string | null
     startedAt?: DateTimeNullableFilter<"Call"> | Date | string | null
     endedAt?: DateTimeNullableFilter<"Call"> | Date | string | null
     createdAt?: DateTimeFilter<"Call"> | Date | string
@@ -11689,6 +13342,7 @@ export namespace Prisma {
     tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     campaign?: XOR<CampaignScalarRelationFilter, CampaignWhereInput>
     lead?: XOR<LeadScalarRelationFilter, LeadWhereInput>
+    callAnalysis?: XOR<CallAnalysisNullableScalarRelationFilter, CallAnalysisWhereInput> | null
   }
 
   export type CallOrderByWithRelationInput = {
@@ -11703,7 +13357,6 @@ export namespace Prisma {
     transcript?: SortOrderInput | SortOrder
     transcriptMessages?: SortOrderInput | SortOrder
     summary?: SortOrderInput | SortOrder
-    outcome?: SortOrderInput | SortOrder
     startedAt?: SortOrderInput | SortOrder
     endedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -11711,6 +13364,7 @@ export namespace Prisma {
     tenant?: TenantOrderByWithRelationInput
     campaign?: CampaignOrderByWithRelationInput
     lead?: LeadOrderByWithRelationInput
+    callAnalysis?: CallAnalysisOrderByWithRelationInput
   }
 
   export type CallWhereUniqueInput = Prisma.AtLeast<{
@@ -11728,7 +13382,6 @@ export namespace Prisma {
     transcript?: StringNullableFilter<"Call"> | string | null
     transcriptMessages?: JsonNullableFilter<"Call">
     summary?: StringNullableFilter<"Call"> | string | null
-    outcome?: StringNullableFilter<"Call"> | string | null
     startedAt?: DateTimeNullableFilter<"Call"> | Date | string | null
     endedAt?: DateTimeNullableFilter<"Call"> | Date | string | null
     createdAt?: DateTimeFilter<"Call"> | Date | string
@@ -11736,6 +13389,7 @@ export namespace Prisma {
     tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     campaign?: XOR<CampaignScalarRelationFilter, CampaignWhereInput>
     lead?: XOR<LeadScalarRelationFilter, LeadWhereInput>
+    callAnalysis?: XOR<CallAnalysisNullableScalarRelationFilter, CallAnalysisWhereInput> | null
   }, "id" | "bolnaCallId">
 
   export type CallOrderByWithAggregationInput = {
@@ -11750,7 +13404,6 @@ export namespace Prisma {
     transcript?: SortOrderInput | SortOrder
     transcriptMessages?: SortOrderInput | SortOrder
     summary?: SortOrderInput | SortOrder
-    outcome?: SortOrderInput | SortOrder
     startedAt?: SortOrderInput | SortOrder
     endedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -11777,11 +13430,133 @@ export namespace Prisma {
     transcript?: StringNullableWithAggregatesFilter<"Call"> | string | null
     transcriptMessages?: JsonNullableWithAggregatesFilter<"Call">
     summary?: StringNullableWithAggregatesFilter<"Call"> | string | null
-    outcome?: StringNullableWithAggregatesFilter<"Call"> | string | null
     startedAt?: DateTimeNullableWithAggregatesFilter<"Call"> | Date | string | null
     endedAt?: DateTimeNullableWithAggregatesFilter<"Call"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Call"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Call"> | Date | string
+  }
+
+  export type CallAnalysisWhereInput = {
+    AND?: CallAnalysisWhereInput | CallAnalysisWhereInput[]
+    OR?: CallAnalysisWhereInput[]
+    NOT?: CallAnalysisWhereInput | CallAnalysisWhereInput[]
+    id?: StringFilter<"CallAnalysis"> | string
+    callId?: StringFilter<"CallAnalysis"> | string
+    tenantId?: StringFilter<"CallAnalysis"> | string
+    disposition?: EnumDispositionNullableFilter<"CallAnalysis"> | $Enums.Disposition | null
+    leadTemperature?: EnumLeadTemperatureNullableFilter<"CallAnalysis"> | $Enums.LeadTemperature | null
+    preferredConfiguration?: StringNullableFilter<"CallAnalysis"> | string | null
+    budgetRange?: StringNullableFilter<"CallAnalysis"> | string | null
+    purchaseTimeline?: EnumPurchaseTimelineNullableFilter<"CallAnalysis"> | $Enums.PurchaseTimeline | null
+    purchasePurpose?: EnumPurchasePurposeNullableFilter<"CallAnalysis"> | $Enums.PurchasePurpose | null
+    locationMatch?: EnumLocationMatchNullableFilter<"CallAnalysis"> | $Enums.LocationMatch | null
+    customerLocationPref?: StringNullableFilter<"CallAnalysis"> | string | null
+    preferredNextAction?: EnumPreferredNextActionNullableFilter<"CallAnalysis"> | $Enums.PreferredNextAction | null
+    preferredContactChannel?: EnumContactChannelNullableFilter<"CallAnalysis"> | $Enums.ContactChannel | null
+    followupSchedule?: StringNullableFilter<"CallAnalysis"> | string | null
+    doNotCall?: EnumExtractionFlagNullableFilter<"CallAnalysis"> | $Enums.ExtractionFlag | null
+    languageSupportRequired?: EnumExtractionFlagNullableFilter<"CallAnalysis"> | $Enums.ExtractionFlag | null
+    createdAt?: DateTimeFilter<"CallAnalysis"> | Date | string
+    updatedAt?: DateTimeFilter<"CallAnalysis"> | Date | string
+    call?: XOR<CallScalarRelationFilter, CallWhereInput>
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
+  }
+
+  export type CallAnalysisOrderByWithRelationInput = {
+    id?: SortOrder
+    callId?: SortOrder
+    tenantId?: SortOrder
+    disposition?: SortOrderInput | SortOrder
+    leadTemperature?: SortOrderInput | SortOrder
+    preferredConfiguration?: SortOrderInput | SortOrder
+    budgetRange?: SortOrderInput | SortOrder
+    purchaseTimeline?: SortOrderInput | SortOrder
+    purchasePurpose?: SortOrderInput | SortOrder
+    locationMatch?: SortOrderInput | SortOrder
+    customerLocationPref?: SortOrderInput | SortOrder
+    preferredNextAction?: SortOrderInput | SortOrder
+    preferredContactChannel?: SortOrderInput | SortOrder
+    followupSchedule?: SortOrderInput | SortOrder
+    doNotCall?: SortOrderInput | SortOrder
+    languageSupportRequired?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    call?: CallOrderByWithRelationInput
+    tenant?: TenantOrderByWithRelationInput
+  }
+
+  export type CallAnalysisWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    callId?: string
+    AND?: CallAnalysisWhereInput | CallAnalysisWhereInput[]
+    OR?: CallAnalysisWhereInput[]
+    NOT?: CallAnalysisWhereInput | CallAnalysisWhereInput[]
+    tenantId?: StringFilter<"CallAnalysis"> | string
+    disposition?: EnumDispositionNullableFilter<"CallAnalysis"> | $Enums.Disposition | null
+    leadTemperature?: EnumLeadTemperatureNullableFilter<"CallAnalysis"> | $Enums.LeadTemperature | null
+    preferredConfiguration?: StringNullableFilter<"CallAnalysis"> | string | null
+    budgetRange?: StringNullableFilter<"CallAnalysis"> | string | null
+    purchaseTimeline?: EnumPurchaseTimelineNullableFilter<"CallAnalysis"> | $Enums.PurchaseTimeline | null
+    purchasePurpose?: EnumPurchasePurposeNullableFilter<"CallAnalysis"> | $Enums.PurchasePurpose | null
+    locationMatch?: EnumLocationMatchNullableFilter<"CallAnalysis"> | $Enums.LocationMatch | null
+    customerLocationPref?: StringNullableFilter<"CallAnalysis"> | string | null
+    preferredNextAction?: EnumPreferredNextActionNullableFilter<"CallAnalysis"> | $Enums.PreferredNextAction | null
+    preferredContactChannel?: EnumContactChannelNullableFilter<"CallAnalysis"> | $Enums.ContactChannel | null
+    followupSchedule?: StringNullableFilter<"CallAnalysis"> | string | null
+    doNotCall?: EnumExtractionFlagNullableFilter<"CallAnalysis"> | $Enums.ExtractionFlag | null
+    languageSupportRequired?: EnumExtractionFlagNullableFilter<"CallAnalysis"> | $Enums.ExtractionFlag | null
+    createdAt?: DateTimeFilter<"CallAnalysis"> | Date | string
+    updatedAt?: DateTimeFilter<"CallAnalysis"> | Date | string
+    call?: XOR<CallScalarRelationFilter, CallWhereInput>
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
+  }, "id" | "callId">
+
+  export type CallAnalysisOrderByWithAggregationInput = {
+    id?: SortOrder
+    callId?: SortOrder
+    tenantId?: SortOrder
+    disposition?: SortOrderInput | SortOrder
+    leadTemperature?: SortOrderInput | SortOrder
+    preferredConfiguration?: SortOrderInput | SortOrder
+    budgetRange?: SortOrderInput | SortOrder
+    purchaseTimeline?: SortOrderInput | SortOrder
+    purchasePurpose?: SortOrderInput | SortOrder
+    locationMatch?: SortOrderInput | SortOrder
+    customerLocationPref?: SortOrderInput | SortOrder
+    preferredNextAction?: SortOrderInput | SortOrder
+    preferredContactChannel?: SortOrderInput | SortOrder
+    followupSchedule?: SortOrderInput | SortOrder
+    doNotCall?: SortOrderInput | SortOrder
+    languageSupportRequired?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: CallAnalysisCountOrderByAggregateInput
+    _max?: CallAnalysisMaxOrderByAggregateInput
+    _min?: CallAnalysisMinOrderByAggregateInput
+  }
+
+  export type CallAnalysisScalarWhereWithAggregatesInput = {
+    AND?: CallAnalysisScalarWhereWithAggregatesInput | CallAnalysisScalarWhereWithAggregatesInput[]
+    OR?: CallAnalysisScalarWhereWithAggregatesInput[]
+    NOT?: CallAnalysisScalarWhereWithAggregatesInput | CallAnalysisScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CallAnalysis"> | string
+    callId?: StringWithAggregatesFilter<"CallAnalysis"> | string
+    tenantId?: StringWithAggregatesFilter<"CallAnalysis"> | string
+    disposition?: EnumDispositionNullableWithAggregatesFilter<"CallAnalysis"> | $Enums.Disposition | null
+    leadTemperature?: EnumLeadTemperatureNullableWithAggregatesFilter<"CallAnalysis"> | $Enums.LeadTemperature | null
+    preferredConfiguration?: StringNullableWithAggregatesFilter<"CallAnalysis"> | string | null
+    budgetRange?: StringNullableWithAggregatesFilter<"CallAnalysis"> | string | null
+    purchaseTimeline?: EnumPurchaseTimelineNullableWithAggregatesFilter<"CallAnalysis"> | $Enums.PurchaseTimeline | null
+    purchasePurpose?: EnumPurchasePurposeNullableWithAggregatesFilter<"CallAnalysis"> | $Enums.PurchasePurpose | null
+    locationMatch?: EnumLocationMatchNullableWithAggregatesFilter<"CallAnalysis"> | $Enums.LocationMatch | null
+    customerLocationPref?: StringNullableWithAggregatesFilter<"CallAnalysis"> | string | null
+    preferredNextAction?: EnumPreferredNextActionNullableWithAggregatesFilter<"CallAnalysis"> | $Enums.PreferredNextAction | null
+    preferredContactChannel?: EnumContactChannelNullableWithAggregatesFilter<"CallAnalysis"> | $Enums.ContactChannel | null
+    followupSchedule?: StringNullableWithAggregatesFilter<"CallAnalysis"> | string | null
+    doNotCall?: EnumExtractionFlagNullableWithAggregatesFilter<"CallAnalysis"> | $Enums.ExtractionFlag | null
+    languageSupportRequired?: EnumExtractionFlagNullableWithAggregatesFilter<"CallAnalysis"> | $Enums.ExtractionFlag | null
+    createdAt?: DateTimeWithAggregatesFilter<"CallAnalysis"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CallAnalysis"> | Date | string
   }
 
   export type TenantCreateInput = {
@@ -11798,6 +13573,7 @@ export namespace Prisma {
     calls?: CallCreateNestedManyWithoutTenantInput
     assistants?: AssistantCreateNestedManyWithoutTenantInput
     brochures?: BrochureCreateNestedManyWithoutTenantInput
+    callAnalyses?: CallAnalysisCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateInput = {
@@ -11814,6 +13590,7 @@ export namespace Prisma {
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
     assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
     brochures?: BrochureUncheckedCreateNestedManyWithoutTenantInput
+    callAnalyses?: CallAnalysisUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUpdateInput = {
@@ -11830,6 +13607,7 @@ export namespace Prisma {
     calls?: CallUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUpdateManyWithoutTenantNestedInput
     brochures?: BrochureUpdateManyWithoutTenantNestedInput
+    callAnalyses?: CallAnalysisUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateInput = {
@@ -11846,6 +13624,7 @@ export namespace Prisma {
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
     brochures?: BrochureUncheckedUpdateManyWithoutTenantNestedInput
+    callAnalyses?: CallAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantCreateManyInput = {
@@ -12546,6 +14325,7 @@ export namespace Prisma {
     email?: string | null
     company?: string | null
     status?: $Enums.LeadStatus
+    doNotCall?: boolean
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12561,6 +14341,7 @@ export namespace Prisma {
     email?: string | null
     company?: string | null
     status?: $Enums.LeadStatus
+    doNotCall?: boolean
     tenantId: string
     campaignId: string
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -12576,6 +14357,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    doNotCall?: BoolFieldUpdateOperationsInput | boolean
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12591,6 +14373,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    doNotCall?: BoolFieldUpdateOperationsInput | boolean
     tenantId?: StringFieldUpdateOperationsInput | string
     campaignId?: StringFieldUpdateOperationsInput | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -12606,6 +14389,7 @@ export namespace Prisma {
     email?: string | null
     company?: string | null
     status?: $Enums.LeadStatus
+    doNotCall?: boolean
     tenantId: string
     campaignId: string
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -12620,6 +14404,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    doNotCall?: BoolFieldUpdateOperationsInput | boolean
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12632,6 +14417,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    doNotCall?: BoolFieldUpdateOperationsInput | boolean
     tenantId?: StringFieldUpdateOperationsInput | string
     campaignId?: StringFieldUpdateOperationsInput | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -12648,7 +14434,6 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
-    outcome?: string | null
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
@@ -12656,6 +14441,7 @@ export namespace Prisma {
     tenant: TenantCreateNestedOneWithoutCallsInput
     campaign: CampaignCreateNestedOneWithoutCallsInput
     lead: LeadCreateNestedOneWithoutCallsInput
+    callAnalysis?: CallAnalysisCreateNestedOneWithoutCallInput
   }
 
   export type CallUncheckedCreateInput = {
@@ -12670,11 +14456,11 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
-    outcome?: string | null
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    callAnalysis?: CallAnalysisUncheckedCreateNestedOneWithoutCallInput
   }
 
   export type CallUpdateInput = {
@@ -12686,7 +14472,6 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
-    outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12694,6 +14479,7 @@ export namespace Prisma {
     tenant?: TenantUpdateOneRequiredWithoutCallsNestedInput
     campaign?: CampaignUpdateOneRequiredWithoutCallsNestedInput
     lead?: LeadUpdateOneRequiredWithoutCallsNestedInput
+    callAnalysis?: CallAnalysisUpdateOneWithoutCallNestedInput
   }
 
   export type CallUncheckedUpdateInput = {
@@ -12708,11 +14494,11 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
-    outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    callAnalysis?: CallAnalysisUncheckedUpdateOneWithoutCallNestedInput
   }
 
   export type CallCreateManyInput = {
@@ -12727,7 +14513,6 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
-    outcome?: string | null
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
@@ -12743,7 +14528,6 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
-    outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12762,9 +14546,153 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
-    outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallAnalysisCreateInput = {
+    id?: string
+    disposition?: $Enums.Disposition | null
+    leadTemperature?: $Enums.LeadTemperature | null
+    preferredConfiguration?: string | null
+    budgetRange?: string | null
+    purchaseTimeline?: $Enums.PurchaseTimeline | null
+    purchasePurpose?: $Enums.PurchasePurpose | null
+    locationMatch?: $Enums.LocationMatch | null
+    customerLocationPref?: string | null
+    preferredNextAction?: $Enums.PreferredNextAction | null
+    preferredContactChannel?: $Enums.ContactChannel | null
+    followupSchedule?: string | null
+    doNotCall?: $Enums.ExtractionFlag | null
+    languageSupportRequired?: $Enums.ExtractionFlag | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    call: CallCreateNestedOneWithoutCallAnalysisInput
+    tenant: TenantCreateNestedOneWithoutCallAnalysesInput
+  }
+
+  export type CallAnalysisUncheckedCreateInput = {
+    id?: string
+    callId: string
+    tenantId: string
+    disposition?: $Enums.Disposition | null
+    leadTemperature?: $Enums.LeadTemperature | null
+    preferredConfiguration?: string | null
+    budgetRange?: string | null
+    purchaseTimeline?: $Enums.PurchaseTimeline | null
+    purchasePurpose?: $Enums.PurchasePurpose | null
+    locationMatch?: $Enums.LocationMatch | null
+    customerLocationPref?: string | null
+    preferredNextAction?: $Enums.PreferredNextAction | null
+    preferredContactChannel?: $Enums.ContactChannel | null
+    followupSchedule?: string | null
+    doNotCall?: $Enums.ExtractionFlag | null
+    languageSupportRequired?: $Enums.ExtractionFlag | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CallAnalysisUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    disposition?: NullableEnumDispositionFieldUpdateOperationsInput | $Enums.Disposition | null
+    leadTemperature?: NullableEnumLeadTemperatureFieldUpdateOperationsInput | $Enums.LeadTemperature | null
+    preferredConfiguration?: NullableStringFieldUpdateOperationsInput | string | null
+    budgetRange?: NullableStringFieldUpdateOperationsInput | string | null
+    purchaseTimeline?: NullableEnumPurchaseTimelineFieldUpdateOperationsInput | $Enums.PurchaseTimeline | null
+    purchasePurpose?: NullableEnumPurchasePurposeFieldUpdateOperationsInput | $Enums.PurchasePurpose | null
+    locationMatch?: NullableEnumLocationMatchFieldUpdateOperationsInput | $Enums.LocationMatch | null
+    customerLocationPref?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredNextAction?: NullableEnumPreferredNextActionFieldUpdateOperationsInput | $Enums.PreferredNextAction | null
+    preferredContactChannel?: NullableEnumContactChannelFieldUpdateOperationsInput | $Enums.ContactChannel | null
+    followupSchedule?: NullableStringFieldUpdateOperationsInput | string | null
+    doNotCall?: NullableEnumExtractionFlagFieldUpdateOperationsInput | $Enums.ExtractionFlag | null
+    languageSupportRequired?: NullableEnumExtractionFlagFieldUpdateOperationsInput | $Enums.ExtractionFlag | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    call?: CallUpdateOneRequiredWithoutCallAnalysisNestedInput
+    tenant?: TenantUpdateOneRequiredWithoutCallAnalysesNestedInput
+  }
+
+  export type CallAnalysisUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    callId?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    disposition?: NullableEnumDispositionFieldUpdateOperationsInput | $Enums.Disposition | null
+    leadTemperature?: NullableEnumLeadTemperatureFieldUpdateOperationsInput | $Enums.LeadTemperature | null
+    preferredConfiguration?: NullableStringFieldUpdateOperationsInput | string | null
+    budgetRange?: NullableStringFieldUpdateOperationsInput | string | null
+    purchaseTimeline?: NullableEnumPurchaseTimelineFieldUpdateOperationsInput | $Enums.PurchaseTimeline | null
+    purchasePurpose?: NullableEnumPurchasePurposeFieldUpdateOperationsInput | $Enums.PurchasePurpose | null
+    locationMatch?: NullableEnumLocationMatchFieldUpdateOperationsInput | $Enums.LocationMatch | null
+    customerLocationPref?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredNextAction?: NullableEnumPreferredNextActionFieldUpdateOperationsInput | $Enums.PreferredNextAction | null
+    preferredContactChannel?: NullableEnumContactChannelFieldUpdateOperationsInput | $Enums.ContactChannel | null
+    followupSchedule?: NullableStringFieldUpdateOperationsInput | string | null
+    doNotCall?: NullableEnumExtractionFlagFieldUpdateOperationsInput | $Enums.ExtractionFlag | null
+    languageSupportRequired?: NullableEnumExtractionFlagFieldUpdateOperationsInput | $Enums.ExtractionFlag | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallAnalysisCreateManyInput = {
+    id?: string
+    callId: string
+    tenantId: string
+    disposition?: $Enums.Disposition | null
+    leadTemperature?: $Enums.LeadTemperature | null
+    preferredConfiguration?: string | null
+    budgetRange?: string | null
+    purchaseTimeline?: $Enums.PurchaseTimeline | null
+    purchasePurpose?: $Enums.PurchasePurpose | null
+    locationMatch?: $Enums.LocationMatch | null
+    customerLocationPref?: string | null
+    preferredNextAction?: $Enums.PreferredNextAction | null
+    preferredContactChannel?: $Enums.ContactChannel | null
+    followupSchedule?: string | null
+    doNotCall?: $Enums.ExtractionFlag | null
+    languageSupportRequired?: $Enums.ExtractionFlag | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CallAnalysisUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    disposition?: NullableEnumDispositionFieldUpdateOperationsInput | $Enums.Disposition | null
+    leadTemperature?: NullableEnumLeadTemperatureFieldUpdateOperationsInput | $Enums.LeadTemperature | null
+    preferredConfiguration?: NullableStringFieldUpdateOperationsInput | string | null
+    budgetRange?: NullableStringFieldUpdateOperationsInput | string | null
+    purchaseTimeline?: NullableEnumPurchaseTimelineFieldUpdateOperationsInput | $Enums.PurchaseTimeline | null
+    purchasePurpose?: NullableEnumPurchasePurposeFieldUpdateOperationsInput | $Enums.PurchasePurpose | null
+    locationMatch?: NullableEnumLocationMatchFieldUpdateOperationsInput | $Enums.LocationMatch | null
+    customerLocationPref?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredNextAction?: NullableEnumPreferredNextActionFieldUpdateOperationsInput | $Enums.PreferredNextAction | null
+    preferredContactChannel?: NullableEnumContactChannelFieldUpdateOperationsInput | $Enums.ContactChannel | null
+    followupSchedule?: NullableStringFieldUpdateOperationsInput | string | null
+    doNotCall?: NullableEnumExtractionFlagFieldUpdateOperationsInput | $Enums.ExtractionFlag | null
+    languageSupportRequired?: NullableEnumExtractionFlagFieldUpdateOperationsInput | $Enums.ExtractionFlag | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallAnalysisUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    callId?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    disposition?: NullableEnumDispositionFieldUpdateOperationsInput | $Enums.Disposition | null
+    leadTemperature?: NullableEnumLeadTemperatureFieldUpdateOperationsInput | $Enums.LeadTemperature | null
+    preferredConfiguration?: NullableStringFieldUpdateOperationsInput | string | null
+    budgetRange?: NullableStringFieldUpdateOperationsInput | string | null
+    purchaseTimeline?: NullableEnumPurchaseTimelineFieldUpdateOperationsInput | $Enums.PurchaseTimeline | null
+    purchasePurpose?: NullableEnumPurchasePurposeFieldUpdateOperationsInput | $Enums.PurchasePurpose | null
+    locationMatch?: NullableEnumLocationMatchFieldUpdateOperationsInput | $Enums.LocationMatch | null
+    customerLocationPref?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredNextAction?: NullableEnumPreferredNextActionFieldUpdateOperationsInput | $Enums.PreferredNextAction | null
+    preferredContactChannel?: NullableEnumContactChannelFieldUpdateOperationsInput | $Enums.ContactChannel | null
+    followupSchedule?: NullableStringFieldUpdateOperationsInput | string | null
+    doNotCall?: NullableEnumExtractionFlagFieldUpdateOperationsInput | $Enums.ExtractionFlag | null
+    languageSupportRequired?: NullableEnumExtractionFlagFieldUpdateOperationsInput | $Enums.ExtractionFlag | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12836,6 +14764,12 @@ export namespace Prisma {
     none?: BrochureWhereInput
   }
 
+  export type CallAnalysisListRelationFilter = {
+    every?: CallAnalysisWhereInput
+    some?: CallAnalysisWhereInput
+    none?: CallAnalysisWhereInput
+  }
+
   export type UserOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -12857,6 +14791,10 @@ export namespace Prisma {
   }
 
   export type BrochureOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CallAnalysisOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -13574,6 +15512,7 @@ export namespace Prisma {
     email?: SortOrder
     company?: SortOrder
     status?: SortOrder
+    doNotCall?: SortOrder
     tenantId?: SortOrder
     campaignId?: SortOrder
     metadata?: SortOrder
@@ -13588,6 +15527,7 @@ export namespace Prisma {
     email?: SortOrder
     company?: SortOrder
     status?: SortOrder
+    doNotCall?: SortOrder
     tenantId?: SortOrder
     campaignId?: SortOrder
     createdAt?: SortOrder
@@ -13601,6 +15541,7 @@ export namespace Prisma {
     email?: SortOrder
     company?: SortOrder
     status?: SortOrder
+    doNotCall?: SortOrder
     tenantId?: SortOrder
     campaignId?: SortOrder
     createdAt?: SortOrder
@@ -13629,6 +15570,11 @@ export namespace Prisma {
     isNot?: LeadWhereInput
   }
 
+  export type CallAnalysisNullableScalarRelationFilter = {
+    is?: CallAnalysisWhereInput | null
+    isNot?: CallAnalysisWhereInput | null
+  }
+
   export type CallCountOrderByAggregateInput = {
     id?: SortOrder
     bolnaCallId?: SortOrder
@@ -13641,7 +15587,6 @@ export namespace Prisma {
     transcript?: SortOrder
     transcriptMessages?: SortOrder
     summary?: SortOrder
-    outcome?: SortOrder
     startedAt?: SortOrder
     endedAt?: SortOrder
     createdAt?: SortOrder
@@ -13663,7 +15608,6 @@ export namespace Prisma {
     recording?: SortOrder
     transcript?: SortOrder
     summary?: SortOrder
-    outcome?: SortOrder
     startedAt?: SortOrder
     endedAt?: SortOrder
     createdAt?: SortOrder
@@ -13681,7 +15625,6 @@ export namespace Prisma {
     recording?: SortOrder
     transcript?: SortOrder
     summary?: SortOrder
-    outcome?: SortOrder
     startedAt?: SortOrder
     endedAt?: SortOrder
     createdAt?: SortOrder
@@ -13700,6 +15643,210 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumCallStatusFilter<$PrismaModel>
     _max?: NestedEnumCallStatusFilter<$PrismaModel>
+  }
+
+  export type EnumDispositionNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.Disposition | EnumDispositionFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Disposition[] | ListEnumDispositionFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Disposition[] | ListEnumDispositionFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumDispositionNullableFilter<$PrismaModel> | $Enums.Disposition | null
+  }
+
+  export type EnumLeadTemperatureNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.LeadTemperature | EnumLeadTemperatureFieldRefInput<$PrismaModel> | null
+    in?: $Enums.LeadTemperature[] | ListEnumLeadTemperatureFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.LeadTemperature[] | ListEnumLeadTemperatureFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumLeadTemperatureNullableFilter<$PrismaModel> | $Enums.LeadTemperature | null
+  }
+
+  export type EnumPurchaseTimelineNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.PurchaseTimeline | EnumPurchaseTimelineFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PurchaseTimeline[] | ListEnumPurchaseTimelineFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PurchaseTimeline[] | ListEnumPurchaseTimelineFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPurchaseTimelineNullableFilter<$PrismaModel> | $Enums.PurchaseTimeline | null
+  }
+
+  export type EnumPurchasePurposeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.PurchasePurpose | EnumPurchasePurposeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PurchasePurpose[] | ListEnumPurchasePurposeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PurchasePurpose[] | ListEnumPurchasePurposeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPurchasePurposeNullableFilter<$PrismaModel> | $Enums.PurchasePurpose | null
+  }
+
+  export type EnumLocationMatchNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.LocationMatch | EnumLocationMatchFieldRefInput<$PrismaModel> | null
+    in?: $Enums.LocationMatch[] | ListEnumLocationMatchFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.LocationMatch[] | ListEnumLocationMatchFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumLocationMatchNullableFilter<$PrismaModel> | $Enums.LocationMatch | null
+  }
+
+  export type EnumPreferredNextActionNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.PreferredNextAction | EnumPreferredNextActionFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PreferredNextAction[] | ListEnumPreferredNextActionFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PreferredNextAction[] | ListEnumPreferredNextActionFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPreferredNextActionNullableFilter<$PrismaModel> | $Enums.PreferredNextAction | null
+  }
+
+  export type EnumContactChannelNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContactChannel | EnumContactChannelFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ContactChannel[] | ListEnumContactChannelFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ContactChannel[] | ListEnumContactChannelFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumContactChannelNullableFilter<$PrismaModel> | $Enums.ContactChannel | null
+  }
+
+  export type EnumExtractionFlagNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ExtractionFlag | EnumExtractionFlagFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ExtractionFlag[] | ListEnumExtractionFlagFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ExtractionFlag[] | ListEnumExtractionFlagFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumExtractionFlagNullableFilter<$PrismaModel> | $Enums.ExtractionFlag | null
+  }
+
+  export type CallScalarRelationFilter = {
+    is?: CallWhereInput
+    isNot?: CallWhereInput
+  }
+
+  export type CallAnalysisCountOrderByAggregateInput = {
+    id?: SortOrder
+    callId?: SortOrder
+    tenantId?: SortOrder
+    disposition?: SortOrder
+    leadTemperature?: SortOrder
+    preferredConfiguration?: SortOrder
+    budgetRange?: SortOrder
+    purchaseTimeline?: SortOrder
+    purchasePurpose?: SortOrder
+    locationMatch?: SortOrder
+    customerLocationPref?: SortOrder
+    preferredNextAction?: SortOrder
+    preferredContactChannel?: SortOrder
+    followupSchedule?: SortOrder
+    doNotCall?: SortOrder
+    languageSupportRequired?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CallAnalysisMaxOrderByAggregateInput = {
+    id?: SortOrder
+    callId?: SortOrder
+    tenantId?: SortOrder
+    disposition?: SortOrder
+    leadTemperature?: SortOrder
+    preferredConfiguration?: SortOrder
+    budgetRange?: SortOrder
+    purchaseTimeline?: SortOrder
+    purchasePurpose?: SortOrder
+    locationMatch?: SortOrder
+    customerLocationPref?: SortOrder
+    preferredNextAction?: SortOrder
+    preferredContactChannel?: SortOrder
+    followupSchedule?: SortOrder
+    doNotCall?: SortOrder
+    languageSupportRequired?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CallAnalysisMinOrderByAggregateInput = {
+    id?: SortOrder
+    callId?: SortOrder
+    tenantId?: SortOrder
+    disposition?: SortOrder
+    leadTemperature?: SortOrder
+    preferredConfiguration?: SortOrder
+    budgetRange?: SortOrder
+    purchaseTimeline?: SortOrder
+    purchasePurpose?: SortOrder
+    locationMatch?: SortOrder
+    customerLocationPref?: SortOrder
+    preferredNextAction?: SortOrder
+    preferredContactChannel?: SortOrder
+    followupSchedule?: SortOrder
+    doNotCall?: SortOrder
+    languageSupportRequired?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumDispositionNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Disposition | EnumDispositionFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Disposition[] | ListEnumDispositionFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Disposition[] | ListEnumDispositionFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumDispositionNullableWithAggregatesFilter<$PrismaModel> | $Enums.Disposition | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumDispositionNullableFilter<$PrismaModel>
+    _max?: NestedEnumDispositionNullableFilter<$PrismaModel>
+  }
+
+  export type EnumLeadTemperatureNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LeadTemperature | EnumLeadTemperatureFieldRefInput<$PrismaModel> | null
+    in?: $Enums.LeadTemperature[] | ListEnumLeadTemperatureFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.LeadTemperature[] | ListEnumLeadTemperatureFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumLeadTemperatureNullableWithAggregatesFilter<$PrismaModel> | $Enums.LeadTemperature | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumLeadTemperatureNullableFilter<$PrismaModel>
+    _max?: NestedEnumLeadTemperatureNullableFilter<$PrismaModel>
+  }
+
+  export type EnumPurchaseTimelineNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PurchaseTimeline | EnumPurchaseTimelineFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PurchaseTimeline[] | ListEnumPurchaseTimelineFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PurchaseTimeline[] | ListEnumPurchaseTimelineFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPurchaseTimelineNullableWithAggregatesFilter<$PrismaModel> | $Enums.PurchaseTimeline | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumPurchaseTimelineNullableFilter<$PrismaModel>
+    _max?: NestedEnumPurchaseTimelineNullableFilter<$PrismaModel>
+  }
+
+  export type EnumPurchasePurposeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PurchasePurpose | EnumPurchasePurposeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PurchasePurpose[] | ListEnumPurchasePurposeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PurchasePurpose[] | ListEnumPurchasePurposeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPurchasePurposeNullableWithAggregatesFilter<$PrismaModel> | $Enums.PurchasePurpose | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumPurchasePurposeNullableFilter<$PrismaModel>
+    _max?: NestedEnumPurchasePurposeNullableFilter<$PrismaModel>
+  }
+
+  export type EnumLocationMatchNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LocationMatch | EnumLocationMatchFieldRefInput<$PrismaModel> | null
+    in?: $Enums.LocationMatch[] | ListEnumLocationMatchFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.LocationMatch[] | ListEnumLocationMatchFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumLocationMatchNullableWithAggregatesFilter<$PrismaModel> | $Enums.LocationMatch | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumLocationMatchNullableFilter<$PrismaModel>
+    _max?: NestedEnumLocationMatchNullableFilter<$PrismaModel>
+  }
+
+  export type EnumPreferredNextActionNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PreferredNextAction | EnumPreferredNextActionFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PreferredNextAction[] | ListEnumPreferredNextActionFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PreferredNextAction[] | ListEnumPreferredNextActionFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPreferredNextActionNullableWithAggregatesFilter<$PrismaModel> | $Enums.PreferredNextAction | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumPreferredNextActionNullableFilter<$PrismaModel>
+    _max?: NestedEnumPreferredNextActionNullableFilter<$PrismaModel>
+  }
+
+  export type EnumContactChannelNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContactChannel | EnumContactChannelFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ContactChannel[] | ListEnumContactChannelFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ContactChannel[] | ListEnumContactChannelFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumContactChannelNullableWithAggregatesFilter<$PrismaModel> | $Enums.ContactChannel | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumContactChannelNullableFilter<$PrismaModel>
+    _max?: NestedEnumContactChannelNullableFilter<$PrismaModel>
+  }
+
+  export type EnumExtractionFlagNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ExtractionFlag | EnumExtractionFlagFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ExtractionFlag[] | ListEnumExtractionFlagFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ExtractionFlag[] | ListEnumExtractionFlagFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumExtractionFlagNullableWithAggregatesFilter<$PrismaModel> | $Enums.ExtractionFlag | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumExtractionFlagNullableFilter<$PrismaModel>
+    _max?: NestedEnumExtractionFlagNullableFilter<$PrismaModel>
   }
 
   export type UserCreateNestedManyWithoutTenantInput = {
@@ -13744,6 +15891,13 @@ export namespace Prisma {
     connect?: BrochureWhereUniqueInput | BrochureWhereUniqueInput[]
   }
 
+  export type CallAnalysisCreateNestedManyWithoutTenantInput = {
+    create?: XOR<CallAnalysisCreateWithoutTenantInput, CallAnalysisUncheckedCreateWithoutTenantInput> | CallAnalysisCreateWithoutTenantInput[] | CallAnalysisUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: CallAnalysisCreateOrConnectWithoutTenantInput | CallAnalysisCreateOrConnectWithoutTenantInput[]
+    createMany?: CallAnalysisCreateManyTenantInputEnvelope
+    connect?: CallAnalysisWhereUniqueInput | CallAnalysisWhereUniqueInput[]
+  }
+
   export type UserUncheckedCreateNestedManyWithoutTenantInput = {
     create?: XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput> | UserCreateWithoutTenantInput[] | UserUncheckedCreateWithoutTenantInput[]
     connectOrCreate?: UserCreateOrConnectWithoutTenantInput | UserCreateOrConnectWithoutTenantInput[]
@@ -13784,6 +15938,13 @@ export namespace Prisma {
     connectOrCreate?: BrochureCreateOrConnectWithoutTenantInput | BrochureCreateOrConnectWithoutTenantInput[]
     createMany?: BrochureCreateManyTenantInputEnvelope
     connect?: BrochureWhereUniqueInput | BrochureWhereUniqueInput[]
+  }
+
+  export type CallAnalysisUncheckedCreateNestedManyWithoutTenantInput = {
+    create?: XOR<CallAnalysisCreateWithoutTenantInput, CallAnalysisUncheckedCreateWithoutTenantInput> | CallAnalysisCreateWithoutTenantInput[] | CallAnalysisUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: CallAnalysisCreateOrConnectWithoutTenantInput | CallAnalysisCreateOrConnectWithoutTenantInput[]
+    createMany?: CallAnalysisCreateManyTenantInputEnvelope
+    connect?: CallAnalysisWhereUniqueInput | CallAnalysisWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -13882,6 +16043,20 @@ export namespace Prisma {
     deleteMany?: BrochureScalarWhereInput | BrochureScalarWhereInput[]
   }
 
+  export type CallAnalysisUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<CallAnalysisCreateWithoutTenantInput, CallAnalysisUncheckedCreateWithoutTenantInput> | CallAnalysisCreateWithoutTenantInput[] | CallAnalysisUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: CallAnalysisCreateOrConnectWithoutTenantInput | CallAnalysisCreateOrConnectWithoutTenantInput[]
+    upsert?: CallAnalysisUpsertWithWhereUniqueWithoutTenantInput | CallAnalysisUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: CallAnalysisCreateManyTenantInputEnvelope
+    set?: CallAnalysisWhereUniqueInput | CallAnalysisWhereUniqueInput[]
+    disconnect?: CallAnalysisWhereUniqueInput | CallAnalysisWhereUniqueInput[]
+    delete?: CallAnalysisWhereUniqueInput | CallAnalysisWhereUniqueInput[]
+    connect?: CallAnalysisWhereUniqueInput | CallAnalysisWhereUniqueInput[]
+    update?: CallAnalysisUpdateWithWhereUniqueWithoutTenantInput | CallAnalysisUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: CallAnalysisUpdateManyWithWhereWithoutTenantInput | CallAnalysisUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: CallAnalysisScalarWhereInput | CallAnalysisScalarWhereInput[]
+  }
+
   export type UserUncheckedUpdateManyWithoutTenantNestedInput = {
     create?: XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput> | UserCreateWithoutTenantInput[] | UserUncheckedCreateWithoutTenantInput[]
     connectOrCreate?: UserCreateOrConnectWithoutTenantInput | UserCreateOrConnectWithoutTenantInput[]
@@ -13964,6 +16139,20 @@ export namespace Prisma {
     update?: BrochureUpdateWithWhereUniqueWithoutTenantInput | BrochureUpdateWithWhereUniqueWithoutTenantInput[]
     updateMany?: BrochureUpdateManyWithWhereWithoutTenantInput | BrochureUpdateManyWithWhereWithoutTenantInput[]
     deleteMany?: BrochureScalarWhereInput | BrochureScalarWhereInput[]
+  }
+
+  export type CallAnalysisUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<CallAnalysisCreateWithoutTenantInput, CallAnalysisUncheckedCreateWithoutTenantInput> | CallAnalysisCreateWithoutTenantInput[] | CallAnalysisUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: CallAnalysisCreateOrConnectWithoutTenantInput | CallAnalysisCreateOrConnectWithoutTenantInput[]
+    upsert?: CallAnalysisUpsertWithWhereUniqueWithoutTenantInput | CallAnalysisUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: CallAnalysisCreateManyTenantInputEnvelope
+    set?: CallAnalysisWhereUniqueInput | CallAnalysisWhereUniqueInput[]
+    disconnect?: CallAnalysisWhereUniqueInput | CallAnalysisWhereUniqueInput[]
+    delete?: CallAnalysisWhereUniqueInput | CallAnalysisWhereUniqueInput[]
+    connect?: CallAnalysisWhereUniqueInput | CallAnalysisWhereUniqueInput[]
+    update?: CallAnalysisUpdateWithWhereUniqueWithoutTenantInput | CallAnalysisUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: CallAnalysisUpdateManyWithWhereWithoutTenantInput | CallAnalysisUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: CallAnalysisScalarWhereInput | CallAnalysisScalarWhereInput[]
   }
 
   export type TenantCreateNestedOneWithoutUsersInput = {
@@ -14459,6 +16648,18 @@ export namespace Prisma {
     connect?: LeadWhereUniqueInput
   }
 
+  export type CallAnalysisCreateNestedOneWithoutCallInput = {
+    create?: XOR<CallAnalysisCreateWithoutCallInput, CallAnalysisUncheckedCreateWithoutCallInput>
+    connectOrCreate?: CallAnalysisCreateOrConnectWithoutCallInput
+    connect?: CallAnalysisWhereUniqueInput
+  }
+
+  export type CallAnalysisUncheckedCreateNestedOneWithoutCallInput = {
+    create?: XOR<CallAnalysisCreateWithoutCallInput, CallAnalysisUncheckedCreateWithoutCallInput>
+    connectOrCreate?: CallAnalysisCreateOrConnectWithoutCallInput
+    connect?: CallAnalysisWhereUniqueInput
+  }
+
   export type EnumCallStatusFieldUpdateOperationsInput = {
     set?: $Enums.CallStatus
   }
@@ -14485,6 +16686,86 @@ export namespace Prisma {
     upsert?: LeadUpsertWithoutCallsInput
     connect?: LeadWhereUniqueInput
     update?: XOR<XOR<LeadUpdateToOneWithWhereWithoutCallsInput, LeadUpdateWithoutCallsInput>, LeadUncheckedUpdateWithoutCallsInput>
+  }
+
+  export type CallAnalysisUpdateOneWithoutCallNestedInput = {
+    create?: XOR<CallAnalysisCreateWithoutCallInput, CallAnalysisUncheckedCreateWithoutCallInput>
+    connectOrCreate?: CallAnalysisCreateOrConnectWithoutCallInput
+    upsert?: CallAnalysisUpsertWithoutCallInput
+    disconnect?: CallAnalysisWhereInput | boolean
+    delete?: CallAnalysisWhereInput | boolean
+    connect?: CallAnalysisWhereUniqueInput
+    update?: XOR<XOR<CallAnalysisUpdateToOneWithWhereWithoutCallInput, CallAnalysisUpdateWithoutCallInput>, CallAnalysisUncheckedUpdateWithoutCallInput>
+  }
+
+  export type CallAnalysisUncheckedUpdateOneWithoutCallNestedInput = {
+    create?: XOR<CallAnalysisCreateWithoutCallInput, CallAnalysisUncheckedCreateWithoutCallInput>
+    connectOrCreate?: CallAnalysisCreateOrConnectWithoutCallInput
+    upsert?: CallAnalysisUpsertWithoutCallInput
+    disconnect?: CallAnalysisWhereInput | boolean
+    delete?: CallAnalysisWhereInput | boolean
+    connect?: CallAnalysisWhereUniqueInput
+    update?: XOR<XOR<CallAnalysisUpdateToOneWithWhereWithoutCallInput, CallAnalysisUpdateWithoutCallInput>, CallAnalysisUncheckedUpdateWithoutCallInput>
+  }
+
+  export type CallCreateNestedOneWithoutCallAnalysisInput = {
+    create?: XOR<CallCreateWithoutCallAnalysisInput, CallUncheckedCreateWithoutCallAnalysisInput>
+    connectOrCreate?: CallCreateOrConnectWithoutCallAnalysisInput
+    connect?: CallWhereUniqueInput
+  }
+
+  export type TenantCreateNestedOneWithoutCallAnalysesInput = {
+    create?: XOR<TenantCreateWithoutCallAnalysesInput, TenantUncheckedCreateWithoutCallAnalysesInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutCallAnalysesInput
+    connect?: TenantWhereUniqueInput
+  }
+
+  export type NullableEnumDispositionFieldUpdateOperationsInput = {
+    set?: $Enums.Disposition | null
+  }
+
+  export type NullableEnumLeadTemperatureFieldUpdateOperationsInput = {
+    set?: $Enums.LeadTemperature | null
+  }
+
+  export type NullableEnumPurchaseTimelineFieldUpdateOperationsInput = {
+    set?: $Enums.PurchaseTimeline | null
+  }
+
+  export type NullableEnumPurchasePurposeFieldUpdateOperationsInput = {
+    set?: $Enums.PurchasePurpose | null
+  }
+
+  export type NullableEnumLocationMatchFieldUpdateOperationsInput = {
+    set?: $Enums.LocationMatch | null
+  }
+
+  export type NullableEnumPreferredNextActionFieldUpdateOperationsInput = {
+    set?: $Enums.PreferredNextAction | null
+  }
+
+  export type NullableEnumContactChannelFieldUpdateOperationsInput = {
+    set?: $Enums.ContactChannel | null
+  }
+
+  export type NullableEnumExtractionFlagFieldUpdateOperationsInput = {
+    set?: $Enums.ExtractionFlag | null
+  }
+
+  export type CallUpdateOneRequiredWithoutCallAnalysisNestedInput = {
+    create?: XOR<CallCreateWithoutCallAnalysisInput, CallUncheckedCreateWithoutCallAnalysisInput>
+    connectOrCreate?: CallCreateOrConnectWithoutCallAnalysisInput
+    upsert?: CallUpsertWithoutCallAnalysisInput
+    connect?: CallWhereUniqueInput
+    update?: XOR<XOR<CallUpdateToOneWithWhereWithoutCallAnalysisInput, CallUpdateWithoutCallAnalysisInput>, CallUncheckedUpdateWithoutCallAnalysisInput>
+  }
+
+  export type TenantUpdateOneRequiredWithoutCallAnalysesNestedInput = {
+    create?: XOR<TenantCreateWithoutCallAnalysesInput, TenantUncheckedCreateWithoutCallAnalysesInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutCallAnalysesInput
+    upsert?: TenantUpsertWithoutCallAnalysesInput
+    connect?: TenantWhereUniqueInput
+    update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutCallAnalysesInput, TenantUpdateWithoutCallAnalysesInput>, TenantUncheckedUpdateWithoutCallAnalysesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -14834,6 +17115,142 @@ export namespace Prisma {
     _max?: NestedEnumCallStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumDispositionNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.Disposition | EnumDispositionFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Disposition[] | ListEnumDispositionFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Disposition[] | ListEnumDispositionFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumDispositionNullableFilter<$PrismaModel> | $Enums.Disposition | null
+  }
+
+  export type NestedEnumLeadTemperatureNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.LeadTemperature | EnumLeadTemperatureFieldRefInput<$PrismaModel> | null
+    in?: $Enums.LeadTemperature[] | ListEnumLeadTemperatureFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.LeadTemperature[] | ListEnumLeadTemperatureFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumLeadTemperatureNullableFilter<$PrismaModel> | $Enums.LeadTemperature | null
+  }
+
+  export type NestedEnumPurchaseTimelineNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.PurchaseTimeline | EnumPurchaseTimelineFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PurchaseTimeline[] | ListEnumPurchaseTimelineFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PurchaseTimeline[] | ListEnumPurchaseTimelineFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPurchaseTimelineNullableFilter<$PrismaModel> | $Enums.PurchaseTimeline | null
+  }
+
+  export type NestedEnumPurchasePurposeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.PurchasePurpose | EnumPurchasePurposeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PurchasePurpose[] | ListEnumPurchasePurposeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PurchasePurpose[] | ListEnumPurchasePurposeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPurchasePurposeNullableFilter<$PrismaModel> | $Enums.PurchasePurpose | null
+  }
+
+  export type NestedEnumLocationMatchNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.LocationMatch | EnumLocationMatchFieldRefInput<$PrismaModel> | null
+    in?: $Enums.LocationMatch[] | ListEnumLocationMatchFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.LocationMatch[] | ListEnumLocationMatchFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumLocationMatchNullableFilter<$PrismaModel> | $Enums.LocationMatch | null
+  }
+
+  export type NestedEnumPreferredNextActionNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.PreferredNextAction | EnumPreferredNextActionFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PreferredNextAction[] | ListEnumPreferredNextActionFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PreferredNextAction[] | ListEnumPreferredNextActionFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPreferredNextActionNullableFilter<$PrismaModel> | $Enums.PreferredNextAction | null
+  }
+
+  export type NestedEnumContactChannelNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContactChannel | EnumContactChannelFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ContactChannel[] | ListEnumContactChannelFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ContactChannel[] | ListEnumContactChannelFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumContactChannelNullableFilter<$PrismaModel> | $Enums.ContactChannel | null
+  }
+
+  export type NestedEnumExtractionFlagNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ExtractionFlag | EnumExtractionFlagFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ExtractionFlag[] | ListEnumExtractionFlagFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ExtractionFlag[] | ListEnumExtractionFlagFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumExtractionFlagNullableFilter<$PrismaModel> | $Enums.ExtractionFlag | null
+  }
+
+  export type NestedEnumDispositionNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Disposition | EnumDispositionFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Disposition[] | ListEnumDispositionFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Disposition[] | ListEnumDispositionFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumDispositionNullableWithAggregatesFilter<$PrismaModel> | $Enums.Disposition | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumDispositionNullableFilter<$PrismaModel>
+    _max?: NestedEnumDispositionNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumLeadTemperatureNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LeadTemperature | EnumLeadTemperatureFieldRefInput<$PrismaModel> | null
+    in?: $Enums.LeadTemperature[] | ListEnumLeadTemperatureFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.LeadTemperature[] | ListEnumLeadTemperatureFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumLeadTemperatureNullableWithAggregatesFilter<$PrismaModel> | $Enums.LeadTemperature | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumLeadTemperatureNullableFilter<$PrismaModel>
+    _max?: NestedEnumLeadTemperatureNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumPurchaseTimelineNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PurchaseTimeline | EnumPurchaseTimelineFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PurchaseTimeline[] | ListEnumPurchaseTimelineFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PurchaseTimeline[] | ListEnumPurchaseTimelineFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPurchaseTimelineNullableWithAggregatesFilter<$PrismaModel> | $Enums.PurchaseTimeline | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumPurchaseTimelineNullableFilter<$PrismaModel>
+    _max?: NestedEnumPurchaseTimelineNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumPurchasePurposeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PurchasePurpose | EnumPurchasePurposeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PurchasePurpose[] | ListEnumPurchasePurposeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PurchasePurpose[] | ListEnumPurchasePurposeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPurchasePurposeNullableWithAggregatesFilter<$PrismaModel> | $Enums.PurchasePurpose | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumPurchasePurposeNullableFilter<$PrismaModel>
+    _max?: NestedEnumPurchasePurposeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumLocationMatchNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LocationMatch | EnumLocationMatchFieldRefInput<$PrismaModel> | null
+    in?: $Enums.LocationMatch[] | ListEnumLocationMatchFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.LocationMatch[] | ListEnumLocationMatchFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumLocationMatchNullableWithAggregatesFilter<$PrismaModel> | $Enums.LocationMatch | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumLocationMatchNullableFilter<$PrismaModel>
+    _max?: NestedEnumLocationMatchNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumPreferredNextActionNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PreferredNextAction | EnumPreferredNextActionFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PreferredNextAction[] | ListEnumPreferredNextActionFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PreferredNextAction[] | ListEnumPreferredNextActionFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPreferredNextActionNullableWithAggregatesFilter<$PrismaModel> | $Enums.PreferredNextAction | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumPreferredNextActionNullableFilter<$PrismaModel>
+    _max?: NestedEnumPreferredNextActionNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumContactChannelNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContactChannel | EnumContactChannelFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ContactChannel[] | ListEnumContactChannelFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ContactChannel[] | ListEnumContactChannelFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumContactChannelNullableWithAggregatesFilter<$PrismaModel> | $Enums.ContactChannel | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumContactChannelNullableFilter<$PrismaModel>
+    _max?: NestedEnumContactChannelNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumExtractionFlagNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ExtractionFlag | EnumExtractionFlagFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ExtractionFlag[] | ListEnumExtractionFlagFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ExtractionFlag[] | ListEnumExtractionFlagFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumExtractionFlagNullableWithAggregatesFilter<$PrismaModel> | $Enums.ExtractionFlag | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumExtractionFlagNullableFilter<$PrismaModel>
+    _max?: NestedEnumExtractionFlagNullableFilter<$PrismaModel>
+  }
+
   export type UserCreateWithoutTenantInput = {
     id?: string
     email: string
@@ -14921,6 +17338,7 @@ export namespace Prisma {
     email?: string | null
     company?: string | null
     status?: $Enums.LeadStatus
+    doNotCall?: boolean
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14935,6 +17353,7 @@ export namespace Prisma {
     email?: string | null
     company?: string | null
     status?: $Enums.LeadStatus
+    doNotCall?: boolean
     campaignId: string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
@@ -14961,13 +17380,13 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
-    outcome?: string | null
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     campaign: CampaignCreateNestedOneWithoutCallsInput
     lead: LeadCreateNestedOneWithoutCallsInput
+    callAnalysis?: CallAnalysisCreateNestedOneWithoutCallInput
   }
 
   export type CallUncheckedCreateWithoutTenantInput = {
@@ -14981,11 +17400,11 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
-    outcome?: string | null
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    callAnalysis?: CallAnalysisUncheckedCreateNestedOneWithoutCallInput
   }
 
   export type CallCreateOrConnectWithoutTenantInput = {
@@ -15144,6 +17563,56 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CallAnalysisCreateWithoutTenantInput = {
+    id?: string
+    disposition?: $Enums.Disposition | null
+    leadTemperature?: $Enums.LeadTemperature | null
+    preferredConfiguration?: string | null
+    budgetRange?: string | null
+    purchaseTimeline?: $Enums.PurchaseTimeline | null
+    purchasePurpose?: $Enums.PurchasePurpose | null
+    locationMatch?: $Enums.LocationMatch | null
+    customerLocationPref?: string | null
+    preferredNextAction?: $Enums.PreferredNextAction | null
+    preferredContactChannel?: $Enums.ContactChannel | null
+    followupSchedule?: string | null
+    doNotCall?: $Enums.ExtractionFlag | null
+    languageSupportRequired?: $Enums.ExtractionFlag | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    call: CallCreateNestedOneWithoutCallAnalysisInput
+  }
+
+  export type CallAnalysisUncheckedCreateWithoutTenantInput = {
+    id?: string
+    callId: string
+    disposition?: $Enums.Disposition | null
+    leadTemperature?: $Enums.LeadTemperature | null
+    preferredConfiguration?: string | null
+    budgetRange?: string | null
+    purchaseTimeline?: $Enums.PurchaseTimeline | null
+    purchasePurpose?: $Enums.PurchasePurpose | null
+    locationMatch?: $Enums.LocationMatch | null
+    customerLocationPref?: string | null
+    preferredNextAction?: $Enums.PreferredNextAction | null
+    preferredContactChannel?: $Enums.ContactChannel | null
+    followupSchedule?: string | null
+    doNotCall?: $Enums.ExtractionFlag | null
+    languageSupportRequired?: $Enums.ExtractionFlag | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CallAnalysisCreateOrConnectWithoutTenantInput = {
+    where: CallAnalysisWhereUniqueInput
+    create: XOR<CallAnalysisCreateWithoutTenantInput, CallAnalysisUncheckedCreateWithoutTenantInput>
+  }
+
+  export type CallAnalysisCreateManyTenantInputEnvelope = {
+    data: CallAnalysisCreateManyTenantInput | CallAnalysisCreateManyTenantInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithWhereUniqueWithoutTenantInput = {
     where: UserWhereUniqueInput
     update: XOR<UserUpdateWithoutTenantInput, UserUncheckedUpdateWithoutTenantInput>
@@ -15238,6 +17707,7 @@ export namespace Prisma {
     email?: StringNullableFilter<"Lead"> | string | null
     company?: StringNullableFilter<"Lead"> | string | null
     status?: EnumLeadStatusFilter<"Lead"> | $Enums.LeadStatus
+    doNotCall?: BoolFilter<"Lead"> | boolean
     tenantId?: StringFilter<"Lead"> | string
     campaignId?: StringFilter<"Lead"> | string
     metadata?: JsonNullableFilter<"Lead">
@@ -15276,7 +17746,6 @@ export namespace Prisma {
     transcript?: StringNullableFilter<"Call"> | string | null
     transcriptMessages?: JsonNullableFilter<"Call">
     summary?: StringNullableFilter<"Call"> | string | null
-    outcome?: StringNullableFilter<"Call"> | string | null
     startedAt?: DateTimeNullableFilter<"Call"> | Date | string | null
     endedAt?: DateTimeNullableFilter<"Call"> | Date | string | null
     createdAt?: DateTimeFilter<"Call"> | Date | string
@@ -15384,6 +17853,46 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Brochure"> | Date | string
   }
 
+  export type CallAnalysisUpsertWithWhereUniqueWithoutTenantInput = {
+    where: CallAnalysisWhereUniqueInput
+    update: XOR<CallAnalysisUpdateWithoutTenantInput, CallAnalysisUncheckedUpdateWithoutTenantInput>
+    create: XOR<CallAnalysisCreateWithoutTenantInput, CallAnalysisUncheckedCreateWithoutTenantInput>
+  }
+
+  export type CallAnalysisUpdateWithWhereUniqueWithoutTenantInput = {
+    where: CallAnalysisWhereUniqueInput
+    data: XOR<CallAnalysisUpdateWithoutTenantInput, CallAnalysisUncheckedUpdateWithoutTenantInput>
+  }
+
+  export type CallAnalysisUpdateManyWithWhereWithoutTenantInput = {
+    where: CallAnalysisScalarWhereInput
+    data: XOR<CallAnalysisUpdateManyMutationInput, CallAnalysisUncheckedUpdateManyWithoutTenantInput>
+  }
+
+  export type CallAnalysisScalarWhereInput = {
+    AND?: CallAnalysisScalarWhereInput | CallAnalysisScalarWhereInput[]
+    OR?: CallAnalysisScalarWhereInput[]
+    NOT?: CallAnalysisScalarWhereInput | CallAnalysisScalarWhereInput[]
+    id?: StringFilter<"CallAnalysis"> | string
+    callId?: StringFilter<"CallAnalysis"> | string
+    tenantId?: StringFilter<"CallAnalysis"> | string
+    disposition?: EnumDispositionNullableFilter<"CallAnalysis"> | $Enums.Disposition | null
+    leadTemperature?: EnumLeadTemperatureNullableFilter<"CallAnalysis"> | $Enums.LeadTemperature | null
+    preferredConfiguration?: StringNullableFilter<"CallAnalysis"> | string | null
+    budgetRange?: StringNullableFilter<"CallAnalysis"> | string | null
+    purchaseTimeline?: EnumPurchaseTimelineNullableFilter<"CallAnalysis"> | $Enums.PurchaseTimeline | null
+    purchasePurpose?: EnumPurchasePurposeNullableFilter<"CallAnalysis"> | $Enums.PurchasePurpose | null
+    locationMatch?: EnumLocationMatchNullableFilter<"CallAnalysis"> | $Enums.LocationMatch | null
+    customerLocationPref?: StringNullableFilter<"CallAnalysis"> | string | null
+    preferredNextAction?: EnumPreferredNextActionNullableFilter<"CallAnalysis"> | $Enums.PreferredNextAction | null
+    preferredContactChannel?: EnumContactChannelNullableFilter<"CallAnalysis"> | $Enums.ContactChannel | null
+    followupSchedule?: StringNullableFilter<"CallAnalysis"> | string | null
+    doNotCall?: EnumExtractionFlagNullableFilter<"CallAnalysis"> | $Enums.ExtractionFlag | null
+    languageSupportRequired?: EnumExtractionFlagNullableFilter<"CallAnalysis"> | $Enums.ExtractionFlag | null
+    createdAt?: DateTimeFilter<"CallAnalysis"> | Date | string
+    updatedAt?: DateTimeFilter<"CallAnalysis"> | Date | string
+  }
+
   export type TenantCreateWithoutUsersInput = {
     id?: string
     name: string
@@ -15397,6 +17906,7 @@ export namespace Prisma {
     calls?: CallCreateNestedManyWithoutTenantInput
     assistants?: AssistantCreateNestedManyWithoutTenantInput
     brochures?: BrochureCreateNestedManyWithoutTenantInput
+    callAnalyses?: CallAnalysisCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutUsersInput = {
@@ -15412,6 +17922,7 @@ export namespace Prisma {
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
     assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
     brochures?: BrochureUncheckedCreateNestedManyWithoutTenantInput
+    callAnalyses?: CallAnalysisUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutUsersInput = {
@@ -15443,6 +17954,7 @@ export namespace Prisma {
     calls?: CallUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUpdateManyWithoutTenantNestedInput
     brochures?: BrochureUpdateManyWithoutTenantNestedInput
+    callAnalyses?: CallAnalysisUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -15458,6 +17970,7 @@ export namespace Prisma {
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
     brochures?: BrochureUncheckedUpdateManyWithoutTenantNestedInput
+    callAnalyses?: CallAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantCreateWithoutAssistantsInput = {
@@ -15473,6 +17986,7 @@ export namespace Prisma {
     leads?: LeadCreateNestedManyWithoutTenantInput
     calls?: CallCreateNestedManyWithoutTenantInput
     brochures?: BrochureCreateNestedManyWithoutTenantInput
+    callAnalyses?: CallAnalysisCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutAssistantsInput = {
@@ -15488,6 +18002,7 @@ export namespace Prisma {
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
     brochures?: BrochureUncheckedCreateNestedManyWithoutTenantInput
+    callAnalyses?: CallAnalysisUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutAssistantsInput = {
@@ -15569,6 +18084,7 @@ export namespace Prisma {
     leads?: LeadUpdateManyWithoutTenantNestedInput
     calls?: CallUpdateManyWithoutTenantNestedInput
     brochures?: BrochureUpdateManyWithoutTenantNestedInput
+    callAnalyses?: CallAnalysisUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutAssistantsInput = {
@@ -15584,6 +18100,7 @@ export namespace Prisma {
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
     brochures?: BrochureUncheckedUpdateManyWithoutTenantNestedInput
+    callAnalyses?: CallAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type CampaignUpsertWithWhereUniqueWithoutAssistantInput = {
@@ -15615,6 +18132,7 @@ export namespace Prisma {
     leads?: LeadCreateNestedManyWithoutTenantInput
     calls?: CallCreateNestedManyWithoutTenantInput
     assistants?: AssistantCreateNestedManyWithoutTenantInput
+    callAnalyses?: CallAnalysisCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutBrochuresInput = {
@@ -15630,6 +18148,7 @@ export namespace Prisma {
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
     assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
+    callAnalyses?: CallAnalysisUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutBrochuresInput = {
@@ -15711,6 +18230,7 @@ export namespace Prisma {
     leads?: LeadUpdateManyWithoutTenantNestedInput
     calls?: CallUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUpdateManyWithoutTenantNestedInput
+    callAnalyses?: CallAnalysisUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutBrochuresInput = {
@@ -15726,6 +18246,7 @@ export namespace Prisma {
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
+    callAnalyses?: CallAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type CampaignUpsertWithWhereUniqueWithoutBrochureInput = {
@@ -15757,6 +18278,7 @@ export namespace Prisma {
     calls?: CallCreateNestedManyWithoutTenantInput
     assistants?: AssistantCreateNestedManyWithoutTenantInput
     brochures?: BrochureCreateNestedManyWithoutTenantInput
+    callAnalyses?: CallAnalysisCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutCampaignsInput = {
@@ -15772,6 +18294,7 @@ export namespace Prisma {
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
     assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
     brochures?: BrochureUncheckedCreateNestedManyWithoutTenantInput
+    callAnalyses?: CallAnalysisUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutCampaignsInput = {
@@ -15922,6 +18445,7 @@ export namespace Prisma {
     email?: string | null
     company?: string | null
     status?: $Enums.LeadStatus
+    doNotCall?: boolean
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15936,6 +18460,7 @@ export namespace Prisma {
     email?: string | null
     company?: string | null
     status?: $Enums.LeadStatus
+    doNotCall?: boolean
     tenantId: string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
@@ -15962,13 +18487,13 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
-    outcome?: string | null
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tenant: TenantCreateNestedOneWithoutCallsInput
     lead: LeadCreateNestedOneWithoutCallsInput
+    callAnalysis?: CallAnalysisCreateNestedOneWithoutCallInput
   }
 
   export type CallUncheckedCreateWithoutCampaignInput = {
@@ -15982,11 +18507,11 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
-    outcome?: string | null
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    callAnalysis?: CallAnalysisUncheckedCreateNestedOneWithoutCallInput
   }
 
   export type CallCreateOrConnectWithoutCampaignInput = {
@@ -16023,6 +18548,7 @@ export namespace Prisma {
     calls?: CallUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUpdateManyWithoutTenantNestedInput
     brochures?: BrochureUpdateManyWithoutTenantNestedInput
+    callAnalyses?: CallAnalysisUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutCampaignsInput = {
@@ -16038,6 +18564,7 @@ export namespace Prisma {
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
     brochures?: BrochureUncheckedUpdateManyWithoutTenantNestedInput
+    callAnalyses?: CallAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type AssistantUpsertWithoutCampaignsInput = {
@@ -16233,6 +18760,7 @@ export namespace Prisma {
     calls?: CallCreateNestedManyWithoutTenantInput
     assistants?: AssistantCreateNestedManyWithoutTenantInput
     brochures?: BrochureCreateNestedManyWithoutTenantInput
+    callAnalyses?: CallAnalysisCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutLeadsInput = {
@@ -16248,6 +18776,7 @@ export namespace Prisma {
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
     assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
     brochures?: BrochureUncheckedCreateNestedManyWithoutTenantInput
+    callAnalyses?: CallAnalysisUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutLeadsInput = {
@@ -16309,13 +18838,13 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
-    outcome?: string | null
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tenant: TenantCreateNestedOneWithoutCallsInput
     campaign: CampaignCreateNestedOneWithoutCallsInput
+    callAnalysis?: CallAnalysisCreateNestedOneWithoutCallInput
   }
 
   export type CallUncheckedCreateWithoutLeadInput = {
@@ -16329,11 +18858,11 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
-    outcome?: string | null
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    callAnalysis?: CallAnalysisUncheckedCreateNestedOneWithoutCallInput
   }
 
   export type CallCreateOrConnectWithoutLeadInput = {
@@ -16370,6 +18899,7 @@ export namespace Prisma {
     calls?: CallUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUpdateManyWithoutTenantNestedInput
     brochures?: BrochureUpdateManyWithoutTenantNestedInput
+    callAnalyses?: CallAnalysisUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutLeadsInput = {
@@ -16385,6 +18915,7 @@ export namespace Prisma {
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
     brochures?: BrochureUncheckedUpdateManyWithoutTenantNestedInput
+    callAnalyses?: CallAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type CampaignUpsertWithoutLeadsInput = {
@@ -16467,6 +18998,7 @@ export namespace Prisma {
     leads?: LeadCreateNestedManyWithoutTenantInput
     assistants?: AssistantCreateNestedManyWithoutTenantInput
     brochures?: BrochureCreateNestedManyWithoutTenantInput
+    callAnalyses?: CallAnalysisCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateWithoutCallsInput = {
@@ -16482,6 +19014,7 @@ export namespace Prisma {
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
     assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
     brochures?: BrochureUncheckedCreateNestedManyWithoutTenantInput
+    callAnalyses?: CallAnalysisUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantCreateOrConnectWithoutCallsInput = {
@@ -16541,6 +19074,7 @@ export namespace Prisma {
     email?: string | null
     company?: string | null
     status?: $Enums.LeadStatus
+    doNotCall?: boolean
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16555,6 +19089,7 @@ export namespace Prisma {
     email?: string | null
     company?: string | null
     status?: $Enums.LeadStatus
+    doNotCall?: boolean
     tenantId: string
     campaignId: string
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -16565,6 +19100,51 @@ export namespace Prisma {
   export type LeadCreateOrConnectWithoutCallsInput = {
     where: LeadWhereUniqueInput
     create: XOR<LeadCreateWithoutCallsInput, LeadUncheckedCreateWithoutCallsInput>
+  }
+
+  export type CallAnalysisCreateWithoutCallInput = {
+    id?: string
+    disposition?: $Enums.Disposition | null
+    leadTemperature?: $Enums.LeadTemperature | null
+    preferredConfiguration?: string | null
+    budgetRange?: string | null
+    purchaseTimeline?: $Enums.PurchaseTimeline | null
+    purchasePurpose?: $Enums.PurchasePurpose | null
+    locationMatch?: $Enums.LocationMatch | null
+    customerLocationPref?: string | null
+    preferredNextAction?: $Enums.PreferredNextAction | null
+    preferredContactChannel?: $Enums.ContactChannel | null
+    followupSchedule?: string | null
+    doNotCall?: $Enums.ExtractionFlag | null
+    languageSupportRequired?: $Enums.ExtractionFlag | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutCallAnalysesInput
+  }
+
+  export type CallAnalysisUncheckedCreateWithoutCallInput = {
+    id?: string
+    tenantId: string
+    disposition?: $Enums.Disposition | null
+    leadTemperature?: $Enums.LeadTemperature | null
+    preferredConfiguration?: string | null
+    budgetRange?: string | null
+    purchaseTimeline?: $Enums.PurchaseTimeline | null
+    purchasePurpose?: $Enums.PurchasePurpose | null
+    locationMatch?: $Enums.LocationMatch | null
+    customerLocationPref?: string | null
+    preferredNextAction?: $Enums.PreferredNextAction | null
+    preferredContactChannel?: $Enums.ContactChannel | null
+    followupSchedule?: string | null
+    doNotCall?: $Enums.ExtractionFlag | null
+    languageSupportRequired?: $Enums.ExtractionFlag | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CallAnalysisCreateOrConnectWithoutCallInput = {
+    where: CallAnalysisWhereUniqueInput
+    create: XOR<CallAnalysisCreateWithoutCallInput, CallAnalysisUncheckedCreateWithoutCallInput>
   }
 
   export type TenantUpsertWithoutCallsInput = {
@@ -16591,6 +19171,7 @@ export namespace Prisma {
     leads?: LeadUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUpdateManyWithoutTenantNestedInput
     brochures?: BrochureUpdateManyWithoutTenantNestedInput
+    callAnalyses?: CallAnalysisUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateWithoutCallsInput = {
@@ -16606,6 +19187,7 @@ export namespace Prisma {
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
     brochures?: BrochureUncheckedUpdateManyWithoutTenantNestedInput
+    callAnalyses?: CallAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type CampaignUpsertWithoutCallsInput = {
@@ -16677,6 +19259,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    doNotCall?: BoolFieldUpdateOperationsInput | boolean
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16691,11 +19274,231 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    doNotCall?: BoolFieldUpdateOperationsInput | boolean
     tenantId?: StringFieldUpdateOperationsInput | string
     campaignId?: StringFieldUpdateOperationsInput | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallAnalysisUpsertWithoutCallInput = {
+    update: XOR<CallAnalysisUpdateWithoutCallInput, CallAnalysisUncheckedUpdateWithoutCallInput>
+    create: XOR<CallAnalysisCreateWithoutCallInput, CallAnalysisUncheckedCreateWithoutCallInput>
+    where?: CallAnalysisWhereInput
+  }
+
+  export type CallAnalysisUpdateToOneWithWhereWithoutCallInput = {
+    where?: CallAnalysisWhereInput
+    data: XOR<CallAnalysisUpdateWithoutCallInput, CallAnalysisUncheckedUpdateWithoutCallInput>
+  }
+
+  export type CallAnalysisUpdateWithoutCallInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    disposition?: NullableEnumDispositionFieldUpdateOperationsInput | $Enums.Disposition | null
+    leadTemperature?: NullableEnumLeadTemperatureFieldUpdateOperationsInput | $Enums.LeadTemperature | null
+    preferredConfiguration?: NullableStringFieldUpdateOperationsInput | string | null
+    budgetRange?: NullableStringFieldUpdateOperationsInput | string | null
+    purchaseTimeline?: NullableEnumPurchaseTimelineFieldUpdateOperationsInput | $Enums.PurchaseTimeline | null
+    purchasePurpose?: NullableEnumPurchasePurposeFieldUpdateOperationsInput | $Enums.PurchasePurpose | null
+    locationMatch?: NullableEnumLocationMatchFieldUpdateOperationsInput | $Enums.LocationMatch | null
+    customerLocationPref?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredNextAction?: NullableEnumPreferredNextActionFieldUpdateOperationsInput | $Enums.PreferredNextAction | null
+    preferredContactChannel?: NullableEnumContactChannelFieldUpdateOperationsInput | $Enums.ContactChannel | null
+    followupSchedule?: NullableStringFieldUpdateOperationsInput | string | null
+    doNotCall?: NullableEnumExtractionFlagFieldUpdateOperationsInput | $Enums.ExtractionFlag | null
+    languageSupportRequired?: NullableEnumExtractionFlagFieldUpdateOperationsInput | $Enums.ExtractionFlag | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutCallAnalysesNestedInput
+  }
+
+  export type CallAnalysisUncheckedUpdateWithoutCallInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    disposition?: NullableEnumDispositionFieldUpdateOperationsInput | $Enums.Disposition | null
+    leadTemperature?: NullableEnumLeadTemperatureFieldUpdateOperationsInput | $Enums.LeadTemperature | null
+    preferredConfiguration?: NullableStringFieldUpdateOperationsInput | string | null
+    budgetRange?: NullableStringFieldUpdateOperationsInput | string | null
+    purchaseTimeline?: NullableEnumPurchaseTimelineFieldUpdateOperationsInput | $Enums.PurchaseTimeline | null
+    purchasePurpose?: NullableEnumPurchasePurposeFieldUpdateOperationsInput | $Enums.PurchasePurpose | null
+    locationMatch?: NullableEnumLocationMatchFieldUpdateOperationsInput | $Enums.LocationMatch | null
+    customerLocationPref?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredNextAction?: NullableEnumPreferredNextActionFieldUpdateOperationsInput | $Enums.PreferredNextAction | null
+    preferredContactChannel?: NullableEnumContactChannelFieldUpdateOperationsInput | $Enums.ContactChannel | null
+    followupSchedule?: NullableStringFieldUpdateOperationsInput | string | null
+    doNotCall?: NullableEnumExtractionFlagFieldUpdateOperationsInput | $Enums.ExtractionFlag | null
+    languageSupportRequired?: NullableEnumExtractionFlagFieldUpdateOperationsInput | $Enums.ExtractionFlag | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallCreateWithoutCallAnalysisInput = {
+    id?: string
+    bolnaCallId?: string | null
+    status?: $Enums.CallStatus
+    duration?: number | null
+    recording?: string | null
+    transcript?: string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
+    summary?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutCallsInput
+    campaign: CampaignCreateNestedOneWithoutCallsInput
+    lead: LeadCreateNestedOneWithoutCallsInput
+  }
+
+  export type CallUncheckedCreateWithoutCallAnalysisInput = {
+    id?: string
+    bolnaCallId?: string | null
+    tenantId: string
+    campaignId: string
+    leadId: string
+    status?: $Enums.CallStatus
+    duration?: number | null
+    recording?: string | null
+    transcript?: string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
+    summary?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CallCreateOrConnectWithoutCallAnalysisInput = {
+    where: CallWhereUniqueInput
+    create: XOR<CallCreateWithoutCallAnalysisInput, CallUncheckedCreateWithoutCallAnalysisInput>
+  }
+
+  export type TenantCreateWithoutCallAnalysesInput = {
+    id?: string
+    name: string
+    email: string
+    apiKey?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserCreateNestedManyWithoutTenantInput
+    campaigns?: CampaignCreateNestedManyWithoutTenantInput
+    leads?: LeadCreateNestedManyWithoutTenantInput
+    calls?: CallCreateNestedManyWithoutTenantInput
+    assistants?: AssistantCreateNestedManyWithoutTenantInput
+    brochures?: BrochureCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutCallAnalysesInput = {
+    id?: string
+    name: string
+    email: string
+    apiKey?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserUncheckedCreateNestedManyWithoutTenantInput
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
+    leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
+    calls?: CallUncheckedCreateNestedManyWithoutTenantInput
+    assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
+    brochures?: BrochureUncheckedCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutCallAnalysesInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutCallAnalysesInput, TenantUncheckedCreateWithoutCallAnalysesInput>
+  }
+
+  export type CallUpsertWithoutCallAnalysisInput = {
+    update: XOR<CallUpdateWithoutCallAnalysisInput, CallUncheckedUpdateWithoutCallAnalysisInput>
+    create: XOR<CallCreateWithoutCallAnalysisInput, CallUncheckedCreateWithoutCallAnalysisInput>
+    where?: CallWhereInput
+  }
+
+  export type CallUpdateToOneWithWhereWithoutCallAnalysisInput = {
+    where?: CallWhereInput
+    data: XOR<CallUpdateWithoutCallAnalysisInput, CallUncheckedUpdateWithoutCallAnalysisInput>
+  }
+
+  export type CallUpdateWithoutCallAnalysisInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    recording?: NullableStringFieldUpdateOperationsInput | string | null
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutCallsNestedInput
+    campaign?: CampaignUpdateOneRequiredWithoutCallsNestedInput
+    lead?: LeadUpdateOneRequiredWithoutCallsNestedInput
+  }
+
+  export type CallUncheckedUpdateWithoutCallAnalysisInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
+    tenantId?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    leadId?: StringFieldUpdateOperationsInput | string
+    status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    recording?: NullableStringFieldUpdateOperationsInput | string | null
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TenantUpsertWithoutCallAnalysesInput = {
+    update: XOR<TenantUpdateWithoutCallAnalysesInput, TenantUncheckedUpdateWithoutCallAnalysesInput>
+    create: XOR<TenantCreateWithoutCallAnalysesInput, TenantUncheckedCreateWithoutCallAnalysesInput>
+    where?: TenantWhereInput
+  }
+
+  export type TenantUpdateToOneWithWhereWithoutCallAnalysesInput = {
+    where?: TenantWhereInput
+    data: XOR<TenantUpdateWithoutCallAnalysesInput, TenantUncheckedUpdateWithoutCallAnalysesInput>
+  }
+
+  export type TenantUpdateWithoutCallAnalysesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    apiKey?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUpdateManyWithoutTenantNestedInput
+    campaigns?: CampaignUpdateManyWithoutTenantNestedInput
+    leads?: LeadUpdateManyWithoutTenantNestedInput
+    calls?: CallUpdateManyWithoutTenantNestedInput
+    assistants?: AssistantUpdateManyWithoutTenantNestedInput
+    brochures?: BrochureUpdateManyWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutCallAnalysesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    apiKey?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUncheckedUpdateManyWithoutTenantNestedInput
+    campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
+    calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
+    assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
+    brochures?: BrochureUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type UserCreateManyTenantInput = {
@@ -16733,6 +19536,7 @@ export namespace Prisma {
     email?: string | null
     company?: string | null
     status?: $Enums.LeadStatus
+    doNotCall?: boolean
     campaignId: string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
@@ -16750,7 +19554,6 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
-    outcome?: string | null
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
@@ -16814,6 +19617,26 @@ export namespace Prisma {
     extractionWarnings?: BrochureCreateextractionWarningsInput | string[]
     isConfirmed?: boolean
     confirmedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CallAnalysisCreateManyTenantInput = {
+    id?: string
+    callId: string
+    disposition?: $Enums.Disposition | null
+    leadTemperature?: $Enums.LeadTemperature | null
+    preferredConfiguration?: string | null
+    budgetRange?: string | null
+    purchaseTimeline?: $Enums.PurchaseTimeline | null
+    purchasePurpose?: $Enums.PurchasePurpose | null
+    locationMatch?: $Enums.LocationMatch | null
+    customerLocationPref?: string | null
+    preferredNextAction?: $Enums.PreferredNextAction | null
+    preferredContactChannel?: $Enums.ContactChannel | null
+    followupSchedule?: string | null
+    doNotCall?: $Enums.ExtractionFlag | null
+    languageSupportRequired?: $Enums.ExtractionFlag | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -16913,6 +19736,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    doNotCall?: BoolFieldUpdateOperationsInput | boolean
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16927,6 +19751,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    doNotCall?: BoolFieldUpdateOperationsInput | boolean
     campaignId?: StringFieldUpdateOperationsInput | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16941,6 +19766,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    doNotCall?: BoolFieldUpdateOperationsInput | boolean
     campaignId?: StringFieldUpdateOperationsInput | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16956,13 +19782,13 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
-    outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     campaign?: CampaignUpdateOneRequiredWithoutCallsNestedInput
     lead?: LeadUpdateOneRequiredWithoutCallsNestedInput
+    callAnalysis?: CallAnalysisUpdateOneWithoutCallNestedInput
   }
 
   export type CallUncheckedUpdateWithoutTenantInput = {
@@ -16976,11 +19802,11 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
-    outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    callAnalysis?: CallAnalysisUncheckedUpdateOneWithoutCallNestedInput
   }
 
   export type CallUncheckedUpdateManyWithoutTenantInput = {
@@ -16994,7 +19820,6 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
-    outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17188,6 +20013,66 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CallAnalysisUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    disposition?: NullableEnumDispositionFieldUpdateOperationsInput | $Enums.Disposition | null
+    leadTemperature?: NullableEnumLeadTemperatureFieldUpdateOperationsInput | $Enums.LeadTemperature | null
+    preferredConfiguration?: NullableStringFieldUpdateOperationsInput | string | null
+    budgetRange?: NullableStringFieldUpdateOperationsInput | string | null
+    purchaseTimeline?: NullableEnumPurchaseTimelineFieldUpdateOperationsInput | $Enums.PurchaseTimeline | null
+    purchasePurpose?: NullableEnumPurchasePurposeFieldUpdateOperationsInput | $Enums.PurchasePurpose | null
+    locationMatch?: NullableEnumLocationMatchFieldUpdateOperationsInput | $Enums.LocationMatch | null
+    customerLocationPref?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredNextAction?: NullableEnumPreferredNextActionFieldUpdateOperationsInput | $Enums.PreferredNextAction | null
+    preferredContactChannel?: NullableEnumContactChannelFieldUpdateOperationsInput | $Enums.ContactChannel | null
+    followupSchedule?: NullableStringFieldUpdateOperationsInput | string | null
+    doNotCall?: NullableEnumExtractionFlagFieldUpdateOperationsInput | $Enums.ExtractionFlag | null
+    languageSupportRequired?: NullableEnumExtractionFlagFieldUpdateOperationsInput | $Enums.ExtractionFlag | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    call?: CallUpdateOneRequiredWithoutCallAnalysisNestedInput
+  }
+
+  export type CallAnalysisUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    callId?: StringFieldUpdateOperationsInput | string
+    disposition?: NullableEnumDispositionFieldUpdateOperationsInput | $Enums.Disposition | null
+    leadTemperature?: NullableEnumLeadTemperatureFieldUpdateOperationsInput | $Enums.LeadTemperature | null
+    preferredConfiguration?: NullableStringFieldUpdateOperationsInput | string | null
+    budgetRange?: NullableStringFieldUpdateOperationsInput | string | null
+    purchaseTimeline?: NullableEnumPurchaseTimelineFieldUpdateOperationsInput | $Enums.PurchaseTimeline | null
+    purchasePurpose?: NullableEnumPurchasePurposeFieldUpdateOperationsInput | $Enums.PurchasePurpose | null
+    locationMatch?: NullableEnumLocationMatchFieldUpdateOperationsInput | $Enums.LocationMatch | null
+    customerLocationPref?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredNextAction?: NullableEnumPreferredNextActionFieldUpdateOperationsInput | $Enums.PreferredNextAction | null
+    preferredContactChannel?: NullableEnumContactChannelFieldUpdateOperationsInput | $Enums.ContactChannel | null
+    followupSchedule?: NullableStringFieldUpdateOperationsInput | string | null
+    doNotCall?: NullableEnumExtractionFlagFieldUpdateOperationsInput | $Enums.ExtractionFlag | null
+    languageSupportRequired?: NullableEnumExtractionFlagFieldUpdateOperationsInput | $Enums.ExtractionFlag | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallAnalysisUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    callId?: StringFieldUpdateOperationsInput | string
+    disposition?: NullableEnumDispositionFieldUpdateOperationsInput | $Enums.Disposition | null
+    leadTemperature?: NullableEnumLeadTemperatureFieldUpdateOperationsInput | $Enums.LeadTemperature | null
+    preferredConfiguration?: NullableStringFieldUpdateOperationsInput | string | null
+    budgetRange?: NullableStringFieldUpdateOperationsInput | string | null
+    purchaseTimeline?: NullableEnumPurchaseTimelineFieldUpdateOperationsInput | $Enums.PurchaseTimeline | null
+    purchasePurpose?: NullableEnumPurchasePurposeFieldUpdateOperationsInput | $Enums.PurchasePurpose | null
+    locationMatch?: NullableEnumLocationMatchFieldUpdateOperationsInput | $Enums.LocationMatch | null
+    customerLocationPref?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredNextAction?: NullableEnumPreferredNextActionFieldUpdateOperationsInput | $Enums.PreferredNextAction | null
+    preferredContactChannel?: NullableEnumContactChannelFieldUpdateOperationsInput | $Enums.ContactChannel | null
+    followupSchedule?: NullableStringFieldUpdateOperationsInput | string | null
+    doNotCall?: NullableEnumExtractionFlagFieldUpdateOperationsInput | $Enums.ExtractionFlag | null
+    languageSupportRequired?: NullableEnumExtractionFlagFieldUpdateOperationsInput | $Enums.ExtractionFlag | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type CampaignCreateManyAssistantInput = {
     id?: string
     name: string
@@ -17347,6 +20232,7 @@ export namespace Prisma {
     email?: string | null
     company?: string | null
     status?: $Enums.LeadStatus
+    doNotCall?: boolean
     tenantId: string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
@@ -17364,7 +20250,6 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
-    outcome?: string | null
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
@@ -17378,6 +20263,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    doNotCall?: BoolFieldUpdateOperationsInput | boolean
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17392,6 +20278,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    doNotCall?: BoolFieldUpdateOperationsInput | boolean
     tenantId?: StringFieldUpdateOperationsInput | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17406,6 +20293,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    doNotCall?: BoolFieldUpdateOperationsInput | boolean
     tenantId?: StringFieldUpdateOperationsInput | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17421,13 +20309,13 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
-    outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tenant?: TenantUpdateOneRequiredWithoutCallsNestedInput
     lead?: LeadUpdateOneRequiredWithoutCallsNestedInput
+    callAnalysis?: CallAnalysisUpdateOneWithoutCallNestedInput
   }
 
   export type CallUncheckedUpdateWithoutCampaignInput = {
@@ -17441,11 +20329,11 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
-    outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    callAnalysis?: CallAnalysisUncheckedUpdateOneWithoutCallNestedInput
   }
 
   export type CallUncheckedUpdateManyWithoutCampaignInput = {
@@ -17459,7 +20347,6 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
-    outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17477,7 +20364,6 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
-    outcome?: string | null
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
@@ -17493,13 +20379,13 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
-    outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tenant?: TenantUpdateOneRequiredWithoutCallsNestedInput
     campaign?: CampaignUpdateOneRequiredWithoutCallsNestedInput
+    callAnalysis?: CallAnalysisUpdateOneWithoutCallNestedInput
   }
 
   export type CallUncheckedUpdateWithoutLeadInput = {
@@ -17513,11 +20399,11 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
-    outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    callAnalysis?: CallAnalysisUncheckedUpdateOneWithoutCallNestedInput
   }
 
   export type CallUncheckedUpdateManyWithoutLeadInput = {
@@ -17531,7 +20417,6 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
-    outcome?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

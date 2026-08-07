@@ -1,3 +1,5 @@
+// src/types/bolna.types.ts
+
 export interface BolnaCallPayload {
   agent_id: string;
   recipient_phone_number: string;
@@ -5,17 +7,15 @@ export interface BolnaCallPayload {
 }
 
 export interface BolnaCallResponse {
-  // Bolna top-level call object
-  id: string; // ← confirmed: "17d9ad0f-..."
-  status: string; // "queued" | "in-progress" | "completed"
+  id: string;
+  status: string;
   agent_id: string;
   message?: string;
 
-  // Legacy fields from queue response — keep as fallback
+  // Legacy fallbacks
   execution_id?: string;
   run_id?: string;
 
-  // Call data (populated after completion)
   transcript?: string | null;
   summary?: string | null;
   conversation_duration?: number;
@@ -49,26 +49,6 @@ export interface BolnaCreateAgentPayload {
   agent_type: string;
   tasks: BolnaTask[];
 }
-
-// export interface BolnaTask {
-//   task_type: string;
-//   toolchain: BolnaToolchain;
-//   task_config?: Record<string, any>;
-// }
-
-// export interface BolnaToolchain {
-//   execution: string;
-//   pipelines: string[][];
-// }
-
-// export interface BolnaAgentResponse {
-//   agent_id: string;
-//   agent_name: string;
-//   agent_type: string;
-//   created_at: string;
-// }
-
-
 
 // ─────────────────────────────────────────────────────────────────────────────
 // LLM CONFIG
@@ -254,3 +234,74 @@ export interface BolnaAgentResponse {
   agent_prompts: BolnaAgentPrompts;
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// BOLNA EXTRACTION — per-field shape returned by Bolna AI
+// ─────────────────────────────────────────────────────────────────────────────
+export enum BolnaDataSection {
+  CALL_OUTCOME = "Call Outcome",
+  LEAD_QUALIFICATION = "Lead Qualification",
+  NEXT_ACTION_AND_CONTACT_PREFERENCE = "Next Action and Contact Preference",
+  FOLLOW_UP_SCHEDULE = "Follow-Up Schedule",
+  COMPLIANCE = "Compliance",
+  SUMMARY = "Summary",
+}
+
+export interface BolnaExtractedField {
+  subjective: string | null;
+  objective: string | null;
+  confidence: number;
+  confidence_label: string;
+  reasoning_subjective: string | null;
+  reasoning_objective: string | null;
+  validation: string | null;
+}
+
+export interface BolnaExtractedData {
+  [BolnaDataSection.CALL_OUTCOME]?: {
+    disposition?: BolnaExtractedField;
+    lead_temperature?: BolnaExtractedField;
+  };
+  [BolnaDataSection.LEAD_QUALIFICATION]?: {
+    preferred_configuration?: BolnaExtractedField;
+    budget_range?: BolnaExtractedField;
+    purchase_timeline?: BolnaExtractedField;
+    purchase_purpose?: BolnaExtractedField;
+    location_match?: BolnaExtractedField;
+    customer_location_pref?: BolnaExtractedField;
+  };
+  [BolnaDataSection.NEXT_ACTION_AND_CONTACT_PREFERENCE]?: {
+    preferred_next_action?: BolnaExtractedField;
+    preferred_contact_channel?: BolnaExtractedField;
+  };
+  [BolnaDataSection.FOLLOW_UP_SCHEDULE]?: {
+    followup_schedule?: BolnaExtractedField;
+  };
+  [BolnaDataSection.COMPLIANCE]?: {
+    do_not_call?: BolnaExtractedField;
+    language_support_required?: BolnaExtractedField;
+  };
+  [BolnaDataSection.SUMMARY]?: {
+    call_summary?: BolnaExtractedField;
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FLAT PARSED OUTPUT — what we store in CallAnalysis model
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface ParsedCallAnalysis {
+  disposition: string | null;
+  leadTemperature: string | null;
+  preferredConfiguration: string | null;
+  budgetRange: string | null;
+  purchaseTimeline: string | null;
+  purchasePurpose: string | null;
+  locationMatch: string | null;
+  customerLocationPref: string | null;
+  preferredNextAction: string | null;
+  preferredContactChannel: string | null;
+  followupSchedule: string | null;
+  doNotCall: string | null;
+  languageSupportRequired: string | null;
+  callSummary: string | null;
+}

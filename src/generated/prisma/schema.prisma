@@ -1,5 +1,3 @@
-// prisma/schema.prisma — FULL FILE, replace existing
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -10,6 +8,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// TENANT
+// ─────────────────────────────────────────────────────────────────────────────
+
 model Tenant {
   id        String   @id @default(uuid())
   name      String
@@ -19,13 +21,18 @@ model Tenant {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  users      User[]
-  campaigns  Campaign[]
-  leads      Lead[]
-  calls      Call[]
-  assistants Assistant[]
-  brochures  Brochure[]
+  users        User[]
+  campaigns    Campaign[]
+  leads        Lead[]
+  calls        Call[]
+  assistants   Assistant[]
+  brochures    Brochure[]
+  callAnalyses CallAnalysis[]
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// USER
+// ─────────────────────────────────────────────────────────────────────────────
 
 model User {
   id        String   @id @default(uuid())
@@ -46,6 +53,10 @@ enum Role {
   USER
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// ASSISTANT
+// ─────────────────────────────────────────────────────────────────────────────
+
 model Assistant {
   id        String   @id @default(uuid())
   bolnaId   String   @unique
@@ -58,6 +69,10 @@ model Assistant {
   tenant    Tenant     @relation(fields: [tenantId], references: [id])
   campaigns Campaign[]
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BROCHURE
+// ─────────────────────────────────────────────────────────────────────────────
 
 model Brochure {
   id       String @id @default(uuid())
@@ -132,12 +147,15 @@ model Brochure {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // ── Relations ─────────────────────────────────────────────────
   tenant    Tenant     @relation(fields: [tenantId], references: [id])
   campaigns Campaign[]
 
   @@index([tenantId])
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CAMPAIGN
+// ─────────────────────────────────────────────────────────────────────────────
 
 model Campaign {
   id           String         @id @default(uuid())
@@ -174,6 +192,10 @@ enum CampaignStatus {
   FAILED
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// LEAD
+// ─────────────────────────────────────────────────────────────────────────────
+
 model Lead {
   id         String     @id @default(uuid())
   name       String
@@ -181,6 +203,7 @@ model Lead {
   email      String?
   company    String?
   status     LeadStatus @default(PENDING)
+  doNotCall  Boolean    @default(false)
   tenantId   String
   campaignId String
   metadata   Json?
@@ -202,6 +225,10 @@ enum LeadStatus {
   FAILED
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// CALL
+// ─────────────────────────────────────────────────────────────────────────────
+
 model Call {
   id                 String     @id @default(uuid())
   bolnaCallId        String?    @unique
@@ -214,15 +241,15 @@ model Call {
   transcript         String?
   transcriptMessages Json?
   summary            String?
-  outcome            String?
   startedAt          DateTime?
   endedAt            DateTime?
   createdAt          DateTime   @default(now())
   updatedAt          DateTime   @updatedAt
 
-  tenant   Tenant   @relation(fields: [tenantId], references: [id])
-  campaign Campaign @relation(fields: [campaignId], references: [id])
-  lead     Lead     @relation(fields: [leadId], references: [id])
+  tenant       Tenant        @relation(fields: [tenantId], references: [id])
+  campaign     Campaign      @relation(fields: [campaignId], references: [id])
+  lead         Lead          @relation(fields: [leadId], references: [id])
+  callAnalysis CallAnalysis?
 }
 
 enum CallStatus {
@@ -232,4 +259,116 @@ enum CallStatus {
   FAILED
   NO_ANSWER
   BUSY
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CALL ANALYSIS
+// ─────────────────────────────────────────────────────────────────────────────
+
+model CallAnalysis {
+  id       String @id @default(uuid())
+  callId   String @unique
+  tenantId String
+
+  // ── Call Outcome ──────────────────────────────────────────────
+  disposition     Disposition?
+  leadTemperature LeadTemperature?
+
+  // ── Lead Qualification ────────────────────────────────────────
+  preferredConfiguration String?
+  budgetRange            String?
+  purchaseTimeline       PurchaseTimeline?
+  purchasePurpose        PurchasePurpose?
+  locationMatch          LocationMatch?
+  customerLocationPref   String?
+
+  // ── Next Action ───────────────────────────────────────────────
+  preferredNextAction     PreferredNextAction?
+  preferredContactChannel ContactChannel?
+  followupSchedule        String?
+
+  // ── Compliance ────────────────────────────────────────────────
+  doNotCall               ExtractionFlag?
+  languageSupportRequired ExtractionFlag?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  call   Call   @relation(fields: [callId], references: [id])
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([callId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CALL ANALYSIS ENUMS
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum Disposition {
+  INTERESTED_SEND_DETAILS
+  QUALIFIED_CONSULTANT_FOLLOWUP
+  SITE_VISIT_INTEREST
+  INTERESTED_GENERAL
+  FOLLOWUP_REQUESTED
+  NOT_INTERESTED
+  DO_NOT_CALL
+  WRONG_NUMBER
+  ALREADY_PURCHASED
+  BROKER
+  LANGUAGE_CALLBACK_REQUIRED
+  CALL_ENDED_BY_CUSTOMER
+  CALL_ENDED_ABUSIVE
+  NO_RESPONSE
+  CALL_DROPPED
+}
+
+enum LeadTemperature {
+  HOT
+  WARM
+  NURTURE
+  COLD
+  NOT_APPLICABLE
+}
+
+enum PurchaseTimeline {
+  WITHIN_3_MONTHS
+  WITHIN_6_MONTHS
+  WITHIN_1_YEAR
+  AFTER_1_YEAR
+  FLEXIBLE
+  NOT_SHARED
+}
+
+enum PurchasePurpose {
+  OWN_USE
+  INVESTMENT
+  BOTH
+  NOT_SHARED
+}
+
+enum PreferredNextAction {
+  SEND_DETAILS
+  CONSULTANT_CALL
+  SITE_VISIT
+  FOLLOWUP_CALL
+  NONE
+}
+
+enum ContactChannel {
+  WHATSAPP
+  EMAIL
+  NOT_ASKED
+}
+
+enum LocationMatch {
+  MATCH
+  MISMATCH
+  NOT_ASKED
+  NOT_MENTIONED
+}
+
+enum ExtractionFlag {
+  YES
+  NO
 }

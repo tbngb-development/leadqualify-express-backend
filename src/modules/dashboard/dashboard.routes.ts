@@ -6,6 +6,24 @@ const router = Router();
 
 router.use(authenticate);
 
+// ─── Qualifying dispositions ──────────────────────────────────────────────────
+const QUALIFYING_DISPOSITIONS = [
+  "QUALIFIED_CONSULTANT_FOLLOWUP",
+  "SITE_VISIT_INTEREST",
+  "INTERESTED_SEND_DETAILS",
+  "INTERESTED_GENERAL",
+] as const;
+
+// ─── Disqualifying dispositions ───────────────────────────────────────────────
+const DISQUALIFYING_DISPOSITIONS = [
+  "NOT_INTERESTED",
+  "DO_NOT_CALL",
+  "WRONG_NUMBER",
+  "ALREADY_PURCHASED",
+  "BROKER",
+  "CALL_ENDED_ABUSIVE",
+] as const;
+
 // ─── Overview ─────────────────────────────────────────────────────────────────
 router.get(
   "/overview",
@@ -17,31 +35,46 @@ router.get(
         totalCampaigns,
         activeCampaigns,
         totalLeads,
-        qualifiedLeads,
-        notQualifiedLeads,
         totalCalls,
         completedCalls,
         failedCalls,
+        qualifiedLeads,
+        notQualifiedLeads,
       ] = await Promise.all([
+        // Campaign counts
         prisma.campaign.count({ where: { tenantId } }),
         prisma.campaign.count({ where: { tenantId, status: "RUNNING" } }),
+
+        // Lead total
         prisma.lead.count({ where: { tenantId } }),
-        prisma.lead.count({ where: { tenantId, status: "QUALIFIED" } }),
-        prisma.lead.count({ where: { tenantId, status: "NOT_QUALIFIED" } }),
+
+        // Call counts
         prisma.call.count({ where: { tenantId } }),
         prisma.call.count({ where: { tenantId, status: "COMPLETED" } }),
         prisma.call.count({ where: { tenantId, status: "FAILED" } }),
+
+        // Qualified — from CallAnalysis disposition
+        prisma.callAnalysis.count({
+          where: {
+            tenantId,
+            disposition: { in: QUALIFYING_DISPOSITIONS as any },
+          },
+        }),
+
+        // Not qualified — from CallAnalysis disposition
+        prisma.callAnalysis.count({
+          where: {
+            tenantId,
+            disposition: { in: DISQUALIFYING_DISPOSITIONS as any },
+          },
+        }),
       ]);
 
       const qualificationRate =
-        totalLeads > 0
-          ? ((qualifiedLeads / totalLeads) * 100).toFixed(1)
-          : "0";
+        totalLeads > 0 ? ((qualifiedLeads / totalLeads) * 100).toFixed(1) : "0";
 
       const callSuccessRate =
-        totalCalls > 0
-          ? ((completedCalls / totalCalls) * 100).toFixed(1)
-          : "0";
+        totalCalls > 0 ? ((completedCalls / totalCalls) * 100).toFixed(1) : "0";
 
       res.json({
         success: true,
@@ -67,7 +100,7 @@ router.get(
     } catch (error) {
       next(error);
     }
-  }
+  },
 );
 
 // ─── Recent Activity ──────────────────────────────────────────────────────────
@@ -77,8 +110,9 @@ router.get(
     try {
       const tenantId = req.user!.tenantId;
 
-      const [recentCalls, qualifiedLeads, recentCampaigns] = await Promise.all(
-        [
+      const [recentCalls, qualifiedAnalyses, recentCampaigns] =
+        await Promise.all([
+          // Recent calls with lead and campaign info
           prisma.call.findMany({
             where: { tenantId },
             take: 10,
@@ -86,23 +120,62 @@ router.get(
             include: {
               lead: { select: { name: true, phone: true } },
               campaign: { select: { name: true } },
+              callAnalysis: {
+                select: {
+                  disposition: true,
+                  leadTemperature: true,
+                },
+              },
             },
           }),
-          prisma.lead.findMany({
-            where: { tenantId, status: "QUALIFIED" },
+
+          // Recent qualified leads via CallAnalysis disposition
+          prisma.callAnalysis.findMany({
+            where: {
+              tenantId,
+              disposition: { in: QUALIFYING_DISPOSITIONS as any },
+            },
             take: 10,
-            orderBy: { updatedAt: "desc" },
+            orderBy: { createdAt: "desc" },
             include: {
-              campaign: { select: { name: true } },
+              call: {
+                select: {
+                  leadId: true,
+                  campaignId: true,
+                  lead: {
+                    select: {
+                      name: true,
+                      phone: true,
+                    },
+                  },
+                  campaign: {
+                    select: {
+                      name: true,
+                    },
+                  },
+                },
+              },
             },
           }),
+
+          // Recent campaigns
           prisma.campaign.findMany({
             where: { tenantId },
             take: 5,
             orderBy: { createdAt: "desc" },
           }),
-        ]
-      );
+        ]);
+
+      // ── Shape qualified leads for consistent response ──────────────────────
+      const qualifiedLeads = qualifiedAnalyses.map((analysis) => ({
+        leadId: analysis.call.leadId,
+        name: analysis.call.lead.name,
+        phone: analysis.call.lead.phone,
+        campaign: analysis.call.campaign.name,
+        disposition: analysis.disposition,
+        leadTemperature: analysis.leadTemperature,
+        qualifiedAt: analysis.createdAt,
+      }));
 
       res.json({
         success: true,
@@ -115,7 +188,7 @@ router.get(
     } catch (error) {
       next(error);
     }
-  }
+  },
 );
 
 // ─── Campaign Performance ─────────────────────────────────────────────────────
@@ -159,7 +232,7 @@ router.get(
     } catch (error) {
       next(error);
     }
-  }
+  },
 );
 
 export default router;
