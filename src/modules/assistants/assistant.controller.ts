@@ -5,6 +5,17 @@ import { AuthRequest } from "../../middleware/auth";
 import { getParam } from "../../utils/paramHelper";
 import assistantService from "./assistant.service";
 
+// ── Helper: resolve tenantId ──────────────────────────────────────────────────
+// SUPER_ADMIN sends tenantId in body/query; tenant users use their JWT tenantId
+function resolveTenantId(req: AuthRequest, fromBody?: string): string | null {
+  if (req.user?.role === "SUPER_ADMIN") {
+    // Admin must explicitly supply tenantId
+    return fromBody ?? (req.query.tenantId as string) ?? null;
+  }
+  // Tenant user — always scoped to their own tenant
+  return req.user?.tenantId ?? null;
+}
+
 // ─── GET /api/assistants ──────────────────────────────────────────────────────
 export const list = async (
   req: AuthRequest,
@@ -12,7 +23,17 @@ export const list = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const data = await assistantService.list(req.user!.tenantId);
+    const tenantId = resolveTenantId(req);
+
+    if (!tenantId) {
+      res.status(400).json({
+        success: false,
+        error: "tenantId is required",
+      });
+      return;
+    }
+
+    const data = await assistantService.list(tenantId);
     res.json({ success: true, data });
   } catch (error) {
     next(error);
@@ -20,7 +41,6 @@ export const list = async (
 };
 
 // ─── GET /api/assistants/bolna-agents ─────────────────────────────────────────
-// Fetch all agents from Bolna dashboard for dropdown selection
 export const listBolnaAgents = async (
   req: AuthRequest,
   res: Response,
@@ -42,7 +62,14 @@ export const get = async (
 ): Promise<void> => {
   try {
     const id = getParam(req.params["id"]);
-    const data = await assistantService.get(req.user!.tenantId, id);
+    const tenantId = resolveTenantId(req);
+
+    if (!tenantId) {
+      res.status(400).json({ success: false, error: "tenantId is required" });
+      return;
+    }
+
+    const data = await assistantService.get(tenantId, id);
     res.json({ success: true, data });
   } catch (error: any) {
     if (error.message === "Assistant not found") {
@@ -54,14 +81,13 @@ export const get = async (
 };
 
 // ─── POST /api/assistants/register ───────────────────────────────────────────
-// Register an existing Bolna agent by pasting its agent_id
 export const register = async (
   req: AuthRequest,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const { name, bolnaId } = req.body;
+    const { name, bolnaId, tenantId: bodyTenantId } = req.body;
 
     if (!name || !bolnaId) {
       res.status(400).json({
@@ -71,10 +97,17 @@ export const register = async (
       return;
     }
 
-    const data = await assistantService.register(req.user!.tenantId, {
-      name,
-      bolnaId,
-    });
+    const tenantId = resolveTenantId(req, bodyTenantId);
+
+    if (!tenantId) {
+      res.status(400).json({
+        success: false,
+        error: "tenantId is required",
+      });
+      return;
+    }
+
+    const data = await assistantService.register(tenantId, { name, bolnaId });
 
     res.status(201).json({
       success: true,
@@ -94,7 +127,6 @@ export const register = async (
 };
 
 // ─── PATCH /api/assistants/:id ────────────────────────────────────────────────
-// Update friendly name only — prompt/voice changes via Bolna dashboard
 export const update = async (
   req: AuthRequest,
   res: Response,
@@ -102,11 +134,16 @@ export const update = async (
 ): Promise<void> => {
   try {
     const id = getParam(req.params["id"]);
-    const { name } = req.body;
+    const { name, tenantId: bodyTenantId } = req.body;
 
-    const data = await assistantService.update(req.user!.tenantId, id, {
-      name,
-    });
+    const tenantId = resolveTenantId(req, bodyTenantId);
+
+    if (!tenantId) {
+      res.status(400).json({ success: false, error: "tenantId is required" });
+      return;
+    }
+
+    const data = await assistantService.update(tenantId, id, { name });
 
     res.json({
       success: true,
@@ -123,7 +160,6 @@ export const update = async (
 };
 
 // ─── POST /api/assistants/:id/sync ───────────────────────────────────────────
-// Re-fetch agent config from Bolna dashboard → update local DB
 export const sync = async (
   req: AuthRequest,
   res: Response,
@@ -131,7 +167,14 @@ export const sync = async (
 ): Promise<void> => {
   try {
     const id = getParam(req.params["id"]);
-    const data = await assistantService.sync(req.user!.tenantId, id);
+    const tenantId = resolveTenantId(req, req.body.tenantId);
+
+    if (!tenantId) {
+      res.status(400).json({ success: false, error: "tenantId is required" });
+      return;
+    }
+
+    const data = await assistantService.sync(tenantId, id);
 
     res.json({
       success: true,
@@ -155,7 +198,14 @@ export const remove = async (
 ): Promise<void> => {
   try {
     const id = getParam(req.params["id"]);
-    await assistantService.delete(req.user!.tenantId, id);
+    const tenantId = resolveTenantId(req, req.body.tenantId);
+
+    if (!tenantId) {
+      res.status(400).json({ success: false, error: "tenantId is required" });
+      return;
+    }
+
+    await assistantService.delete(tenantId, id);
 
     res.json({
       success: true,
