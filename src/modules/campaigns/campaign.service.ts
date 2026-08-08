@@ -262,9 +262,21 @@ export class CampaignService {
     try {
       // Merge campaign variables + lead-specific data
       // Lead fields override campaign fields if same key exists
+
+      const hasCustomerName =
+        !!lead.name &&
+        !["unknown", "null", "unavailable", ""].includes(
+          lead.name.trim().toLowerCase(),
+        );
+
+      const welcome_message = hasCustomerName
+        ? `Hi, am I speaking with ${lead.name}? I'm ${campaignVariables.agent_name} from ${campaignVariables.builder_name}. Is this a good time to talk?`
+        : `Hi, I'm ${campaignVariables.agent_name} from ${campaignVariables.builder_name} regarding a property enquiry. Is this a good time to talk?`;
+
       const callVariables: Record<string, string> = {
         ...campaignVariables,
-        customer_name: lead.name ?? "",
+        welcome_message,
+        customer_name: lead.name,
         customer_phone: lead.phone,
       };
 
@@ -273,7 +285,6 @@ export class CampaignService {
         recipient_phone_number: lead.phone,
         user_data: callVariables,
       });
-
 
       console.log(`[Campaign] Bolna response: ${bolnaCall}`);
       console.log(`[Campaign] Bolna callId: ${bolnaCall.execution_id}`);
