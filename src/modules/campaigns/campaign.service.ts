@@ -274,15 +274,14 @@ export class CampaignService {
         user_data: callVariables,
       });
 
-      const callId =
-        bolnaCall.id ?? bolnaCall.execution_id ?? bolnaCall.run_id ?? null;
 
-      console.log(`[Bolna] Resolved callId: ${callId}`);
+      console.log(`[Campaign] Bolna response: ${bolnaCall}`);
+      console.log(`[Campaign] Bolna callId: ${bolnaCall.execution_id}`);
 
       await prisma.call.update({
         where: { id: callRecord.id },
         data: {
-          bolnaCallId: callId,
+          bolnaCallId: bolnaCall.execution_id,
           startedAt: new Date(),
         },
       });
