@@ -1,9 +1,8 @@
-// src/modules/campaigns/campaign.service.ts — FULL REPLACE
+// src/modules/campaigns/campaign.service.ts
 
 import prisma from "../../config/database";
 import { bolnaClient } from "../../config/bolna";
 import { LeadRow, parseLeadFile } from "../../utils/leadParser";
-import brochureService from "../brochure/brochure.service";
 import fs from "fs";
 
 export class CampaignService {
@@ -30,17 +29,13 @@ export class CampaignService {
   async get(tenantId: string, id: string) {
     const campaign = await prisma.campaign.findFirst({
       where: { id, tenantId },
-      include: {
-        assistant: true,
-        brochure: true,
-      },
+      include: { assistant: true, brochure: true },
     });
-
     if (!campaign) throw new Error("Campaign not found");
     return campaign;
   }
 
-  // ─── Create ─────────────────────────────────────────────────────────────────
+  // ─── Create ────────────────────────────────────────────────────────────────
   async create(
     tenantId: string,
     data: {
@@ -77,13 +72,11 @@ export class CampaignService {
         brochureId: data.brochureId,
         variables: data.variables,
       },
-      include: {
-        assistant: true,
-      },
+      include: { assistant: true },
     });
   }
 
-  // ─── Upload CSV ────────────────────────────────────────────────────────────
+  // ─── Upload Leads ──────────────────────────────────────────────────────────
   async uploadLeads(tenantId: string, campaignId: string, filePath: string) {
     // ── 1. Verify campaign ownership ──────────────────────────────────────────
     const campaign = await prisma.campaign.findFirst({
@@ -91,12 +84,19 @@ export class CampaignService {
     });
     if (!campaign) throw new Error("Campaign not found");
 
-    // ── 2. Parse file (auto-detects csv / xls / xlsx) ─────────────────────────
+    // ── 2. Block upload only for FAILED campaigns ─────────────────────────────
+    if (campaign.status === "FAILED") {
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+      throw new Error(
+        "Cannot upload leads to a failed campaign. Please create a new campaign.",
+      );
+    }
+
+    // ── 3. Parse file ─────────────────────────────────────────────────────────
     let rows: LeadRow[];
     try {
       rows = parseLeadFile(filePath);
     } catch (parseError: unknown) {
-      // Clean up before throwing
       if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
       const message =
         parseError instanceof Error
@@ -105,51 +105,73 @@ export class CampaignService {
       throw new Error(`File parsing failed: ${message}`);
     }
 
-    // ── 3. Validate ────────────────────────────────────────────────────────────
-    const validLeads = rows.filter((r) => r.phone && r.phone.trim() !== "");
-    const invalidCount = rows.length - validLeads.length;
+    // ── 4. Validate rows ──────────────────────────────────────────────────────
+    const validRows = rows.filter((r) => r.phone && r.phone.trim() !== "");
+    const invalidCount = rows.length - validRows.length;
 
     if (rows.length === 0) {
       if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
       throw new Error("File is empty — no rows found");
     }
 
-    if (validLeads.length === 0) {
+    if (validRows.length === 0) {
       if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
       throw new Error(
-        "No valid leads found — every row is missing a phone number. " +
-          "Ensure your file has a column named: phone, Phone, phone_number, or mobile",
+        "No valid leads found — every row is missing a phone number.",
       );
     }
 
-    for (let i of validLeads) console.log("Valid lead: ", i);
+    // ── 5. Deduplicate against existing leads in this campaign ────────────────
+    const incomingPhones = validRows.map((r) => r.phone.trim());
 
-    // ── 4. Persist leads ───────────────────────────────────────────────────────
-    await prisma.lead.createMany({
-      data: validLeads.map((row) => ({
-        name: row.name,
-        phone: row.phone,
-        email: row.email,
-        company: row.company,
-        tenantId,
+    const existingLeads = await prisma.lead.findMany({
+      where: {
         campaignId,
-        metadata: row as object,
-      })),
+        phone: { in: incomingPhones },
+      },
+      select: { phone: true },
     });
 
-    // ── 5. Update campaign total ───────────────────────────────────────────────
-    await prisma.campaign.update({
-      where: { id: campaignId },
-      data: { totalLeads: { increment: validLeads.length } },
-    });
+    const existingPhoneSet = new Set(existingLeads.map((l) => l.phone));
 
-    // ── 6. Clean up uploaded file ──────────────────────────────────────────────
+    const newLeads = validRows.filter(
+      (r) => !existingPhoneSet.has(r.phone.trim()),
+    );
+    const duplicateNumbers = validRows
+      .filter((r) => existingPhoneSet.has(r.phone.trim()))
+      .map((r) => r.phone.trim());
+
+    // ── 6. Insert only new leads ──────────────────────────────────────────────
+    if (newLeads.length > 0) {
+      await prisma.lead.createMany({
+        data: newLeads.map((row) => ({
+          name: row.name,
+          phone: row.phone.trim(),
+          email: row.email,
+          company: row.company,
+          tenantId,
+          campaignId,
+          metadata: row as object,
+        })),
+        skipDuplicates: true, // DB-level safety net for race conditions
+      });
+
+      await prisma.campaign.update({
+        where: { id: campaignId },
+        data: { totalLeads: { increment: newLeads.length } },
+      });
+    }
+
+    // ── 7. Cleanup ────────────────────────────────────────────────────────────
     if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
 
     return {
       total: rows.length,
-      valid: validLeads.length,
+      valid: validRows.length,
+      imported: newLeads.length,
+      duplicates: duplicateNumbers.length,
       invalid: invalidCount,
+      duplicateNumbers,
     };
   }
 
@@ -164,11 +186,10 @@ export class CampaignService {
     if (campaign.status === "RUNNING") throw new Error("Already running");
 
     const leads = await prisma.lead.findMany({
-      where: { campaignId, status: "PENDING" },
+      where: { campaignId, status: "PENDING", doNotCall: false },
     });
     if (leads.length === 0) throw new Error("No pending leads found");
 
-    // Campaign variables — already stored as JSON from frontend
     const campaignVariables =
       (campaign.variables as Record<string, string>) ?? {};
 
@@ -194,34 +215,48 @@ export class CampaignService {
     };
   }
 
-  // ─── Process Leads ──────────────────────────────────────────────────────────
+  // ─── Process Leads — batched concurrent dispatch ───────────────────────────
   private async processLeads(
     tenantId: string,
     campaignId: string,
     leads: { id: string; phone: string; name: string }[],
     bolnaAgentId: string,
     campaignVariables: Record<string, string>,
+    batchSize = 50,
   ) {
-    for (const lead of leads) {
+    for (let i = 0; i < leads.length; i += batchSize) {
+      // Check if campaign is still running before each batch
       const campaign = await prisma.campaign.findUnique({
         where: { id: campaignId },
       });
 
       if (campaign?.status !== "RUNNING") {
-        console.log(`[Campaign] ${campaignId} paused/stopped`);
+        console.log(
+          `[Campaign] ${campaignId} paused/stopped — halting dispatch`,
+        );
         break;
       }
 
-      try {
-        await this.makeCall(
-          tenantId,
-          campaignId,
-          lead,
-          bolnaAgentId,
-          campaignVariables,
-        );
-      } catch (error) {
-        console.error(`[Campaign] Call failed for lead ${lead.id}:`, error);
+      const batch = leads.slice(i, i + batchSize);
+
+      // Fire batch concurrently — Bolna queues and manages concurrency
+      await Promise.all(
+        batch.map((lead) =>
+          this.makeCall(
+            tenantId,
+            campaignId,
+            lead,
+            bolnaAgentId,
+            campaignVariables,
+          ).catch((err) =>
+            console.error(`[Campaign] Call failed for lead ${lead.id}:`, err),
+          ),
+        ),
+      );
+
+      // Small delay between batches to respect Bolna rate limits
+      if (i + batchSize < leads.length) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
     }
 
@@ -251,12 +286,7 @@ export class CampaignService {
     });
 
     const callRecord = await prisma.call.create({
-      data: {
-        tenantId,
-        campaignId,
-        leadId: lead.id,
-        status: "CALLING",
-      },
+      data: { tenantId, campaignId, leadId: lead.id, status: "CALLING" },
     });
 
     try {
@@ -286,15 +316,14 @@ export class CampaignService {
         user_data: callVariables,
       });
 
-      console.log(`[Campaign] Bolna response: ${bolnaCall}`);
-      console.log(`[Campaign] Bolna callId: ${bolnaCall.execution_id}`);
+      const callId =
+        bolnaCall.id ?? bolnaCall.execution_id ?? null;
+
+      console.log(`[Bolna] Resolved callId: ${callId}`);
 
       await prisma.call.update({
         where: { id: callRecord.id },
-        data: {
-          bolnaCallId: bolnaCall.execution_id,
-          startedAt: new Date(),
-        },
+        data: { bolnaCallId: callId, startedAt: new Date() },
       });
 
       return callRecord;

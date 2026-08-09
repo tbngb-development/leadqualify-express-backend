@@ -1,3 +1,5 @@
+// prisma/schema.prisma
+
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -78,27 +80,23 @@ model Brochure {
   id       String @id @default(uuid())
   tenantId String
 
-  // ── PDF Meta ──────────────────────────────────────────────────
   originalFileName String
   fileSizeMB       String
   pageCount        Int
   rawTextLength    Int
 
-  // ── Core Identity ─────────────────────────────────────────────
   projectName    String?
   developerName  String?
   reraNumber     String?
   projectWebsite String?
   contactNumber  String?
 
-  // ── Location ──────────────────────────────────────────────────
   city        String?
   area        String?
   state       String?
   landmark    String?
   fullAddress String?
 
-  // ── Property Specs ────────────────────────────────────────────
   propertyTypes  String[]
   configurations String[]
   totalUnits     Int?
@@ -108,7 +106,6 @@ model Brochure {
   sizeMax        Float?
   sizeUnit       String?
 
-  // ── Financials ────────────────────────────────────────────────
   startingPrice     Float?
   maxPrice          Float?
   pricePerSqft      Float?
@@ -117,18 +114,15 @@ model Brochure {
   bankApprovals     String[]
   maintenanceCharge String?
 
-  // ── Timeline ──────────────────────────────────────────────────
   possessionDate     String?
   launchDate         String?
   constructionStatus String? @default("unknown")
 
-  // ── Features ──────────────────────────────────────────────────
   amenities            String[]
   specifications       String[]
   nearbyInfrastructure String[]
   usps                 String[]
 
-  // ── Lead Qualification ────────────────────────────────────────
   minimumBudget          Float?
   maximumBudget          Float?
   targetBuyerProfile     String?
@@ -136,11 +130,9 @@ model Brochure {
   investmentType         String[]
   keyQualifyingQuestions String[]
 
-  // ── Extraction Meta ───────────────────────────────────────────
   confidence         Float    @default(0)
   extractionWarnings String[]
 
-  // ── Status ────────────────────────────────────────────────────
   isConfirmed Boolean   @default(false)
   confirmedAt DateTime?
 
@@ -213,6 +205,11 @@ model Lead {
   tenant   Tenant   @relation(fields: [tenantId], references: [id])
   campaign Campaign @relation(fields: [campaignId], references: [id])
   calls    Call[]
+
+  // One phone number per campaign — prevents duplicate leads
+  @@unique([phone, campaignId])
+  @@index([tenantId])
+  @@index([campaignId])
 }
 
 enum LeadStatus {
@@ -250,6 +247,10 @@ model Call {
   campaign     Campaign      @relation(fields: [campaignId], references: [id])
   lead         Lead          @relation(fields: [leadId], references: [id])
   callAnalysis CallAnalysis?
+
+  @@index([tenantId])
+  @@index([campaignId])
+  @@index([leadId])
 }
 
 enum CallStatus {
@@ -270,24 +271,17 @@ model CallAnalysis {
   callId   String @unique
   tenantId String
 
-  // ── Call Outcome ──────────────────────────────────────────────
-  disposition     Disposition?
-  leadTemperature LeadTemperature?
-
-  // ── Lead Qualification ────────────────────────────────────────
-  preferredConfiguration String?
-  budgetRange            String?
-  purchaseTimeline       PurchaseTimeline?
-  purchasePurpose        PurchasePurpose?
-  locationMatch          LocationMatch?
-  customerLocationPref   String?
-
-  // ── Next Action ───────────────────────────────────────────────
+  disposition             Disposition?
+  leadTemperature         LeadTemperature?
+  preferredConfiguration  String?
+  budgetRange             String?
+  purchaseTimeline        PurchaseTimeline?
+  purchasePurpose         PurchasePurpose?
+  locationMatch           LocationMatch?
+  customerLocationPref    String?
   preferredNextAction     PreferredNextAction?
   preferredContactChannel ContactChannel?
   followupSchedule        String?
-
-  // ── Compliance ────────────────────────────────────────────────
   doNotCall               ExtractionFlag?
   languageSupportRequired ExtractionFlag?
 
@@ -299,6 +293,8 @@ model CallAnalysis {
 
   @@index([tenantId])
   @@index([callId])
+  @@index([disposition])
+  @@index([leadTemperature])
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
