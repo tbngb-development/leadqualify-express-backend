@@ -12776,10 +12776,10 @@ export namespace Prisma {
 
   export type AssistantWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    bolnaId?: string
     AND?: AssistantWhereInput | AssistantWhereInput[]
     OR?: AssistantWhereInput[]
     NOT?: AssistantWhereInput | AssistantWhereInput[]
+    bolnaId?: StringFilter<"Assistant"> | string
     name?: StringFilter<"Assistant"> | string
     tenantId?: StringFilter<"Assistant"> | string
     config?: JsonFilter<"Assistant">
@@ -12787,7 +12787,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Assistant"> | Date | string
     tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     campaigns?: CampaignListRelationFilter
-  }, "id" | "bolnaId">
+  }, "id">
 
   export type AssistantOrderByWithAggregationInput = {
     id?: SortOrder
