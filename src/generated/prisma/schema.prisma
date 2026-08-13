@@ -61,7 +61,7 @@ enum Role {
 
 model Assistant {
   id        String   @id @default(uuid())
-  bolnaId   String   @unique
+  bolnaId   String
   name      String
   tenantId  String
   config    Json
