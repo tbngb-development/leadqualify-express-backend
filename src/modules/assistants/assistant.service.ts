@@ -2,6 +2,11 @@
 
 import prisma from "../../config/database";
 import { bolnaClient } from "../../config/bolna";
+import {
+  extractPromptInputFields,
+  getAgentFirstMessage,
+  getAgentSystemPrompt,
+} from "../../utils/promptVariableExtractor";
 
 export class AssistantService {
   // ─── List — all assistants for tenant ─────────────────────────────────────
@@ -18,7 +23,28 @@ export class AssistantService {
       where: { id, tenantId },
     });
     if (!assistant) throw new Error("Assistant not found");
-    return assistant;
+
+    let bolnaAgent;
+    try {
+      bolnaAgent = await bolnaClient.agents.verify(assistant.bolnaId);
+      console.log(
+        `[AssistantService] Verified Bolna agent: ${bolnaAgent.id} (${bolnaAgent.agent_name})`,
+      );
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        throw new Error(
+          `Bolna agent not found: ${assistant.bolnaId} ── ${assistant.name}. Check the agent ID in your Bolna dashboard.`,
+        );
+      }
+      throw new Error(`Failed to verify Bolna agent: ${error.message}`);
+    }
+
+    const systemPrompt = getAgentSystemPrompt(bolnaAgent);
+    const firstMessage = getAgentFirstMessage(bolnaAgent);
+
+    const variables = extractPromptInputFields(systemPrompt, firstMessage);
+
+    return { assistant, variables };
   }
 
   // ─── Register — store a Bolna agent ID that's already configured ───────────
@@ -35,7 +61,7 @@ export class AssistantService {
     try {
       bolnaAgent = await bolnaClient.agents.verify(data.bolnaId);
       console.log(
-        `[AssistantService] Verified Bolna agent: ${bolnaAgent.agent_id} (${bolnaAgent.agent_name})`,
+        `[AssistantService] Verified Bolna agent: ${bolnaAgent.id} (${bolnaAgent.agent_name})`,
       );
     } catch (error: any) {
       if (error.response?.status === 404) {

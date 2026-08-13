@@ -2,8 +2,14 @@
 
 import { Request, Response } from "express";
 import prisma from "../../config/database";
+import {
+  BolnaDataSection,
+  BolnaExtractedData,
+  ParsedCallAnalysis,
+} from "../../types/bolna.types";
 
 // ─── Bolna Webhook Payload Shape ──────────────────────────────────────────────
+
 interface BolnaTelephonyData {
   duration: number;
   recording_url: string;
@@ -14,12 +20,16 @@ interface BolnaTelephonyData {
   hangup_provider_code?: string | null;
 }
 
-interface BolnaWebhookPayload {
-  // ── Primary identifier ──────────────────────────────────────────────────
-  id?: string; // top-level call ID — confirmed
-  execution_id?: string; // legacy queue response ID
-  run_id?: string; // same as execution_id
+interface BolnaMessage {
+  role: "agent" | "user";
+  content: string;
+  created_at?: string;
+}
 
+interface BolnaWebhookPayload {
+  id?: string;
+  execution_id?: string;
+  run_id?: string;
   agent_id?: string;
   status:
     | "completed"
@@ -36,23 +46,16 @@ interface BolnaWebhookPayload {
     | "no_answer"
     | "call_completed"
     | "error";
-
-  // ── Call results (populated on completion) ───────────────────────────────
   transcript?: string | null;
   summary?: string | null;
   conversation_duration?: number;
   error_message?: string | null;
-  extracted_data?: any;
-
-  // ── Nested data ──────────────────────────────────────────────────────────
+  extracted_data?: BolnaExtractedData | null;
   telephony_data?: BolnaTelephonyData;
-
   context_details?: {
     recipient_data: Record<string, string>;
     recipient_phone_number: string;
   };
-
-  // ── Legacy flat fields (some Bolna events use these) ─────────────────────
   recording_url?: string;
   duration?: number;
   messages?: BolnaMessage[];
@@ -60,23 +63,16 @@ interface BolnaWebhookPayload {
   user_data?: Record<string, string>;
 }
 
-interface BolnaMessage {
-  role: "agent" | "user";
-  content: string;
-  created_at?: string;
-}
+// ─── Resolve Helpers ──────────────────────────────────────────────────────────
 
-// ─── Resolve the call identifier from any Bolna event ────────────────────────
 function resolveCallId(payload: BolnaWebhookPayload): string | null {
   return payload.id ?? payload.execution_id ?? payload.run_id ?? null;
 }
 
-// ─── Resolve recording URL from nested or flat ───────────────────────────────
 function resolveRecordingUrl(payload: BolnaWebhookPayload): string | null {
   return payload.telephony_data?.recording_url ?? payload.recording_url ?? null;
 }
 
-// ─── Resolve duration ─────────────────────────────────────────────────────────
 function resolveDuration(payload: BolnaWebhookPayload): number | null {
   return (
     payload.telephony_data?.duration ??
@@ -86,7 +82,85 @@ function resolveDuration(payload: BolnaWebhookPayload): number | null {
   );
 }
 
+// ─── Allowed enum values — must match schema exactly ─────────────────────────
+
+const DISPOSITION_VALUES = [
+  "INTERESTED_SEND_DETAILS",
+  "QUALIFIED_CONSULTANT_FOLLOWUP",
+  "SITE_VISIT_INTEREST",
+  "INTERESTED_GENERAL",
+  "FOLLOWUP_REQUESTED",
+  "NOT_INTERESTED",
+  "DO_NOT_CALL",
+  "WRONG_NUMBER",
+  "ALREADY_PURCHASED",
+  "BROKER",
+  "LANGUAGE_CALLBACK_REQUIRED",
+  "CALL_ENDED_BY_CUSTOMER",
+  "CALL_ENDED_ABUSIVE",
+  "NO_RESPONSE",
+  "CALL_DROPPED",
+] as const;
+
+const LEAD_TEMPERATURE_VALUES = [
+  "HOT",
+  "WARM",
+  "NURTURE",
+  "COLD",
+  "NOT_APPLICABLE",
+] as const;
+
+const PURCHASE_TIMELINE_VALUES = [
+  "WITHIN_3_MONTHS",
+  "WITHIN_6_MONTHS",
+  "WITHIN_1_YEAR",
+  "AFTER_1_YEAR",
+  "FLEXIBLE",
+  "NOT_SHARED",
+] as const;
+
+const PURCHASE_PURPOSE_VALUES = [
+  "OWN_USE",
+  "INVESTMENT",
+  "BOTH",
+  "NOT_SHARED",
+] as const;
+
+const PREFERRED_NEXT_ACTION_VALUES = [
+  "SEND_DETAILS",
+  "CONSULTANT_CALL",
+  "SITE_VISIT",
+  "FOLLOWUP_CALL",
+  "NONE",
+] as const;
+
+const CONTACT_CHANNEL_VALUES = ["WHATSAPP", "EMAIL", "NOT_ASKED"] as const;
+
+const LOCATION_MATCH_VALUES = [
+  "MATCH",
+  "MISMATCH",
+  "NOT_ASKED",
+  "NOT_MENTIONED",
+] as const;
+
+const EXTRACTION_FLAG_VALUES = ["YES", "NO"] as const;
+
+// ─── Enum Sanitizer ───────────────────────────────────────────────────────────
+// Validates that a raw string value from Bolna extraction belongs to an
+// allowed set. Returns null if value is absent or not in the allowed set.
+// This prevents Prisma validation errors from unexpected AI-generated values.
+
+function sanitizeEnum<T extends string>(
+  value: string | null | undefined,
+  allowed: readonly T[],
+): T | null {
+  if (!value) return null;
+  const upper = value.trim().toUpperCase() as T;
+  return (allowed as readonly string[]).includes(upper) ? upper : null;
+}
+
 // ─── Main Handler ─────────────────────────────────────────────────────────────
+
 export const handleBolnaWebhook = async (
   req: Request,
   res: Response,
@@ -109,28 +183,21 @@ export const handleBolnaWebhook = async (
 
   try {
     switch (payload.status) {
-      // ── Placed, waiting to connect ─────────────────────────────────────
       case "queued":
       case "initiated": {
         await prisma.call.updateMany({
           where: { bolnaCallId: callId },
-          data: {
-            status: "CALLING",
-            startedAt: new Date(),
-          },
+          data: { status: "CALLING", startedAt: new Date() },
         });
         console.log(`[Webhook] Queued/initiated: ${callId}`);
         break;
       }
 
-      // ── Phone ringing ──────────────────────────────────────────────────
       case "ringing": {
-        // No status change — call is already CALLING
         console.log(`[Webhook] Ringing: ${callId}`);
         break;
       }
 
-      // ── Lead answered ──────────────────────────────────────────────────
       case "in-progress":
       case "in_progress":
       case "answered": {
@@ -142,7 +209,6 @@ export const handleBolnaWebhook = async (
         break;
       }
 
-      // ── Call finished with transcript ──────────────────────────────────
       case "completed":
       case "ended":
       case "call_completed": {
@@ -150,20 +216,17 @@ export const handleBolnaWebhook = async (
         break;
       }
 
-      // ── Lead didn't answer ─────────────────────────────────────────────
       case "no-answer":
       case "no_answer": {
         await handleCallNoAnswer(callId);
         break;
       }
 
-      // ── Busy ───────────────────────────────────────────────────────────
       case "busy": {
         await handleCallBusy(callId);
         break;
       }
 
-      // ── Error ──────────────────────────────────────────────────────────
       case "failed":
       case "error": {
         await handleCallFailed(callId, payload.error_message);
@@ -181,6 +244,7 @@ export const handleBolnaWebhook = async (
 };
 
 // ─── Completed ────────────────────────────────────────────────────────────────
+
 async function handleCallCompleted(
   callId: string,
   payload: BolnaWebhookPayload,
@@ -194,7 +258,7 @@ async function handleCallCompleted(
     return;
   }
 
-  // ── Normalize messages if present ────────────────────────────────────────
+  // ── Normalize messages ────────────────────────────────────────────────────
   const normalizedMessages = (payload.messages ?? [])
     .filter((m) => m.role === "agent" || m.role === "user")
     .map((m) => ({
@@ -211,57 +275,69 @@ async function handleCallCompleted(
       .join("\n") ||
     null;
 
-  // ── Classify outcome ──────────────────────────────────────────────────────
-  const outcome = determineOutcome(payload.summary ?? "");
+  // ── Parse extraction data ─────────────────────────────────────────────────
+  const parsed = parseExtractionData(payload.extracted_data ?? null);
+
+  // ── Resolve call summary from extraction (discard raw Bolna summary) ──────
+  const callSummary = parsed?.callSummary ?? null;
+
+  // ── Resolve duration and recording ────────────────────────────────────────
   const duration = resolveDuration(payload);
   const recording = resolveRecordingUrl(payload);
 
-  // ── Determine hangup reason ───────────────────────────────────────────────
+  // ── Determine final call status ───────────────────────────────────────────
   const hangupReason = payload.telephony_data?.hangup_reason ?? null;
   const callStatus =
     hangupReason === "customer-busy" ? "NO_ANSWER" : "COMPLETED";
 
   console.log(
-    `[Webhook] Completed: ${callId} | outcome: ${outcome} | duration: ${duration}s`,
+    `[Webhook] Completed: ${callId} | duration: ${duration}s | hasExtraction: ${!!parsed}`,
   );
 
-  // ── Update call ───────────────────────────────────────────────────────────
+  // ── Update call record ────────────────────────────────────────────────────
   await prisma.call.update({
     where: { id: call.id },
     data: {
       status: callStatus as any,
-      summary: payload.summary ?? null,
+      summary: callSummary,
       transcript: transcriptText,
       transcriptMessages:
         normalizedMessages.length > 0 ? normalizedMessages : undefined,
       duration,
       recording,
-      outcome,
       endedAt: new Date(),
     },
   });
 
-  // ── Update lead ───────────────────────────────────────────────────────────
+  // ── Update lead status to CALLED ──────────────────────────────────────────
   await prisma.lead.update({
     where: { id: call.leadId },
-    data: { status: outcome as any },
+    data: { status: "CALLED" },
   });
 
-  // ── Update campaign counters ──────────────────────────────────────────────
-  if (outcome === "QUALIFIED") {
-    await prisma.campaign.update({
-      where: { id: call.campaignId },
-      data: { successLeads: { increment: 1 } },
-    });
-  } else {
-    await prisma.campaign.update({
-      where: { id: call.campaignId },
-      data: { calledLeads: { increment: 1 } },
-    });
+  // ── Save call analysis if extraction data exists ──────────────────────────
+  if (parsed) {
+    await saveCallAnalysis(call.id, call.tenantId, parsed);
+
+    // ── Handle do_not_call flag on lead ──────────────────────────────────
+    if (parsed.doNotCall === "YES") {
+      await prisma.lead.update({
+        where: { id: call.leadId },
+        data: { doNotCall: true },
+      });
+      console.log(`[Webhook] Do-not-call flagged for lead: ${call.leadId}`);
+    }
   }
+
+  // ── Update campaign counters ──────────────────────────────────────────────
+  await prisma.campaign.update({
+    where: { id: call.campaignId },
+    data: { calledLeads: { increment: 1 } },
+  });
 }
 
 // ─── No Answer ────────────────────────────────────────────────────────────────
+
 async function handleCallNoAnswer(callId: string) {
   const call = await prisma.call.findFirst({
     where: { bolnaCallId: callId },
@@ -273,11 +349,7 @@ async function handleCallNoAnswer(callId: string) {
 
   await prisma.call.update({
     where: { id: call.id },
-    data: {
-      status: "NO_ANSWER",
-      outcome: "NO_ANSWER",
-      endedAt: new Date(),
-    },
+    data: { status: "NO_ANSWER", endedAt: new Date() },
   });
 
   await prisma.lead.update({
@@ -289,6 +361,7 @@ async function handleCallNoAnswer(callId: string) {
 }
 
 // ─── Busy ─────────────────────────────────────────────────────────────────────
+
 async function handleCallBusy(callId: string) {
   const call = await prisma.call.findFirst({
     where: { bolnaCallId: callId },
@@ -300,11 +373,7 @@ async function handleCallBusy(callId: string) {
 
   await prisma.call.update({
     where: { id: call.id },
-    data: {
-      status: "BUSY",
-      outcome: "BUSY",
-      endedAt: new Date(),
-    },
+    data: { status: "BUSY", endedAt: new Date() },
   });
 
   await prisma.lead.update({
@@ -316,6 +385,7 @@ async function handleCallBusy(callId: string) {
 }
 
 // ─── Failed ───────────────────────────────────────────────────────────────────
+
 async function handleCallFailed(callId: string, errorMessage?: string | null) {
   const call = await prisma.call.findFirst({
     where: { bolnaCallId: callId },
@@ -331,11 +401,7 @@ async function handleCallFailed(callId: string, errorMessage?: string | null) {
 
   await prisma.call.update({
     where: { id: call.id },
-    data: {
-      status: "FAILED",
-      outcome: "FAILED",
-      endedAt: new Date(),
-    },
+    data: { status: "FAILED", endedAt: new Date() },
   });
 
   await prisma.lead.update({
@@ -349,25 +415,144 @@ async function handleCallFailed(callId: string, errorMessage?: string | null) {
   });
 }
 
-// ─── Outcome Classifier ───────────────────────────────────────────────────────
-function determineOutcome(summary: string): string {
-  const lower = summary.toLowerCase();
+// ─── Parse Extraction Data ────────────────────────────────────────────────────
+// Returns null if extracted_data is absent or has no usable fields.
+// This prevents empty CallAnalysis records from being created.
+function parseExtractionData(
+  extracted: BolnaExtractedData | null,
+): ParsedCallAnalysis | null {
+  if (!extracted || typeof extracted !== "object") return null;
 
-  if (
-    lower.includes("not interested") ||
-    lower.includes("not qualified") ||
-    lower.includes("cold")
-  )
-    return "NOT_QUALIFIED";
+  // ── Safe field readers ────────────────────────────────────────────────────
+  const obj = (field?: { objective?: string | null }): string | null =>
+    field?.objective?.trim() ?? null;
 
-  if (
-    lower.includes("qualified") ||
-    lower.includes("hot") ||
-    lower.includes("interested") ||
-    lower.includes("follow up") ||
-    lower.includes("warm")
-  )
-    return "QUALIFIED";
+  const subj = (field?: { subjective?: string | null }): string | null =>
+    field?.subjective?.trim() ?? null;
 
-  return "CALLED";
+  // ── Extract groups ────────────────────────────────────────────────────────
+  const outcome = extracted["Call Outcome"];
+  const qualification = extracted["Lead Qualification"];
+  const nextAction = extracted["Next Action and Contact Preference"];
+  const followUp = extracted["Follow-Up Schedule"];
+  const compliance = extracted["Compliance"];
+  const summary = extracted["Summary"];
+
+  const parsed: ParsedCallAnalysis = {
+    // ── Enums — all sanitized ───────────────────────────────────────────────
+    disposition: sanitizeEnum(obj(outcome?.disposition), DISPOSITION_VALUES),
+    leadTemperature: sanitizeEnum(
+      obj(outcome?.lead_temperature),
+      LEAD_TEMPERATURE_VALUES,
+    ),
+    purchaseTimeline: sanitizeEnum(
+      obj(qualification?.purchase_timeline),
+      PURCHASE_TIMELINE_VALUES,
+    ),
+    purchasePurpose: sanitizeEnum(
+      obj(qualification?.purchase_purpose),
+      PURCHASE_PURPOSE_VALUES,
+    ),
+    locationMatch: sanitizeEnum(
+      obj(qualification?.location_match),
+      LOCATION_MATCH_VALUES,
+    ),
+    preferredNextAction: sanitizeEnum(
+      obj(nextAction?.preferred_next_action),
+      PREFERRED_NEXT_ACTION_VALUES,
+    ),
+    preferredContactChannel: sanitizeEnum(
+      obj(nextAction?.preferred_contact_channel),
+      CONTACT_CHANNEL_VALUES,
+    ),
+    doNotCall: sanitizeEnum(
+      obj(compliance?.do_not_call),
+      EXTRACTION_FLAG_VALUES,
+    ),
+    languageSupportRequired: sanitizeEnum(
+      obj(compliance?.language_support_required),
+      EXTRACTION_FLAG_VALUES,
+    ),
+
+    // ── Free text — no sanitization needed ─────────────────────────────────
+    preferredConfiguration: subj(qualification?.preferred_configuration),
+    budgetRange: subj(qualification?.budget_range),
+    customerLocationPref: subj(qualification?.customer_location_pref),
+    followupSchedule: subj(followUp?.followup_schedule),
+    callSummary: subj(summary?.call_summary),
+  };
+
+  // ── If every field is null nothing is worth saving ────────────────────────
+  const hasAnyValue = Object.values(parsed).some((v) => v !== null);
+  if (!hasAnyValue) {
+    console.warn(
+      "[Webhook] Extraction data present but all fields null — skipping CallAnalysis",
+    );
+    return null;
+  }
+
+  // ── Log any enum fields that were sanitized to null ───────────────────────
+  // Helps identify new unexpected values Bolna AI starts returning
+  const enumFields = [
+    "disposition",
+    "leadTemperature",
+    "purchaseTimeline",
+    "purchasePurpose",
+    "locationMatch",
+    "preferredNextAction",
+    "preferredContactChannel",
+    "doNotCall",
+    "languageSupportRequired",
+  ] as const;
+
+  for (const field of enumFields) {
+    const raw = parsed[field];
+    if (raw === null) {
+      console.warn(
+        `[Webhook] Enum field "${field}" was null after sanitization — Bolna returned an unexpected value`,
+      );
+    }
+  }
+
+  return parsed;
+}
+
+// ─── Save Call Analysis ───────────────────────────────────────────────────────
+
+async function saveCallAnalysis(
+  callId: string,
+  tenantId: string,
+  parsed: ParsedCallAnalysis,
+): Promise<void> {
+  try {
+    await prisma.callAnalysis.create({
+      data: {
+        callId,
+        tenantId,
+        disposition: (parsed.disposition as any) ?? null,
+        leadTemperature: (parsed.leadTemperature as any) ?? null,
+        preferredConfiguration: parsed.preferredConfiguration,
+        budgetRange: parsed.budgetRange,
+        purchaseTimeline: (parsed.purchaseTimeline as any) ?? null,
+        purchasePurpose: (parsed.purchasePurpose as any) ?? null,
+        locationMatch: (parsed.locationMatch as any) ?? null,
+        customerLocationPref: parsed.customerLocationPref,
+        preferredNextAction: (parsed.preferredNextAction as any) ?? null,
+        preferredContactChannel:
+          (parsed.preferredContactChannel as any) ?? null,
+        followupSchedule: parsed.followupSchedule,
+        doNotCall: (parsed.doNotCall as any) ?? null,
+        languageSupportRequired:
+          (parsed.languageSupportRequired as any) ?? null,
+      },
+    });
+    console.log(`[Webhook] CallAnalysis saved for call: ${callId}`);
+  } catch (error) {
+    // Log but don't throw — call record is already saved, analysis failure
+    // should not break the webhook response chain
+    console.error(
+      `[Webhook] Failed to save CallAnalysis for call ${callId}:`,
+      error,
+    );
+  }
 }

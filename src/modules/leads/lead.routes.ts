@@ -1,11 +1,14 @@
+// src/modules/leads/lead.routes.ts
+
 import { Router } from "express";
 import { authenticate } from "../../middleware/auth";
-import { list, get } from "./lead.controller";
+import { list, get, getStats } from "./lead.controller";
 
 const router = Router();
 
 router.use(authenticate);
 
+router.get("/stats", getStats);   // ← before /:id
 router.get("/", list);
 router.get("/:id", get);
 

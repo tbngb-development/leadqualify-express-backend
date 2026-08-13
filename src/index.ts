@@ -41,6 +41,7 @@ app.use(
       "http://localhost:3001",
       "http://localhost:3000",
       "http://localhost:5000",
+      "https://leadqualify-agent.vercel.app",
       process.env.FRONTEND_URL ?? "http://localhost:3001",
     ],
     credentials: true,
@@ -62,7 +63,7 @@ app.use((req, _res, next) => {
 app.get("/health", (_req, res) => {
   res.json({
     status: "OK",
-    service: "Vapi Lead Qualification API",
+    service: "Lead Qualification API",
     version: "1.0.0",
     timestamp: new Date().toISOString(),
   });
