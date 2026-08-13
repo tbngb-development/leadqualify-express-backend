@@ -9,13 +9,9 @@ export interface BolnaCallPayload {
 export interface BolnaCallResponse {
   id: string;
   status: string;
+  message: string;
+  execution_id: string;
   agent_id: string;
-  message?: string;
-
-  // Legacy fallbacks
-  execution_id?: string;
-  run_id?: string;
-
   transcript?: string | null;
   summary?: string | null;
   conversation_duration?: number;

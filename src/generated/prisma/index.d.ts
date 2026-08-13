@@ -13265,6 +13265,7 @@ export namespace Prisma {
 
   export type LeadWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    phone_campaignId?: LeadPhoneCampaignIdCompoundUniqueInput
     AND?: LeadWhereInput | LeadWhereInput[]
     OR?: LeadWhereInput[]
     NOT?: LeadWhereInput | LeadWhereInput[]
@@ -13282,7 +13283,7 @@ export namespace Prisma {
     tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     campaign?: XOR<CampaignScalarRelationFilter, CampaignWhereInput>
     calls?: CallListRelationFilter
-  }, "id">
+  }, "id" | "phone_campaignId">
 
   export type LeadOrderByWithAggregationInput = {
     id?: SortOrder
@@ -15503,6 +15504,11 @@ export namespace Prisma {
   export type CampaignScalarRelationFilter = {
     is?: CampaignWhereInput
     isNot?: CampaignWhereInput
+  }
+
+  export type LeadPhoneCampaignIdCompoundUniqueInput = {
+    phone: string
+    campaignId: string
   }
 
   export type LeadCountOrderByAggregateInput = {
