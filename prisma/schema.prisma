@@ -207,7 +207,7 @@ model Lead {
   calls    Call[]
 
   // One phone number per campaign — prevents duplicate leads
-  @@unique([phone, campaignId])
+  // @@unique([phone, campaignId])
   @@index([tenantId])
   @@index([campaignId])
 }
