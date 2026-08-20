@@ -68,42 +68,30 @@ export const uploadLeads = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    
+    const tenantId = req.user!.tenantId;
+    const campaignId = getParam(req.params["id"]);
+
     if (!req.file) {
-      res.status(400).json({
-        success: false,
-        error: "File is required. Supported formats: CSV, XLS, XLSX",
-      });
+      res.status(400).json({ success: false, error: "No file uploaded" });
       return;
     }
 
-    // Guard: double-check extension even if multer passed it
-    const ext = path.extname(req.file.originalname).toLowerCase();
-    const allowed = [".csv", ".xls", ".xlsx"];
-    if (!allowed.includes(ext)) {
-      // Remove the file multer already saved
-      if (fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
-      res.status(400).json({
-        success: false,
-        error: `Unsupported file type "${ext}". Allowed: CSV, XLS, XLSX`,
-      });
-      return;
-    }
+    // allowDuplicates=true only accepted in non-production environments
+    const allowDuplicates = req.query.allowDuplicates === "true";
 
-    const id = getParam(req.params["id"]);
-    const data = await campaignService.uploadLeads(
-      req.user!.tenantId,
-      id,
+    const result = await campaignService.uploadLeads(
+      tenantId,
+      campaignId,
       req.file.path,
+      allowDuplicates,
     );
 
-    res.json({ success: true, data });
-  } catch (error) {
-    // If something went wrong and file still exists, clean up
-    if (req.file && fs.existsSync(req.file.path)) {
-      fs.unlinkSync(req.file.path);
-    }
-    next(error);
+    res.json({ success: true, data: result });
+    return;
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "Failed to upload leads";
+    res.status(400).json({ success: false, error: message });
   }
 };
 

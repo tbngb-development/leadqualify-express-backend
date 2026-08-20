@@ -77,14 +77,17 @@ export class CampaignService {
   }
 
   // ─── Upload Leads ──────────────────────────────────────────────────────────
-  async uploadLeads(tenantId: string, campaignId: string, filePath: string) {
-    // ── 1. Verify campaign ownership ──────────────────────────────────────────
+  async uploadLeads(
+    tenantId: string,
+    campaignId: string,
+    filePath: string,
+    allowDuplicates = false, // 👈 new flag — false by default (production safe)
+  ) {
     const campaign = await prisma.campaign.findFirst({
       where: { id: campaignId, tenantId },
     });
     if (!campaign) throw new Error("Campaign not found");
 
-    // ── 2. Block upload only for FAILED campaigns ─────────────────────────────
     if (campaign.status === "FAILED") {
       if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
       throw new Error(
@@ -92,7 +95,6 @@ export class CampaignService {
       );
     }
 
-    // ── 3. Parse file ─────────────────────────────────────────────────────────
     let rows: LeadRow[];
     try {
       rows = parseLeadFile(filePath);
@@ -105,7 +107,6 @@ export class CampaignService {
       throw new Error(`File parsing failed: ${message}`);
     }
 
-    // ── 4. Validate rows ──────────────────────────────────────────────────────
     const validRows = rows.filter((r) => r.phone && r.phone.trim() !== "");
     const invalidCount = rows.length - validRows.length;
 
@@ -121,27 +122,26 @@ export class CampaignService {
       );
     }
 
-    // ── 5. Deduplicate against existing leads in this campaign ────────────────
-    const incomingPhones = validRows.map((r) => r.phone.trim());
+    let newLeads = validRows;
+    let duplicateNumbers: string[] = [];
 
-    const existingLeads = await prisma.lead.findMany({
-      where: {
-        campaignId,
-        phone: { in: incomingPhones },
-      },
-      select: { phone: true },
-    });
+    // ── Deduplication — skipped when allowDuplicates = true ──────────────────
+    if (!allowDuplicates) {
+      const incomingPhones = validRows.map((r) => r.phone.trim());
 
-    const existingPhoneSet = new Set(existingLeads.map((l) => l.phone));
+      const existingLeads = await prisma.lead.findMany({
+        where: { campaignId, phone: { in: incomingPhones } },
+        select: { phone: true },
+      });
 
-    const newLeads = validRows.filter(
-      (r) => !existingPhoneSet.has(r.phone.trim()),
-    );
-    const duplicateNumbers = validRows
-      .filter((r) => existingPhoneSet.has(r.phone.trim()))
-      .map((r) => r.phone.trim());
+      const existingPhoneSet = new Set(existingLeads.map((l) => l.phone));
 
-    // ── 6. Insert only new leads ──────────────────────────────────────────────
+      newLeads = validRows.filter((r) => !existingPhoneSet.has(r.phone.trim()));
+      duplicateNumbers = validRows
+        .filter((r) => existingPhoneSet.has(r.phone.trim()))
+        .map((r) => r.phone.trim());
+    }
+
     if (newLeads.length > 0) {
       await prisma.lead.createMany({
         data: newLeads.map((row) => ({
@@ -153,7 +153,7 @@ export class CampaignService {
           campaignId,
           metadata: row as object,
         })),
-        skipDuplicates: true, // DB-level safety net for race conditions
+        skipDuplicates: allowDuplicates ? false : true, // 👈 when bypassing, let DB unique constraint surface naturally
       });
 
       await prisma.campaign.update({
@@ -162,7 +162,6 @@ export class CampaignService {
       });
     }
 
-    // ── 7. Cleanup ────────────────────────────────────────────────────────────
     if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
 
     return {
@@ -316,8 +315,7 @@ export class CampaignService {
         user_data: callVariables,
       });
 
-      const callId =
-        bolnaCall.id ?? bolnaCall.execution_id ?? null;
+      const callId = bolnaCall.id ?? bolnaCall.execution_id ?? null;
 
       console.log(`[Bolna] Resolved callId: ${callId}`);
 
