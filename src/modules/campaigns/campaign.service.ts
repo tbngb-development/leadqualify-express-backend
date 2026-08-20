@@ -299,7 +299,7 @@ export class CampaignService {
         );
 
       const welcome_message = hasCustomerName
-        ? `Hi, am I speaking with ${lead.name}? Is this a good time to talk?`
+        ? `Hi, am I speaking with ${lead.name}?`
         : `Hi, I'm ${campaignVariables.agent_name} from ${campaignVariables.builder_name}. Is this a good time to talk?`;
 
       const callVariables: Record<string, string> = {
