@@ -110,6 +110,8 @@ const LEAD_TEMPERATURE_VALUES = [
   "NOT_APPLICABLE",
 ] as const;
 
+const QUALIFIED_TEMPERATURES = new Set(["HOT", "WARM"]);
+
 const PURCHASE_TIMELINE_VALUES = [
   "WITHIN_3_MONTHS",
   "WITHIN_6_MONTHS",
@@ -329,10 +331,16 @@ async function handleCallCompleted(
     }
   }
 
+  const leadTemp = parsed?.leadTemperature?.toUpperCase()?.trim();
+  const isQualified = leadTemp ? QUALIFIED_TEMPERATURES.has(leadTemp) : false;
+
   // ── Update campaign counters ──────────────────────────────────────────────
   await prisma.campaign.update({
     where: { id: call.campaignId },
-    data: { calledLeads: { increment: 1 } },
+    data: {
+      calledLeads: { increment: 1 },
+      ...(isQualified && { successLeads: { increment: 1 } }),
+    },
   });
 }
 
