@@ -76,6 +76,102 @@ export class CampaignService {
     });
   }
 
+  async parseLeads(tenantId: string, campaignId: string, filePath: string) {
+    const campaign = await prisma.campaign.findFirst({
+      where: { id: campaignId, tenantId },
+    });
+
+    if (!campaign) {
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+      throw new Error("Campaign not found");
+    }
+
+    if (campaign.status === "FAILED") {
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+      throw new Error(
+        "Cannot upload leads to a failed campaign. Please create a new campaign.",
+      );
+    }
+
+    let rows: LeadRow[];
+    try {
+      rows = parseLeadFile(filePath);
+    } catch (parseError: unknown) {
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+      const message =
+        parseError instanceof Error
+          ? parseError.message
+          : "Failed to parse file";
+      throw new Error(`File parsing failed: ${message}`);
+    } finally {
+      // Always clean up the parse-preview temp file
+      if (fs.existsSync(filePath)) {
+        try {
+          fs.unlinkSync(filePath);
+        } catch {
+          /* ignore */
+        }
+      }
+    }
+
+    if (rows.length === 0) {
+      throw new Error("File is empty — no rows found");
+    }
+
+    // ── Bucket 1: rows missing phone ────────────────────────────────────────
+    const validRows = rows.filter((r) => r.phone && r.phone.trim() !== "");
+    const invalidCount = rows.length - validRows.length;
+
+    // ── Bucket 2: duplicates WITHIN the uploaded file itself ───────────────
+    const seenInFile = new Set<string>();
+    const inFileDuplicateNumbers: string[] = [];
+    const uniqueRows: LeadRow[] = [];
+
+    for (const row of validRows) {
+      const phone = row.phone.trim();
+      if (seenInFile.has(phone)) {
+        inFileDuplicateNumbers.push(phone);
+      } else {
+        seenInFile.add(phone);
+        uniqueRows.push(row);
+      }
+    }
+
+    // ── Bucket 3: duplicates against EXISTING leads in this campaign ───────
+    const uniquePhones = uniqueRows.map((r) => r.phone.trim());
+    const existingLeads =
+      uniquePhones.length > 0
+        ? await prisma.lead.findMany({
+            where: { campaignId, phone: { in: uniquePhones } },
+            select: { phone: true },
+          })
+        : [];
+
+    const existingPhoneSet = new Set(existingLeads.map((l) => l.phone));
+
+    const dbDuplicateNumbers: string[] = [];
+    const newLeads: LeadRow[] = [];
+
+    for (const row of uniqueRows) {
+      if (existingPhoneSet.has(row.phone.trim())) {
+        dbDuplicateNumbers.push(row.phone.trim());
+      } else {
+        newLeads.push(row);
+      }
+    }
+
+    return {
+      total: rows.length,
+      valid: validRows.length,
+      invalid: invalidCount,
+      inFileDuplicates: inFileDuplicateNumbers.length,
+      inFileDuplicateNumbers,
+      dbDuplicates: dbDuplicateNumbers.length,
+      dbDuplicateNumbers,
+      readyToImport: newLeads.length,
+    };
+  }
+
   // ─── Upload Leads ──────────────────────────────────────────────────────────
   async uploadLeads(
     tenantId: string,
