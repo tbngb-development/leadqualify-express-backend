@@ -161,13 +161,12 @@ function sanitizeEnum<T extends string>(
   return (allowed as readonly string[]).includes(upper) ? upper : null;
 }
 
-// ─── Main Handler ─────────────────────────────────────────────────────────────
+// ─── Main Handler (CHANGED: queued/initiated case) ──────────────────────────
 
 export const handleBolnaWebhook = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  // Acknowledge immediately — Bolna expects fast response
   res.json({ received: true });
 
   const payload = req.body as BolnaWebhookPayload;
@@ -191,6 +190,21 @@ export const handleBolnaWebhook = async (
           where: { bolnaCallId: callId },
           data: { status: "CALLING", startedAt: new Date() },
         });
+
+        // ── NEW: Transition SCHEDULED → RUNNING on first Bolna call ──────
+        // When Bolna fires a scheduled call, the webhook tells us the
+        // campaign is now actively running.
+        const call = await prisma.call.findFirst({
+          where: { bolnaCallId: callId },
+          select: { campaignId: true },
+        });
+        if (call) {
+          await prisma.campaign.updateMany({
+            where: { id: call.campaignId, status: "SCHEDULED" },
+            data: { status: "RUNNING", startedAt: new Date() },
+          });
+        }
+
         console.log(`[Webhook] Queued/initiated: ${callId}`);
         break;
       }
@@ -245,7 +259,7 @@ export const handleBolnaWebhook = async (
   }
 };
 
-// ─── Completed ────────────────────────────────────────────────────────────────
+// ─── Completed (CHANGED: added scheduled campaign completion detection) ─────
 
 async function handleCallCompleted(
   callId: string,
@@ -260,7 +274,6 @@ async function handleCallCompleted(
     return;
   }
 
-  // ── Normalize messages ────────────────────────────────────────────────────
   const normalizedMessages = (payload.messages ?? [])
     .filter((m) => m.role === "agent" || m.role === "user")
     .map((m) => ({
@@ -269,7 +282,6 @@ async function handleCallCompleted(
       time: m.created_at ?? null,
     }));
 
-  // ── Build transcript ──────────────────────────────────────────────────────
   const transcriptText =
     payload.transcript ||
     normalizedMessages
@@ -277,17 +289,11 @@ async function handleCallCompleted(
       .join("\n") ||
     null;
 
-  // ── Parse extraction data ─────────────────────────────────────────────────
   const parsed = parseExtractionData(payload.extracted_data ?? null);
-
-  // ── Resolve call summary from extraction (discard raw Bolna summary) ──────
   const callSummary = parsed?.callSummary ?? null;
-
-  // ── Resolve duration and recording ────────────────────────────────────────
   const duration = resolveDuration(payload);
   const recording = resolveRecordingUrl(payload);
 
-  // ── Determine final call status ───────────────────────────────────────────
   const hangupReason = payload.telephony_data?.hangup_reason ?? null;
   const callStatus =
     hangupReason === "customer-busy" ? "NO_ANSWER" : "COMPLETED";
@@ -296,7 +302,6 @@ async function handleCallCompleted(
     `[Webhook] Completed: ${callId} | duration: ${duration}s | hasExtraction: ${!!parsed}`,
   );
 
-  // ── Update call record ────────────────────────────────────────────────────
   await prisma.call.update({
     where: { id: call.id },
     data: {
@@ -311,17 +316,14 @@ async function handleCallCompleted(
     },
   });
 
-  // ── Update lead status to CALLED ──────────────────────────────────────────
   await prisma.lead.update({
     where: { id: call.leadId },
     data: { status: "CALLED" },
   });
 
-  // ── Save call analysis if extraction data exists ──────────────────────────
   if (parsed) {
     await saveCallAnalysis(call.id, call.tenantId, parsed);
 
-    // ── Handle do_not_call flag on lead ──────────────────────────────────
     if (parsed.doNotCall === "YES") {
       await prisma.lead.update({
         where: { id: call.leadId },
@@ -334,7 +336,6 @@ async function handleCallCompleted(
   const leadTemp = parsed?.leadTemperature?.toUpperCase()?.trim();
   const isQualified = leadTemp ? QUALIFIED_TEMPERATURES.has(leadTemp) : false;
 
-  // ── Update campaign counters ──────────────────────────────────────────────
   await prisma.campaign.update({
     where: { id: call.campaignId },
     data: {
@@ -342,10 +343,12 @@ async function handleCallCompleted(
       ...(isQualified && { successLeads: { increment: 1 } }),
     },
   });
+
+  // Check completion for scheduled campaigns
+  await checkScheduledCampaignCompletion(call.campaignId);
 }
 
 // ─── No Answer ────────────────────────────────────────────────────────────────
-
 async function handleCallNoAnswer(callId: string) {
   const call = await prisma.call.findFirst({
     where: { bolnaCallId: callId },
@@ -366,10 +369,10 @@ async function handleCallNoAnswer(callId: string) {
   });
 
   console.log(`[Webhook] No answer: ${callId}`);
+  await checkScheduledCampaignCompletion(call.campaignId);
 }
 
 // ─── Busy ─────────────────────────────────────────────────────────────────────
-
 async function handleCallBusy(callId: string) {
   const call = await prisma.call.findFirst({
     where: { bolnaCallId: callId },
@@ -390,10 +393,10 @@ async function handleCallBusy(callId: string) {
   });
 
   console.log(`[Webhook] Busy: ${callId}`);
+  await checkScheduledCampaignCompletion(call.campaignId);
 }
 
 // ─── Failed ───────────────────────────────────────────────────────────────────
-
 async function handleCallFailed(callId: string, errorMessage?: string | null) {
   const call = await prisma.call.findFirst({
     where: { bolnaCallId: callId },
@@ -421,6 +424,39 @@ async function handleCallFailed(callId: string, errorMessage?: string | null) {
     where: { id: call.campaignId },
     data: { failedLeads: { increment: 1 } },
   });
+
+  await checkScheduledCampaignCompletion(call.campaignId);
+}
+
+// ─── Scheduled Campaign Completion Check ─────────────────────────────────────
+async function checkScheduledCampaignCompletion(
+  campaignId: string,
+): Promise<void> {
+  const campaign = await prisma.campaign.findUnique({
+    where: { id: campaignId },
+    select: { status: true, scheduledAt: true },
+  });
+
+  if (!campaign || !campaign.scheduledAt || campaign.status !== "RUNNING") {
+    return;
+  }
+
+  const activeLeads = await prisma.lead.count({
+    where: {
+      campaignId,
+      status: { in: ["PENDING", "CALLING"] },
+    },
+  });
+
+  if (activeLeads === 0) {
+    await prisma.campaign.update({
+      where: { id: campaignId },
+      data: { status: "COMPLETED", completedAt: new Date() },
+    });
+    console.log(
+      `[Webhook] Scheduled campaign ${campaignId} — all calls completed → COMPLETED`,
+    );
+  }
 }
 
 // ─── Parse Extraction Data ────────────────────────────────────────────────────

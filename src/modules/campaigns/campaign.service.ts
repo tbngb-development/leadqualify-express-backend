@@ -81,7 +81,7 @@ export class CampaignService {
     tenantId: string,
     campaignId: string,
     filePath: string,
-    allowDuplicates = false, // 👈 new flag — false by default (production safe)
+    allowDuplicates = false,
   ) {
     const campaign = await prisma.campaign.findFirst({
       where: { id: campaignId, tenantId },
@@ -153,7 +153,7 @@ export class CampaignService {
           campaignId,
           metadata: row as object,
         })),
-        skipDuplicates: allowDuplicates ? false : true, // 👈 when bypassing, let DB unique constraint surface naturally
+        skipDuplicates: allowDuplicates ? false : true,
       });
 
       await prisma.campaign.update({
@@ -175,7 +175,8 @@ export class CampaignService {
   }
 
   // ─── Start Campaign ────────────────────────────────────────────────────────
-  async start(tenantId: string, campaignId: string) {
+  // Now accepts optional scheduledAt (ISO 8601 string with timezone)
+  async start(tenantId: string, campaignId: string, scheduledAt?: string) {
     const campaign = await prisma.campaign.findFirst({
       where: { id: campaignId, tenantId },
       include: { assistant: true },
@@ -183,6 +184,10 @@ export class CampaignService {
 
     if (!campaign) throw new Error("Campaign not found");
     if (campaign.status === "RUNNING") throw new Error("Already running");
+    if (campaign.status === "SCHEDULED")
+      throw new Error(
+        "Campaign is already scheduled. Cancel first to reschedule.",
+      );
 
     const leads = await prisma.lead.findMany({
       where: { campaignId, status: "PENDING", doNotCall: false },
@@ -192,25 +197,59 @@ export class CampaignService {
     const campaignVariables =
       (campaign.variables as Record<string, string>) ?? {};
 
-    await prisma.campaign.update({
-      where: { id: campaignId },
-      data: { status: "RUNNING", startedAt: new Date() },
-    });
+    // ── Determine if this is a scheduled or immediate run ──────────────────
+    const isScheduled = !!scheduledAt;
 
+    if (isScheduled) {
+      // Validate the scheduled date
+      const scheduledDate = new Date(scheduledAt!);
+      if (isNaN(scheduledDate.getTime())) {
+        throw new Error(
+          "Invalid scheduled date format. Use ISO 8601 with timezone.",
+        );
+      }
+      if (scheduledDate <= new Date()) {
+        throw new Error("Scheduled time must be in the future.");
+      }
+
+      await prisma.campaign.update({
+        where: { id: campaignId },
+        data: {
+          status: "SCHEDULED",
+          scheduledAt: scheduledDate,
+        },
+      });
+    } else {
+      await prisma.campaign.update({
+        where: { id: campaignId },
+        data: { status: "RUNNING", startedAt: new Date() },
+      });
+    }
+
+    // ── Dispatch calls (Bolna handles the actual scheduling) ───────────────
     this.processLeads(
       tenantId,
       campaignId,
       leads,
       campaign.assistant.bolnaId,
       campaignVariables,
+      50,
+      isScheduled ? scheduledAt : undefined,
     )
-      .then(() => console.log(`[Campaign] ${campaignId} completed`))
+      .then(() =>
+        console.log(
+          `[Campaign] ${campaignId} dispatch completed (${isScheduled ? "scheduled" : "immediate"})`,
+        ),
+      )
       .catch((err) => console.error(`[Campaign] ${campaignId} failed:`, err));
 
     return {
-      message: `Campaign started — ${leads.length} calls queued`,
+      message: isScheduled
+        ? `Campaign scheduled for ${scheduledAt} — ${leads.length} calls queued with Bolna`
+        : `Campaign started — ${leads.length} calls queued`,
       totalLeads: leads.length,
       variableKeys: Object.keys(campaignVariables),
+      scheduledAt: isScheduled ? scheduledAt : null,
     };
   }
 
@@ -222,14 +261,16 @@ export class CampaignService {
     bolnaAgentId: string,
     campaignVariables: Record<string, string>,
     batchSize = 50,
+    scheduledAt?: string, // ← NEW: passed through to makeCall
   ) {
     for (let i = 0; i < leads.length; i += batchSize) {
-      // Check if campaign is still running before each batch
+      // Check if campaign is still active before each batch
       const campaign = await prisma.campaign.findUnique({
         where: { id: campaignId },
       });
 
-      if (campaign?.status !== "RUNNING") {
+      // Allow both RUNNING and SCHEDULED statuses during dispatch
+      if (campaign?.status !== "RUNNING" && campaign?.status !== "SCHEDULED") {
         console.log(
           `[Campaign] ${campaignId} paused/stopped — halting dispatch`,
         );
@@ -238,7 +279,6 @@ export class CampaignService {
 
       const batch = leads.slice(i, i + batchSize);
 
-      // Fire batch concurrently — Bolna queues and manages concurrency
       await Promise.all(
         batch.map((lead) =>
           this.makeCall(
@@ -247,27 +287,32 @@ export class CampaignService {
             lead,
             bolnaAgentId,
             campaignVariables,
+            scheduledAt, // ← NEW
           ).catch((err) =>
             console.error(`[Campaign] Call failed for lead ${lead.id}:`, err),
           ),
         ),
       );
 
-      // Small delay between batches to respect Bolna rate limits
       if (i + batchSize < leads.length) {
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
     }
 
-    const remaining = await prisma.lead.count({
-      where: { campaignId, status: "PENDING" },
-    });
-
-    if (remaining === 0) {
-      await prisma.campaign.update({
-        where: { id: campaignId },
-        data: { status: "COMPLETED", completedAt: new Date() },
+    // ── Only auto-complete for immediate (RUNNING) campaigns ───────────────
+    // Scheduled campaigns will be marked COMPLETED by the webhook handler
+    // after all Bolna-scheduled calls actually finish.
+    if (!scheduledAt) {
+      const remaining = await prisma.lead.count({
+        where: { campaignId, status: "PENDING" },
       });
+
+      if (remaining === 0) {
+        await prisma.campaign.update({
+          where: { id: campaignId },
+          data: { status: "COMPLETED", completedAt: new Date() },
+        });
+      }
     }
   }
 
@@ -278,6 +323,7 @@ export class CampaignService {
     lead: { id: string; phone: string; name: string },
     bolnaAgentId: string,
     campaignVariables: Record<string, string>,
+    scheduledAt?: string, // ← NEW
   ) {
     await prisma.lead.update({
       where: { id: lead.id },
@@ -289,9 +335,6 @@ export class CampaignService {
     });
 
     try {
-      // Merge campaign variables + lead-specific data
-      // Lead fields override campaign fields if same key exists
-
       const hasCustomerName =
         !!lead.name &&
         !["unknown", "null", "unavailable", ""].includes(
@@ -309,15 +352,24 @@ export class CampaignService {
         customer_phone: lead.phone,
       };
 
-      const bolnaCall = await bolnaClient.calls.create({
+      // ── Build Bolna payload — include scheduled_at if provided ──────────
+      const bolnaPayload: Record<string, unknown> = {
         agent_id: bolnaAgentId,
         recipient_phone_number: lead.phone,
         user_data: callVariables,
-      });
+      };
+
+      if (scheduledAt) {
+        bolnaPayload.scheduled_at = scheduledAt;
+      }
+
+      const bolnaCall = await bolnaClient.calls.create(bolnaPayload as any);
 
       const callId = bolnaCall.id ?? bolnaCall.execution_id ?? null;
 
-      console.log(`[Bolna] Resolved callId: ${callId}`);
+      console.log(
+        `[Bolna] Resolved callId: ${callId}${scheduledAt ? ` (scheduled: ${scheduledAt})` : ""}`,
+      );
 
       await prisma.call.update({
         where: { id: callRecord.id },
@@ -355,6 +407,59 @@ export class CampaignService {
       where: { id: campaignId },
       data: { status: "PAUSED" },
     });
+  }
+
+  // ─── Cancel Schedule ───────────────────────────────────────────────────────
+  // Resets a SCHEDULED campaign back to DRAFT, resets leads to PENDING,
+  // and cleans up pending call records.
+  async cancelSchedule(tenantId: string, campaignId: string) {
+    const campaign = await prisma.campaign.findFirst({
+      where: { id: campaignId, tenantId },
+    });
+
+    if (!campaign) throw new Error("Campaign not found");
+    if (campaign.status !== "SCHEDULED") {
+      throw new Error(
+        "Only scheduled campaigns can have their schedule cancelled.",
+      );
+    }
+
+    // 1. Reset all leads that were set to CALLING back to PENDING so they can be run again
+    await prisma.lead.updateMany({
+      where: {
+        campaignId,
+        status: "CALLING",
+      },
+      data: {
+        status: "PENDING",
+      },
+    });
+
+    // 2. Remove in-flight Call records initiated for this scheduled run
+    await prisma.call.deleteMany({
+      where: {
+        campaignId,
+        status: "CALLING",
+      },
+    });
+
+    // 3. Reset campaign status back to DRAFT and remove the scheduled timestamp
+    const updatedCampaign = await prisma.campaign.update({
+      where: { id: campaignId },
+      data: {
+        status: "DRAFT",
+        scheduledAt: null,
+      },
+      include: {
+        assistant: true,
+        brochure: true,
+      },
+    });
+
+    return {
+      message: "Campaign schedule cancelled. Leads have been reset to PENDING.",
+      campaign: updatedCampaign,
+    };
   }
 
   // ─── Stats ─────────────────────────────────────────────────────────────────
