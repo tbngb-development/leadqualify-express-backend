@@ -4,6 +4,7 @@ export interface BolnaCallPayload {
   agent_id: string;
   recipient_phone_number: string;
   user_data?: Record<string, string>;
+  scheduled_at?: string;
 }
 
 export interface BolnaCallResponse {

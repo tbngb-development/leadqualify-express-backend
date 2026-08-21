@@ -218,6 +218,7 @@ exports.Prisma.CampaignScalarFieldEnum = {
   calledLeads: 'calledLeads',
   successLeads: 'successLeads',
   failedLeads: 'failedLeads',
+  scheduledAt: 'scheduledAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   startedAt: 'startedAt',
@@ -315,6 +316,7 @@ exports.Role = exports.$Enums.Role = {
 
 exports.CampaignStatus = exports.$Enums.CampaignStatus = {
   DRAFT: 'DRAFT',
+  SCHEDULED: 'SCHEDULED',
   RUNNING: 'RUNNING',
   PAUSED: 'PAUSED',
   COMPLETED: 'COMPLETED',

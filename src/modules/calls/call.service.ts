@@ -1,7 +1,11 @@
 // src/modules/calls/call.service.ts
 
 import prisma from "../../config/database";
-import { CallStatus, Disposition, LeadTemperature } from "../../generated/prisma";
+import {
+  CallStatus,
+  Disposition,
+  LeadTemperature,
+} from "../../generated/prisma";
 
 // ─── Qualifying dispositions (mirrors dashboard constants) ────────────────────
 const QUALIFYING_DISPOSITIONS: Disposition[] = [
@@ -27,7 +31,7 @@ export class CallService {
       sortOrder?: string;
       page?: number;
       limit?: number;
-    }
+    },
   ) {
     const {
       campaignId,
@@ -57,18 +61,28 @@ export class CallService {
         : {};
 
     // ── Build callAnalysis filter ─────────────────────────────────────────────
+    const callAnalysisCondition: any = {};
+
+    if (disposition) {
+      callAnalysisCondition.disposition = disposition as Disposition;
+    }
+
+    if (leadTemperature) {
+      // Split comma-separated temperatures ("HOT,WARM") into an array
+      const temps = leadTemperature
+        .split(",")
+        .map((t) => t.trim().toUpperCase() as LeadTemperature);
+
+      if (temps.length > 1) {
+        callAnalysisCondition.leadTemperature = { in: temps };
+      } else if (temps[0]) {
+        callAnalysisCondition.leadTemperature = temps[0];
+      }
+    }
+
     const analysisFilter =
-      disposition || leadTemperature
-        ? {
-            callAnalysis: {
-              ...(disposition && {
-                disposition: disposition as Disposition,
-              }),
-              ...(leadTemperature && {
-                leadTemperature: leadTemperature as LeadTemperature,
-              }),
-            },
-          }
+      Object.keys(callAnalysisCondition).length > 0
+        ? { callAnalysis: callAnalysisCondition }
         : {};
 
     const where = {
@@ -146,7 +160,7 @@ export class CallService {
   // ─── Stats ─────────────────────────────────────────────────────────────────
   async getStats(
     tenantId: string,
-    filters: { campaignId?: string; leadId?: string }
+    filters: { campaignId?: string; leadId?: string },
   ) {
     const { campaignId, leadId } = filters;
 

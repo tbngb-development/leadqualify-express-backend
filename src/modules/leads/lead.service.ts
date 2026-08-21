@@ -18,18 +18,20 @@ export class LeadService {
       campaignId?: string;
       status?: string;
       doNotCall?: boolean;
+      leadTemperature?: string;
       dateFrom?: string;
       dateTo?: string;
       sortBy?: string;
       sortOrder?: string;
       page?: number;
       limit?: number;
-    }
+    },
   ) {
     const {
       campaignId,
       status,
       doNotCall,
+      leadTemperature,
       dateFrom,
       dateTo,
       sortBy = "createdAt",
@@ -50,13 +52,29 @@ export class LeadService {
           }
         : {};
 
-    const where = {
+    // Explicitly typing 'where' as 'any' stops compilation errors when appending dynamic sub-queries
+    const where: any = {
       tenantId,
       ...(campaignId && { campaignId }),
       ...(status && { status: status as LeadStatus }),
       ...(doNotCall !== undefined && { doNotCall }),
       ...dateFilter,
     };
+
+    // ── Filter leads by their latest call's leadTemperature (Supports Multi-value) ──
+    if (leadTemperature) {
+      const temps = leadTemperature
+        .split(",")
+        .map((t) => t.trim().toUpperCase());
+
+      where.calls = {
+        some: {
+          callAnalysis: {
+            leadTemperature: { in: temps },
+          },
+        },
+      };
+    }
 
     const validSortFields = ["createdAt", "name", "updatedAt"];
     const orderField = validSortFields.includes(sortBy) ? sortBy : "createdAt";

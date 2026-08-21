@@ -1,3 +1,5 @@
+// src/modules/campaigns/campaign.controller.ts
+
 import { Response, NextFunction } from "express";
 import path from "path";
 import fs from "fs";
@@ -62,6 +64,34 @@ export const create = async (
   }
 };
 
+export const parseLeads = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const tenantId = req.user!.tenantId;
+    const campaignId = getParam(req.params["id"]);
+
+    if (!req.file) {
+      res.status(400).json({ success: false, error: "No file uploaded" });
+      return;
+    }
+
+    const result = await campaignService.parseLeads(
+      tenantId,
+      campaignId,
+      req.file.path,
+    );
+
+    res.json({ success: true, data: result });
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "Failed to parse leads";
+    res.status(400).json({ success: false, error: message });
+  }
+};
+
 export const uploadLeads = async (
   req: AuthRequest,
   res: Response,
@@ -76,7 +106,6 @@ export const uploadLeads = async (
       return;
     }
 
-    // allowDuplicates=true only accepted in non-production environments
     const allowDuplicates = req.query.allowDuplicates === "true";
 
     const result = await campaignService.uploadLeads(
@@ -95,6 +124,7 @@ export const uploadLeads = async (
   }
 };
 
+// ── UPDATED: now accepts optional scheduledAt in body ──
 export const start = async (
   req: AuthRequest,
   res: Response,
@@ -102,7 +132,13 @@ export const start = async (
 ): Promise<void> => {
   try {
     const id = getParam(req.params["id"]);
-    const data = await campaignService.start(req.user!.tenantId, id);
+    const { scheduledAt } = req.body; // ← NEW: optional ISO 8601 string
+
+    const data = await campaignService.start(
+      req.user!.tenantId,
+      id,
+      scheduledAt,
+    );
     res.json({ success: true, data });
   } catch (error) {
     next(error);
@@ -118,6 +154,25 @@ export const pause = async (
     const id = getParam(req.params["id"]);
     const data = await campaignService.pause(req.user!.tenantId, id);
     res.json({ success: true, data });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// ── NEW: Cancel a scheduled campaign ──
+export const cancelSchedule = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const id = getParam(req.params["id"]);
+    const data = await campaignService.cancelSchedule(req.user!.tenantId, id);
+    res.json({
+      success: true,
+      data,
+      warning: "Calls already queued may still execute",
+    });
   } catch (error) {
     next(error);
   }

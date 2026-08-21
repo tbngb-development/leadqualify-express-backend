@@ -69,6 +69,7 @@ export type Role = (typeof Role)[keyof typeof Role]
 
 export const CampaignStatus: {
   DRAFT: 'DRAFT',
+  SCHEDULED: 'SCHEDULED',
   RUNNING: 'RUNNING',
   PAUSED: 'PAUSED',
   COMPLETED: 'COMPLETED',
@@ -7125,6 +7126,7 @@ export namespace Prisma {
     calledLeads: number | null
     successLeads: number | null
     failedLeads: number | null
+    scheduledAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     startedAt: Date | null
@@ -7143,6 +7145,7 @@ export namespace Prisma {
     calledLeads: number | null
     successLeads: number | null
     failedLeads: number | null
+    scheduledAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     startedAt: Date | null
@@ -7162,6 +7165,7 @@ export namespace Prisma {
     calledLeads: number
     successLeads: number
     failedLeads: number
+    scheduledAt: number
     createdAt: number
     updatedAt: number
     startedAt: number
@@ -7196,6 +7200,7 @@ export namespace Prisma {
     calledLeads?: true
     successLeads?: true
     failedLeads?: true
+    scheduledAt?: true
     createdAt?: true
     updatedAt?: true
     startedAt?: true
@@ -7214,6 +7219,7 @@ export namespace Prisma {
     calledLeads?: true
     successLeads?: true
     failedLeads?: true
+    scheduledAt?: true
     createdAt?: true
     updatedAt?: true
     startedAt?: true
@@ -7233,6 +7239,7 @@ export namespace Prisma {
     calledLeads?: true
     successLeads?: true
     failedLeads?: true
+    scheduledAt?: true
     createdAt?: true
     updatedAt?: true
     startedAt?: true
@@ -7339,6 +7346,7 @@ export namespace Prisma {
     calledLeads: number
     successLeads: number
     failedLeads: number
+    scheduledAt: Date | null
     createdAt: Date
     updatedAt: Date
     startedAt: Date | null
@@ -7377,6 +7385,7 @@ export namespace Prisma {
     calledLeads?: boolean
     successLeads?: boolean
     failedLeads?: boolean
+    scheduledAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     startedAt?: boolean
@@ -7402,6 +7411,7 @@ export namespace Prisma {
     calledLeads?: boolean
     successLeads?: boolean
     failedLeads?: boolean
+    scheduledAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     startedAt?: boolean
@@ -7424,6 +7434,7 @@ export namespace Prisma {
     calledLeads?: boolean
     successLeads?: boolean
     failedLeads?: boolean
+    scheduledAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     startedAt?: boolean
@@ -7446,13 +7457,14 @@ export namespace Prisma {
     calledLeads?: boolean
     successLeads?: boolean
     failedLeads?: boolean
+    scheduledAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     startedAt?: boolean
     completedAt?: boolean
   }
 
-  export type CampaignOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "status" | "tenantId" | "assistantId" | "brochureId" | "variables" | "totalLeads" | "calledLeads" | "successLeads" | "failedLeads" | "createdAt" | "updatedAt" | "startedAt" | "completedAt", ExtArgs["result"]["campaign"]>
+  export type CampaignOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "status" | "tenantId" | "assistantId" | "brochureId" | "variables" | "totalLeads" | "calledLeads" | "successLeads" | "failedLeads" | "scheduledAt" | "createdAt" | "updatedAt" | "startedAt" | "completedAt", ExtArgs["result"]["campaign"]>
   export type CampaignInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     assistant?: boolean | AssistantDefaultArgs<ExtArgs>
@@ -7494,6 +7506,7 @@ export namespace Prisma {
       calledLeads: number
       successLeads: number
       failedLeads: number
+      scheduledAt: Date | null
       createdAt: Date
       updatedAt: Date
       startedAt: Date | null
@@ -7938,6 +7951,7 @@ export namespace Prisma {
     readonly calledLeads: FieldRef<"Campaign", 'Int'>
     readonly successLeads: FieldRef<"Campaign", 'Int'>
     readonly failedLeads: FieldRef<"Campaign", 'Int'>
+    readonly scheduledAt: FieldRef<"Campaign", 'DateTime'>
     readonly createdAt: FieldRef<"Campaign", 'DateTime'>
     readonly updatedAt: FieldRef<"Campaign", 'DateTime'>
     readonly startedAt: FieldRef<"Campaign", 'DateTime'>
@@ -12221,6 +12235,7 @@ export namespace Prisma {
     calledLeads: 'calledLeads',
     successLeads: 'successLeads',
     failedLeads: 'failedLeads',
+    scheduledAt: 'scheduledAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     startedAt: 'startedAt',
@@ -13116,6 +13131,7 @@ export namespace Prisma {
     calledLeads?: IntFilter<"Campaign"> | number
     successLeads?: IntFilter<"Campaign"> | number
     failedLeads?: IntFilter<"Campaign"> | number
+    scheduledAt?: DateTimeNullableFilter<"Campaign"> | Date | string | null
     createdAt?: DateTimeFilter<"Campaign"> | Date | string
     updatedAt?: DateTimeFilter<"Campaign"> | Date | string
     startedAt?: DateTimeNullableFilter<"Campaign"> | Date | string | null
@@ -13140,6 +13156,7 @@ export namespace Prisma {
     calledLeads?: SortOrder
     successLeads?: SortOrder
     failedLeads?: SortOrder
+    scheduledAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     startedAt?: SortOrderInput | SortOrder
@@ -13167,6 +13184,7 @@ export namespace Prisma {
     calledLeads?: IntFilter<"Campaign"> | number
     successLeads?: IntFilter<"Campaign"> | number
     failedLeads?: IntFilter<"Campaign"> | number
+    scheduledAt?: DateTimeNullableFilter<"Campaign"> | Date | string | null
     createdAt?: DateTimeFilter<"Campaign"> | Date | string
     updatedAt?: DateTimeFilter<"Campaign"> | Date | string
     startedAt?: DateTimeNullableFilter<"Campaign"> | Date | string | null
@@ -13191,6 +13209,7 @@ export namespace Prisma {
     calledLeads?: SortOrder
     successLeads?: SortOrder
     failedLeads?: SortOrder
+    scheduledAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     startedAt?: SortOrderInput | SortOrder
@@ -13218,6 +13237,7 @@ export namespace Prisma {
     calledLeads?: IntWithAggregatesFilter<"Campaign"> | number
     successLeads?: IntWithAggregatesFilter<"Campaign"> | number
     failedLeads?: IntWithAggregatesFilter<"Campaign"> | number
+    scheduledAt?: DateTimeNullableWithAggregatesFilter<"Campaign"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Campaign"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Campaign"> | Date | string
     startedAt?: DateTimeNullableWithAggregatesFilter<"Campaign"> | Date | string | null
@@ -14190,6 +14210,7 @@ export namespace Prisma {
     calledLeads?: number
     successLeads?: number
     failedLeads?: number
+    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -14214,6 +14235,7 @@ export namespace Prisma {
     calledLeads?: number
     successLeads?: number
     failedLeads?: number
+    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -14232,6 +14254,7 @@ export namespace Prisma {
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -14256,6 +14279,7 @@ export namespace Prisma {
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -14277,6 +14301,7 @@ export namespace Prisma {
     calledLeads?: number
     successLeads?: number
     failedLeads?: number
+    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -14293,6 +14318,7 @@ export namespace Prisma {
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -14312,6 +14338,7 @@ export namespace Prisma {
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -15401,6 +15428,7 @@ export namespace Prisma {
     calledLeads?: SortOrder
     successLeads?: SortOrder
     failedLeads?: SortOrder
+    scheduledAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     startedAt?: SortOrder
@@ -15426,6 +15454,7 @@ export namespace Prisma {
     calledLeads?: SortOrder
     successLeads?: SortOrder
     failedLeads?: SortOrder
+    scheduledAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     startedAt?: SortOrder
@@ -15444,6 +15473,7 @@ export namespace Prisma {
     calledLeads?: SortOrder
     successLeads?: SortOrder
     failedLeads?: SortOrder
+    scheduledAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     startedAt?: SortOrder
@@ -17291,6 +17321,7 @@ export namespace Prisma {
     calledLeads?: number
     successLeads?: number
     failedLeads?: number
+    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -17313,6 +17344,7 @@ export namespace Prisma {
     calledLeads?: number
     successLeads?: number
     failedLeads?: number
+    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -17675,6 +17707,7 @@ export namespace Prisma {
     calledLeads?: IntFilter<"Campaign"> | number
     successLeads?: IntFilter<"Campaign"> | number
     failedLeads?: IntFilter<"Campaign"> | number
+    scheduledAt?: DateTimeNullableFilter<"Campaign"> | Date | string | null
     createdAt?: DateTimeFilter<"Campaign"> | Date | string
     updatedAt?: DateTimeFilter<"Campaign"> | Date | string
     startedAt?: DateTimeNullableFilter<"Campaign"> | Date | string | null
@@ -18020,6 +18053,7 @@ export namespace Prisma {
     calledLeads?: number
     successLeads?: number
     failedLeads?: number
+    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -18042,6 +18076,7 @@ export namespace Prisma {
     calledLeads?: number
     successLeads?: number
     failedLeads?: number
+    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -18166,6 +18201,7 @@ export namespace Prisma {
     calledLeads?: number
     successLeads?: number
     failedLeads?: number
+    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -18188,6 +18224,7 @@ export namespace Prisma {
     calledLeads?: number
     successLeads?: number
     failedLeads?: number
+    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -18794,6 +18831,7 @@ export namespace Prisma {
     calledLeads?: number
     successLeads?: number
     failedLeads?: number
+    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -18817,6 +18855,7 @@ export namespace Prisma {
     calledLeads?: number
     successLeads?: number
     failedLeads?: number
+    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -18939,6 +18978,7 @@ export namespace Prisma {
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -18962,6 +19002,7 @@ export namespace Prisma {
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -19032,6 +19073,7 @@ export namespace Prisma {
     calledLeads?: number
     successLeads?: number
     failedLeads?: number
+    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -19055,6 +19097,7 @@ export namespace Prisma {
     calledLeads?: number
     successLeads?: number
     failedLeads?: number
+    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -19211,6 +19254,7 @@ export namespace Prisma {
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -19234,6 +19278,7 @@ export namespace Prisma {
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -19523,6 +19568,7 @@ export namespace Prisma {
     calledLeads?: number
     successLeads?: number
     failedLeads?: number
+    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -19681,6 +19727,7 @@ export namespace Prisma {
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -19703,6 +19750,7 @@ export namespace Prisma {
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -19723,6 +19771,7 @@ export namespace Prisma {
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -20085,6 +20134,7 @@ export namespace Prisma {
     calledLeads?: number
     successLeads?: number
     failedLeads?: number
+    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -20101,6 +20151,7 @@ export namespace Prisma {
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -20123,6 +20174,7 @@ export namespace Prisma {
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -20143,6 +20195,7 @@ export namespace Prisma {
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -20161,6 +20214,7 @@ export namespace Prisma {
     calledLeads?: number
     successLeads?: number
     failedLeads?: number
+    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -20177,6 +20231,7 @@ export namespace Prisma {
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -20199,6 +20254,7 @@ export namespace Prisma {
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -20219,6 +20275,7 @@ export namespace Prisma {
     calledLeads?: IntFieldUpdateOperationsInput | number
     successLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
