@@ -407,6 +407,18 @@ export class CampaignService {
     }
   }
 
+  processNameForCall = (rawName: string | null | undefined): string | null => {
+    if (!rawName) return null;
+
+    const parts = rawName.trim().split(/\s+/).filter(Boolean);
+
+    for (const part of parts) {
+      if (part.length >= 3) return part;
+    }
+
+    return null;
+  };
+
   // ─── Make Single Call ───────────────────────────────────────────────────────
   async makeCall(
     tenantId: string,
@@ -426,22 +438,21 @@ export class CampaignService {
     });
 
     try {
-      // Safely trim and check if name is valid or empty/null
-      const trimmedName = lead.name?.trim();
+      // Process ONLY here — DB still has full name
+      const callName = this.processNameForCall(lead.name);
+
       const hasCustomerName =
-        !!trimmedName &&
-        !["unknown", "null", "unavailable", ""].includes(
-          trimmedName.toLowerCase(),
-        );
+        !!callName &&
+        !["unknown", "null", "unavailable"].includes(callName.toLowerCase());
 
       const welcome_message = hasCustomerName
-        ? `Hi, am I speaking with ${trimmedName}?`
+        ? `Hi, am I speaking with ${callName}?`
         : `Hi, I'm ${campaignVariables.agent_name} from ${campaignVariables.builder_name}. Is this a good time to talk?`;
 
       const callVariables: Record<string, string> = {
         ...campaignVariables,
         welcome_message,
-        customer_name: trimmedName || "",
+        customer_name: callName || "",
         customer_phone: lead.phone,
       };
 
