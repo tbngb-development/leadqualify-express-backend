@@ -241,7 +241,7 @@ export class CampaignService {
     if (newLeads.length > 0) {
       await prisma.lead.createMany({
         data: newLeads.map((row) => ({
-          name: row.name,
+          name: row.name, // <─── Safe to insert string | null now
           phone: row.phone.trim(),
           email: row.email,
           company: row.company,
@@ -353,19 +353,17 @@ export class CampaignService {
   private async processLeads(
     tenantId: string,
     campaignId: string,
-    leads: { id: string; phone: string; name: string }[],
+    leads: { id: string; phone: string; name: string | null }[], // <─── Updated type to allow string | null
     bolnaAgentId: string,
     campaignVariables: Record<string, string>,
     batchSize = 50,
-    scheduledAt?: string, // ← NEW: passed through to makeCall
+    scheduledAt?: string,
   ) {
     for (let i = 0; i < leads.length; i += batchSize) {
-      // Check if campaign is still active before each batch
       const campaign = await prisma.campaign.findUnique({
         where: { id: campaignId },
       });
 
-      // Allow both RUNNING and SCHEDULED statuses during dispatch
       if (campaign?.status !== "RUNNING" && campaign?.status !== "SCHEDULED") {
         console.log(
           `[Campaign] ${campaignId} paused/stopped — halting dispatch`,
@@ -383,7 +381,7 @@ export class CampaignService {
             lead,
             bolnaAgentId,
             campaignVariables,
-            scheduledAt, // ← NEW
+            scheduledAt,
           ).catch((err) =>
             console.error(`[Campaign] Call failed for lead ${lead.id}:`, err),
           ),
@@ -395,9 +393,6 @@ export class CampaignService {
       }
     }
 
-    // ── Only auto-complete for immediate (RUNNING) campaigns ───────────────
-    // Scheduled campaigns will be marked COMPLETED by the webhook handler
-    // after all Bolna-scheduled calls actually finish.
     if (!scheduledAt) {
       const remaining = await prisma.lead.count({
         where: { campaignId, status: "PENDING" },
@@ -416,10 +411,10 @@ export class CampaignService {
   async makeCall(
     tenantId: string,
     campaignId: string,
-    lead: { id: string; phone: string; name: string },
+    lead: { id: string; phone: string; name: string | null }, // <─── Updated type
     bolnaAgentId: string,
     campaignVariables: Record<string, string>,
-    scheduledAt?: string, // ← NEW
+    scheduledAt?: string,
   ) {
     await prisma.lead.update({
       where: { id: lead.id },
@@ -431,24 +426,25 @@ export class CampaignService {
     });
 
     try {
+      // Safely trim and check if name is valid or empty/null
+      const trimmedName = lead.name?.trim();
       const hasCustomerName =
-        !!lead.name &&
+        !!trimmedName &&
         !["unknown", "null", "unavailable", ""].includes(
-          lead.name.trim().toLowerCase(),
+          trimmedName.toLowerCase(),
         );
 
       const welcome_message = hasCustomerName
-        ? `Hi, am I speaking with ${lead.name}?`
+        ? `Hi, am I speaking with ${trimmedName}?`
         : `Hi, I'm ${campaignVariables.agent_name} from ${campaignVariables.builder_name}. Is this a good time to talk?`;
 
       const callVariables: Record<string, string> = {
         ...campaignVariables,
         welcome_message,
-        customer_name: lead.name,
+        customer_name: trimmedName || "",
         customer_phone: lead.phone,
       };
 
-      // ── Build Bolna payload — include scheduled_at if provided ──────────
       const bolnaPayload: Record<string, unknown> = {
         agent_id: bolnaAgentId,
         recipient_phone_number: lead.phone,
