@@ -4,11 +4,11 @@ import fs from "fs";
 import path from "path";
 
 export interface LeadRow {
-  name: string;
+  name: string | null; // <─── Updated to allow null
   phone: string;
   email?: string;
   company?: string;
-  [key: string]: string | undefined;
+  [key: string]: string | null | undefined;
 }
 
 const sanitizePhone = (raw: string): string => {
@@ -24,6 +24,26 @@ const sanitizePhone = (raw: string): string => {
   return cleaned.replace(/\D/g, ""); // digits only, normalization happens at call time
 };
 
+/**
+ * Parses and extracts a valid single name part (min 3 chars) from a multi-word name.
+ * Checks parts sequentially: First Name -> Middle Name -> Last Name...
+ * Returns null if no part matches the minimum length of 3.
+ */
+const processName = (rawName: string | undefined): string | null => {
+  if (!rawName) return null;
+
+  // Split by whitespace and remove empty parts
+  const parts = rawName.trim().split(/\s+/).filter(Boolean);
+
+  for (const part of parts) {
+    if (part.length >= 3) {
+      return part; // Return the first matching name part
+    }
+  }
+
+  return null; // Fallback to null if no part is >= 3 characters
+};
+
 // ─── Normalize a raw row from any source ──────────────────────────────────────
 const normalizeRow = (row: Record<string, unknown>): LeadRow => {
   // Convert all values to string safely
@@ -33,14 +53,15 @@ const normalizeRow = (row: Record<string, unknown>): LeadRow => {
     return s === "" ? undefined : s;
   };
 
+  const rawName =
+    str(row["name"]) ||
+    str(row["Name"]) ||
+    str(row["full_name"]) ||
+    str(row["Full Name"]) ||
+    str(row["FullName"]);
+
   return {
-    name:
-      str(row["name"]) ||
-      str(row["Name"]) ||
-      str(row["full_name"]) ||
-      str(row["Full Name"]) ||
-      str(row["FullName"]) ||
-      "Unknown",
+    name: processName(rawName), // Applies new min-length (3) and first-valid-part logic
 
     phone: sanitizePhone(
       str(row["phone"]) ||
@@ -69,7 +90,9 @@ const normalizeRow = (row: Record<string, unknown>): LeadRow => {
       undefined,
 
     // Spread remaining columns as strings (for metadata)
-    ...Object.fromEntries(Object.entries(row).map(([k, v]) => [k, str(v)])),
+    ...Object.fromEntries(
+      Object.entries(row).map(([k, v]) => [k, str(v) ?? null]),
+    ),
   };
 };
 
@@ -142,6 +165,4 @@ export const parseLeadFile = (filePath: string): LeadRow[] => {
   }
 };
 
-// ─── Keep backward-compat export ─────────────────────────────────────────────
-// Existing code importing parseCSV will still work
 export const parseCSV = parseLeadFile;

@@ -192,7 +192,7 @@ enum CampaignStatus {
 
 model Lead {
   id         String     @id @default(uuid())
-  name       String
+  name       String?
   phone      String
   email      String?
   company    String?

@@ -8610,7 +8610,7 @@ export namespace Prisma {
 
   export type LeadGroupByOutputType = {
     id: string
-    name: string
+    name: string | null
     phone: string
     email: string | null
     company: string | null
@@ -8733,7 +8733,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      name: string
+      name: string | null
       phone: string
       email: string | null
       company: string | null
@@ -13249,7 +13249,7 @@ export namespace Prisma {
     OR?: LeadWhereInput[]
     NOT?: LeadWhereInput | LeadWhereInput[]
     id?: StringFilter<"Lead"> | string
-    name?: StringFilter<"Lead"> | string
+    name?: StringNullableFilter<"Lead"> | string | null
     phone?: StringFilter<"Lead"> | string
     email?: StringNullableFilter<"Lead"> | string | null
     company?: StringNullableFilter<"Lead"> | string | null
@@ -13267,7 +13267,7 @@ export namespace Prisma {
 
   export type LeadOrderByWithRelationInput = {
     id?: SortOrder
-    name?: SortOrder
+    name?: SortOrderInput | SortOrder
     phone?: SortOrder
     email?: SortOrderInput | SortOrder
     company?: SortOrderInput | SortOrder
@@ -13288,7 +13288,7 @@ export namespace Prisma {
     AND?: LeadWhereInput | LeadWhereInput[]
     OR?: LeadWhereInput[]
     NOT?: LeadWhereInput | LeadWhereInput[]
-    name?: StringFilter<"Lead"> | string
+    name?: StringNullableFilter<"Lead"> | string | null
     phone?: StringFilter<"Lead"> | string
     email?: StringNullableFilter<"Lead"> | string | null
     company?: StringNullableFilter<"Lead"> | string | null
@@ -13306,7 +13306,7 @@ export namespace Prisma {
 
   export type LeadOrderByWithAggregationInput = {
     id?: SortOrder
-    name?: SortOrder
+    name?: SortOrderInput | SortOrder
     phone?: SortOrder
     email?: SortOrderInput | SortOrder
     company?: SortOrderInput | SortOrder
@@ -13327,7 +13327,7 @@ export namespace Prisma {
     OR?: LeadScalarWhereWithAggregatesInput[]
     NOT?: LeadScalarWhereWithAggregatesInput | LeadScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Lead"> | string
-    name?: StringWithAggregatesFilter<"Lead"> | string
+    name?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     phone?: StringWithAggregatesFilter<"Lead"> | string
     email?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     company?: StringNullableWithAggregatesFilter<"Lead"> | string | null
@@ -14347,7 +14347,7 @@ export namespace Prisma {
 
   export type LeadCreateInput = {
     id?: string
-    name: string
+    name?: string | null
     phone: string
     email?: string | null
     company?: string | null
@@ -14363,7 +14363,7 @@ export namespace Prisma {
 
   export type LeadUncheckedCreateInput = {
     id?: string
-    name: string
+    name?: string | null
     phone: string
     email?: string | null
     company?: string | null
@@ -14379,7 +14379,7 @@ export namespace Prisma {
 
   export type LeadUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14395,7 +14395,7 @@ export namespace Prisma {
 
   export type LeadUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14411,7 +14411,7 @@ export namespace Prisma {
 
   export type LeadCreateManyInput = {
     id?: string
-    name: string
+    name?: string | null
     phone: string
     email?: string | null
     company?: string | null
@@ -14426,7 +14426,7 @@ export namespace Prisma {
 
   export type LeadUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14439,7 +14439,7 @@ export namespace Prisma {
 
   export type LeadUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17365,7 +17365,7 @@ export namespace Prisma {
 
   export type LeadCreateWithoutTenantInput = {
     id?: string
-    name: string
+    name?: string | null
     phone: string
     email?: string | null
     company?: string | null
@@ -17380,7 +17380,7 @@ export namespace Prisma {
 
   export type LeadUncheckedCreateWithoutTenantInput = {
     id?: string
-    name: string
+    name?: string | null
     phone: string
     email?: string | null
     company?: string | null
@@ -17735,7 +17735,7 @@ export namespace Prisma {
     OR?: LeadScalarWhereInput[]
     NOT?: LeadScalarWhereInput | LeadScalarWhereInput[]
     id?: StringFilter<"Lead"> | string
-    name?: StringFilter<"Lead"> | string
+    name?: StringNullableFilter<"Lead"> | string | null
     phone?: StringFilter<"Lead"> | string
     email?: StringNullableFilter<"Lead"> | string | null
     company?: StringNullableFilter<"Lead"> | string | null
@@ -18477,7 +18477,7 @@ export namespace Prisma {
 
   export type LeadCreateWithoutCampaignInput = {
     id?: string
-    name: string
+    name?: string | null
     phone: string
     email?: string | null
     company?: string | null
@@ -18492,7 +18492,7 @@ export namespace Prisma {
 
   export type LeadUncheckedCreateWithoutCampaignInput = {
     id?: string
-    name: string
+    name?: string | null
     phone: string
     email?: string | null
     company?: string | null
@@ -19112,7 +19112,7 @@ export namespace Prisma {
 
   export type LeadCreateWithoutCallsInput = {
     id?: string
-    name: string
+    name?: string | null
     phone: string
     email?: string | null
     company?: string | null
@@ -19127,7 +19127,7 @@ export namespace Prisma {
 
   export type LeadUncheckedCreateWithoutCallsInput = {
     id?: string
-    name: string
+    name?: string | null
     phone: string
     email?: string | null
     company?: string | null
@@ -19299,7 +19299,7 @@ export namespace Prisma {
 
   export type LeadUpdateWithoutCallsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19314,7 +19314,7 @@ export namespace Prisma {
 
   export type LeadUncheckedUpdateWithoutCallsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19577,7 +19577,7 @@ export namespace Prisma {
 
   export type LeadCreateManyTenantInput = {
     id?: string
-    name: string
+    name?: string | null
     phone: string
     email?: string | null
     company?: string | null
@@ -19780,7 +19780,7 @@ export namespace Prisma {
 
   export type LeadUpdateWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19795,7 +19795,7 @@ export namespace Prisma {
 
   export type LeadUncheckedUpdateWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19810,7 +19810,7 @@ export namespace Prisma {
 
   export type LeadUncheckedUpdateManyWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20284,7 +20284,7 @@ export namespace Prisma {
 
   export type LeadCreateManyCampaignInput = {
     id?: string
-    name: string
+    name?: string | null
     phone: string
     email?: string | null
     company?: string | null
@@ -20315,7 +20315,7 @@ export namespace Prisma {
 
   export type LeadUpdateWithoutCampaignInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20330,7 +20330,7 @@ export namespace Prisma {
 
   export type LeadUncheckedUpdateWithoutCampaignInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20345,7 +20345,7 @@ export namespace Prisma {
 
   export type LeadUncheckedUpdateManyWithoutCampaignInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
