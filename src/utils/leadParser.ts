@@ -24,29 +24,8 @@ const sanitizePhone = (raw: string): string => {
   return cleaned.replace(/\D/g, ""); // digits only, normalization happens at call time
 };
 
-/**
- * Parses and extracts a valid single name part (min 3 chars) from a multi-word name.
- * Checks parts sequentially: First Name -> Middle Name -> Last Name...
- * Returns null if no part matches the minimum length of 3.
- */
-const processName = (rawName: string | undefined): string | null => {
-  if (!rawName) return null;
-
-  // Split by whitespace and remove empty parts
-  const parts = rawName.trim().split(/\s+/).filter(Boolean);
-
-  for (const part of parts) {
-    if (part.length >= 3) {
-      return part; // Return the first matching name part
-    }
-  }
-
-  return null; // Fallback to null if no part is >= 3 characters
-};
-
 // ─── Normalize a raw row from any source ──────────────────────────────────────
 const normalizeRow = (row: Record<string, unknown>): LeadRow => {
-  // Convert all values to string safely
   const str = (val: unknown): string | undefined => {
     if (val === null || val === undefined || val === "") return undefined;
     const s = String(val).trim();
@@ -61,7 +40,8 @@ const normalizeRow = (row: Record<string, unknown>): LeadRow => {
     str(row["FullName"]);
 
   return {
-    name: processName(rawName), // Applies new min-length (3) and first-valid-part logic
+    // Store exactly as uploaded; null if missing/empty
+    name: rawName ?? null,
 
     phone: sanitizePhone(
       str(row["phone"]) ||
@@ -89,7 +69,6 @@ const normalizeRow = (row: Record<string, unknown>): LeadRow => {
       str(row["Organization"]) ||
       undefined,
 
-    // Spread remaining columns as strings (for metadata)
     ...Object.fromEntries(
       Object.entries(row).map(([k, v]) => [k, str(v) ?? null]),
     ),
