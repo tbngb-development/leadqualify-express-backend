@@ -13,6 +13,7 @@ import {
   pause,
   cancelSchedule,
   stats,
+  performance,
   parseLeads,
 } from "./campaign.controller";
 import { leadsUpload } from "../../middleware/upload";
@@ -30,5 +31,6 @@ router.post("/:id/start", start);
 router.post("/:id/pause", pause);
 router.post("/:id/cancel-schedule", cancelSchedule);
 router.get("/:id/stats", stats);
+router.get("/:id/performance", performance);
 
 export default router;

@@ -191,3 +191,17 @@ export const stats = async (
     next(error);
   }
 };
+
+export const performance = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const id = getParam(req.params["id"]);
+    const data = await campaignService.performanceStats(req.user!.tenantId, id);
+    res.json({ success: true, data });
+  } catch (error) {
+    next(error);
+  }
+};
