@@ -13,22 +13,24 @@ const QUALIFYING_DISPOSITIONS: Disposition[] = [
   "SITE_VISIT_INTEREST",
   "INTERESTED_SEND_DETAILS",
   "INTERESTED_GENERAL",
+  "INTERESTED_SEND_DETAILS",
 ];
 
 export class CallService {
   // ─── List ──────────────────────────────────────────────────────────────────
   async list(
     tenantId: string,
-    filters: {
+    query: {
       campaignId?: string;
       leadId?: string;
       status?: string;
       disposition?: string;
       leadTemperature?: string;
+      search?: string;
       dateFrom?: string;
       dateTo?: string;
       sortBy?: string;
-      sortOrder?: string;
+      sortOrder?: "asc" | "desc";
       page?: number;
       limit?: number;
     },
@@ -39,77 +41,85 @@ export class CallService {
       status,
       disposition,
       leadTemperature,
+      search,
       dateFrom,
       dateTo,
-      sortBy = "createdAt",
+      sortBy = "startedAt",
       sortOrder = "desc",
       page = 1,
-      limit = 20,
-    } = filters;
+      limit = 15,
+    } = query;
 
-    const skip = (page - 1) * limit;
+    const where: any = { tenantId };
 
-    // ── Build date range filter ───────────────────────────────────────────────
-    const dateFilter =
-      dateFrom || dateTo
-        ? {
-            startedAt: {
-              ...(dateFrom && { gte: new Date(dateFrom) }),
-              ...(dateTo && { lte: new Date(dateTo) }),
-            },
-          }
-        : {};
+    if (campaignId) where.campaignId = campaignId;
+    if (leadId) where.leadId = leadId;
 
-    // ── Build callAnalysis filter ─────────────────────────────────────────────
-    const callAnalysisCondition: any = {};
+    // ─── Status Filter (handles "NO_ANSWER,BUSY" or "COMPLETED") ───
+    if (status) {
+      const statuses = status
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+      where.status = statuses.length > 1 ? { in: statuses } : statuses[0];
+    }
+
+    // ─── Date Range Filter ───
+    if (dateFrom || dateTo) {
+      where.startedAt = {};
+      if (dateFrom) where.startedAt.gte = new Date(dateFrom);
+      if (dateTo) where.startedAt.lte = new Date(dateTo);
+    }
+
+    // ─── Disposition & Temperature Filters ───
+    const callAnalysisWhere: any = {};
 
     if (disposition) {
-      callAnalysisCondition.disposition = disposition as Disposition;
+      const disps = disposition
+        .split(",")
+        .map((d) => d.trim())
+        .filter(Boolean);
+      callAnalysisWhere.disposition =
+        disps.length > 1 ? { in: disps } : disps[0];
     }
 
     if (leadTemperature) {
-      // Split comma-separated temperatures ("HOT,WARM") into an array
       const temps = leadTemperature
         .split(",")
-        .map((t) => t.trim().toUpperCase() as LeadTemperature);
-
-      if (temps.length > 1) {
-        callAnalysisCondition.leadTemperature = { in: temps };
-      } else if (temps[0]) {
-        callAnalysisCondition.leadTemperature = temps[0];
-      }
+        .map((t) => t.trim())
+        .filter(Boolean);
+      callAnalysisWhere.leadTemperature =
+        temps.length > 1 ? { in: temps } : temps[0];
     }
 
-    const analysisFilter =
-      Object.keys(callAnalysisCondition).length > 0
-        ? { callAnalysis: callAnalysisCondition }
-        : {};
+    if (Object.keys(callAnalysisWhere).length > 0) {
+      where.callAnalysis = callAnalysisWhere;
+    }
 
-    const where = {
-      tenantId,
-      ...(campaignId && { campaignId }),
-      ...(leadId && { leadId }),
-      ...(status && { status: status as CallStatus }),
-      ...dateFilter,
-      ...analysisFilter,
-    };
+    // ─── Search by Lead Name or Phone ───
+    if (search) {
+      where.lead = {
+        OR: [
+          { name: { contains: search, mode: "insensitive" } },
+          { phone: { contains: search } },
+        ],
+      };
+    }
 
-    // ── Build sort ────────────────────────────────────────────────────────────
-    const validSortFields = ["createdAt", "startedAt", "duration"];
-    const orderField = validSortFields.includes(sortBy) ? sortBy : "createdAt";
-    const orderDir = sortOrder === "asc" ? "asc" : "desc";
+    const pageNum = Math.max(1, Number(page));
+    const limitNum = Math.max(1, Number(limit));
 
     const [calls, total] = await Promise.all([
       prisma.call.findMany({
         where,
-        skip,
-        take: limit,
-        orderBy: { [orderField]: orderDir },
         include: {
           lead: { select: { id: true, name: true, phone: true } },
           campaign: { select: { id: true, name: true } },
           callAnalysis: true,
         },
+        orderBy: { [sortBy]: sortOrder },
+        skip: (pageNum - 1) * limitNum,
+        take: limitNum,
       }),
       prisma.call.count({ where }),
     ]);
@@ -118,9 +128,9 @@ export class CallService {
       calls,
       pagination: {
         total,
-        page,
+        page: pageNum,
         limit,
-        pages: Math.ceil(total / limit),
+        pages: Math.ceil(total / limitNum),
       },
     };
   }
