@@ -87,15 +87,25 @@ export const bolnaClient = {
         `[Bolna] Initiating call → agent: ${payload.agent_id} | phone: ${normalizedPhone}`,
       );
 
-      const response = await http.post<BolnaCallResponse>("/call", {
-        ...payload,
-        recipient_phone_number: normalizedPhone,
-      });
+      try {
+        const response = await http.post<BolnaCallResponse>("/call", {
+          ...payload,
+          recipient_phone_number: normalizedPhone,
+        });
 
-      console.log(
-        `[Bolna] Call Response Data: ${JSON.stringify(response.data)}`,
-      );
-      return response.data;
+        console.log(
+          `[Bolna] Call Response Data: ${JSON.stringify(response.data)}`,
+        );
+        return response.data;
+      } catch (error: any) {
+        if (error.response) {
+          console.error(
+            "❌ [Bolna API Rejection]:",
+            JSON.stringify(error.response.data, null, 2),
+          );
+        }
+        throw error;
+      }
     },
   },
 
@@ -105,7 +115,9 @@ export const bolnaClient = {
     verify: async (agentId: string): Promise<BolnaAgentResponse> => {
       const http = createHttpClient();
 
-      const response = await http.get<BolnaAgentResponse>(`/v2/agent/${agentId}`);
+      const response = await http.get<BolnaAgentResponse>(
+        `/v2/agent/${agentId}`,
+      );
 
       return response.data;
     },

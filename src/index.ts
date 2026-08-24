@@ -17,6 +17,7 @@ import userRoutes from "./modules/users/user.routes";
 import tenantRoutes from "./modules/tenants/tenant.routes";
 import webhookRoutes from "./modules/webhooks/webhook.routes";
 import brochureRoutes from "./modules/brochure/brochure.routes";
+import integrationRoutes from "./modules/integrations/integration.routes";
 
 dotenv.config();
 
@@ -46,7 +47,7 @@ app.use(
     ],
     credentials: true,
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "x-api-key"],
   }),
 );
 
@@ -72,6 +73,8 @@ app.get("/health", (_req, res) => {
 app.use("/webhooks", webhookRoutes);
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
+app.use("/api/integrations", limiter, integrationRoutes);
+
 app.use("/api/auth", limiter, authRoutes);
 app.use("/api/assistants", limiter, assistantRoutes);
 app.use("/api/campaigns", limiter, campaignRoutes);
