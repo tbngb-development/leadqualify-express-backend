@@ -361,6 +361,13 @@ async function handleCallNoAnswer(callId: string) {
     return;
   }
 
+  await prisma.campaign.update({
+    where: { id: call.campaignId },
+    data: {
+      calledLeads: { increment: 1 },
+    },
+  });
+
   await prisma.call.update({
     where: { id: call.id },
     data: { status: "NO_ANSWER", endedAt: new Date() },
@@ -384,6 +391,13 @@ async function handleCallBusy(callId: string) {
     console.warn(`[Webhook] Call not found for busy: ${callId}`);
     return;
   }
+
+  await prisma.campaign.update({
+    where: { id: call.campaignId },
+    data: {
+      calledLeads: { increment: 1 },
+    },
+  });
 
   await prisma.call.update({
     where: { id: call.id },
