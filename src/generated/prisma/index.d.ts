@@ -9634,10 +9634,12 @@ export namespace Prisma {
 
   export type CallAvgAggregateOutputType = {
     duration: number | null
+    cost: number | null
   }
 
   export type CallSumAggregateOutputType = {
     duration: number | null
+    cost: number | null
   }
 
   export type CallMinAggregateOutputType = {
@@ -9648,6 +9650,7 @@ export namespace Prisma {
     leadId: string | null
     status: $Enums.CallStatus | null
     duration: number | null
+    cost: number | null
     recording: string | null
     transcript: string | null
     summary: string | null
@@ -9665,6 +9668,7 @@ export namespace Prisma {
     leadId: string | null
     status: $Enums.CallStatus | null
     duration: number | null
+    cost: number | null
     recording: string | null
     transcript: string | null
     summary: string | null
@@ -9682,6 +9686,7 @@ export namespace Prisma {
     leadId: number
     status: number
     duration: number
+    cost: number
     recording: number
     transcript: number
     transcriptMessages: number
@@ -9696,10 +9701,12 @@ export namespace Prisma {
 
   export type CallAvgAggregateInputType = {
     duration?: true
+    cost?: true
   }
 
   export type CallSumAggregateInputType = {
     duration?: true
+    cost?: true
   }
 
   export type CallMinAggregateInputType = {
@@ -9710,6 +9717,7 @@ export namespace Prisma {
     leadId?: true
     status?: true
     duration?: true
+    cost?: true
     recording?: true
     transcript?: true
     summary?: true
@@ -9727,6 +9735,7 @@ export namespace Prisma {
     leadId?: true
     status?: true
     duration?: true
+    cost?: true
     recording?: true
     transcript?: true
     summary?: true
@@ -9744,6 +9753,7 @@ export namespace Prisma {
     leadId?: true
     status?: true
     duration?: true
+    cost?: true
     recording?: true
     transcript?: true
     transcriptMessages?: true
@@ -9849,6 +9859,7 @@ export namespace Prisma {
     leadId: string
     status: $Enums.CallStatus
     duration: number | null
+    cost: number | null
     recording: string | null
     transcript: string | null
     transcriptMessages: JsonValue | null
@@ -9886,6 +9897,7 @@ export namespace Prisma {
     leadId?: boolean
     status?: boolean
     duration?: boolean
+    cost?: boolean
     recording?: boolean
     transcript?: boolean
     transcriptMessages?: boolean
@@ -9908,6 +9920,7 @@ export namespace Prisma {
     leadId?: boolean
     status?: boolean
     duration?: boolean
+    cost?: boolean
     recording?: boolean
     transcript?: boolean
     transcriptMessages?: boolean
@@ -9929,6 +9942,7 @@ export namespace Prisma {
     leadId?: boolean
     status?: boolean
     duration?: boolean
+    cost?: boolean
     recording?: boolean
     transcript?: boolean
     transcriptMessages?: boolean
@@ -9950,6 +9964,7 @@ export namespace Prisma {
     leadId?: boolean
     status?: boolean
     duration?: boolean
+    cost?: boolean
     recording?: boolean
     transcript?: boolean
     transcriptMessages?: boolean
@@ -9960,7 +9975,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type CallOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bolnaCallId" | "tenantId" | "campaignId" | "leadId" | "status" | "duration" | "recording" | "transcript" | "transcriptMessages" | "summary" | "startedAt" | "endedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["call"]>
+  export type CallOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bolnaCallId" | "tenantId" | "campaignId" | "leadId" | "status" | "duration" | "cost" | "recording" | "transcript" | "transcriptMessages" | "summary" | "startedAt" | "endedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["call"]>
   export type CallInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
@@ -9994,6 +10009,7 @@ export namespace Prisma {
       leadId: string
       status: $Enums.CallStatus
       duration: number | null
+      cost: number | null
       recording: string | null
       transcript: string | null
       transcriptMessages: Prisma.JsonValue | null
@@ -10436,6 +10452,7 @@ export namespace Prisma {
     readonly leadId: FieldRef<"Call", 'String'>
     readonly status: FieldRef<"Call", 'CallStatus'>
     readonly duration: FieldRef<"Call", 'Int'>
+    readonly cost: FieldRef<"Call", 'Float'>
     readonly recording: FieldRef<"Call", 'String'>
     readonly transcript: FieldRef<"Call", 'String'>
     readonly transcriptMessages: FieldRef<"Call", 'Json'>
@@ -12271,6 +12288,7 @@ export namespace Prisma {
     leadId: 'leadId',
     status: 'status',
     duration: 'duration',
+    cost: 'cost',
     recording: 'recording',
     transcript: 'transcript',
     transcriptMessages: 'transcriptMessages',
@@ -13351,6 +13369,7 @@ export namespace Prisma {
     leadId?: StringFilter<"Call"> | string
     status?: EnumCallStatusFilter<"Call"> | $Enums.CallStatus
     duration?: IntNullableFilter<"Call"> | number | null
+    cost?: FloatNullableFilter<"Call"> | number | null
     recording?: StringNullableFilter<"Call"> | string | null
     transcript?: StringNullableFilter<"Call"> | string | null
     transcriptMessages?: JsonNullableFilter<"Call">
@@ -13373,6 +13392,7 @@ export namespace Prisma {
     leadId?: SortOrder
     status?: SortOrder
     duration?: SortOrderInput | SortOrder
+    cost?: SortOrderInput | SortOrder
     recording?: SortOrderInput | SortOrder
     transcript?: SortOrderInput | SortOrder
     transcriptMessages?: SortOrderInput | SortOrder
@@ -13398,6 +13418,7 @@ export namespace Prisma {
     leadId?: StringFilter<"Call"> | string
     status?: EnumCallStatusFilter<"Call"> | $Enums.CallStatus
     duration?: IntNullableFilter<"Call"> | number | null
+    cost?: FloatNullableFilter<"Call"> | number | null
     recording?: StringNullableFilter<"Call"> | string | null
     transcript?: StringNullableFilter<"Call"> | string | null
     transcriptMessages?: JsonNullableFilter<"Call">
@@ -13420,6 +13441,7 @@ export namespace Prisma {
     leadId?: SortOrder
     status?: SortOrder
     duration?: SortOrderInput | SortOrder
+    cost?: SortOrderInput | SortOrder
     recording?: SortOrderInput | SortOrder
     transcript?: SortOrderInput | SortOrder
     transcriptMessages?: SortOrderInput | SortOrder
@@ -13446,6 +13468,7 @@ export namespace Prisma {
     leadId?: StringWithAggregatesFilter<"Call"> | string
     status?: EnumCallStatusWithAggregatesFilter<"Call"> | $Enums.CallStatus
     duration?: IntNullableWithAggregatesFilter<"Call"> | number | null
+    cost?: FloatNullableWithAggregatesFilter<"Call"> | number | null
     recording?: StringNullableWithAggregatesFilter<"Call"> | string | null
     transcript?: StringNullableWithAggregatesFilter<"Call"> | string | null
     transcriptMessages?: JsonNullableWithAggregatesFilter<"Call">
@@ -14457,6 +14480,7 @@ export namespace Prisma {
     bolnaCallId?: string | null
     status?: $Enums.CallStatus
     duration?: number | null
+    cost?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -14479,6 +14503,7 @@ export namespace Prisma {
     leadId: string
     status?: $Enums.CallStatus
     duration?: number | null
+    cost?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -14495,6 +14520,7 @@ export namespace Prisma {
     bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -14517,6 +14543,7 @@ export namespace Prisma {
     leadId?: StringFieldUpdateOperationsInput | string
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -14536,6 +14563,7 @@ export namespace Prisma {
     leadId: string
     status?: $Enums.CallStatus
     duration?: number | null
+    cost?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -14551,6 +14579,7 @@ export namespace Prisma {
     bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -14569,6 +14598,7 @@ export namespace Prisma {
     leadId?: StringFieldUpdateOperationsInput | string
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -15613,6 +15643,7 @@ export namespace Prisma {
     leadId?: SortOrder
     status?: SortOrder
     duration?: SortOrder
+    cost?: SortOrder
     recording?: SortOrder
     transcript?: SortOrder
     transcriptMessages?: SortOrder
@@ -15625,6 +15656,7 @@ export namespace Prisma {
 
   export type CallAvgOrderByAggregateInput = {
     duration?: SortOrder
+    cost?: SortOrder
   }
 
   export type CallMaxOrderByAggregateInput = {
@@ -15635,6 +15667,7 @@ export namespace Prisma {
     leadId?: SortOrder
     status?: SortOrder
     duration?: SortOrder
+    cost?: SortOrder
     recording?: SortOrder
     transcript?: SortOrder
     summary?: SortOrder
@@ -15652,6 +15685,7 @@ export namespace Prisma {
     leadId?: SortOrder
     status?: SortOrder
     duration?: SortOrder
+    cost?: SortOrder
     recording?: SortOrder
     transcript?: SortOrder
     summary?: SortOrder
@@ -15663,6 +15697,7 @@ export namespace Prisma {
 
   export type CallSumOrderByAggregateInput = {
     duration?: SortOrder
+    cost?: SortOrder
   }
 
   export type EnumCallStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -17408,6 +17443,7 @@ export namespace Prisma {
     bolnaCallId?: string | null
     status?: $Enums.CallStatus
     duration?: number | null
+    cost?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -17428,6 +17464,7 @@ export namespace Prisma {
     leadId: string
     status?: $Enums.CallStatus
     duration?: number | null
+    cost?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -17775,6 +17812,7 @@ export namespace Prisma {
     leadId?: StringFilter<"Call"> | string
     status?: EnumCallStatusFilter<"Call"> | $Enums.CallStatus
     duration?: IntNullableFilter<"Call"> | number | null
+    cost?: FloatNullableFilter<"Call"> | number | null
     recording?: StringNullableFilter<"Call"> | string | null
     transcript?: StringNullableFilter<"Call"> | string | null
     transcriptMessages?: JsonNullableFilter<"Call">
@@ -18520,6 +18558,7 @@ export namespace Prisma {
     bolnaCallId?: string | null
     status?: $Enums.CallStatus
     duration?: number | null
+    cost?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -18540,6 +18579,7 @@ export namespace Prisma {
     leadId: string
     status?: $Enums.CallStatus
     duration?: number | null
+    cost?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -18873,6 +18913,7 @@ export namespace Prisma {
     bolnaCallId?: string | null
     status?: $Enums.CallStatus
     duration?: number | null
+    cost?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -18893,6 +18934,7 @@ export namespace Prisma {
     campaignId: string
     status?: $Enums.CallStatus
     duration?: number | null
+    cost?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -19383,6 +19425,7 @@ export namespace Prisma {
     bolnaCallId?: string | null
     status?: $Enums.CallStatus
     duration?: number | null
+    cost?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -19404,6 +19447,7 @@ export namespace Prisma {
     leadId: string
     status?: $Enums.CallStatus
     duration?: number | null
+    cost?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -19472,6 +19516,7 @@ export namespace Prisma {
     bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -19493,6 +19538,7 @@ export namespace Prisma {
     leadId?: StringFieldUpdateOperationsInput | string
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -19596,6 +19642,7 @@ export namespace Prisma {
     leadId: string
     status?: $Enums.CallStatus
     duration?: number | null
+    cost?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -19827,6 +19874,7 @@ export namespace Prisma {
     bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -19847,6 +19895,7 @@ export namespace Prisma {
     leadId?: StringFieldUpdateOperationsInput | string
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -19865,6 +19914,7 @@ export namespace Prisma {
     leadId?: StringFieldUpdateOperationsInput | string
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -20303,6 +20353,7 @@ export namespace Prisma {
     leadId: string
     status?: $Enums.CallStatus
     duration?: number | null
+    cost?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -20362,6 +20413,7 @@ export namespace Prisma {
     bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -20382,6 +20434,7 @@ export namespace Prisma {
     leadId?: StringFieldUpdateOperationsInput | string
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -20400,6 +20453,7 @@ export namespace Prisma {
     leadId?: StringFieldUpdateOperationsInput | string
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -20417,6 +20471,7 @@ export namespace Prisma {
     campaignId: string
     status?: $Enums.CallStatus
     duration?: number | null
+    cost?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -20432,6 +20487,7 @@ export namespace Prisma {
     bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -20452,6 +20508,7 @@ export namespace Prisma {
     campaignId?: StringFieldUpdateOperationsInput | string
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -20470,6 +20527,7 @@ export namespace Prisma {
     campaignId?: StringFieldUpdateOperationsInput | string
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue

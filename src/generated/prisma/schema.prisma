@@ -236,6 +236,7 @@ model Call {
   leadId             String
   status             CallStatus @default(PENDING)
   duration           Int?
+  cost               Float?
   recording          String?
   transcript         String?
   transcriptMessages Json?
