@@ -12,6 +12,7 @@ export class TenantService {
             users: true,
             campaigns: true,
             leads: true,
+            calls: true,
           },
         },
       },
