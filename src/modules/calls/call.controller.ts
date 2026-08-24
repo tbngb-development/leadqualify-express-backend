@@ -8,7 +8,7 @@ import { getParam } from "../../utils/paramHelper";
 export const list = async (
   req: AuthRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const {
@@ -17,6 +17,7 @@ export const list = async (
       status,
       disposition,
       leadTemperature,
+      search,
       dateFrom,
       dateTo,
       sortBy,
@@ -31,12 +32,13 @@ export const list = async (
       status: status ? String(status) : undefined,
       disposition: disposition ? String(disposition) : undefined,
       leadTemperature: leadTemperature ? String(leadTemperature) : undefined,
+      search: search ? String(search) : undefined, // <─── ADDED
       dateFrom: dateFrom ? String(dateFrom) : undefined,
       dateTo: dateTo ? String(dateTo) : undefined,
       sortBy: sortBy ? String(sortBy) : undefined,
-      sortOrder: sortOrder ? String(sortOrder) : undefined,
-      page: Number(page),
-      limit: Number(limit),
+      sortOrder: sortOrder === "asc" ? "asc" : "desc",
+      page: page ? Number(page) : 1,
+      limit: limit ? Number(limit) : 15,
     });
 
     res.json({ success: true, data });
@@ -44,11 +46,10 @@ export const list = async (
     next(error);
   }
 };
-
 export const get = async (
   req: AuthRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const id = getParam(req.params["id"]);
@@ -62,7 +63,7 @@ export const get = async (
 export const getTranscript = async (
   req: AuthRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const id = getParam(req.params["id"]);
@@ -76,7 +77,7 @@ export const getTranscript = async (
 export const getStats = async (
   req: AuthRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const { campaignId, leadId } = req.query;

@@ -17,10 +17,9 @@ export class LeadService {
     filters: {
       campaignId?: string;
       status?: string;
-      doNotCall?: boolean;
-      leadTemperature?: string;
       dateFrom?: string;
       dateTo?: string;
+      search?: string;
       sortBy?: string;
       sortOrder?: string;
       page?: number;
@@ -30,52 +29,51 @@ export class LeadService {
     const {
       campaignId,
       status,
-      doNotCall,
-      leadTemperature,
       dateFrom,
       dateTo,
+      search,
       sortBy = "createdAt",
       sortOrder = "desc",
       page = 1,
       limit = 20,
     } = filters;
 
-    const skip = (page - 1) * limit;
-
-    const dateFilter =
-      dateFrom || dateTo
-        ? {
-            createdAt: {
-              ...(dateFrom && { gte: new Date(dateFrom) }),
-              ...(dateTo && { lte: new Date(dateTo) }),
-            },
-          }
-        : {};
+    const pageNum = Math.max(1, Number(page));
+    const limitNum = Math.max(1, Number(limit));
+    const skip = (pageNum - 1) * limitNum;
 
     // Explicitly typing 'where' as 'any' stops compilation errors when appending dynamic sub-queries
     const where: any = {
       tenantId,
       ...(campaignId && { campaignId }),
-      ...(status && { status: status as LeadStatus }),
-      ...(doNotCall !== undefined && { doNotCall }),
-      ...dateFilter,
     };
 
-    // ── Filter leads by their latest call's leadTemperature (Supports Multi-value) ──
-    if (leadTemperature) {
-      const temps = leadTemperature
+    // ── Status Filter (Supports single or comma-separated e.g. "PENDING,CALLED") ──
+    if (status) {
+      const statuses = status
         .split(",")
-        .map((t) => t.trim().toUpperCase());
+        .map((s) => s.trim())
+        .filter(Boolean);
+      where.status = statuses.length > 1 ? { in: statuses } : statuses[0];
+    }
 
-      where.calls = {
-        some: {
-          callAnalysis: {
-            leadTemperature: { in: temps },
-          },
-        },
+    // ── Date Range Filter ──
+    if (dateFrom || dateTo) {
+      where.createdAt = {
+        ...(dateFrom && { gte: new Date(dateFrom) }),
+        ...(dateTo && { lte: new Date(dateTo) }),
       };
     }
 
+    // ── Search Filter (Name or Phone) ──
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: "insensitive" } },
+        { phone: { contains: search } },
+      ];
+    }
+
+    // ── Sorting ──
     const validSortFields = ["createdAt", "name", "updatedAt"];
     const orderField = validSortFields.includes(sortBy) ? sortBy : "createdAt";
     const orderDir = sortOrder === "asc" ? "asc" : "desc";
@@ -84,7 +82,7 @@ export class LeadService {
       prisma.lead.findMany({
         where,
         skip,
-        take: limit,
+        take: limitNum,
         orderBy: { [orderField]: orderDir },
         include: {
           campaign: { select: { id: true, name: true } },
@@ -93,13 +91,15 @@ export class LeadService {
       prisma.lead.count({ where }),
     ]);
 
+    const pages = Math.ceil(total / limitNum);
+
     return {
       leads,
       pagination: {
         total,
-        page,
-        limit,
-        pages: Math.ceil(total / limit),
+        page: pageNum,
+        limit: limitNum,
+        pages,
       },
     };
   }
