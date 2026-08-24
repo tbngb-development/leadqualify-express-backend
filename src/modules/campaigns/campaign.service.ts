@@ -597,6 +597,92 @@ export class CampaignService {
 
     return { campaign, leads: leadStats, calls: callStats };
   }
+
+  // ─── Performance Stats ────────────────────────────────────────────────────
+  async performanceStats(tenantId: string, campaignId: string) {
+    const campaign = await prisma.campaign.findFirst({
+      where: { id: campaignId, tenantId },
+    });
+    if (!campaign) throw new Error("Campaign not found");
+
+    const QUALIFYING_DISPOSITIONS = [
+      "QUALIFIED_CONSULTANT_FOLLOWUP",
+      "SITE_VISIT_INTEREST",
+      "INTERESTED_SEND_DETAILS",
+      "INTERESTED_GENERAL",
+    ];
+
+    // Fetch all CallAnalysis records for this campaign
+    const analyses = await prisma.callAnalysis.findMany({
+      where: {
+        tenantId,
+        call: { campaignId },
+      },
+      select: {
+        disposition: true,
+        leadTemperature: true,
+        preferredNextAction: true,
+        doNotCall: true,
+      },
+    });
+
+    // Fetch total cost aggregated from Call records
+    const costAgg = await prisma.call.aggregate({
+      where: { campaignId, tenantId, cost: { not: null } },
+      _sum: { cost: true },
+    });
+
+    const totalCost = costAgg._sum.cost ?? 0;
+
+    // ── Compute counts ────────────────────────────────────────────────────
+    const hotLeads = analyses.filter((a) => a.leadTemperature === "HOT").length;
+
+    // Callbacks: Preferred next action is either CONSULTANT_CALL or FOLLOWUP_CALL
+    const callbacks = analyses.filter(
+      (a) =>
+        a.preferredNextAction === "CONSULTANT_CALL" ||
+        a.preferredNextAction === "FOLLOWUP_CALL",
+    ).length;
+
+    // Site Visits: Disposition is SITE_VISIT_INTEREST or next action is SITE_VISIT
+    const siteVisits = analyses.filter(
+      (a) =>
+        a.disposition === "SITE_VISIT_INTEREST" ||
+        a.preferredNextAction === "SITE_VISIT",
+    ).length;
+
+    // DNC count: Where CallAnalysis.doNotCall flags extraction is YES
+    const dnc = analyses.filter((a) => a.doNotCall === "YES").length;
+
+    // ── Qualification rate (disposition-based) ────────────────────────────
+    const withDisposition = analyses.filter((a) => a.disposition !== null);
+    const qualified = withDisposition.filter(
+      (a) => a.disposition && QUALIFYING_DISPOSITIONS.includes(a.disposition),
+    ).length;
+
+    const qualificationRate =
+      withDisposition.length > 0
+        ? ((qualified / withDisposition.length) * 100).toFixed(1)
+        : "0.0";
+
+    // ── Cost per lead ─────────────────────────────────────────────────────
+    const costPerLeadInCents =
+      campaign.successLeads > 0
+        ? parseFloat((totalCost / campaign.successLeads).toFixed(2)) / 100
+        : 0;
+
+    const totalCostInCents = parseFloat(totalCost.toFixed(2)) / 100;
+
+    return {
+      hotLeads,
+      callbacks,
+      siteVisits,
+      dnc,
+      totalCost: totalCostInCents,
+      costPerLead: costPerLeadInCents,
+      qualificationRate: qualificationRate,
+    };
+  }
 }
 
 export default new CampaignService();

@@ -49,6 +49,7 @@ interface BolnaWebhookPayload {
   transcript?: string | null;
   summary?: string | null;
   conversation_duration?: number;
+  total_cost?: number;
   error_message?: string | null;
   extracted_data?: BolnaExtractedData | null;
   telephony_data?: BolnaTelephonyData;
@@ -293,13 +294,14 @@ async function handleCallCompleted(
   const callSummary = parsed?.callSummary ?? null;
   const duration = resolveDuration(payload);
   const recording = resolveRecordingUrl(payload);
+  const cost = payload.total_cost ?? null;
 
   const hangupReason = payload.telephony_data?.hangup_reason ?? null;
   const callStatus =
     hangupReason === "customer-busy" ? "NO_ANSWER" : "COMPLETED";
 
   console.log(
-    `[Webhook] Completed: ${callId} | duration: ${duration}s | hasExtraction: ${!!parsed}`,
+    `[Webhook] Completed: ${callId} | duration: ${duration}s | cost: ${payload.total_cost} | hasExtraction: ${!!parsed}`,
   );
 
   await prisma.call.update({
@@ -312,6 +314,7 @@ async function handleCallCompleted(
         normalizedMessages.length > 0 ? normalizedMessages : undefined,
       duration,
       recording,
+      cost,
       endedAt: new Date(),
     },
   });
