@@ -623,6 +623,18 @@ export class CampaignService {
         leadTemperature: true,
         preferredNextAction: true,
         doNotCall: true,
+        budgetRange: true,
+        preferredConfiguration: true,
+      },
+    });
+
+    // Fetch Call Timestamps & Statuses for Hourly Pickup/Conversion Analysis
+    const calls = await prisma.call.findMany({
+      where: { campaignId, tenantId, startedAt: { not: null } },
+      select: {
+        startedAt: true,
+        status: true,
+        callAnalysis: { select: { disposition: true, leadTemperature: true } },
       },
     });
 
@@ -632,7 +644,98 @@ export class CampaignService {
       _sum: { cost: true },
     });
 
-    const totalCost = costAgg._sum.cost ?? 0;
+    const totalCostInCents = costAgg._sum.cost ?? 0;
+    const totalCostInDollars = totalCostInCents / 100;
+
+    // ─── Calculate Best Pickup & Conversion Times ────────────────────────────────
+    const hourlyStats: Record<
+      number,
+      { total: number; connected: number; qualified: number }
+    > = {};
+
+    for (const call of calls) {
+      if (!call.startedAt) continue;
+      const hour = new Date(call.startedAt).getHours(); // 0 - 23
+
+      if (!hourlyStats[hour]) {
+        hourlyStats[hour] = { total: 0, connected: 0, qualified: 0 };
+      }
+
+      hourlyStats[hour].total += 1;
+
+      if (call.status === "COMPLETED") {
+        hourlyStats[hour].connected += 1;
+      }
+
+      const disp = call.callAnalysis?.disposition;
+      const temp = call.callAnalysis?.leadTemperature;
+      if (
+        (disp && QUALIFYING_DISPOSITIONS.includes(disp)) ||
+        temp === "HOT" ||
+        temp === "WARM"
+      ) {
+        hourlyStats[hour].qualified += 1;
+      }
+    }
+
+    let bestPickupHour: number | null = null;
+    let maxPickupRate = 0;
+
+    let bestConversionHour: number | null = null;
+    let maxQualifiedCount = 0;
+
+    Object.entries(hourlyStats).forEach(([hStr, stat]) => {
+      const hour = parseInt(hStr, 10);
+      const pickupRate = stat.total > 0 ? stat.connected / stat.total : 0;
+
+      if (pickupRate > maxPickupRate && stat.total >= 1) {
+        maxPickupRate = pickupRate;
+        bestPickupHour = hour;
+      }
+
+      if (stat.qualified > maxQualifiedCount) {
+        maxQualifiedCount = stat.qualified;
+        bestConversionHour = hour;
+      }
+    });
+
+    const formatHourWindow = (hour: number | null) => {
+      if (hour === null) return "Insufficient Data";
+      const ampmStart = hour >= 12 ? "PM" : "AM";
+      const startHour12 = hour % 12 === 0 ? 12 : hour % 12;
+      const nextHour = (hour + 1) % 24;
+      const ampmEnd = nextHour >= 12 ? "PM" : "AM";
+      const endHour12 = nextHour % 12 === 0 ? 12 : nextHour % 12;
+      return `${startHour12}:00 ${ampmStart} - ${endHour12}:00 ${ampmEnd}`;
+    };
+
+    // ─── Extract Top Preferences (Budget & Config) ──────────────────────────────
+    const budgetCounts: Record<string, number> = {};
+    const configCounts: Record<string, number> = {};
+
+    analyses.forEach((a) => {
+      if (a.budgetRange && a.budgetRange !== "NOT_SHARED") {
+        const b = a.budgetRange.trim();
+        budgetCounts[b] = (budgetCounts[b] || 0) + 1;
+      }
+      if (
+        a.preferredConfiguration &&
+        a.preferredConfiguration !== "NOT_SHARED"
+      ) {
+        const c = a.preferredConfiguration.trim();
+        configCounts[c] = (configCounts[c] || 0) + 1;
+      }
+    });
+
+    const topBudget =
+      Object.keys(budgetCounts).sort(
+        (a, b) => budgetCounts[b] - budgetCounts[a],
+      )[0] ?? null;
+
+    const topConfiguration =
+      Object.keys(configCounts).sort(
+        (a, b) => configCounts[b] - configCounts[a],
+      )[0] ?? null;
 
     // ── Compute counts ────────────────────────────────────────────────────
     const hotLeads = analyses.filter((a) => a.leadTemperature === "HOT").length;
@@ -666,21 +769,24 @@ export class CampaignService {
         : "0.0";
 
     // ── Cost per lead ─────────────────────────────────────────────────────
-    const costPerLeadInCents =
+    const costPerLeadInDollars =
       campaign.successLeads > 0
-        ? parseFloat((totalCost / campaign.successLeads).toFixed(2)) / 100
+        ? parseFloat((totalCostInDollars / campaign.successLeads).toFixed(2)) /
+          100
         : 0;
-
-    const totalCostInCents = parseFloat(totalCost.toFixed(2)) / 100;
 
     return {
       hotLeads,
       callbacks,
       siteVisits,
       dnc,
-      totalCost: totalCostInCents,
-      costPerLead: costPerLeadInCents,
+      totalCost: totalCostInDollars,
+      costPerLead: costPerLeadInDollars,
       qualificationRate: qualificationRate,
+      bestPickupTime: formatHourWindow(bestPickupHour),
+      bestConversionTime: formatHourWindow(bestConversionHour),
+      topBudget: topBudget ?? "N/A",
+      topConfiguration: topConfiguration ?? "N/A",
     };
   }
 }
