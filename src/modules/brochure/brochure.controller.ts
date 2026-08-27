@@ -1,11 +1,12 @@
 // src/modules/brochure/brochure.controller.ts — FULL REPLACE
 
-import { Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
 import { AuthRequest } from "../../middleware/auth";
 import { getParam } from "../../utils/paramHelper";
 import brochureService from "./brochure.service";
 import { SaveBrochureSchema, UpdateBrochureSchema } from "./brochure.types";
 import { cleanupUploadedFile } from "../../middleware/upload";
+import prisma from "../../config/database";
 
 // ─── POST /api/brochure/extract ───────────────────────────────────────────────
 // Upload PDF → extract → return structured data (does NOT save to DB)
@@ -20,7 +21,7 @@ export const extract = async (
     if (!req.file || !filePath) {
       res.status(400).json({
         success: false,
-        error:   "PDF file is required",
+        error: "PDF file is required",
       });
       return;
     }
@@ -39,7 +40,7 @@ export const extract = async (
     res.status(200).json({
       success: true,
       message: "Brochure extracted successfully",
-      data:    result,
+      data: result,
     });
   } catch (error: any) {
     // File cleanup is handled inside service.extract()
@@ -53,7 +54,7 @@ export const extract = async (
       res.status(422).json({
         success: false,
         message: error.message,
-        error:   "UNPROCESSABLE_PDF",
+        error: "UNPROCESSABLE_PDF",
       });
       return;
     }
@@ -62,7 +63,7 @@ export const extract = async (
       res.status(503).json({
         success: false,
         message: error.message,
-        error:   "AI_QUOTA_EXCEEDED",
+        error: "AI_QUOTA_EXCEEDED",
       });
       return;
     }
@@ -84,7 +85,7 @@ export const save = async (
     if (!parsed.success) {
       res.status(400).json({
         success: false,
-        error:   "Invalid brochure data",
+        error: "Invalid brochure data",
         details: parsed.error.flatten().fieldErrors,
       });
       return;
@@ -98,7 +99,7 @@ export const save = async (
     res.status(201).json({
       success: true,
       message: "Brochure saved successfully",
-      data:    { brochureId: brochure.id, brochure },
+      data: { brochureId: brochure.id, brochure },
     });
   } catch (error) {
     next(error);
@@ -126,7 +127,7 @@ export const get = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const id   = getParam(req.params["id"]);
+    const id = getParam(req.params["id"]);
     const data = await brochureService.get(req.user!.tenantId, id);
     res.json({ success: true, data });
   } catch (error: any) {
@@ -145,13 +146,13 @@ export const update = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const id     = getParam(req.params["id"]);
+    const id = getParam(req.params["id"]);
     const parsed = UpdateBrochureSchema.safeParse(req.body);
 
     if (!parsed.success) {
       res.status(400).json({
         success: false,
-        error:   "Invalid update data",
+        error: "Invalid update data",
         details: parsed.error.flatten().fieldErrors,
       });
       return;
@@ -184,7 +185,7 @@ export const remove = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const id   = getParam(req.params["id"]);
+    const id = getParam(req.params["id"]);
     const data = await brochureService.delete(req.user!.tenantId, id);
     res.json({ success: true, data });
   } catch (error: any) {
@@ -197,5 +198,57 @@ export const remove = async (
       return;
     }
     next(error);
+  }
+};
+
+export const getPublicBrochure = async (req: Request, res: Response) => {
+  try {
+    const id = getParam(req.params["id"]);
+
+    const brochure = await prisma.brochure.findUnique({
+      where: { id },
+    });
+
+    if (!brochure) {
+      return res.status(404).json({
+        success: false,
+        error: "Brochure not found",
+      });
+    }
+
+    if (!brochure.isConfirmed) {
+      return res.status(404).json({
+        success: false,
+        error: "Brochure data not yet confirmed",
+      });
+    }
+
+    // Return clean, LLM-friendly response
+    return res.json({
+      success: true,
+      data: {
+        project_name: brochure.projectName,
+        city: brochure.city,
+        area: brochure.area,
+        developer: brochure.developerName || "Not specified",
+        property_type: brochure.propertyTypes || "Residential",
+        status: brochure.constructionStatus || "Under Construction",
+        configurations: brochure.configurations,
+        starting_price: brochure.startingPrice,
+        price_unit: "INR",
+        amenities: brochure.amenities,
+        total_units: brochure.totalUnits || null,
+        available_units: brochure.sizeUnit || null,
+        possession_date: brochure.possessionDate || null,
+        rera_number: brochure.reraNumber || null,
+        specifications: brochure.specifications || null,
+      },
+    });
+  } catch (error) {
+    console.error("Public brochure fetch error:", error);
+    return res.status(500).json({
+      success: false,
+      error: "Failed to fetch brochure data",
+    });
   }
 };

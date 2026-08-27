@@ -17,6 +17,7 @@ import userRoutes from "./modules/users/user.routes";
 import tenantRoutes from "./modules/tenants/tenant.routes";
 import webhookRoutes from "./modules/webhooks/webhook.routes";
 import brochureRoutes from "./modules/brochure/brochure.routes";
+import brochurePublicRoutes from "./modules/brochure/brochure.public.routes";
 
 dotenv.config();
 
@@ -68,6 +69,8 @@ app.get("/health", (_req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
+
+app.use("/api/public/brochure", brochurePublicRoutes);
 
 app.use("/webhooks", webhookRoutes);
 
