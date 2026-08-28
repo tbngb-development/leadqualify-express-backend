@@ -213,11 +213,11 @@ router.get(
         assistant: c.assistant.name,
         totalLeads: c.totalLeads,
         calledLeads: c.calledLeads,
-        successLeads: c.successLeads,
+        completedLeads: c.completedLeads,
         failedLeads: c.failedLeads,
-        successRate:
+        completedRate:
           c.calledLeads > 0
-            ? ((c.successLeads / c.calledLeads) * 100).toFixed(1) + "%"
+            ? ((c.completedLeads / c.calledLeads) * 100).toFixed(1) + "%"
             : "0%",
         progress:
           c.totalLeads > 0

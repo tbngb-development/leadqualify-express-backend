@@ -214,11 +214,33 @@ exports.Prisma.CampaignScalarFieldEnum = {
   assistantId: 'assistantId',
   brochureId: 'brochureId',
   variables: 'variables',
+  defaultRetryConfig: 'defaultRetryConfig',
   totalLeads: 'totalLeads',
   calledLeads: 'calledLeads',
-  successLeads: 'successLeads',
+  completedLeads: 'completedLeads',
   failedLeads: 'failedLeads',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt'
+};
+
+exports.Prisma.LeadBatchScalarFieldEnum = {
+  id: 'id',
+  bolnaBatchId: 'bolnaBatchId',
+  campaignId: 'campaignId',
+  tenantId: 'tenantId',
+  status: 'status',
+  fileName: 'fileName',
+  originalFileUrl: 'originalFileUrl',
+  transformedCsvUrl: 'transformedCsvUrl',
+  totalLeads: 'totalLeads',
+  calledLeads: 'calledLeads',
+  completedLeads: 'completedLeads',
+  failedLeads: 'failedLeads',
+  retryConfig: 'retryConfig',
   scheduledAt: 'scheduledAt',
+  bolnaScheduledAt: 'bolnaScheduledAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   startedAt: 'startedAt',
@@ -235,6 +257,7 @@ exports.Prisma.LeadScalarFieldEnum = {
   doNotCall: 'doNotCall',
   tenantId: 'tenantId',
   campaignId: 'campaignId',
+  batchId: 'batchId',
   metadata: 'metadata',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -246,6 +269,7 @@ exports.Prisma.CallScalarFieldEnum = {
   tenantId: 'tenantId',
   campaignId: 'campaignId',
   leadId: 'leadId',
+  batchId: 'batchId',
   status: 'status',
   duration: 'duration',
   cost: 'cost',
@@ -253,6 +277,7 @@ exports.Prisma.CallScalarFieldEnum = {
   transcript: 'transcript',
   transcriptMessages: 'transcriptMessages',
   summary: 'summary',
+  callHistory: 'callHistory',
   startedAt: 'startedAt',
   endedAt: 'endedAt',
   createdAt: 'createdAt',
@@ -317,9 +342,16 @@ exports.Role = exports.$Enums.Role = {
 
 exports.CampaignStatus = exports.$Enums.CampaignStatus = {
   DRAFT: 'DRAFT',
+  RUNNING: 'RUNNING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
+
+exports.BatchStatus = exports.$Enums.BatchStatus = {
+  CREATED: 'CREATED',
   SCHEDULED: 'SCHEDULED',
   RUNNING: 'RUNNING',
-  PAUSED: 'PAUSED',
+  STOPPED: 'STOPPED',
   COMPLETED: 'COMPLETED',
   FAILED: 'FAILED'
 };
@@ -417,6 +449,7 @@ exports.Prisma.ModelName = {
   Assistant: 'Assistant',
   Brochure: 'Brochure',
   Campaign: 'Campaign',
+  LeadBatch: 'LeadBatch',
   Lead: 'Lead',
   Call: 'Call',
   CallAnalysis: 'CallAnalysis'

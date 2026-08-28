@@ -1,8 +1,4 @@
-// src/modules/campaigns/campaign.controller.ts
-
 import { Response, NextFunction } from "express";
-import path from "path";
-import fs from "fs";
 import { AuthRequest } from "../../middleware/auth";
 import campaignService from "./campaign.service";
 import { getParam } from "../../utils/paramHelper";
@@ -40,7 +36,14 @@ export const create = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const { name, description, assistantId, brochureId, variables } = req.body;
+    const {
+      name,
+      description,
+      assistantId,
+      brochureId,
+      variables,
+      defaultRetryConfig,
+    } = req.body;
 
     if (!name || !assistantId) {
       res.status(400).json({
@@ -56,6 +59,7 @@ export const create = async (
       assistantId,
       brochureId,
       variables,
+      defaultRetryConfig,
     });
 
     res.status(201).json({ success: true, data });
@@ -92,90 +96,46 @@ export const parseLeads = async (
   }
 };
 
+// ── DEPRECATED placeholder ──
 export const uploadLeads = async (
   req: AuthRequest,
   res: Response,
-  next: NextFunction,
 ): Promise<void> => {
-  try {
-    const tenantId = req.user!.tenantId;
-    const campaignId = getParam(req.params["id"]);
-
-    if (!req.file) {
-      res.status(400).json({ success: false, error: "No file uploaded" });
-      return;
-    }
-
-    const allowDuplicates = req.query.allowDuplicates === "true";
-
-    const result = await campaignService.uploadLeads(
-      tenantId,
-      campaignId,
-      req.file.path,
-      allowDuplicates,
-    );
-
-    res.json({ success: true, data: result });
-    return;
-  } catch (error: unknown) {
-    const message =
-      error instanceof Error ? error.message : "Failed to upload leads";
-    res.status(400).json({ success: false, error: message });
-  }
+  res.status(410).json({
+    success: false,
+    error:
+      "Legacy file upload deprecated. Please use POST /api/campaigns/:id/batches to upload and track leads in V1.",
+  });
 };
 
-// ── UPDATED: now accepts optional scheduledAt in body ──
-export const start = async (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
-  try {
-    const id = getParam(req.params["id"]);
-    const { scheduledAt } = req.body; // ← NEW: optional ISO 8601 string
-
-    const data = await campaignService.start(
-      req.user!.tenantId,
-      id,
-      scheduledAt,
-    );
-    res.json({ success: true, data });
-  } catch (error) {
-    next(error);
-  }
+// ── DEPRECATED placeholder ──
+export const start = async (req: AuthRequest, res: Response): Promise<void> => {
+  res.status(410).json({
+    success: false,
+    error:
+      "Campaign-level start deprecated. Use POST /api/campaigns/:id/batches/:batchId/run or /schedule.",
+  });
 };
 
-export const pause = async (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
-  try {
-    const id = getParam(req.params["id"]);
-    const data = await campaignService.pause(req.user!.tenantId, id);
-    res.json({ success: true, data });
-  } catch (error) {
-    next(error);
-  }
+// ── DEPRECATED placeholder ──
+export const pause = async (req: AuthRequest, res: Response): Promise<void> => {
+  res.status(410).json({
+    success: false,
+    error:
+      "Campaign-level pause deprecated. Use POST /api/campaigns/:id/batches/:batchId/stop instead.",
+  });
 };
 
-// ── NEW: Cancel a scheduled campaign ──
+// ── DEPRECATED placeholder ──
 export const cancelSchedule = async (
   req: AuthRequest,
   res: Response,
-  next: NextFunction,
 ): Promise<void> => {
-  try {
-    const id = getParam(req.params["id"]);
-    const data = await campaignService.cancelSchedule(req.user!.tenantId, id);
-    res.json({
-      success: true,
-      data,
-      warning: "Calls already queued may still execute",
-    });
-  } catch (error) {
-    next(error);
-  }
+  res.status(410).json({
+    success: false,
+    error:
+      "Campaign-level schedule cancel deprecated. Use POST /api/campaigns/:id/batches/:batchId/stop instead.",
+  });
 };
 
 export const stats = async (

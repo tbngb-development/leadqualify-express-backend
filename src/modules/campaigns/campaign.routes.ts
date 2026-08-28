@@ -1,9 +1,6 @@
-// src/modules/campaigns/campaign.routes.ts
-
 import { Router } from "express";
-import multer from "multer";
-import path from "path";
 import { authenticate } from "../../middleware/auth";
+import { leadsUpload } from "../../middleware/upload";
 import {
   list,
   get,
@@ -16,21 +13,35 @@ import {
   performance,
   parseLeads,
 } from "./campaign.controller";
-import { leadsUpload } from "../../middleware/upload";
+import batchRoutes from "./batch.routes";
 
 const router = Router();
 
 router.use(authenticate);
 
+// ── V1 Batch routes (nested) ─────────────────────────────────────────────────
+// Mounted at /:campaignId/batches (Fixed typo: was /:campaignI/batches)
+router.use("/:campaignId/batches", batchRoutes);
+
+// ── Campaign routes ──────────────────────────────────────────────────────────
 router.get("/", list);
-router.get("/:id", get);
 router.post("/", create);
-router.post("/:id/parse-leads", leadsUpload.single("file"), parseLeads);
-router.post("/:id/upload", leadsUpload.single("file"), uploadLeads);
-router.post("/:id/start", start);
-router.post("/:id/pause", pause);
-router.post("/:id/cancel-schedule", cancelSchedule);
+
+// Sub-resource endpoints before /:id
 router.get("/:id/stats", stats);
 router.get("/:id/performance", performance);
+router.post("/:id/parse-leads", leadsUpload.single("file"), parseLeads);
+
+router.get("/:id", get);
+
+// ── DEPRECATED: Scheduled for removal in Phase 5 ─────────────────────────────
+// Use POST /:campaignId/batches instead of /:id/upload
+router.post("/:id/upload", leadsUpload.single("file"), uploadLeads);
+// Use POST /:campaignId/batches/:batchId/run instead of /:id/start
+router.post("/:id/start", start);
+// Use POST /:campaignId/batches/:batchId/stop instead of /:id/pause
+router.post("/:id/pause", pause);
+// Use POST /:campaignId/batches/:batchId/stop instead of /:id/cancel-schedule
+router.post("/:id/cancel-schedule", cancelSchedule);
 
 export default router;

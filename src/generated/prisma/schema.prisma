@@ -1,5 +1,3 @@
-// prisma/schema.prisma
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -25,6 +23,7 @@ model Tenant {
 
   users        User[]
   campaigns    Campaign[]
+  batches      LeadBatch[]
   leads        Lead[]
   calls        Call[]
   assistants   Assistant[]
@@ -150,38 +149,81 @@ model Brochure {
 // ─────────────────────────────────────────────────────────────────────────────
 
 model Campaign {
-  id           String         @id @default(uuid())
-  name         String
-  description  String?
-  status       CampaignStatus @default(DRAFT)
-  tenantId     String
-  assistantId  String
-  brochureId   String?
-  variables    Json?
-  totalLeads   Int            @default(0)
-  calledLeads  Int            @default(0)
-  successLeads Int            @default(0)
-  failedLeads  Int            @default(0)
-  scheduledAt  DateTime?
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  startedAt    DateTime?
-  completedAt  DateTime?
+  id                 String         @id @default(uuid())
+  name               String
+  description        String?
+  status             CampaignStatus @default(DRAFT)
+  tenantId           String
+  assistantId        String
+  brochureId         String?
+  variables          Json?
+  defaultRetryConfig Json? // Campaign level defaults for all its batches
+  totalLeads         Int            @default(0)
+  calledLeads        Int            @default(0)
+  completedLeads     Int            @default(0)
+  failedLeads        Int            @default(0)
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  startedAt          DateTime?
+  completedAt        DateTime?
 
-  tenant    Tenant    @relation(fields: [tenantId], references: [id])
-  assistant Assistant @relation(fields: [assistantId], references: [id])
-  brochure  Brochure? @relation(fields: [brochureId], references: [id])
+  tenant    Tenant      @relation(fields: [tenantId], references: [id])
+  assistant Assistant   @relation(fields: [assistantId], references: [id])
+  brochure  Brochure?   @relation(fields: [brochureId], references: [id])
   leads     Lead[]
   calls     Call[]
+  batches   LeadBatch[]
 
   @@index([brochureId])
 }
 
 enum CampaignStatus {
   DRAFT
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LEAD BATCH (NEW V1 MODEL)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model LeadBatch {
+  id                String      @id @default(uuid())
+  bolnaBatchId      String?     @unique
+  campaignId        String
+  tenantId          String
+  status            BatchStatus @default(CREATED)
+  fileName          String?
+  originalFileUrl   String?
+  transformedCsvUrl String?
+  totalLeads        Int         @default(0)
+  calledLeads       Int         @default(0)
+  completedLeads    Int         @default(0)
+  failedLeads       Int         @default(0)
+  retryConfig       Json? // JSON: RetryConfig shape
+  scheduledAt       DateTime?
+  bolnaScheduledAt  DateTime?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  startedAt         DateTime?
+  completedAt       DateTime?
+
+  tenant   Tenant   @relation(fields: [tenantId], references: [id])
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  leads    Lead[]
+  calls    Call[]
+
+  @@index([tenantId])
+  @@index([campaignId])
+  @@index([bolnaBatchId])
+}
+
+enum BatchStatus {
+  CREATED
   SCHEDULED
   RUNNING
-  PAUSED
+  STOPPED
   COMPLETED
   FAILED
 }
@@ -200,18 +242,20 @@ model Lead {
   doNotCall  Boolean    @default(false)
   tenantId   String
   campaignId String
+  batchId    String? // Nullable to ensure zero migration disruption
   metadata   Json?
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 
-  tenant   Tenant   @relation(fields: [tenantId], references: [id])
-  campaign Campaign @relation(fields: [campaignId], references: [id])
+  tenant   Tenant     @relation(fields: [tenantId], references: [id])
+  campaign Campaign   @relation(fields: [campaignId], references: [id])
+  batch    LeadBatch? @relation(fields: [batchId], references: [id], onDelete: Cascade)
   calls    Call[]
 
-  // One phone number per campaign — prevents duplicate leads
-  // @@unique([phone, campaignId])
+  @@unique([phone, campaignId]) // Unique constraint per campaign is maintained
   @@index([tenantId])
   @@index([campaignId])
+  @@index([batchId])
 }
 
 enum LeadStatus {
@@ -230,10 +274,11 @@ enum LeadStatus {
 
 model Call {
   id                 String     @id @default(uuid())
-  bolnaCallId        String?    @unique
+  bolnaCallId        String?    @unique // Stores the latest execution_id
   tenantId           String
   campaignId         String
   leadId             String
+  batchId            String? // Linked to the batch context
   status             CallStatus @default(PENDING)
   duration           Int?
   cost               Float?
@@ -241,6 +286,7 @@ model Call {
   transcript         String?
   transcriptMessages Json?
   summary            String?
+  callHistory        Json? // JSON: callHistory shape tracking retries
   startedAt          DateTime?
   endedAt            DateTime?
   createdAt          DateTime   @default(now())
@@ -249,11 +295,13 @@ model Call {
   tenant       Tenant        @relation(fields: [tenantId], references: [id])
   campaign     Campaign      @relation(fields: [campaignId], references: [id])
   lead         Lead          @relation(fields: [leadId], references: [id])
+  batch        LeadBatch?    @relation(fields: [batchId], references: [id], onDelete: Cascade)
   callAnalysis CallAnalysis?
 
   @@index([tenantId])
   @@index([campaignId])
   @@index([leadId])
+  @@index([batchId])
 }
 
 enum CallStatus {
