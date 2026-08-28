@@ -645,7 +645,7 @@ async function incrementTerminalStats(
     data: {
       calledLeads: { increment: 1 },
       ...(isCompleted && { completedLeads: { increment: 1 } }),
-      ...(isQualified && { completedLeads: { increment: 1 } }),
+      // ...(isQualified && { completedLeads: { increment: 1 } }),
       ...(isFailed && { failedLeads: { increment: 1 } }),
     },
   });
@@ -657,7 +657,7 @@ async function incrementTerminalStats(
       data: {
         calledLeads: { increment: 1 },
         ...(isCompleted && { completedLeads: { increment: 1 } }),
-        ...(isQualified && { completedLeads: { increment: 1 } }),
+        // ...(isQualified && { completedLeads: { increment: 1 } }),
         ...(isFailed && { failedLeads: { increment: 1 } }),
       },
     });
