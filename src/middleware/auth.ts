@@ -18,7 +18,7 @@ interface JwtPayload {
 export const authenticate = async (
   req: AuthRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
@@ -30,9 +30,11 @@ export const authenticate = async (
 
     const token = authHeader.replace("Bearer ", "");
 
+    // console.log("auth token [authenticate]: ", token);
+    
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET || "secret"
+      process.env.JWT_SECRET || "secret",
     ) as JwtPayload;
 
     const user = await prisma.user.findUnique({

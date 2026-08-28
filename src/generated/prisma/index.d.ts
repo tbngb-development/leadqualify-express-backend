@@ -39,6 +39,11 @@ export type Brochure = $Result.DefaultSelection<Prisma.$BrochurePayload>
  */
 export type Campaign = $Result.DefaultSelection<Prisma.$CampaignPayload>
 /**
+ * Model LeadBatch
+ * 
+ */
+export type LeadBatch = $Result.DefaultSelection<Prisma.$LeadBatchPayload>
+/**
  * Model Lead
  * 
  */
@@ -69,14 +74,24 @@ export type Role = (typeof Role)[keyof typeof Role]
 
 export const CampaignStatus: {
   DRAFT: 'DRAFT',
-  SCHEDULED: 'SCHEDULED',
   RUNNING: 'RUNNING',
-  PAUSED: 'PAUSED',
   COMPLETED: 'COMPLETED',
   FAILED: 'FAILED'
 };
 
 export type CampaignStatus = (typeof CampaignStatus)[keyof typeof CampaignStatus]
+
+
+export const BatchStatus: {
+  CREATED: 'CREATED',
+  SCHEDULED: 'SCHEDULED',
+  RUNNING: 'RUNNING',
+  STOPPED: 'STOPPED',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
+
+export type BatchStatus = (typeof BatchStatus)[keyof typeof BatchStatus]
 
 
 export const LeadStatus: {
@@ -204,6 +219,10 @@ export const Role: typeof $Enums.Role
 export type CampaignStatus = $Enums.CampaignStatus
 
 export const CampaignStatus: typeof $Enums.CampaignStatus
+
+export type BatchStatus = $Enums.BatchStatus
+
+export const BatchStatus: typeof $Enums.BatchStatus
 
 export type LeadStatus = $Enums.LeadStatus
 
@@ -412,6 +431,16 @@ export class PrismaClient<
     * ```
     */
   get campaign(): Prisma.CampaignDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.leadBatch`: Exposes CRUD operations for the **LeadBatch** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LeadBatches
+    * const leadBatches = await prisma.leadBatch.findMany()
+    * ```
+    */
+  get leadBatch(): Prisma.LeadBatchDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.lead`: Exposes CRUD operations for the **Lead** model.
@@ -888,6 +917,7 @@ export namespace Prisma {
     Assistant: 'Assistant',
     Brochure: 'Brochure',
     Campaign: 'Campaign',
+    LeadBatch: 'LeadBatch',
     Lead: 'Lead',
     Call: 'Call',
     CallAnalysis: 'CallAnalysis'
@@ -909,7 +939,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "tenant" | "user" | "assistant" | "brochure" | "campaign" | "lead" | "call" | "callAnalysis"
+      modelProps: "tenant" | "user" | "assistant" | "brochure" | "campaign" | "leadBatch" | "lead" | "call" | "callAnalysis"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1283,6 +1313,80 @@ export namespace Prisma {
           }
         }
       }
+      LeadBatch: {
+        payload: Prisma.$LeadBatchPayload<ExtArgs>
+        fields: Prisma.LeadBatchFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LeadBatchFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadBatchPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LeadBatchFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadBatchPayload>
+          }
+          findFirst: {
+            args: Prisma.LeadBatchFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadBatchPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LeadBatchFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadBatchPayload>
+          }
+          findMany: {
+            args: Prisma.LeadBatchFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadBatchPayload>[]
+          }
+          create: {
+            args: Prisma.LeadBatchCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadBatchPayload>
+          }
+          createMany: {
+            args: Prisma.LeadBatchCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LeadBatchCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadBatchPayload>[]
+          }
+          delete: {
+            args: Prisma.LeadBatchDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadBatchPayload>
+          }
+          update: {
+            args: Prisma.LeadBatchUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadBatchPayload>
+          }
+          deleteMany: {
+            args: Prisma.LeadBatchDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LeadBatchUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LeadBatchUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadBatchPayload>[]
+          }
+          upsert: {
+            args: Prisma.LeadBatchUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadBatchPayload>
+          }
+          aggregate: {
+            args: Prisma.LeadBatchAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLeadBatch>
+          }
+          groupBy: {
+            args: Prisma.LeadBatchGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LeadBatchGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LeadBatchCountArgs<ExtArgs>
+            result: $Utils.Optional<LeadBatchCountAggregateOutputType> | number
+          }
+        }
+      }
       Lead: {
         payload: Prisma.$LeadPayload<ExtArgs>
         fields: Prisma.LeadFieldRefs
@@ -1606,6 +1710,7 @@ export namespace Prisma {
     assistant?: AssistantOmit
     brochure?: BrochureOmit
     campaign?: CampaignOmit
+    leadBatch?: LeadBatchOmit
     lead?: LeadOmit
     call?: CallOmit
     callAnalysis?: CallAnalysisOmit
@@ -1691,6 +1796,7 @@ export namespace Prisma {
   export type TenantCountOutputType = {
     users: number
     campaigns: number
+    batches: number
     leads: number
     calls: number
     assistants: number
@@ -1701,6 +1807,7 @@ export namespace Prisma {
   export type TenantCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | TenantCountOutputTypeCountUsersArgs
     campaigns?: boolean | TenantCountOutputTypeCountCampaignsArgs
+    batches?: boolean | TenantCountOutputTypeCountBatchesArgs
     leads?: boolean | TenantCountOutputTypeCountLeadsArgs
     calls?: boolean | TenantCountOutputTypeCountCallsArgs
     assistants?: boolean | TenantCountOutputTypeCountAssistantsArgs
@@ -1731,6 +1838,13 @@ export namespace Prisma {
    */
   export type TenantCountOutputTypeCountCampaignsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CampaignWhereInput
+  }
+
+  /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountBatchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LeadBatchWhereInput
   }
 
   /**
@@ -1838,11 +1952,13 @@ export namespace Prisma {
   export type CampaignCountOutputType = {
     leads: number
     calls: number
+    batches: number
   }
 
   export type CampaignCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     leads?: boolean | CampaignCountOutputTypeCountLeadsArgs
     calls?: boolean | CampaignCountOutputTypeCountCallsArgs
+    batches?: boolean | CampaignCountOutputTypeCountBatchesArgs
   }
 
   // Custom InputTypes
@@ -1867,6 +1983,53 @@ export namespace Prisma {
    * CampaignCountOutputType without action
    */
   export type CampaignCountOutputTypeCountCallsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CallWhereInput
+  }
+
+  /**
+   * CampaignCountOutputType without action
+   */
+  export type CampaignCountOutputTypeCountBatchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LeadBatchWhereInput
+  }
+
+
+  /**
+   * Count Type LeadBatchCountOutputType
+   */
+
+  export type LeadBatchCountOutputType = {
+    leads: number
+    calls: number
+  }
+
+  export type LeadBatchCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    leads?: boolean | LeadBatchCountOutputTypeCountLeadsArgs
+    calls?: boolean | LeadBatchCountOutputTypeCountCallsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * LeadBatchCountOutputType without action
+   */
+  export type LeadBatchCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadBatchCountOutputType
+     */
+    select?: LeadBatchCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * LeadBatchCountOutputType without action
+   */
+  export type LeadBatchCountOutputTypeCountLeadsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LeadWhereInput
+  }
+
+  /**
+   * LeadBatchCountOutputType without action
+   */
+  export type LeadBatchCountOutputTypeCountCallsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CallWhereInput
   }
 
@@ -2088,6 +2251,7 @@ export namespace Prisma {
     updatedAt?: boolean
     users?: boolean | Tenant$usersArgs<ExtArgs>
     campaigns?: boolean | Tenant$campaignsArgs<ExtArgs>
+    batches?: boolean | Tenant$batchesArgs<ExtArgs>
     leads?: boolean | Tenant$leadsArgs<ExtArgs>
     calls?: boolean | Tenant$callsArgs<ExtArgs>
     assistants?: boolean | Tenant$assistantsArgs<ExtArgs>
@@ -2130,6 +2294,7 @@ export namespace Prisma {
   export type TenantInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | Tenant$usersArgs<ExtArgs>
     campaigns?: boolean | Tenant$campaignsArgs<ExtArgs>
+    batches?: boolean | Tenant$batchesArgs<ExtArgs>
     leads?: boolean | Tenant$leadsArgs<ExtArgs>
     calls?: boolean | Tenant$callsArgs<ExtArgs>
     assistants?: boolean | Tenant$assistantsArgs<ExtArgs>
@@ -2145,6 +2310,7 @@ export namespace Prisma {
     objects: {
       users: Prisma.$UserPayload<ExtArgs>[]
       campaigns: Prisma.$CampaignPayload<ExtArgs>[]
+      batches: Prisma.$LeadBatchPayload<ExtArgs>[]
       leads: Prisma.$LeadPayload<ExtArgs>[]
       calls: Prisma.$CallPayload<ExtArgs>[]
       assistants: Prisma.$AssistantPayload<ExtArgs>[]
@@ -2555,6 +2721,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     users<T extends Tenant$usersArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     campaigns<T extends Tenant$campaignsArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$campaignsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    batches<T extends Tenant$batchesArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$batchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadBatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     leads<T extends Tenant$leadsArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$leadsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     calls<T extends Tenant$callsArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$callsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     assistants<T extends Tenant$assistantsArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$assistantsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssistantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3029,6 +3196,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CampaignScalarFieldEnum | CampaignScalarFieldEnum[]
+  }
+
+  /**
+   * Tenant.batches
+   */
+  export type Tenant$batchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadBatch
+     */
+    select?: LeadBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadBatch
+     */
+    omit?: LeadBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadBatchInclude<ExtArgs> | null
+    where?: LeadBatchWhereInput
+    orderBy?: LeadBatchOrderByWithRelationInput | LeadBatchOrderByWithRelationInput[]
+    cursor?: LeadBatchWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LeadBatchScalarFieldEnum | LeadBatchScalarFieldEnum[]
   }
 
   /**
@@ -7103,14 +7294,14 @@ export namespace Prisma {
   export type CampaignAvgAggregateOutputType = {
     totalLeads: number | null
     calledLeads: number | null
-    successLeads: number | null
+    completedLeads: number | null
     failedLeads: number | null
   }
 
   export type CampaignSumAggregateOutputType = {
     totalLeads: number | null
     calledLeads: number | null
-    successLeads: number | null
+    completedLeads: number | null
     failedLeads: number | null
   }
 
@@ -7124,9 +7315,8 @@ export namespace Prisma {
     brochureId: string | null
     totalLeads: number | null
     calledLeads: number | null
-    successLeads: number | null
+    completedLeads: number | null
     failedLeads: number | null
-    scheduledAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     startedAt: Date | null
@@ -7143,9 +7333,8 @@ export namespace Prisma {
     brochureId: string | null
     totalLeads: number | null
     calledLeads: number | null
-    successLeads: number | null
+    completedLeads: number | null
     failedLeads: number | null
-    scheduledAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     startedAt: Date | null
@@ -7161,11 +7350,11 @@ export namespace Prisma {
     assistantId: number
     brochureId: number
     variables: number
+    defaultRetryConfig: number
     totalLeads: number
     calledLeads: number
-    successLeads: number
+    completedLeads: number
     failedLeads: number
-    scheduledAt: number
     createdAt: number
     updatedAt: number
     startedAt: number
@@ -7177,14 +7366,14 @@ export namespace Prisma {
   export type CampaignAvgAggregateInputType = {
     totalLeads?: true
     calledLeads?: true
-    successLeads?: true
+    completedLeads?: true
     failedLeads?: true
   }
 
   export type CampaignSumAggregateInputType = {
     totalLeads?: true
     calledLeads?: true
-    successLeads?: true
+    completedLeads?: true
     failedLeads?: true
   }
 
@@ -7198,9 +7387,8 @@ export namespace Prisma {
     brochureId?: true
     totalLeads?: true
     calledLeads?: true
-    successLeads?: true
+    completedLeads?: true
     failedLeads?: true
-    scheduledAt?: true
     createdAt?: true
     updatedAt?: true
     startedAt?: true
@@ -7217,9 +7405,8 @@ export namespace Prisma {
     brochureId?: true
     totalLeads?: true
     calledLeads?: true
-    successLeads?: true
+    completedLeads?: true
     failedLeads?: true
-    scheduledAt?: true
     createdAt?: true
     updatedAt?: true
     startedAt?: true
@@ -7235,11 +7422,11 @@ export namespace Prisma {
     assistantId?: true
     brochureId?: true
     variables?: true
+    defaultRetryConfig?: true
     totalLeads?: true
     calledLeads?: true
-    successLeads?: true
+    completedLeads?: true
     failedLeads?: true
-    scheduledAt?: true
     createdAt?: true
     updatedAt?: true
     startedAt?: true
@@ -7342,11 +7529,11 @@ export namespace Prisma {
     assistantId: string
     brochureId: string | null
     variables: JsonValue | null
+    defaultRetryConfig: JsonValue | null
     totalLeads: number
     calledLeads: number
-    successLeads: number
+    completedLeads: number
     failedLeads: number
-    scheduledAt: Date | null
     createdAt: Date
     updatedAt: Date
     startedAt: Date | null
@@ -7381,11 +7568,11 @@ export namespace Prisma {
     assistantId?: boolean
     brochureId?: boolean
     variables?: boolean
+    defaultRetryConfig?: boolean
     totalLeads?: boolean
     calledLeads?: boolean
-    successLeads?: boolean
+    completedLeads?: boolean
     failedLeads?: boolean
-    scheduledAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     startedAt?: boolean
@@ -7395,6 +7582,7 @@ export namespace Prisma {
     brochure?: boolean | Campaign$brochureArgs<ExtArgs>
     leads?: boolean | Campaign$leadsArgs<ExtArgs>
     calls?: boolean | Campaign$callsArgs<ExtArgs>
+    batches?: boolean | Campaign$batchesArgs<ExtArgs>
     _count?: boolean | CampaignCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["campaign"]>
 
@@ -7407,11 +7595,11 @@ export namespace Prisma {
     assistantId?: boolean
     brochureId?: boolean
     variables?: boolean
+    defaultRetryConfig?: boolean
     totalLeads?: boolean
     calledLeads?: boolean
-    successLeads?: boolean
+    completedLeads?: boolean
     failedLeads?: boolean
-    scheduledAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     startedAt?: boolean
@@ -7430,11 +7618,11 @@ export namespace Prisma {
     assistantId?: boolean
     brochureId?: boolean
     variables?: boolean
+    defaultRetryConfig?: boolean
     totalLeads?: boolean
     calledLeads?: boolean
-    successLeads?: boolean
+    completedLeads?: boolean
     failedLeads?: boolean
-    scheduledAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     startedAt?: boolean
@@ -7453,24 +7641,25 @@ export namespace Prisma {
     assistantId?: boolean
     brochureId?: boolean
     variables?: boolean
+    defaultRetryConfig?: boolean
     totalLeads?: boolean
     calledLeads?: boolean
-    successLeads?: boolean
+    completedLeads?: boolean
     failedLeads?: boolean
-    scheduledAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     startedAt?: boolean
     completedAt?: boolean
   }
 
-  export type CampaignOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "status" | "tenantId" | "assistantId" | "brochureId" | "variables" | "totalLeads" | "calledLeads" | "successLeads" | "failedLeads" | "scheduledAt" | "createdAt" | "updatedAt" | "startedAt" | "completedAt", ExtArgs["result"]["campaign"]>
+  export type CampaignOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "status" | "tenantId" | "assistantId" | "brochureId" | "variables" | "defaultRetryConfig" | "totalLeads" | "calledLeads" | "completedLeads" | "failedLeads" | "createdAt" | "updatedAt" | "startedAt" | "completedAt", ExtArgs["result"]["campaign"]>
   export type CampaignInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     assistant?: boolean | AssistantDefaultArgs<ExtArgs>
     brochure?: boolean | Campaign$brochureArgs<ExtArgs>
     leads?: boolean | Campaign$leadsArgs<ExtArgs>
     calls?: boolean | Campaign$callsArgs<ExtArgs>
+    batches?: boolean | Campaign$batchesArgs<ExtArgs>
     _count?: boolean | CampaignCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CampaignIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7492,6 +7681,7 @@ export namespace Prisma {
       brochure: Prisma.$BrochurePayload<ExtArgs> | null
       leads: Prisma.$LeadPayload<ExtArgs>[]
       calls: Prisma.$CallPayload<ExtArgs>[]
+      batches: Prisma.$LeadBatchPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7502,11 +7692,11 @@ export namespace Prisma {
       assistantId: string
       brochureId: string | null
       variables: Prisma.JsonValue | null
+      defaultRetryConfig: Prisma.JsonValue | null
       totalLeads: number
       calledLeads: number
-      successLeads: number
+      completedLeads: number
       failedLeads: number
-      scheduledAt: Date | null
       createdAt: Date
       updatedAt: Date
       startedAt: Date | null
@@ -7910,6 +8100,7 @@ export namespace Prisma {
     brochure<T extends Campaign$brochureArgs<ExtArgs> = {}>(args?: Subset<T, Campaign$brochureArgs<ExtArgs>>): Prisma__BrochureClient<$Result.GetResult<Prisma.$BrochurePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     leads<T extends Campaign$leadsArgs<ExtArgs> = {}>(args?: Subset<T, Campaign$leadsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     calls<T extends Campaign$callsArgs<ExtArgs> = {}>(args?: Subset<T, Campaign$callsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    batches<T extends Campaign$batchesArgs<ExtArgs> = {}>(args?: Subset<T, Campaign$batchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadBatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7947,11 +8138,11 @@ export namespace Prisma {
     readonly assistantId: FieldRef<"Campaign", 'String'>
     readonly brochureId: FieldRef<"Campaign", 'String'>
     readonly variables: FieldRef<"Campaign", 'Json'>
+    readonly defaultRetryConfig: FieldRef<"Campaign", 'Json'>
     readonly totalLeads: FieldRef<"Campaign", 'Int'>
     readonly calledLeads: FieldRef<"Campaign", 'Int'>
-    readonly successLeads: FieldRef<"Campaign", 'Int'>
+    readonly completedLeads: FieldRef<"Campaign", 'Int'>
     readonly failedLeads: FieldRef<"Campaign", 'Int'>
-    readonly scheduledAt: FieldRef<"Campaign", 'DateTime'>
     readonly createdAt: FieldRef<"Campaign", 'DateTime'>
     readonly updatedAt: FieldRef<"Campaign", 'DateTime'>
     readonly startedAt: FieldRef<"Campaign", 'DateTime'>
@@ -8419,6 +8610,30 @@ export namespace Prisma {
   }
 
   /**
+   * Campaign.batches
+   */
+  export type Campaign$batchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadBatch
+     */
+    select?: LeadBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadBatch
+     */
+    omit?: LeadBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadBatchInclude<ExtArgs> | null
+    where?: LeadBatchWhereInput
+    orderBy?: LeadBatchOrderByWithRelationInput | LeadBatchOrderByWithRelationInput[]
+    cursor?: LeadBatchWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LeadBatchScalarFieldEnum | LeadBatchScalarFieldEnum[]
+  }
+
+  /**
    * Campaign without action
    */
   export type CampaignDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8434,6 +8649,1354 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: CampaignInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model LeadBatch
+   */
+
+  export type AggregateLeadBatch = {
+    _count: LeadBatchCountAggregateOutputType | null
+    _avg: LeadBatchAvgAggregateOutputType | null
+    _sum: LeadBatchSumAggregateOutputType | null
+    _min: LeadBatchMinAggregateOutputType | null
+    _max: LeadBatchMaxAggregateOutputType | null
+  }
+
+  export type LeadBatchAvgAggregateOutputType = {
+    totalLeads: number | null
+    calledLeads: number | null
+    completedLeads: number | null
+    failedLeads: number | null
+  }
+
+  export type LeadBatchSumAggregateOutputType = {
+    totalLeads: number | null
+    calledLeads: number | null
+    completedLeads: number | null
+    failedLeads: number | null
+  }
+
+  export type LeadBatchMinAggregateOutputType = {
+    id: string | null
+    bolnaBatchId: string | null
+    campaignId: string | null
+    tenantId: string | null
+    status: $Enums.BatchStatus | null
+    fileName: string | null
+    originalFileUrl: string | null
+    transformedCsvUrl: string | null
+    totalLeads: number | null
+    calledLeads: number | null
+    completedLeads: number | null
+    failedLeads: number | null
+    scheduledAt: Date | null
+    bolnaScheduledAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    startedAt: Date | null
+    completedAt: Date | null
+  }
+
+  export type LeadBatchMaxAggregateOutputType = {
+    id: string | null
+    bolnaBatchId: string | null
+    campaignId: string | null
+    tenantId: string | null
+    status: $Enums.BatchStatus | null
+    fileName: string | null
+    originalFileUrl: string | null
+    transformedCsvUrl: string | null
+    totalLeads: number | null
+    calledLeads: number | null
+    completedLeads: number | null
+    failedLeads: number | null
+    scheduledAt: Date | null
+    bolnaScheduledAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    startedAt: Date | null
+    completedAt: Date | null
+  }
+
+  export type LeadBatchCountAggregateOutputType = {
+    id: number
+    bolnaBatchId: number
+    campaignId: number
+    tenantId: number
+    status: number
+    fileName: number
+    originalFileUrl: number
+    transformedCsvUrl: number
+    totalLeads: number
+    calledLeads: number
+    completedLeads: number
+    failedLeads: number
+    retryConfig: number
+    scheduledAt: number
+    bolnaScheduledAt: number
+    createdAt: number
+    updatedAt: number
+    startedAt: number
+    completedAt: number
+    _all: number
+  }
+
+
+  export type LeadBatchAvgAggregateInputType = {
+    totalLeads?: true
+    calledLeads?: true
+    completedLeads?: true
+    failedLeads?: true
+  }
+
+  export type LeadBatchSumAggregateInputType = {
+    totalLeads?: true
+    calledLeads?: true
+    completedLeads?: true
+    failedLeads?: true
+  }
+
+  export type LeadBatchMinAggregateInputType = {
+    id?: true
+    bolnaBatchId?: true
+    campaignId?: true
+    tenantId?: true
+    status?: true
+    fileName?: true
+    originalFileUrl?: true
+    transformedCsvUrl?: true
+    totalLeads?: true
+    calledLeads?: true
+    completedLeads?: true
+    failedLeads?: true
+    scheduledAt?: true
+    bolnaScheduledAt?: true
+    createdAt?: true
+    updatedAt?: true
+    startedAt?: true
+    completedAt?: true
+  }
+
+  export type LeadBatchMaxAggregateInputType = {
+    id?: true
+    bolnaBatchId?: true
+    campaignId?: true
+    tenantId?: true
+    status?: true
+    fileName?: true
+    originalFileUrl?: true
+    transformedCsvUrl?: true
+    totalLeads?: true
+    calledLeads?: true
+    completedLeads?: true
+    failedLeads?: true
+    scheduledAt?: true
+    bolnaScheduledAt?: true
+    createdAt?: true
+    updatedAt?: true
+    startedAt?: true
+    completedAt?: true
+  }
+
+  export type LeadBatchCountAggregateInputType = {
+    id?: true
+    bolnaBatchId?: true
+    campaignId?: true
+    tenantId?: true
+    status?: true
+    fileName?: true
+    originalFileUrl?: true
+    transformedCsvUrl?: true
+    totalLeads?: true
+    calledLeads?: true
+    completedLeads?: true
+    failedLeads?: true
+    retryConfig?: true
+    scheduledAt?: true
+    bolnaScheduledAt?: true
+    createdAt?: true
+    updatedAt?: true
+    startedAt?: true
+    completedAt?: true
+    _all?: true
+  }
+
+  export type LeadBatchAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LeadBatch to aggregate.
+     */
+    where?: LeadBatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LeadBatches to fetch.
+     */
+    orderBy?: LeadBatchOrderByWithRelationInput | LeadBatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LeadBatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LeadBatches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LeadBatches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LeadBatches
+    **/
+    _count?: true | LeadBatchCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LeadBatchAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LeadBatchSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LeadBatchMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LeadBatchMaxAggregateInputType
+  }
+
+  export type GetLeadBatchAggregateType<T extends LeadBatchAggregateArgs> = {
+        [P in keyof T & keyof AggregateLeadBatch]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLeadBatch[P]>
+      : GetScalarType<T[P], AggregateLeadBatch[P]>
+  }
+
+
+
+
+  export type LeadBatchGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LeadBatchWhereInput
+    orderBy?: LeadBatchOrderByWithAggregationInput | LeadBatchOrderByWithAggregationInput[]
+    by: LeadBatchScalarFieldEnum[] | LeadBatchScalarFieldEnum
+    having?: LeadBatchScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LeadBatchCountAggregateInputType | true
+    _avg?: LeadBatchAvgAggregateInputType
+    _sum?: LeadBatchSumAggregateInputType
+    _min?: LeadBatchMinAggregateInputType
+    _max?: LeadBatchMaxAggregateInputType
+  }
+
+  export type LeadBatchGroupByOutputType = {
+    id: string
+    bolnaBatchId: string | null
+    campaignId: string
+    tenantId: string
+    status: $Enums.BatchStatus
+    fileName: string | null
+    originalFileUrl: string | null
+    transformedCsvUrl: string | null
+    totalLeads: number
+    calledLeads: number
+    completedLeads: number
+    failedLeads: number
+    retryConfig: JsonValue | null
+    scheduledAt: Date | null
+    bolnaScheduledAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    startedAt: Date | null
+    completedAt: Date | null
+    _count: LeadBatchCountAggregateOutputType | null
+    _avg: LeadBatchAvgAggregateOutputType | null
+    _sum: LeadBatchSumAggregateOutputType | null
+    _min: LeadBatchMinAggregateOutputType | null
+    _max: LeadBatchMaxAggregateOutputType | null
+  }
+
+  type GetLeadBatchGroupByPayload<T extends LeadBatchGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LeadBatchGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LeadBatchGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LeadBatchGroupByOutputType[P]>
+            : GetScalarType<T[P], LeadBatchGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LeadBatchSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bolnaBatchId?: boolean
+    campaignId?: boolean
+    tenantId?: boolean
+    status?: boolean
+    fileName?: boolean
+    originalFileUrl?: boolean
+    transformedCsvUrl?: boolean
+    totalLeads?: boolean
+    calledLeads?: boolean
+    completedLeads?: boolean
+    failedLeads?: boolean
+    retryConfig?: boolean
+    scheduledAt?: boolean
+    bolnaScheduledAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    leads?: boolean | LeadBatch$leadsArgs<ExtArgs>
+    calls?: boolean | LeadBatch$callsArgs<ExtArgs>
+    _count?: boolean | LeadBatchCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["leadBatch"]>
+
+  export type LeadBatchSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bolnaBatchId?: boolean
+    campaignId?: boolean
+    tenantId?: boolean
+    status?: boolean
+    fileName?: boolean
+    originalFileUrl?: boolean
+    transformedCsvUrl?: boolean
+    totalLeads?: boolean
+    calledLeads?: boolean
+    completedLeads?: boolean
+    failedLeads?: boolean
+    retryConfig?: boolean
+    scheduledAt?: boolean
+    bolnaScheduledAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["leadBatch"]>
+
+  export type LeadBatchSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bolnaBatchId?: boolean
+    campaignId?: boolean
+    tenantId?: boolean
+    status?: boolean
+    fileName?: boolean
+    originalFileUrl?: boolean
+    transformedCsvUrl?: boolean
+    totalLeads?: boolean
+    calledLeads?: boolean
+    completedLeads?: boolean
+    failedLeads?: boolean
+    retryConfig?: boolean
+    scheduledAt?: boolean
+    bolnaScheduledAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["leadBatch"]>
+
+  export type LeadBatchSelectScalar = {
+    id?: boolean
+    bolnaBatchId?: boolean
+    campaignId?: boolean
+    tenantId?: boolean
+    status?: boolean
+    fileName?: boolean
+    originalFileUrl?: boolean
+    transformedCsvUrl?: boolean
+    totalLeads?: boolean
+    calledLeads?: boolean
+    completedLeads?: boolean
+    failedLeads?: boolean
+    retryConfig?: boolean
+    scheduledAt?: boolean
+    bolnaScheduledAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
+  }
+
+  export type LeadBatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bolnaBatchId" | "campaignId" | "tenantId" | "status" | "fileName" | "originalFileUrl" | "transformedCsvUrl" | "totalLeads" | "calledLeads" | "completedLeads" | "failedLeads" | "retryConfig" | "scheduledAt" | "bolnaScheduledAt" | "createdAt" | "updatedAt" | "startedAt" | "completedAt", ExtArgs["result"]["leadBatch"]>
+  export type LeadBatchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    leads?: boolean | LeadBatch$leadsArgs<ExtArgs>
+    calls?: boolean | LeadBatch$callsArgs<ExtArgs>
+    _count?: boolean | LeadBatchCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type LeadBatchIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+  }
+  export type LeadBatchIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+  }
+
+  export type $LeadBatchPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LeadBatch"
+    objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>
+      campaign: Prisma.$CampaignPayload<ExtArgs>
+      leads: Prisma.$LeadPayload<ExtArgs>[]
+      calls: Prisma.$CallPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      bolnaBatchId: string | null
+      campaignId: string
+      tenantId: string
+      status: $Enums.BatchStatus
+      fileName: string | null
+      originalFileUrl: string | null
+      transformedCsvUrl: string | null
+      totalLeads: number
+      calledLeads: number
+      completedLeads: number
+      failedLeads: number
+      retryConfig: Prisma.JsonValue | null
+      scheduledAt: Date | null
+      bolnaScheduledAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+      startedAt: Date | null
+      completedAt: Date | null
+    }, ExtArgs["result"]["leadBatch"]>
+    composites: {}
+  }
+
+  type LeadBatchGetPayload<S extends boolean | null | undefined | LeadBatchDefaultArgs> = $Result.GetResult<Prisma.$LeadBatchPayload, S>
+
+  type LeadBatchCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LeadBatchFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LeadBatchCountAggregateInputType | true
+    }
+
+  export interface LeadBatchDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LeadBatch'], meta: { name: 'LeadBatch' } }
+    /**
+     * Find zero or one LeadBatch that matches the filter.
+     * @param {LeadBatchFindUniqueArgs} args - Arguments to find a LeadBatch
+     * @example
+     * // Get one LeadBatch
+     * const leadBatch = await prisma.leadBatch.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LeadBatchFindUniqueArgs>(args: SelectSubset<T, LeadBatchFindUniqueArgs<ExtArgs>>): Prisma__LeadBatchClient<$Result.GetResult<Prisma.$LeadBatchPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LeadBatch that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LeadBatchFindUniqueOrThrowArgs} args - Arguments to find a LeadBatch
+     * @example
+     * // Get one LeadBatch
+     * const leadBatch = await prisma.leadBatch.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LeadBatchFindUniqueOrThrowArgs>(args: SelectSubset<T, LeadBatchFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LeadBatchClient<$Result.GetResult<Prisma.$LeadBatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LeadBatch that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadBatchFindFirstArgs} args - Arguments to find a LeadBatch
+     * @example
+     * // Get one LeadBatch
+     * const leadBatch = await prisma.leadBatch.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LeadBatchFindFirstArgs>(args?: SelectSubset<T, LeadBatchFindFirstArgs<ExtArgs>>): Prisma__LeadBatchClient<$Result.GetResult<Prisma.$LeadBatchPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LeadBatch that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadBatchFindFirstOrThrowArgs} args - Arguments to find a LeadBatch
+     * @example
+     * // Get one LeadBatch
+     * const leadBatch = await prisma.leadBatch.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LeadBatchFindFirstOrThrowArgs>(args?: SelectSubset<T, LeadBatchFindFirstOrThrowArgs<ExtArgs>>): Prisma__LeadBatchClient<$Result.GetResult<Prisma.$LeadBatchPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LeadBatches that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadBatchFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LeadBatches
+     * const leadBatches = await prisma.leadBatch.findMany()
+     * 
+     * // Get first 10 LeadBatches
+     * const leadBatches = await prisma.leadBatch.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const leadBatchWithIdOnly = await prisma.leadBatch.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LeadBatchFindManyArgs>(args?: SelectSubset<T, LeadBatchFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadBatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LeadBatch.
+     * @param {LeadBatchCreateArgs} args - Arguments to create a LeadBatch.
+     * @example
+     * // Create one LeadBatch
+     * const LeadBatch = await prisma.leadBatch.create({
+     *   data: {
+     *     // ... data to create a LeadBatch
+     *   }
+     * })
+     * 
+     */
+    create<T extends LeadBatchCreateArgs>(args: SelectSubset<T, LeadBatchCreateArgs<ExtArgs>>): Prisma__LeadBatchClient<$Result.GetResult<Prisma.$LeadBatchPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LeadBatches.
+     * @param {LeadBatchCreateManyArgs} args - Arguments to create many LeadBatches.
+     * @example
+     * // Create many LeadBatches
+     * const leadBatch = await prisma.leadBatch.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LeadBatchCreateManyArgs>(args?: SelectSubset<T, LeadBatchCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LeadBatches and returns the data saved in the database.
+     * @param {LeadBatchCreateManyAndReturnArgs} args - Arguments to create many LeadBatches.
+     * @example
+     * // Create many LeadBatches
+     * const leadBatch = await prisma.leadBatch.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LeadBatches and only return the `id`
+     * const leadBatchWithIdOnly = await prisma.leadBatch.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LeadBatchCreateManyAndReturnArgs>(args?: SelectSubset<T, LeadBatchCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadBatchPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a LeadBatch.
+     * @param {LeadBatchDeleteArgs} args - Arguments to delete one LeadBatch.
+     * @example
+     * // Delete one LeadBatch
+     * const LeadBatch = await prisma.leadBatch.delete({
+     *   where: {
+     *     // ... filter to delete one LeadBatch
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LeadBatchDeleteArgs>(args: SelectSubset<T, LeadBatchDeleteArgs<ExtArgs>>): Prisma__LeadBatchClient<$Result.GetResult<Prisma.$LeadBatchPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LeadBatch.
+     * @param {LeadBatchUpdateArgs} args - Arguments to update one LeadBatch.
+     * @example
+     * // Update one LeadBatch
+     * const leadBatch = await prisma.leadBatch.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LeadBatchUpdateArgs>(args: SelectSubset<T, LeadBatchUpdateArgs<ExtArgs>>): Prisma__LeadBatchClient<$Result.GetResult<Prisma.$LeadBatchPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LeadBatches.
+     * @param {LeadBatchDeleteManyArgs} args - Arguments to filter LeadBatches to delete.
+     * @example
+     * // Delete a few LeadBatches
+     * const { count } = await prisma.leadBatch.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LeadBatchDeleteManyArgs>(args?: SelectSubset<T, LeadBatchDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LeadBatches.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadBatchUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LeadBatches
+     * const leadBatch = await prisma.leadBatch.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LeadBatchUpdateManyArgs>(args: SelectSubset<T, LeadBatchUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LeadBatches and returns the data updated in the database.
+     * @param {LeadBatchUpdateManyAndReturnArgs} args - Arguments to update many LeadBatches.
+     * @example
+     * // Update many LeadBatches
+     * const leadBatch = await prisma.leadBatch.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LeadBatches and only return the `id`
+     * const leadBatchWithIdOnly = await prisma.leadBatch.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LeadBatchUpdateManyAndReturnArgs>(args: SelectSubset<T, LeadBatchUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadBatchPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LeadBatch.
+     * @param {LeadBatchUpsertArgs} args - Arguments to update or create a LeadBatch.
+     * @example
+     * // Update or create a LeadBatch
+     * const leadBatch = await prisma.leadBatch.upsert({
+     *   create: {
+     *     // ... data to create a LeadBatch
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LeadBatch we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LeadBatchUpsertArgs>(args: SelectSubset<T, LeadBatchUpsertArgs<ExtArgs>>): Prisma__LeadBatchClient<$Result.GetResult<Prisma.$LeadBatchPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LeadBatches.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadBatchCountArgs} args - Arguments to filter LeadBatches to count.
+     * @example
+     * // Count the number of LeadBatches
+     * const count = await prisma.leadBatch.count({
+     *   where: {
+     *     // ... the filter for the LeadBatches we want to count
+     *   }
+     * })
+    **/
+    count<T extends LeadBatchCountArgs>(
+      args?: Subset<T, LeadBatchCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LeadBatchCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LeadBatch.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadBatchAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LeadBatchAggregateArgs>(args: Subset<T, LeadBatchAggregateArgs>): Prisma.PrismaPromise<GetLeadBatchAggregateType<T>>
+
+    /**
+     * Group by LeadBatch.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadBatchGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LeadBatchGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LeadBatchGroupByArgs['orderBy'] }
+        : { orderBy?: LeadBatchGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LeadBatchGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLeadBatchGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LeadBatch model
+   */
+  readonly fields: LeadBatchFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LeadBatch.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LeadBatchClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    campaign<T extends CampaignDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CampaignDefaultArgs<ExtArgs>>): Prisma__CampaignClient<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    leads<T extends LeadBatch$leadsArgs<ExtArgs> = {}>(args?: Subset<T, LeadBatch$leadsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    calls<T extends LeadBatch$callsArgs<ExtArgs> = {}>(args?: Subset<T, LeadBatch$callsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LeadBatch model
+   */
+  interface LeadBatchFieldRefs {
+    readonly id: FieldRef<"LeadBatch", 'String'>
+    readonly bolnaBatchId: FieldRef<"LeadBatch", 'String'>
+    readonly campaignId: FieldRef<"LeadBatch", 'String'>
+    readonly tenantId: FieldRef<"LeadBatch", 'String'>
+    readonly status: FieldRef<"LeadBatch", 'BatchStatus'>
+    readonly fileName: FieldRef<"LeadBatch", 'String'>
+    readonly originalFileUrl: FieldRef<"LeadBatch", 'String'>
+    readonly transformedCsvUrl: FieldRef<"LeadBatch", 'String'>
+    readonly totalLeads: FieldRef<"LeadBatch", 'Int'>
+    readonly calledLeads: FieldRef<"LeadBatch", 'Int'>
+    readonly completedLeads: FieldRef<"LeadBatch", 'Int'>
+    readonly failedLeads: FieldRef<"LeadBatch", 'Int'>
+    readonly retryConfig: FieldRef<"LeadBatch", 'Json'>
+    readonly scheduledAt: FieldRef<"LeadBatch", 'DateTime'>
+    readonly bolnaScheduledAt: FieldRef<"LeadBatch", 'DateTime'>
+    readonly createdAt: FieldRef<"LeadBatch", 'DateTime'>
+    readonly updatedAt: FieldRef<"LeadBatch", 'DateTime'>
+    readonly startedAt: FieldRef<"LeadBatch", 'DateTime'>
+    readonly completedAt: FieldRef<"LeadBatch", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LeadBatch findUnique
+   */
+  export type LeadBatchFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadBatch
+     */
+    select?: LeadBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadBatch
+     */
+    omit?: LeadBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadBatchInclude<ExtArgs> | null
+    /**
+     * Filter, which LeadBatch to fetch.
+     */
+    where: LeadBatchWhereUniqueInput
+  }
+
+  /**
+   * LeadBatch findUniqueOrThrow
+   */
+  export type LeadBatchFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadBatch
+     */
+    select?: LeadBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadBatch
+     */
+    omit?: LeadBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadBatchInclude<ExtArgs> | null
+    /**
+     * Filter, which LeadBatch to fetch.
+     */
+    where: LeadBatchWhereUniqueInput
+  }
+
+  /**
+   * LeadBatch findFirst
+   */
+  export type LeadBatchFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadBatch
+     */
+    select?: LeadBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadBatch
+     */
+    omit?: LeadBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadBatchInclude<ExtArgs> | null
+    /**
+     * Filter, which LeadBatch to fetch.
+     */
+    where?: LeadBatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LeadBatches to fetch.
+     */
+    orderBy?: LeadBatchOrderByWithRelationInput | LeadBatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LeadBatches.
+     */
+    cursor?: LeadBatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LeadBatches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LeadBatches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LeadBatches.
+     */
+    distinct?: LeadBatchScalarFieldEnum | LeadBatchScalarFieldEnum[]
+  }
+
+  /**
+   * LeadBatch findFirstOrThrow
+   */
+  export type LeadBatchFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadBatch
+     */
+    select?: LeadBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadBatch
+     */
+    omit?: LeadBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadBatchInclude<ExtArgs> | null
+    /**
+     * Filter, which LeadBatch to fetch.
+     */
+    where?: LeadBatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LeadBatches to fetch.
+     */
+    orderBy?: LeadBatchOrderByWithRelationInput | LeadBatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LeadBatches.
+     */
+    cursor?: LeadBatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LeadBatches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LeadBatches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LeadBatches.
+     */
+    distinct?: LeadBatchScalarFieldEnum | LeadBatchScalarFieldEnum[]
+  }
+
+  /**
+   * LeadBatch findMany
+   */
+  export type LeadBatchFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadBatch
+     */
+    select?: LeadBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadBatch
+     */
+    omit?: LeadBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadBatchInclude<ExtArgs> | null
+    /**
+     * Filter, which LeadBatches to fetch.
+     */
+    where?: LeadBatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LeadBatches to fetch.
+     */
+    orderBy?: LeadBatchOrderByWithRelationInput | LeadBatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LeadBatches.
+     */
+    cursor?: LeadBatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LeadBatches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LeadBatches.
+     */
+    skip?: number
+    distinct?: LeadBatchScalarFieldEnum | LeadBatchScalarFieldEnum[]
+  }
+
+  /**
+   * LeadBatch create
+   */
+  export type LeadBatchCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadBatch
+     */
+    select?: LeadBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadBatch
+     */
+    omit?: LeadBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadBatchInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LeadBatch.
+     */
+    data: XOR<LeadBatchCreateInput, LeadBatchUncheckedCreateInput>
+  }
+
+  /**
+   * LeadBatch createMany
+   */
+  export type LeadBatchCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LeadBatches.
+     */
+    data: LeadBatchCreateManyInput | LeadBatchCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LeadBatch createManyAndReturn
+   */
+  export type LeadBatchCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadBatch
+     */
+    select?: LeadBatchSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadBatch
+     */
+    omit?: LeadBatchOmit<ExtArgs> | null
+    /**
+     * The data used to create many LeadBatches.
+     */
+    data: LeadBatchCreateManyInput | LeadBatchCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadBatchIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LeadBatch update
+   */
+  export type LeadBatchUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadBatch
+     */
+    select?: LeadBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadBatch
+     */
+    omit?: LeadBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadBatchInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LeadBatch.
+     */
+    data: XOR<LeadBatchUpdateInput, LeadBatchUncheckedUpdateInput>
+    /**
+     * Choose, which LeadBatch to update.
+     */
+    where: LeadBatchWhereUniqueInput
+  }
+
+  /**
+   * LeadBatch updateMany
+   */
+  export type LeadBatchUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LeadBatches.
+     */
+    data: XOR<LeadBatchUpdateManyMutationInput, LeadBatchUncheckedUpdateManyInput>
+    /**
+     * Filter which LeadBatches to update
+     */
+    where?: LeadBatchWhereInput
+    /**
+     * Limit how many LeadBatches to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LeadBatch updateManyAndReturn
+   */
+  export type LeadBatchUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadBatch
+     */
+    select?: LeadBatchSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadBatch
+     */
+    omit?: LeadBatchOmit<ExtArgs> | null
+    /**
+     * The data used to update LeadBatches.
+     */
+    data: XOR<LeadBatchUpdateManyMutationInput, LeadBatchUncheckedUpdateManyInput>
+    /**
+     * Filter which LeadBatches to update
+     */
+    where?: LeadBatchWhereInput
+    /**
+     * Limit how many LeadBatches to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadBatchIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LeadBatch upsert
+   */
+  export type LeadBatchUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadBatch
+     */
+    select?: LeadBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadBatch
+     */
+    omit?: LeadBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadBatchInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LeadBatch to update in case it exists.
+     */
+    where: LeadBatchWhereUniqueInput
+    /**
+     * In case the LeadBatch found by the `where` argument doesn't exist, create a new LeadBatch with this data.
+     */
+    create: XOR<LeadBatchCreateInput, LeadBatchUncheckedCreateInput>
+    /**
+     * In case the LeadBatch was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LeadBatchUpdateInput, LeadBatchUncheckedUpdateInput>
+  }
+
+  /**
+   * LeadBatch delete
+   */
+  export type LeadBatchDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadBatch
+     */
+    select?: LeadBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadBatch
+     */
+    omit?: LeadBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadBatchInclude<ExtArgs> | null
+    /**
+     * Filter which LeadBatch to delete.
+     */
+    where: LeadBatchWhereUniqueInput
+  }
+
+  /**
+   * LeadBatch deleteMany
+   */
+  export type LeadBatchDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LeadBatches to delete
+     */
+    where?: LeadBatchWhereInput
+    /**
+     * Limit how many LeadBatches to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LeadBatch.leads
+   */
+  export type LeadBatch$leadsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lead
+     */
+    select?: LeadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Lead
+     */
+    omit?: LeadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadInclude<ExtArgs> | null
+    where?: LeadWhereInput
+    orderBy?: LeadOrderByWithRelationInput | LeadOrderByWithRelationInput[]
+    cursor?: LeadWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LeadScalarFieldEnum | LeadScalarFieldEnum[]
+  }
+
+  /**
+   * LeadBatch.calls
+   */
+  export type LeadBatch$callsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Call
+     */
+    select?: CallSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Call
+     */
+    omit?: CallOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallInclude<ExtArgs> | null
+    where?: CallWhereInput
+    orderBy?: CallOrderByWithRelationInput | CallOrderByWithRelationInput[]
+    cursor?: CallWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CallScalarFieldEnum | CallScalarFieldEnum[]
+  }
+
+  /**
+   * LeadBatch without action
+   */
+  export type LeadBatchDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadBatch
+     */
+    select?: LeadBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadBatch
+     */
+    omit?: LeadBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadBatchInclude<ExtArgs> | null
   }
 
 
@@ -8457,6 +10020,7 @@ export namespace Prisma {
     doNotCall: boolean | null
     tenantId: string | null
     campaignId: string | null
+    batchId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -8471,6 +10035,7 @@ export namespace Prisma {
     doNotCall: boolean | null
     tenantId: string | null
     campaignId: string | null
+    batchId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -8485,6 +10050,7 @@ export namespace Prisma {
     doNotCall: number
     tenantId: number
     campaignId: number
+    batchId: number
     metadata: number
     createdAt: number
     updatedAt: number
@@ -8502,6 +10068,7 @@ export namespace Prisma {
     doNotCall?: true
     tenantId?: true
     campaignId?: true
+    batchId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8516,6 +10083,7 @@ export namespace Prisma {
     doNotCall?: true
     tenantId?: true
     campaignId?: true
+    batchId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8530,6 +10098,7 @@ export namespace Prisma {
     doNotCall?: true
     tenantId?: true
     campaignId?: true
+    batchId?: true
     metadata?: true
     createdAt?: true
     updatedAt?: true
@@ -8618,6 +10187,7 @@ export namespace Prisma {
     doNotCall: boolean
     tenantId: string
     campaignId: string
+    batchId: string | null
     metadata: JsonValue | null
     createdAt: Date
     updatedAt: Date
@@ -8650,11 +10220,13 @@ export namespace Prisma {
     doNotCall?: boolean
     tenantId?: boolean
     campaignId?: boolean
+    batchId?: boolean
     metadata?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    batch?: boolean | Lead$batchArgs<ExtArgs>
     calls?: boolean | Lead$callsArgs<ExtArgs>
     _count?: boolean | LeadCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lead"]>
@@ -8669,11 +10241,13 @@ export namespace Prisma {
     doNotCall?: boolean
     tenantId?: boolean
     campaignId?: boolean
+    batchId?: boolean
     metadata?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    batch?: boolean | Lead$batchArgs<ExtArgs>
   }, ExtArgs["result"]["lead"]>
 
   export type LeadSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -8686,11 +10260,13 @@ export namespace Prisma {
     doNotCall?: boolean
     tenantId?: boolean
     campaignId?: boolean
+    batchId?: boolean
     metadata?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    batch?: boolean | Lead$batchArgs<ExtArgs>
   }, ExtArgs["result"]["lead"]>
 
   export type LeadSelectScalar = {
@@ -8703,25 +10279,29 @@ export namespace Prisma {
     doNotCall?: boolean
     tenantId?: boolean
     campaignId?: boolean
+    batchId?: boolean
     metadata?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type LeadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "phone" | "email" | "company" | "status" | "doNotCall" | "tenantId" | "campaignId" | "metadata" | "createdAt" | "updatedAt", ExtArgs["result"]["lead"]>
+  export type LeadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "phone" | "email" | "company" | "status" | "doNotCall" | "tenantId" | "campaignId" | "batchId" | "metadata" | "createdAt" | "updatedAt", ExtArgs["result"]["lead"]>
   export type LeadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    batch?: boolean | Lead$batchArgs<ExtArgs>
     calls?: boolean | Lead$callsArgs<ExtArgs>
     _count?: boolean | LeadCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type LeadIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    batch?: boolean | Lead$batchArgs<ExtArgs>
   }
   export type LeadIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    batch?: boolean | Lead$batchArgs<ExtArgs>
   }
 
   export type $LeadPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8729,6 +10309,7 @@ export namespace Prisma {
     objects: {
       tenant: Prisma.$TenantPayload<ExtArgs>
       campaign: Prisma.$CampaignPayload<ExtArgs>
+      batch: Prisma.$LeadBatchPayload<ExtArgs> | null
       calls: Prisma.$CallPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -8741,6 +10322,7 @@ export namespace Prisma {
       doNotCall: boolean
       tenantId: string
       campaignId: string
+      batchId: string | null
       metadata: Prisma.JsonValue | null
       createdAt: Date
       updatedAt: Date
@@ -9140,6 +10722,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     campaign<T extends CampaignDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CampaignDefaultArgs<ExtArgs>>): Prisma__CampaignClient<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    batch<T extends Lead$batchArgs<ExtArgs> = {}>(args?: Subset<T, Lead$batchArgs<ExtArgs>>): Prisma__LeadBatchClient<$Result.GetResult<Prisma.$LeadBatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     calls<T extends Lead$callsArgs<ExtArgs> = {}>(args?: Subset<T, Lead$callsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -9179,6 +10762,7 @@ export namespace Prisma {
     readonly doNotCall: FieldRef<"Lead", 'Boolean'>
     readonly tenantId: FieldRef<"Lead", 'String'>
     readonly campaignId: FieldRef<"Lead", 'String'>
+    readonly batchId: FieldRef<"Lead", 'String'>
     readonly metadata: FieldRef<"Lead", 'Json'>
     readonly createdAt: FieldRef<"Lead", 'DateTime'>
     readonly updatedAt: FieldRef<"Lead", 'DateTime'>
@@ -9578,6 +11162,25 @@ export namespace Prisma {
   }
 
   /**
+   * Lead.batch
+   */
+  export type Lead$batchArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadBatch
+     */
+    select?: LeadBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadBatch
+     */
+    omit?: LeadBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadBatchInclude<ExtArgs> | null
+    where?: LeadBatchWhereInput
+  }
+
+  /**
    * Lead.calls
    */
   export type Lead$callsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9648,6 +11251,7 @@ export namespace Prisma {
     tenantId: string | null
     campaignId: string | null
     leadId: string | null
+    batchId: string | null
     status: $Enums.CallStatus | null
     duration: number | null
     cost: number | null
@@ -9666,6 +11270,7 @@ export namespace Prisma {
     tenantId: string | null
     campaignId: string | null
     leadId: string | null
+    batchId: string | null
     status: $Enums.CallStatus | null
     duration: number | null
     cost: number | null
@@ -9684,6 +11289,7 @@ export namespace Prisma {
     tenantId: number
     campaignId: number
     leadId: number
+    batchId: number
     status: number
     duration: number
     cost: number
@@ -9691,6 +11297,7 @@ export namespace Prisma {
     transcript: number
     transcriptMessages: number
     summary: number
+    callHistory: number
     startedAt: number
     endedAt: number
     createdAt: number
@@ -9715,6 +11322,7 @@ export namespace Prisma {
     tenantId?: true
     campaignId?: true
     leadId?: true
+    batchId?: true
     status?: true
     duration?: true
     cost?: true
@@ -9733,6 +11341,7 @@ export namespace Prisma {
     tenantId?: true
     campaignId?: true
     leadId?: true
+    batchId?: true
     status?: true
     duration?: true
     cost?: true
@@ -9751,6 +11360,7 @@ export namespace Prisma {
     tenantId?: true
     campaignId?: true
     leadId?: true
+    batchId?: true
     status?: true
     duration?: true
     cost?: true
@@ -9758,6 +11368,7 @@ export namespace Prisma {
     transcript?: true
     transcriptMessages?: true
     summary?: true
+    callHistory?: true
     startedAt?: true
     endedAt?: true
     createdAt?: true
@@ -9857,6 +11468,7 @@ export namespace Prisma {
     tenantId: string
     campaignId: string
     leadId: string
+    batchId: string | null
     status: $Enums.CallStatus
     duration: number | null
     cost: number | null
@@ -9864,6 +11476,7 @@ export namespace Prisma {
     transcript: string | null
     transcriptMessages: JsonValue | null
     summary: string | null
+    callHistory: JsonValue | null
     startedAt: Date | null
     endedAt: Date | null
     createdAt: Date
@@ -9895,6 +11508,7 @@ export namespace Prisma {
     tenantId?: boolean
     campaignId?: boolean
     leadId?: boolean
+    batchId?: boolean
     status?: boolean
     duration?: boolean
     cost?: boolean
@@ -9902,6 +11516,7 @@ export namespace Prisma {
     transcript?: boolean
     transcriptMessages?: boolean
     summary?: boolean
+    callHistory?: boolean
     startedAt?: boolean
     endedAt?: boolean
     createdAt?: boolean
@@ -9909,6 +11524,7 @@ export namespace Prisma {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
     lead?: boolean | LeadDefaultArgs<ExtArgs>
+    batch?: boolean | Call$batchArgs<ExtArgs>
     callAnalysis?: boolean | Call$callAnalysisArgs<ExtArgs>
   }, ExtArgs["result"]["call"]>
 
@@ -9918,6 +11534,7 @@ export namespace Prisma {
     tenantId?: boolean
     campaignId?: boolean
     leadId?: boolean
+    batchId?: boolean
     status?: boolean
     duration?: boolean
     cost?: boolean
@@ -9925,6 +11542,7 @@ export namespace Prisma {
     transcript?: boolean
     transcriptMessages?: boolean
     summary?: boolean
+    callHistory?: boolean
     startedAt?: boolean
     endedAt?: boolean
     createdAt?: boolean
@@ -9932,6 +11550,7 @@ export namespace Prisma {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
     lead?: boolean | LeadDefaultArgs<ExtArgs>
+    batch?: boolean | Call$batchArgs<ExtArgs>
   }, ExtArgs["result"]["call"]>
 
   export type CallSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -9940,6 +11559,7 @@ export namespace Prisma {
     tenantId?: boolean
     campaignId?: boolean
     leadId?: boolean
+    batchId?: boolean
     status?: boolean
     duration?: boolean
     cost?: boolean
@@ -9947,6 +11567,7 @@ export namespace Prisma {
     transcript?: boolean
     transcriptMessages?: boolean
     summary?: boolean
+    callHistory?: boolean
     startedAt?: boolean
     endedAt?: boolean
     createdAt?: boolean
@@ -9954,6 +11575,7 @@ export namespace Prisma {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
     lead?: boolean | LeadDefaultArgs<ExtArgs>
+    batch?: boolean | Call$batchArgs<ExtArgs>
   }, ExtArgs["result"]["call"]>
 
   export type CallSelectScalar = {
@@ -9962,6 +11584,7 @@ export namespace Prisma {
     tenantId?: boolean
     campaignId?: boolean
     leadId?: boolean
+    batchId?: boolean
     status?: boolean
     duration?: boolean
     cost?: boolean
@@ -9969,28 +11592,32 @@ export namespace Prisma {
     transcript?: boolean
     transcriptMessages?: boolean
     summary?: boolean
+    callHistory?: boolean
     startedAt?: boolean
     endedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CallOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bolnaCallId" | "tenantId" | "campaignId" | "leadId" | "status" | "duration" | "cost" | "recording" | "transcript" | "transcriptMessages" | "summary" | "startedAt" | "endedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["call"]>
+  export type CallOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bolnaCallId" | "tenantId" | "campaignId" | "leadId" | "batchId" | "status" | "duration" | "cost" | "recording" | "transcript" | "transcriptMessages" | "summary" | "callHistory" | "startedAt" | "endedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["call"]>
   export type CallInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
     lead?: boolean | LeadDefaultArgs<ExtArgs>
+    batch?: boolean | Call$batchArgs<ExtArgs>
     callAnalysis?: boolean | Call$callAnalysisArgs<ExtArgs>
   }
   export type CallIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
     lead?: boolean | LeadDefaultArgs<ExtArgs>
+    batch?: boolean | Call$batchArgs<ExtArgs>
   }
   export type CallIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
     lead?: boolean | LeadDefaultArgs<ExtArgs>
+    batch?: boolean | Call$batchArgs<ExtArgs>
   }
 
   export type $CallPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9999,6 +11626,7 @@ export namespace Prisma {
       tenant: Prisma.$TenantPayload<ExtArgs>
       campaign: Prisma.$CampaignPayload<ExtArgs>
       lead: Prisma.$LeadPayload<ExtArgs>
+      batch: Prisma.$LeadBatchPayload<ExtArgs> | null
       callAnalysis: Prisma.$CallAnalysisPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -10007,6 +11635,7 @@ export namespace Prisma {
       tenantId: string
       campaignId: string
       leadId: string
+      batchId: string | null
       status: $Enums.CallStatus
       duration: number | null
       cost: number | null
@@ -10014,6 +11643,7 @@ export namespace Prisma {
       transcript: string | null
       transcriptMessages: Prisma.JsonValue | null
       summary: string | null
+      callHistory: Prisma.JsonValue | null
       startedAt: Date | null
       endedAt: Date | null
       createdAt: Date
@@ -10415,6 +12045,7 @@ export namespace Prisma {
     tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     campaign<T extends CampaignDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CampaignDefaultArgs<ExtArgs>>): Prisma__CampaignClient<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     lead<T extends LeadDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LeadDefaultArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    batch<T extends Call$batchArgs<ExtArgs> = {}>(args?: Subset<T, Call$batchArgs<ExtArgs>>): Prisma__LeadBatchClient<$Result.GetResult<Prisma.$LeadBatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     callAnalysis<T extends Call$callAnalysisArgs<ExtArgs> = {}>(args?: Subset<T, Call$callAnalysisArgs<ExtArgs>>): Prisma__CallAnalysisClient<$Result.GetResult<Prisma.$CallAnalysisPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -10450,6 +12081,7 @@ export namespace Prisma {
     readonly tenantId: FieldRef<"Call", 'String'>
     readonly campaignId: FieldRef<"Call", 'String'>
     readonly leadId: FieldRef<"Call", 'String'>
+    readonly batchId: FieldRef<"Call", 'String'>
     readonly status: FieldRef<"Call", 'CallStatus'>
     readonly duration: FieldRef<"Call", 'Int'>
     readonly cost: FieldRef<"Call", 'Float'>
@@ -10457,6 +12089,7 @@ export namespace Prisma {
     readonly transcript: FieldRef<"Call", 'String'>
     readonly transcriptMessages: FieldRef<"Call", 'Json'>
     readonly summary: FieldRef<"Call", 'String'>
+    readonly callHistory: FieldRef<"Call", 'Json'>
     readonly startedAt: FieldRef<"Call", 'DateTime'>
     readonly endedAt: FieldRef<"Call", 'DateTime'>
     readonly createdAt: FieldRef<"Call", 'DateTime'>
@@ -10854,6 +12487,25 @@ export namespace Prisma {
      * Limit how many Calls to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Call.batch
+   */
+  export type Call$batchArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadBatch
+     */
+    select?: LeadBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadBatch
+     */
+    omit?: LeadBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadBatchInclude<ExtArgs> | null
+    where?: LeadBatchWhereInput
   }
 
   /**
@@ -12248,11 +13900,11 @@ export namespace Prisma {
     assistantId: 'assistantId',
     brochureId: 'brochureId',
     variables: 'variables',
+    defaultRetryConfig: 'defaultRetryConfig',
     totalLeads: 'totalLeads',
     calledLeads: 'calledLeads',
-    successLeads: 'successLeads',
+    completedLeads: 'completedLeads',
     failedLeads: 'failedLeads',
-    scheduledAt: 'scheduledAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     startedAt: 'startedAt',
@@ -12260,6 +13912,31 @@ export namespace Prisma {
   };
 
   export type CampaignScalarFieldEnum = (typeof CampaignScalarFieldEnum)[keyof typeof CampaignScalarFieldEnum]
+
+
+  export const LeadBatchScalarFieldEnum: {
+    id: 'id',
+    bolnaBatchId: 'bolnaBatchId',
+    campaignId: 'campaignId',
+    tenantId: 'tenantId',
+    status: 'status',
+    fileName: 'fileName',
+    originalFileUrl: 'originalFileUrl',
+    transformedCsvUrl: 'transformedCsvUrl',
+    totalLeads: 'totalLeads',
+    calledLeads: 'calledLeads',
+    completedLeads: 'completedLeads',
+    failedLeads: 'failedLeads',
+    retryConfig: 'retryConfig',
+    scheduledAt: 'scheduledAt',
+    bolnaScheduledAt: 'bolnaScheduledAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    startedAt: 'startedAt',
+    completedAt: 'completedAt'
+  };
+
+  export type LeadBatchScalarFieldEnum = (typeof LeadBatchScalarFieldEnum)[keyof typeof LeadBatchScalarFieldEnum]
 
 
   export const LeadScalarFieldEnum: {
@@ -12272,6 +13949,7 @@ export namespace Prisma {
     doNotCall: 'doNotCall',
     tenantId: 'tenantId',
     campaignId: 'campaignId',
+    batchId: 'batchId',
     metadata: 'metadata',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -12286,6 +13964,7 @@ export namespace Prisma {
     tenantId: 'tenantId',
     campaignId: 'campaignId',
     leadId: 'leadId',
+    batchId: 'batchId',
     status: 'status',
     duration: 'duration',
     cost: 'cost',
@@ -12293,6 +13972,7 @@ export namespace Prisma {
     transcript: 'transcript',
     transcriptMessages: 'transcriptMessages',
     summary: 'summary',
+    callHistory: 'callHistory',
     startedAt: 'startedAt',
     endedAt: 'endedAt',
     createdAt: 'createdAt',
@@ -12485,6 +14165,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'BatchStatus'
+   */
+  export type EnumBatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BatchStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'BatchStatus[]'
+   */
+  export type ListEnumBatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BatchStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'LeadStatus'
    */
   export type EnumLeadStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadStatus'>
@@ -12640,6 +14334,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Tenant"> | Date | string
     users?: UserListRelationFilter
     campaigns?: CampaignListRelationFilter
+    batches?: LeadBatchListRelationFilter
     leads?: LeadListRelationFilter
     calls?: CallListRelationFilter
     assistants?: AssistantListRelationFilter
@@ -12657,6 +14352,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     users?: UserOrderByRelationAggregateInput
     campaigns?: CampaignOrderByRelationAggregateInput
+    batches?: LeadBatchOrderByRelationAggregateInput
     leads?: LeadOrderByRelationAggregateInput
     calls?: CallOrderByRelationAggregateInput
     assistants?: AssistantOrderByRelationAggregateInput
@@ -12677,6 +14373,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Tenant"> | Date | string
     users?: UserListRelationFilter
     campaigns?: CampaignListRelationFilter
+    batches?: LeadBatchListRelationFilter
     leads?: LeadListRelationFilter
     calls?: CallListRelationFilter
     assistants?: AssistantListRelationFilter
@@ -13145,11 +14842,11 @@ export namespace Prisma {
     assistantId?: StringFilter<"Campaign"> | string
     brochureId?: StringNullableFilter<"Campaign"> | string | null
     variables?: JsonNullableFilter<"Campaign">
+    defaultRetryConfig?: JsonNullableFilter<"Campaign">
     totalLeads?: IntFilter<"Campaign"> | number
     calledLeads?: IntFilter<"Campaign"> | number
-    successLeads?: IntFilter<"Campaign"> | number
+    completedLeads?: IntFilter<"Campaign"> | number
     failedLeads?: IntFilter<"Campaign"> | number
-    scheduledAt?: DateTimeNullableFilter<"Campaign"> | Date | string | null
     createdAt?: DateTimeFilter<"Campaign"> | Date | string
     updatedAt?: DateTimeFilter<"Campaign"> | Date | string
     startedAt?: DateTimeNullableFilter<"Campaign"> | Date | string | null
@@ -13159,6 +14856,7 @@ export namespace Prisma {
     brochure?: XOR<BrochureNullableScalarRelationFilter, BrochureWhereInput> | null
     leads?: LeadListRelationFilter
     calls?: CallListRelationFilter
+    batches?: LeadBatchListRelationFilter
   }
 
   export type CampaignOrderByWithRelationInput = {
@@ -13170,11 +14868,11 @@ export namespace Prisma {
     assistantId?: SortOrder
     brochureId?: SortOrderInput | SortOrder
     variables?: SortOrderInput | SortOrder
+    defaultRetryConfig?: SortOrderInput | SortOrder
     totalLeads?: SortOrder
     calledLeads?: SortOrder
-    successLeads?: SortOrder
+    completedLeads?: SortOrder
     failedLeads?: SortOrder
-    scheduledAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     startedAt?: SortOrderInput | SortOrder
@@ -13184,6 +14882,7 @@ export namespace Prisma {
     brochure?: BrochureOrderByWithRelationInput
     leads?: LeadOrderByRelationAggregateInput
     calls?: CallOrderByRelationAggregateInput
+    batches?: LeadBatchOrderByRelationAggregateInput
   }
 
   export type CampaignWhereUniqueInput = Prisma.AtLeast<{
@@ -13198,11 +14897,11 @@ export namespace Prisma {
     assistantId?: StringFilter<"Campaign"> | string
     brochureId?: StringNullableFilter<"Campaign"> | string | null
     variables?: JsonNullableFilter<"Campaign">
+    defaultRetryConfig?: JsonNullableFilter<"Campaign">
     totalLeads?: IntFilter<"Campaign"> | number
     calledLeads?: IntFilter<"Campaign"> | number
-    successLeads?: IntFilter<"Campaign"> | number
+    completedLeads?: IntFilter<"Campaign"> | number
     failedLeads?: IntFilter<"Campaign"> | number
-    scheduledAt?: DateTimeNullableFilter<"Campaign"> | Date | string | null
     createdAt?: DateTimeFilter<"Campaign"> | Date | string
     updatedAt?: DateTimeFilter<"Campaign"> | Date | string
     startedAt?: DateTimeNullableFilter<"Campaign"> | Date | string | null
@@ -13212,6 +14911,7 @@ export namespace Prisma {
     brochure?: XOR<BrochureNullableScalarRelationFilter, BrochureWhereInput> | null
     leads?: LeadListRelationFilter
     calls?: CallListRelationFilter
+    batches?: LeadBatchListRelationFilter
   }, "id">
 
   export type CampaignOrderByWithAggregationInput = {
@@ -13223,11 +14923,11 @@ export namespace Prisma {
     assistantId?: SortOrder
     brochureId?: SortOrderInput | SortOrder
     variables?: SortOrderInput | SortOrder
+    defaultRetryConfig?: SortOrderInput | SortOrder
     totalLeads?: SortOrder
     calledLeads?: SortOrder
-    successLeads?: SortOrder
+    completedLeads?: SortOrder
     failedLeads?: SortOrder
-    scheduledAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     startedAt?: SortOrderInput | SortOrder
@@ -13251,15 +14951,151 @@ export namespace Prisma {
     assistantId?: StringWithAggregatesFilter<"Campaign"> | string
     brochureId?: StringNullableWithAggregatesFilter<"Campaign"> | string | null
     variables?: JsonNullableWithAggregatesFilter<"Campaign">
+    defaultRetryConfig?: JsonNullableWithAggregatesFilter<"Campaign">
     totalLeads?: IntWithAggregatesFilter<"Campaign"> | number
     calledLeads?: IntWithAggregatesFilter<"Campaign"> | number
-    successLeads?: IntWithAggregatesFilter<"Campaign"> | number
+    completedLeads?: IntWithAggregatesFilter<"Campaign"> | number
     failedLeads?: IntWithAggregatesFilter<"Campaign"> | number
-    scheduledAt?: DateTimeNullableWithAggregatesFilter<"Campaign"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Campaign"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Campaign"> | Date | string
     startedAt?: DateTimeNullableWithAggregatesFilter<"Campaign"> | Date | string | null
     completedAt?: DateTimeNullableWithAggregatesFilter<"Campaign"> | Date | string | null
+  }
+
+  export type LeadBatchWhereInput = {
+    AND?: LeadBatchWhereInput | LeadBatchWhereInput[]
+    OR?: LeadBatchWhereInput[]
+    NOT?: LeadBatchWhereInput | LeadBatchWhereInput[]
+    id?: StringFilter<"LeadBatch"> | string
+    bolnaBatchId?: StringNullableFilter<"LeadBatch"> | string | null
+    campaignId?: StringFilter<"LeadBatch"> | string
+    tenantId?: StringFilter<"LeadBatch"> | string
+    status?: EnumBatchStatusFilter<"LeadBatch"> | $Enums.BatchStatus
+    fileName?: StringNullableFilter<"LeadBatch"> | string | null
+    originalFileUrl?: StringNullableFilter<"LeadBatch"> | string | null
+    transformedCsvUrl?: StringNullableFilter<"LeadBatch"> | string | null
+    totalLeads?: IntFilter<"LeadBatch"> | number
+    calledLeads?: IntFilter<"LeadBatch"> | number
+    completedLeads?: IntFilter<"LeadBatch"> | number
+    failedLeads?: IntFilter<"LeadBatch"> | number
+    retryConfig?: JsonNullableFilter<"LeadBatch">
+    scheduledAt?: DateTimeNullableFilter<"LeadBatch"> | Date | string | null
+    bolnaScheduledAt?: DateTimeNullableFilter<"LeadBatch"> | Date | string | null
+    createdAt?: DateTimeFilter<"LeadBatch"> | Date | string
+    updatedAt?: DateTimeFilter<"LeadBatch"> | Date | string
+    startedAt?: DateTimeNullableFilter<"LeadBatch"> | Date | string | null
+    completedAt?: DateTimeNullableFilter<"LeadBatch"> | Date | string | null
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
+    campaign?: XOR<CampaignScalarRelationFilter, CampaignWhereInput>
+    leads?: LeadListRelationFilter
+    calls?: CallListRelationFilter
+  }
+
+  export type LeadBatchOrderByWithRelationInput = {
+    id?: SortOrder
+    bolnaBatchId?: SortOrderInput | SortOrder
+    campaignId?: SortOrder
+    tenantId?: SortOrder
+    status?: SortOrder
+    fileName?: SortOrderInput | SortOrder
+    originalFileUrl?: SortOrderInput | SortOrder
+    transformedCsvUrl?: SortOrderInput | SortOrder
+    totalLeads?: SortOrder
+    calledLeads?: SortOrder
+    completedLeads?: SortOrder
+    failedLeads?: SortOrder
+    retryConfig?: SortOrderInput | SortOrder
+    scheduledAt?: SortOrderInput | SortOrder
+    bolnaScheduledAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    startedAt?: SortOrderInput | SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    tenant?: TenantOrderByWithRelationInput
+    campaign?: CampaignOrderByWithRelationInput
+    leads?: LeadOrderByRelationAggregateInput
+    calls?: CallOrderByRelationAggregateInput
+  }
+
+  export type LeadBatchWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    bolnaBatchId?: string
+    AND?: LeadBatchWhereInput | LeadBatchWhereInput[]
+    OR?: LeadBatchWhereInput[]
+    NOT?: LeadBatchWhereInput | LeadBatchWhereInput[]
+    campaignId?: StringFilter<"LeadBatch"> | string
+    tenantId?: StringFilter<"LeadBatch"> | string
+    status?: EnumBatchStatusFilter<"LeadBatch"> | $Enums.BatchStatus
+    fileName?: StringNullableFilter<"LeadBatch"> | string | null
+    originalFileUrl?: StringNullableFilter<"LeadBatch"> | string | null
+    transformedCsvUrl?: StringNullableFilter<"LeadBatch"> | string | null
+    totalLeads?: IntFilter<"LeadBatch"> | number
+    calledLeads?: IntFilter<"LeadBatch"> | number
+    completedLeads?: IntFilter<"LeadBatch"> | number
+    failedLeads?: IntFilter<"LeadBatch"> | number
+    retryConfig?: JsonNullableFilter<"LeadBatch">
+    scheduledAt?: DateTimeNullableFilter<"LeadBatch"> | Date | string | null
+    bolnaScheduledAt?: DateTimeNullableFilter<"LeadBatch"> | Date | string | null
+    createdAt?: DateTimeFilter<"LeadBatch"> | Date | string
+    updatedAt?: DateTimeFilter<"LeadBatch"> | Date | string
+    startedAt?: DateTimeNullableFilter<"LeadBatch"> | Date | string | null
+    completedAt?: DateTimeNullableFilter<"LeadBatch"> | Date | string | null
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
+    campaign?: XOR<CampaignScalarRelationFilter, CampaignWhereInput>
+    leads?: LeadListRelationFilter
+    calls?: CallListRelationFilter
+  }, "id" | "bolnaBatchId">
+
+  export type LeadBatchOrderByWithAggregationInput = {
+    id?: SortOrder
+    bolnaBatchId?: SortOrderInput | SortOrder
+    campaignId?: SortOrder
+    tenantId?: SortOrder
+    status?: SortOrder
+    fileName?: SortOrderInput | SortOrder
+    originalFileUrl?: SortOrderInput | SortOrder
+    transformedCsvUrl?: SortOrderInput | SortOrder
+    totalLeads?: SortOrder
+    calledLeads?: SortOrder
+    completedLeads?: SortOrder
+    failedLeads?: SortOrder
+    retryConfig?: SortOrderInput | SortOrder
+    scheduledAt?: SortOrderInput | SortOrder
+    bolnaScheduledAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    startedAt?: SortOrderInput | SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    _count?: LeadBatchCountOrderByAggregateInput
+    _avg?: LeadBatchAvgOrderByAggregateInput
+    _max?: LeadBatchMaxOrderByAggregateInput
+    _min?: LeadBatchMinOrderByAggregateInput
+    _sum?: LeadBatchSumOrderByAggregateInput
+  }
+
+  export type LeadBatchScalarWhereWithAggregatesInput = {
+    AND?: LeadBatchScalarWhereWithAggregatesInput | LeadBatchScalarWhereWithAggregatesInput[]
+    OR?: LeadBatchScalarWhereWithAggregatesInput[]
+    NOT?: LeadBatchScalarWhereWithAggregatesInput | LeadBatchScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"LeadBatch"> | string
+    bolnaBatchId?: StringNullableWithAggregatesFilter<"LeadBatch"> | string | null
+    campaignId?: StringWithAggregatesFilter<"LeadBatch"> | string
+    tenantId?: StringWithAggregatesFilter<"LeadBatch"> | string
+    status?: EnumBatchStatusWithAggregatesFilter<"LeadBatch"> | $Enums.BatchStatus
+    fileName?: StringNullableWithAggregatesFilter<"LeadBatch"> | string | null
+    originalFileUrl?: StringNullableWithAggregatesFilter<"LeadBatch"> | string | null
+    transformedCsvUrl?: StringNullableWithAggregatesFilter<"LeadBatch"> | string | null
+    totalLeads?: IntWithAggregatesFilter<"LeadBatch"> | number
+    calledLeads?: IntWithAggregatesFilter<"LeadBatch"> | number
+    completedLeads?: IntWithAggregatesFilter<"LeadBatch"> | number
+    failedLeads?: IntWithAggregatesFilter<"LeadBatch"> | number
+    retryConfig?: JsonNullableWithAggregatesFilter<"LeadBatch">
+    scheduledAt?: DateTimeNullableWithAggregatesFilter<"LeadBatch"> | Date | string | null
+    bolnaScheduledAt?: DateTimeNullableWithAggregatesFilter<"LeadBatch"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"LeadBatch"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"LeadBatch"> | Date | string
+    startedAt?: DateTimeNullableWithAggregatesFilter<"LeadBatch"> | Date | string | null
+    completedAt?: DateTimeNullableWithAggregatesFilter<"LeadBatch"> | Date | string | null
   }
 
   export type LeadWhereInput = {
@@ -13275,11 +15111,13 @@ export namespace Prisma {
     doNotCall?: BoolFilter<"Lead"> | boolean
     tenantId?: StringFilter<"Lead"> | string
     campaignId?: StringFilter<"Lead"> | string
+    batchId?: StringNullableFilter<"Lead"> | string | null
     metadata?: JsonNullableFilter<"Lead">
     createdAt?: DateTimeFilter<"Lead"> | Date | string
     updatedAt?: DateTimeFilter<"Lead"> | Date | string
     tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     campaign?: XOR<CampaignScalarRelationFilter, CampaignWhereInput>
+    batch?: XOR<LeadBatchNullableScalarRelationFilter, LeadBatchWhereInput> | null
     calls?: CallListRelationFilter
   }
 
@@ -13293,16 +15131,19 @@ export namespace Prisma {
     doNotCall?: SortOrder
     tenantId?: SortOrder
     campaignId?: SortOrder
+    batchId?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     tenant?: TenantOrderByWithRelationInput
     campaign?: CampaignOrderByWithRelationInput
+    batch?: LeadBatchOrderByWithRelationInput
     calls?: CallOrderByRelationAggregateInput
   }
 
   export type LeadWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    phone_campaignId?: LeadPhoneCampaignIdCompoundUniqueInput
     AND?: LeadWhereInput | LeadWhereInput[]
     OR?: LeadWhereInput[]
     NOT?: LeadWhereInput | LeadWhereInput[]
@@ -13314,13 +15155,15 @@ export namespace Prisma {
     doNotCall?: BoolFilter<"Lead"> | boolean
     tenantId?: StringFilter<"Lead"> | string
     campaignId?: StringFilter<"Lead"> | string
+    batchId?: StringNullableFilter<"Lead"> | string | null
     metadata?: JsonNullableFilter<"Lead">
     createdAt?: DateTimeFilter<"Lead"> | Date | string
     updatedAt?: DateTimeFilter<"Lead"> | Date | string
     tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     campaign?: XOR<CampaignScalarRelationFilter, CampaignWhereInput>
+    batch?: XOR<LeadBatchNullableScalarRelationFilter, LeadBatchWhereInput> | null
     calls?: CallListRelationFilter
-  }, "id">
+  }, "id" | "phone_campaignId">
 
   export type LeadOrderByWithAggregationInput = {
     id?: SortOrder
@@ -13332,6 +15175,7 @@ export namespace Prisma {
     doNotCall?: SortOrder
     tenantId?: SortOrder
     campaignId?: SortOrder
+    batchId?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -13353,6 +15197,7 @@ export namespace Prisma {
     doNotCall?: BoolWithAggregatesFilter<"Lead"> | boolean
     tenantId?: StringWithAggregatesFilter<"Lead"> | string
     campaignId?: StringWithAggregatesFilter<"Lead"> | string
+    batchId?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     metadata?: JsonNullableWithAggregatesFilter<"Lead">
     createdAt?: DateTimeWithAggregatesFilter<"Lead"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Lead"> | Date | string
@@ -13367,6 +15212,7 @@ export namespace Prisma {
     tenantId?: StringFilter<"Call"> | string
     campaignId?: StringFilter<"Call"> | string
     leadId?: StringFilter<"Call"> | string
+    batchId?: StringNullableFilter<"Call"> | string | null
     status?: EnumCallStatusFilter<"Call"> | $Enums.CallStatus
     duration?: IntNullableFilter<"Call"> | number | null
     cost?: FloatNullableFilter<"Call"> | number | null
@@ -13374,6 +15220,7 @@ export namespace Prisma {
     transcript?: StringNullableFilter<"Call"> | string | null
     transcriptMessages?: JsonNullableFilter<"Call">
     summary?: StringNullableFilter<"Call"> | string | null
+    callHistory?: JsonNullableFilter<"Call">
     startedAt?: DateTimeNullableFilter<"Call"> | Date | string | null
     endedAt?: DateTimeNullableFilter<"Call"> | Date | string | null
     createdAt?: DateTimeFilter<"Call"> | Date | string
@@ -13381,6 +15228,7 @@ export namespace Prisma {
     tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     campaign?: XOR<CampaignScalarRelationFilter, CampaignWhereInput>
     lead?: XOR<LeadScalarRelationFilter, LeadWhereInput>
+    batch?: XOR<LeadBatchNullableScalarRelationFilter, LeadBatchWhereInput> | null
     callAnalysis?: XOR<CallAnalysisNullableScalarRelationFilter, CallAnalysisWhereInput> | null
   }
 
@@ -13390,6 +15238,7 @@ export namespace Prisma {
     tenantId?: SortOrder
     campaignId?: SortOrder
     leadId?: SortOrder
+    batchId?: SortOrderInput | SortOrder
     status?: SortOrder
     duration?: SortOrderInput | SortOrder
     cost?: SortOrderInput | SortOrder
@@ -13397,6 +15246,7 @@ export namespace Prisma {
     transcript?: SortOrderInput | SortOrder
     transcriptMessages?: SortOrderInput | SortOrder
     summary?: SortOrderInput | SortOrder
+    callHistory?: SortOrderInput | SortOrder
     startedAt?: SortOrderInput | SortOrder
     endedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -13404,6 +15254,7 @@ export namespace Prisma {
     tenant?: TenantOrderByWithRelationInput
     campaign?: CampaignOrderByWithRelationInput
     lead?: LeadOrderByWithRelationInput
+    batch?: LeadBatchOrderByWithRelationInput
     callAnalysis?: CallAnalysisOrderByWithRelationInput
   }
 
@@ -13416,6 +15267,7 @@ export namespace Prisma {
     tenantId?: StringFilter<"Call"> | string
     campaignId?: StringFilter<"Call"> | string
     leadId?: StringFilter<"Call"> | string
+    batchId?: StringNullableFilter<"Call"> | string | null
     status?: EnumCallStatusFilter<"Call"> | $Enums.CallStatus
     duration?: IntNullableFilter<"Call"> | number | null
     cost?: FloatNullableFilter<"Call"> | number | null
@@ -13423,6 +15275,7 @@ export namespace Prisma {
     transcript?: StringNullableFilter<"Call"> | string | null
     transcriptMessages?: JsonNullableFilter<"Call">
     summary?: StringNullableFilter<"Call"> | string | null
+    callHistory?: JsonNullableFilter<"Call">
     startedAt?: DateTimeNullableFilter<"Call"> | Date | string | null
     endedAt?: DateTimeNullableFilter<"Call"> | Date | string | null
     createdAt?: DateTimeFilter<"Call"> | Date | string
@@ -13430,6 +15283,7 @@ export namespace Prisma {
     tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     campaign?: XOR<CampaignScalarRelationFilter, CampaignWhereInput>
     lead?: XOR<LeadScalarRelationFilter, LeadWhereInput>
+    batch?: XOR<LeadBatchNullableScalarRelationFilter, LeadBatchWhereInput> | null
     callAnalysis?: XOR<CallAnalysisNullableScalarRelationFilter, CallAnalysisWhereInput> | null
   }, "id" | "bolnaCallId">
 
@@ -13439,6 +15293,7 @@ export namespace Prisma {
     tenantId?: SortOrder
     campaignId?: SortOrder
     leadId?: SortOrder
+    batchId?: SortOrderInput | SortOrder
     status?: SortOrder
     duration?: SortOrderInput | SortOrder
     cost?: SortOrderInput | SortOrder
@@ -13446,6 +15301,7 @@ export namespace Prisma {
     transcript?: SortOrderInput | SortOrder
     transcriptMessages?: SortOrderInput | SortOrder
     summary?: SortOrderInput | SortOrder
+    callHistory?: SortOrderInput | SortOrder
     startedAt?: SortOrderInput | SortOrder
     endedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -13466,6 +15322,7 @@ export namespace Prisma {
     tenantId?: StringWithAggregatesFilter<"Call"> | string
     campaignId?: StringWithAggregatesFilter<"Call"> | string
     leadId?: StringWithAggregatesFilter<"Call"> | string
+    batchId?: StringNullableWithAggregatesFilter<"Call"> | string | null
     status?: EnumCallStatusWithAggregatesFilter<"Call"> | $Enums.CallStatus
     duration?: IntNullableWithAggregatesFilter<"Call"> | number | null
     cost?: FloatNullableWithAggregatesFilter<"Call"> | number | null
@@ -13473,6 +15330,7 @@ export namespace Prisma {
     transcript?: StringNullableWithAggregatesFilter<"Call"> | string | null
     transcriptMessages?: JsonNullableWithAggregatesFilter<"Call">
     summary?: StringNullableWithAggregatesFilter<"Call"> | string | null
+    callHistory?: JsonNullableWithAggregatesFilter<"Call">
     startedAt?: DateTimeNullableWithAggregatesFilter<"Call"> | Date | string | null
     endedAt?: DateTimeNullableWithAggregatesFilter<"Call"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Call"> | Date | string
@@ -13612,6 +15470,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
+    batches?: LeadBatchCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
     calls?: CallCreateNestedManyWithoutTenantInput
     assistants?: AssistantCreateNestedManyWithoutTenantInput
@@ -13629,6 +15488,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
+    batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
     assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
@@ -13646,6 +15506,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
+    batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
     calls?: CallUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUpdateManyWithoutTenantNestedInput
@@ -13663,6 +15524,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
+    batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
@@ -14229,11 +16091,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.CampaignStatus
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
-    successLeads?: number
+    completedLeads?: number
     failedLeads?: number
-    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -14243,6 +16105,7 @@ export namespace Prisma {
     brochure?: BrochureCreateNestedOneWithoutCampaignsInput
     leads?: LeadCreateNestedManyWithoutCampaignInput
     calls?: CallCreateNestedManyWithoutCampaignInput
+    batches?: LeadBatchCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignUncheckedCreateInput = {
@@ -14254,17 +16117,18 @@ export namespace Prisma {
     assistantId: string
     brochureId?: string | null
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
-    successLeads?: number
+    completedLeads?: number
     failedLeads?: number
-    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
     completedAt?: Date | string | null
     leads?: LeadUncheckedCreateNestedManyWithoutCampaignInput
     calls?: CallUncheckedCreateNestedManyWithoutCampaignInput
+    batches?: LeadBatchUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignUpdateInput = {
@@ -14273,11 +16137,11 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
-    successLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
-    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -14287,6 +16151,7 @@ export namespace Prisma {
     brochure?: BrochureUpdateOneWithoutCampaignsNestedInput
     leads?: LeadUpdateManyWithoutCampaignNestedInput
     calls?: CallUpdateManyWithoutCampaignNestedInput
+    batches?: LeadBatchUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateInput = {
@@ -14298,17 +16163,18 @@ export namespace Prisma {
     assistantId?: StringFieldUpdateOperationsInput | string
     brochureId?: NullableStringFieldUpdateOperationsInput | string | null
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
-    successLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
-    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leads?: LeadUncheckedUpdateManyWithoutCampaignNestedInput
     calls?: CallUncheckedUpdateManyWithoutCampaignNestedInput
+    batches?: LeadBatchUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignCreateManyInput = {
@@ -14320,11 +16186,11 @@ export namespace Prisma {
     assistantId: string
     brochureId?: string | null
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
-    successLeads?: number
+    completedLeads?: number
     failedLeads?: number
-    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -14337,11 +16203,11 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
-    successLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
-    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -14357,11 +16223,171 @@ export namespace Prisma {
     assistantId?: StringFieldUpdateOperationsInput | string
     brochureId?: NullableStringFieldUpdateOperationsInput | string | null
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
-    successLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type LeadBatchCreateInput = {
+    id?: string
+    bolnaBatchId?: string | null
+    status?: $Enums.BatchStatus
+    fileName?: string | null
+    originalFileUrl?: string | null
+    transformedCsvUrl?: string | null
+    totalLeads?: number
+    calledLeads?: number
+    completedLeads?: number
+    failedLeads?: number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: Date | string | null
+    bolnaScheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    tenant: TenantCreateNestedOneWithoutBatchesInput
+    campaign: CampaignCreateNestedOneWithoutBatchesInput
+    leads?: LeadCreateNestedManyWithoutBatchInput
+    calls?: CallCreateNestedManyWithoutBatchInput
+  }
+
+  export type LeadBatchUncheckedCreateInput = {
+    id?: string
+    bolnaBatchId?: string | null
+    campaignId: string
+    tenantId: string
+    status?: $Enums.BatchStatus
+    fileName?: string | null
+    originalFileUrl?: string | null
+    transformedCsvUrl?: string | null
+    totalLeads?: number
+    calledLeads?: number
+    completedLeads?: number
+    failedLeads?: number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: Date | string | null
+    bolnaScheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    leads?: LeadUncheckedCreateNestedManyWithoutBatchInput
+    calls?: CallUncheckedCreateNestedManyWithoutBatchInput
+  }
+
+  export type LeadBatchUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bolnaBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    fileName?: NullableStringFieldUpdateOperationsInput | string | null
+    originalFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    transformedCsvUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    totalLeads?: IntFieldUpdateOperationsInput | number
+    calledLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
+    failedLeads?: IntFieldUpdateOperationsInput | number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bolnaScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tenant?: TenantUpdateOneRequiredWithoutBatchesNestedInput
+    campaign?: CampaignUpdateOneRequiredWithoutBatchesNestedInput
+    leads?: LeadUpdateManyWithoutBatchNestedInput
+    calls?: CallUpdateManyWithoutBatchNestedInput
+  }
+
+  export type LeadBatchUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bolnaBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    campaignId?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    fileName?: NullableStringFieldUpdateOperationsInput | string | null
+    originalFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    transformedCsvUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    totalLeads?: IntFieldUpdateOperationsInput | number
+    calledLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
+    failedLeads?: IntFieldUpdateOperationsInput | number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bolnaScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leads?: LeadUncheckedUpdateManyWithoutBatchNestedInput
+    calls?: CallUncheckedUpdateManyWithoutBatchNestedInput
+  }
+
+  export type LeadBatchCreateManyInput = {
+    id?: string
+    bolnaBatchId?: string | null
+    campaignId: string
+    tenantId: string
+    status?: $Enums.BatchStatus
+    fileName?: string | null
+    originalFileUrl?: string | null
+    transformedCsvUrl?: string | null
+    totalLeads?: number
+    calledLeads?: number
+    completedLeads?: number
+    failedLeads?: number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: Date | string | null
+    bolnaScheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+  }
+
+  export type LeadBatchUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bolnaBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    fileName?: NullableStringFieldUpdateOperationsInput | string | null
+    originalFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    transformedCsvUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    totalLeads?: IntFieldUpdateOperationsInput | number
+    calledLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
+    failedLeads?: IntFieldUpdateOperationsInput | number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bolnaScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type LeadBatchUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bolnaBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    campaignId?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    fileName?: NullableStringFieldUpdateOperationsInput | string | null
+    originalFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    transformedCsvUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    totalLeads?: IntFieldUpdateOperationsInput | number
+    calledLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
+    failedLeads?: IntFieldUpdateOperationsInput | number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bolnaScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -14381,6 +16407,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     tenant: TenantCreateNestedOneWithoutLeadsInput
     campaign: CampaignCreateNestedOneWithoutLeadsInput
+    batch?: LeadBatchCreateNestedOneWithoutLeadsInput
     calls?: CallCreateNestedManyWithoutLeadInput
   }
 
@@ -14394,6 +16421,7 @@ export namespace Prisma {
     doNotCall?: boolean
     tenantId: string
     campaignId: string
+    batchId?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14413,6 +16441,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tenant?: TenantUpdateOneRequiredWithoutLeadsNestedInput
     campaign?: CampaignUpdateOneRequiredWithoutLeadsNestedInput
+    batch?: LeadBatchUpdateOneWithoutLeadsNestedInput
     calls?: CallUpdateManyWithoutLeadNestedInput
   }
 
@@ -14426,6 +16455,7 @@ export namespace Prisma {
     doNotCall?: BoolFieldUpdateOperationsInput | boolean
     tenantId?: StringFieldUpdateOperationsInput | string
     campaignId?: StringFieldUpdateOperationsInput | string
+    batchId?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14442,6 +16472,7 @@ export namespace Prisma {
     doNotCall?: boolean
     tenantId: string
     campaignId: string
+    batchId?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14470,6 +16501,7 @@ export namespace Prisma {
     doNotCall?: BoolFieldUpdateOperationsInput | boolean
     tenantId?: StringFieldUpdateOperationsInput | string
     campaignId?: StringFieldUpdateOperationsInput | string
+    batchId?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14485,6 +16517,7 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
@@ -14492,6 +16525,7 @@ export namespace Prisma {
     tenant: TenantCreateNestedOneWithoutCallsInput
     campaign: CampaignCreateNestedOneWithoutCallsInput
     lead: LeadCreateNestedOneWithoutCallsInput
+    batch?: LeadBatchCreateNestedOneWithoutCallsInput
     callAnalysis?: CallAnalysisCreateNestedOneWithoutCallInput
   }
 
@@ -14501,6 +16535,7 @@ export namespace Prisma {
     tenantId: string
     campaignId: string
     leadId: string
+    batchId?: string | null
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
@@ -14508,6 +16543,7 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
@@ -14525,6 +16561,7 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14532,6 +16569,7 @@ export namespace Prisma {
     tenant?: TenantUpdateOneRequiredWithoutCallsNestedInput
     campaign?: CampaignUpdateOneRequiredWithoutCallsNestedInput
     lead?: LeadUpdateOneRequiredWithoutCallsNestedInput
+    batch?: LeadBatchUpdateOneWithoutCallsNestedInput
     callAnalysis?: CallAnalysisUpdateOneWithoutCallNestedInput
   }
 
@@ -14541,6 +16579,7 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     campaignId?: StringFieldUpdateOperationsInput | string
     leadId?: StringFieldUpdateOperationsInput | string
+    batchId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -14548,6 +16587,7 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14561,6 +16601,7 @@ export namespace Prisma {
     tenantId: string
     campaignId: string
     leadId: string
+    batchId?: string | null
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
@@ -14568,6 +16609,7 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
@@ -14584,6 +16626,7 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14596,6 +16639,7 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     campaignId?: StringFieldUpdateOperationsInput | string
     leadId?: StringFieldUpdateOperationsInput | string
+    batchId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -14603,6 +16647,7 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14797,6 +16842,12 @@ export namespace Prisma {
     none?: CampaignWhereInput
   }
 
+  export type LeadBatchListRelationFilter = {
+    every?: LeadBatchWhereInput
+    some?: LeadBatchWhereInput
+    none?: LeadBatchWhereInput
+  }
+
   export type LeadListRelationFilter = {
     every?: LeadWhereInput
     some?: LeadWhereInput
@@ -14832,6 +16883,10 @@ export namespace Prisma {
   }
 
   export type CampaignOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type LeadBatchOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -15454,11 +17509,11 @@ export namespace Prisma {
     assistantId?: SortOrder
     brochureId?: SortOrder
     variables?: SortOrder
+    defaultRetryConfig?: SortOrder
     totalLeads?: SortOrder
     calledLeads?: SortOrder
-    successLeads?: SortOrder
+    completedLeads?: SortOrder
     failedLeads?: SortOrder
-    scheduledAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     startedAt?: SortOrder
@@ -15468,7 +17523,7 @@ export namespace Prisma {
   export type CampaignAvgOrderByAggregateInput = {
     totalLeads?: SortOrder
     calledLeads?: SortOrder
-    successLeads?: SortOrder
+    completedLeads?: SortOrder
     failedLeads?: SortOrder
   }
 
@@ -15482,9 +17537,8 @@ export namespace Prisma {
     brochureId?: SortOrder
     totalLeads?: SortOrder
     calledLeads?: SortOrder
-    successLeads?: SortOrder
+    completedLeads?: SortOrder
     failedLeads?: SortOrder
-    scheduledAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     startedAt?: SortOrder
@@ -15501,9 +17555,8 @@ export namespace Prisma {
     brochureId?: SortOrder
     totalLeads?: SortOrder
     calledLeads?: SortOrder
-    successLeads?: SortOrder
+    completedLeads?: SortOrder
     failedLeads?: SortOrder
-    scheduledAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     startedAt?: SortOrder
@@ -15513,7 +17566,7 @@ export namespace Prisma {
   export type CampaignSumOrderByAggregateInput = {
     totalLeads?: SortOrder
     calledLeads?: SortOrder
-    successLeads?: SortOrder
+    completedLeads?: SortOrder
     failedLeads?: SortOrder
   }
 
@@ -15553,6 +17606,106 @@ export namespace Prisma {
     _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
+  export type EnumBatchStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.BatchStatus | EnumBatchStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBatchStatusFilter<$PrismaModel> | $Enums.BatchStatus
+  }
+
+  export type CampaignScalarRelationFilter = {
+    is?: CampaignWhereInput
+    isNot?: CampaignWhereInput
+  }
+
+  export type LeadBatchCountOrderByAggregateInput = {
+    id?: SortOrder
+    bolnaBatchId?: SortOrder
+    campaignId?: SortOrder
+    tenantId?: SortOrder
+    status?: SortOrder
+    fileName?: SortOrder
+    originalFileUrl?: SortOrder
+    transformedCsvUrl?: SortOrder
+    totalLeads?: SortOrder
+    calledLeads?: SortOrder
+    completedLeads?: SortOrder
+    failedLeads?: SortOrder
+    retryConfig?: SortOrder
+    scheduledAt?: SortOrder
+    bolnaScheduledAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type LeadBatchAvgOrderByAggregateInput = {
+    totalLeads?: SortOrder
+    calledLeads?: SortOrder
+    completedLeads?: SortOrder
+    failedLeads?: SortOrder
+  }
+
+  export type LeadBatchMaxOrderByAggregateInput = {
+    id?: SortOrder
+    bolnaBatchId?: SortOrder
+    campaignId?: SortOrder
+    tenantId?: SortOrder
+    status?: SortOrder
+    fileName?: SortOrder
+    originalFileUrl?: SortOrder
+    transformedCsvUrl?: SortOrder
+    totalLeads?: SortOrder
+    calledLeads?: SortOrder
+    completedLeads?: SortOrder
+    failedLeads?: SortOrder
+    scheduledAt?: SortOrder
+    bolnaScheduledAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type LeadBatchMinOrderByAggregateInput = {
+    id?: SortOrder
+    bolnaBatchId?: SortOrder
+    campaignId?: SortOrder
+    tenantId?: SortOrder
+    status?: SortOrder
+    fileName?: SortOrder
+    originalFileUrl?: SortOrder
+    transformedCsvUrl?: SortOrder
+    totalLeads?: SortOrder
+    calledLeads?: SortOrder
+    completedLeads?: SortOrder
+    failedLeads?: SortOrder
+    scheduledAt?: SortOrder
+    bolnaScheduledAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type LeadBatchSumOrderByAggregateInput = {
+    totalLeads?: SortOrder
+    calledLeads?: SortOrder
+    completedLeads?: SortOrder
+    failedLeads?: SortOrder
+  }
+
+  export type EnumBatchStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BatchStatus | EnumBatchStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBatchStatusWithAggregatesFilter<$PrismaModel> | $Enums.BatchStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBatchStatusFilter<$PrismaModel>
+    _max?: NestedEnumBatchStatusFilter<$PrismaModel>
+  }
+
   export type EnumLeadStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
     in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
@@ -15560,9 +17713,14 @@ export namespace Prisma {
     not?: NestedEnumLeadStatusFilter<$PrismaModel> | $Enums.LeadStatus
   }
 
-  export type CampaignScalarRelationFilter = {
-    is?: CampaignWhereInput
-    isNot?: CampaignWhereInput
+  export type LeadBatchNullableScalarRelationFilter = {
+    is?: LeadBatchWhereInput | null
+    isNot?: LeadBatchWhereInput | null
+  }
+
+  export type LeadPhoneCampaignIdCompoundUniqueInput = {
+    phone: string
+    campaignId: string
   }
 
   export type LeadCountOrderByAggregateInput = {
@@ -15575,6 +17733,7 @@ export namespace Prisma {
     doNotCall?: SortOrder
     tenantId?: SortOrder
     campaignId?: SortOrder
+    batchId?: SortOrder
     metadata?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -15590,6 +17749,7 @@ export namespace Prisma {
     doNotCall?: SortOrder
     tenantId?: SortOrder
     campaignId?: SortOrder
+    batchId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -15604,6 +17764,7 @@ export namespace Prisma {
     doNotCall?: SortOrder
     tenantId?: SortOrder
     campaignId?: SortOrder
+    batchId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -15641,6 +17802,7 @@ export namespace Prisma {
     tenantId?: SortOrder
     campaignId?: SortOrder
     leadId?: SortOrder
+    batchId?: SortOrder
     status?: SortOrder
     duration?: SortOrder
     cost?: SortOrder
@@ -15648,6 +17810,7 @@ export namespace Prisma {
     transcript?: SortOrder
     transcriptMessages?: SortOrder
     summary?: SortOrder
+    callHistory?: SortOrder
     startedAt?: SortOrder
     endedAt?: SortOrder
     createdAt?: SortOrder
@@ -15665,6 +17828,7 @@ export namespace Prisma {
     tenantId?: SortOrder
     campaignId?: SortOrder
     leadId?: SortOrder
+    batchId?: SortOrder
     status?: SortOrder
     duration?: SortOrder
     cost?: SortOrder
@@ -15683,6 +17847,7 @@ export namespace Prisma {
     tenantId?: SortOrder
     campaignId?: SortOrder
     leadId?: SortOrder
+    batchId?: SortOrder
     status?: SortOrder
     duration?: SortOrder
     cost?: SortOrder
@@ -15928,6 +18093,13 @@ export namespace Prisma {
     connect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
   }
 
+  export type LeadBatchCreateNestedManyWithoutTenantInput = {
+    create?: XOR<LeadBatchCreateWithoutTenantInput, LeadBatchUncheckedCreateWithoutTenantInput> | LeadBatchCreateWithoutTenantInput[] | LeadBatchUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: LeadBatchCreateOrConnectWithoutTenantInput | LeadBatchCreateOrConnectWithoutTenantInput[]
+    createMany?: LeadBatchCreateManyTenantInputEnvelope
+    connect?: LeadBatchWhereUniqueInput | LeadBatchWhereUniqueInput[]
+  }
+
   export type LeadCreateNestedManyWithoutTenantInput = {
     create?: XOR<LeadCreateWithoutTenantInput, LeadUncheckedCreateWithoutTenantInput> | LeadCreateWithoutTenantInput[] | LeadUncheckedCreateWithoutTenantInput[]
     connectOrCreate?: LeadCreateOrConnectWithoutTenantInput | LeadCreateOrConnectWithoutTenantInput[]
@@ -15975,6 +18147,13 @@ export namespace Prisma {
     connectOrCreate?: CampaignCreateOrConnectWithoutTenantInput | CampaignCreateOrConnectWithoutTenantInput[]
     createMany?: CampaignCreateManyTenantInputEnvelope
     connect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+  }
+
+  export type LeadBatchUncheckedCreateNestedManyWithoutTenantInput = {
+    create?: XOR<LeadBatchCreateWithoutTenantInput, LeadBatchUncheckedCreateWithoutTenantInput> | LeadBatchCreateWithoutTenantInput[] | LeadBatchUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: LeadBatchCreateOrConnectWithoutTenantInput | LeadBatchCreateOrConnectWithoutTenantInput[]
+    createMany?: LeadBatchCreateManyTenantInputEnvelope
+    connect?: LeadBatchWhereUniqueInput | LeadBatchWhereUniqueInput[]
   }
 
   export type LeadUncheckedCreateNestedManyWithoutTenantInput = {
@@ -16050,6 +18229,20 @@ export namespace Prisma {
     update?: CampaignUpdateWithWhereUniqueWithoutTenantInput | CampaignUpdateWithWhereUniqueWithoutTenantInput[]
     updateMany?: CampaignUpdateManyWithWhereWithoutTenantInput | CampaignUpdateManyWithWhereWithoutTenantInput[]
     deleteMany?: CampaignScalarWhereInput | CampaignScalarWhereInput[]
+  }
+
+  export type LeadBatchUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<LeadBatchCreateWithoutTenantInput, LeadBatchUncheckedCreateWithoutTenantInput> | LeadBatchCreateWithoutTenantInput[] | LeadBatchUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: LeadBatchCreateOrConnectWithoutTenantInput | LeadBatchCreateOrConnectWithoutTenantInput[]
+    upsert?: LeadBatchUpsertWithWhereUniqueWithoutTenantInput | LeadBatchUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: LeadBatchCreateManyTenantInputEnvelope
+    set?: LeadBatchWhereUniqueInput | LeadBatchWhereUniqueInput[]
+    disconnect?: LeadBatchWhereUniqueInput | LeadBatchWhereUniqueInput[]
+    delete?: LeadBatchWhereUniqueInput | LeadBatchWhereUniqueInput[]
+    connect?: LeadBatchWhereUniqueInput | LeadBatchWhereUniqueInput[]
+    update?: LeadBatchUpdateWithWhereUniqueWithoutTenantInput | LeadBatchUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: LeadBatchUpdateManyWithWhereWithoutTenantInput | LeadBatchUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: LeadBatchScalarWhereInput | LeadBatchScalarWhereInput[]
   }
 
   export type LeadUpdateManyWithoutTenantNestedInput = {
@@ -16148,6 +18341,20 @@ export namespace Prisma {
     update?: CampaignUpdateWithWhereUniqueWithoutTenantInput | CampaignUpdateWithWhereUniqueWithoutTenantInput[]
     updateMany?: CampaignUpdateManyWithWhereWithoutTenantInput | CampaignUpdateManyWithWhereWithoutTenantInput[]
     deleteMany?: CampaignScalarWhereInput | CampaignScalarWhereInput[]
+  }
+
+  export type LeadBatchUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<LeadBatchCreateWithoutTenantInput, LeadBatchUncheckedCreateWithoutTenantInput> | LeadBatchCreateWithoutTenantInput[] | LeadBatchUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: LeadBatchCreateOrConnectWithoutTenantInput | LeadBatchCreateOrConnectWithoutTenantInput[]
+    upsert?: LeadBatchUpsertWithWhereUniqueWithoutTenantInput | LeadBatchUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: LeadBatchCreateManyTenantInputEnvelope
+    set?: LeadBatchWhereUniqueInput | LeadBatchWhereUniqueInput[]
+    disconnect?: LeadBatchWhereUniqueInput | LeadBatchWhereUniqueInput[]
+    delete?: LeadBatchWhereUniqueInput | LeadBatchWhereUniqueInput[]
+    connect?: LeadBatchWhereUniqueInput | LeadBatchWhereUniqueInput[]
+    update?: LeadBatchUpdateWithWhereUniqueWithoutTenantInput | LeadBatchUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: LeadBatchUpdateManyWithWhereWithoutTenantInput | LeadBatchUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: LeadBatchScalarWhereInput | LeadBatchScalarWhereInput[]
   }
 
   export type LeadUncheckedUpdateManyWithoutTenantNestedInput = {
@@ -16521,6 +18728,13 @@ export namespace Prisma {
     connect?: CallWhereUniqueInput | CallWhereUniqueInput[]
   }
 
+  export type LeadBatchCreateNestedManyWithoutCampaignInput = {
+    create?: XOR<LeadBatchCreateWithoutCampaignInput, LeadBatchUncheckedCreateWithoutCampaignInput> | LeadBatchCreateWithoutCampaignInput[] | LeadBatchUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: LeadBatchCreateOrConnectWithoutCampaignInput | LeadBatchCreateOrConnectWithoutCampaignInput[]
+    createMany?: LeadBatchCreateManyCampaignInputEnvelope
+    connect?: LeadBatchWhereUniqueInput | LeadBatchWhereUniqueInput[]
+  }
+
   export type LeadUncheckedCreateNestedManyWithoutCampaignInput = {
     create?: XOR<LeadCreateWithoutCampaignInput, LeadUncheckedCreateWithoutCampaignInput> | LeadCreateWithoutCampaignInput[] | LeadUncheckedCreateWithoutCampaignInput[]
     connectOrCreate?: LeadCreateOrConnectWithoutCampaignInput | LeadCreateOrConnectWithoutCampaignInput[]
@@ -16533,6 +18747,13 @@ export namespace Prisma {
     connectOrCreate?: CallCreateOrConnectWithoutCampaignInput | CallCreateOrConnectWithoutCampaignInput[]
     createMany?: CallCreateManyCampaignInputEnvelope
     connect?: CallWhereUniqueInput | CallWhereUniqueInput[]
+  }
+
+  export type LeadBatchUncheckedCreateNestedManyWithoutCampaignInput = {
+    create?: XOR<LeadBatchCreateWithoutCampaignInput, LeadBatchUncheckedCreateWithoutCampaignInput> | LeadBatchCreateWithoutCampaignInput[] | LeadBatchUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: LeadBatchCreateOrConnectWithoutCampaignInput | LeadBatchCreateOrConnectWithoutCampaignInput[]
+    createMany?: LeadBatchCreateManyCampaignInputEnvelope
+    connect?: LeadBatchWhereUniqueInput | LeadBatchWhereUniqueInput[]
   }
 
   export type EnumCampaignStatusFieldUpdateOperationsInput = {
@@ -16593,6 +18814,20 @@ export namespace Prisma {
     deleteMany?: CallScalarWhereInput | CallScalarWhereInput[]
   }
 
+  export type LeadBatchUpdateManyWithoutCampaignNestedInput = {
+    create?: XOR<LeadBatchCreateWithoutCampaignInput, LeadBatchUncheckedCreateWithoutCampaignInput> | LeadBatchCreateWithoutCampaignInput[] | LeadBatchUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: LeadBatchCreateOrConnectWithoutCampaignInput | LeadBatchCreateOrConnectWithoutCampaignInput[]
+    upsert?: LeadBatchUpsertWithWhereUniqueWithoutCampaignInput | LeadBatchUpsertWithWhereUniqueWithoutCampaignInput[]
+    createMany?: LeadBatchCreateManyCampaignInputEnvelope
+    set?: LeadBatchWhereUniqueInput | LeadBatchWhereUniqueInput[]
+    disconnect?: LeadBatchWhereUniqueInput | LeadBatchWhereUniqueInput[]
+    delete?: LeadBatchWhereUniqueInput | LeadBatchWhereUniqueInput[]
+    connect?: LeadBatchWhereUniqueInput | LeadBatchWhereUniqueInput[]
+    update?: LeadBatchUpdateWithWhereUniqueWithoutCampaignInput | LeadBatchUpdateWithWhereUniqueWithoutCampaignInput[]
+    updateMany?: LeadBatchUpdateManyWithWhereWithoutCampaignInput | LeadBatchUpdateManyWithWhereWithoutCampaignInput[]
+    deleteMany?: LeadBatchScalarWhereInput | LeadBatchScalarWhereInput[]
+  }
+
   export type LeadUncheckedUpdateManyWithoutCampaignNestedInput = {
     create?: XOR<LeadCreateWithoutCampaignInput, LeadUncheckedCreateWithoutCampaignInput> | LeadCreateWithoutCampaignInput[] | LeadUncheckedCreateWithoutCampaignInput[]
     connectOrCreate?: LeadCreateOrConnectWithoutCampaignInput | LeadCreateOrConnectWithoutCampaignInput[]
@@ -16621,6 +18856,136 @@ export namespace Prisma {
     deleteMany?: CallScalarWhereInput | CallScalarWhereInput[]
   }
 
+  export type LeadBatchUncheckedUpdateManyWithoutCampaignNestedInput = {
+    create?: XOR<LeadBatchCreateWithoutCampaignInput, LeadBatchUncheckedCreateWithoutCampaignInput> | LeadBatchCreateWithoutCampaignInput[] | LeadBatchUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: LeadBatchCreateOrConnectWithoutCampaignInput | LeadBatchCreateOrConnectWithoutCampaignInput[]
+    upsert?: LeadBatchUpsertWithWhereUniqueWithoutCampaignInput | LeadBatchUpsertWithWhereUniqueWithoutCampaignInput[]
+    createMany?: LeadBatchCreateManyCampaignInputEnvelope
+    set?: LeadBatchWhereUniqueInput | LeadBatchWhereUniqueInput[]
+    disconnect?: LeadBatchWhereUniqueInput | LeadBatchWhereUniqueInput[]
+    delete?: LeadBatchWhereUniqueInput | LeadBatchWhereUniqueInput[]
+    connect?: LeadBatchWhereUniqueInput | LeadBatchWhereUniqueInput[]
+    update?: LeadBatchUpdateWithWhereUniqueWithoutCampaignInput | LeadBatchUpdateWithWhereUniqueWithoutCampaignInput[]
+    updateMany?: LeadBatchUpdateManyWithWhereWithoutCampaignInput | LeadBatchUpdateManyWithWhereWithoutCampaignInput[]
+    deleteMany?: LeadBatchScalarWhereInput | LeadBatchScalarWhereInput[]
+  }
+
+  export type TenantCreateNestedOneWithoutBatchesInput = {
+    create?: XOR<TenantCreateWithoutBatchesInput, TenantUncheckedCreateWithoutBatchesInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutBatchesInput
+    connect?: TenantWhereUniqueInput
+  }
+
+  export type CampaignCreateNestedOneWithoutBatchesInput = {
+    create?: XOR<CampaignCreateWithoutBatchesInput, CampaignUncheckedCreateWithoutBatchesInput>
+    connectOrCreate?: CampaignCreateOrConnectWithoutBatchesInput
+    connect?: CampaignWhereUniqueInput
+  }
+
+  export type LeadCreateNestedManyWithoutBatchInput = {
+    create?: XOR<LeadCreateWithoutBatchInput, LeadUncheckedCreateWithoutBatchInput> | LeadCreateWithoutBatchInput[] | LeadUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: LeadCreateOrConnectWithoutBatchInput | LeadCreateOrConnectWithoutBatchInput[]
+    createMany?: LeadCreateManyBatchInputEnvelope
+    connect?: LeadWhereUniqueInput | LeadWhereUniqueInput[]
+  }
+
+  export type CallCreateNestedManyWithoutBatchInput = {
+    create?: XOR<CallCreateWithoutBatchInput, CallUncheckedCreateWithoutBatchInput> | CallCreateWithoutBatchInput[] | CallUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: CallCreateOrConnectWithoutBatchInput | CallCreateOrConnectWithoutBatchInput[]
+    createMany?: CallCreateManyBatchInputEnvelope
+    connect?: CallWhereUniqueInput | CallWhereUniqueInput[]
+  }
+
+  export type LeadUncheckedCreateNestedManyWithoutBatchInput = {
+    create?: XOR<LeadCreateWithoutBatchInput, LeadUncheckedCreateWithoutBatchInput> | LeadCreateWithoutBatchInput[] | LeadUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: LeadCreateOrConnectWithoutBatchInput | LeadCreateOrConnectWithoutBatchInput[]
+    createMany?: LeadCreateManyBatchInputEnvelope
+    connect?: LeadWhereUniqueInput | LeadWhereUniqueInput[]
+  }
+
+  export type CallUncheckedCreateNestedManyWithoutBatchInput = {
+    create?: XOR<CallCreateWithoutBatchInput, CallUncheckedCreateWithoutBatchInput> | CallCreateWithoutBatchInput[] | CallUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: CallCreateOrConnectWithoutBatchInput | CallCreateOrConnectWithoutBatchInput[]
+    createMany?: CallCreateManyBatchInputEnvelope
+    connect?: CallWhereUniqueInput | CallWhereUniqueInput[]
+  }
+
+  export type EnumBatchStatusFieldUpdateOperationsInput = {
+    set?: $Enums.BatchStatus
+  }
+
+  export type TenantUpdateOneRequiredWithoutBatchesNestedInput = {
+    create?: XOR<TenantCreateWithoutBatchesInput, TenantUncheckedCreateWithoutBatchesInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutBatchesInput
+    upsert?: TenantUpsertWithoutBatchesInput
+    connect?: TenantWhereUniqueInput
+    update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutBatchesInput, TenantUpdateWithoutBatchesInput>, TenantUncheckedUpdateWithoutBatchesInput>
+  }
+
+  export type CampaignUpdateOneRequiredWithoutBatchesNestedInput = {
+    create?: XOR<CampaignCreateWithoutBatchesInput, CampaignUncheckedCreateWithoutBatchesInput>
+    connectOrCreate?: CampaignCreateOrConnectWithoutBatchesInput
+    upsert?: CampaignUpsertWithoutBatchesInput
+    connect?: CampaignWhereUniqueInput
+    update?: XOR<XOR<CampaignUpdateToOneWithWhereWithoutBatchesInput, CampaignUpdateWithoutBatchesInput>, CampaignUncheckedUpdateWithoutBatchesInput>
+  }
+
+  export type LeadUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<LeadCreateWithoutBatchInput, LeadUncheckedCreateWithoutBatchInput> | LeadCreateWithoutBatchInput[] | LeadUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: LeadCreateOrConnectWithoutBatchInput | LeadCreateOrConnectWithoutBatchInput[]
+    upsert?: LeadUpsertWithWhereUniqueWithoutBatchInput | LeadUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: LeadCreateManyBatchInputEnvelope
+    set?: LeadWhereUniqueInput | LeadWhereUniqueInput[]
+    disconnect?: LeadWhereUniqueInput | LeadWhereUniqueInput[]
+    delete?: LeadWhereUniqueInput | LeadWhereUniqueInput[]
+    connect?: LeadWhereUniqueInput | LeadWhereUniqueInput[]
+    update?: LeadUpdateWithWhereUniqueWithoutBatchInput | LeadUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: LeadUpdateManyWithWhereWithoutBatchInput | LeadUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: LeadScalarWhereInput | LeadScalarWhereInput[]
+  }
+
+  export type CallUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<CallCreateWithoutBatchInput, CallUncheckedCreateWithoutBatchInput> | CallCreateWithoutBatchInput[] | CallUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: CallCreateOrConnectWithoutBatchInput | CallCreateOrConnectWithoutBatchInput[]
+    upsert?: CallUpsertWithWhereUniqueWithoutBatchInput | CallUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: CallCreateManyBatchInputEnvelope
+    set?: CallWhereUniqueInput | CallWhereUniqueInput[]
+    disconnect?: CallWhereUniqueInput | CallWhereUniqueInput[]
+    delete?: CallWhereUniqueInput | CallWhereUniqueInput[]
+    connect?: CallWhereUniqueInput | CallWhereUniqueInput[]
+    update?: CallUpdateWithWhereUniqueWithoutBatchInput | CallUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: CallUpdateManyWithWhereWithoutBatchInput | CallUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: CallScalarWhereInput | CallScalarWhereInput[]
+  }
+
+  export type LeadUncheckedUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<LeadCreateWithoutBatchInput, LeadUncheckedCreateWithoutBatchInput> | LeadCreateWithoutBatchInput[] | LeadUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: LeadCreateOrConnectWithoutBatchInput | LeadCreateOrConnectWithoutBatchInput[]
+    upsert?: LeadUpsertWithWhereUniqueWithoutBatchInput | LeadUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: LeadCreateManyBatchInputEnvelope
+    set?: LeadWhereUniqueInput | LeadWhereUniqueInput[]
+    disconnect?: LeadWhereUniqueInput | LeadWhereUniqueInput[]
+    delete?: LeadWhereUniqueInput | LeadWhereUniqueInput[]
+    connect?: LeadWhereUniqueInput | LeadWhereUniqueInput[]
+    update?: LeadUpdateWithWhereUniqueWithoutBatchInput | LeadUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: LeadUpdateManyWithWhereWithoutBatchInput | LeadUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: LeadScalarWhereInput | LeadScalarWhereInput[]
+  }
+
+  export type CallUncheckedUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<CallCreateWithoutBatchInput, CallUncheckedCreateWithoutBatchInput> | CallCreateWithoutBatchInput[] | CallUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: CallCreateOrConnectWithoutBatchInput | CallCreateOrConnectWithoutBatchInput[]
+    upsert?: CallUpsertWithWhereUniqueWithoutBatchInput | CallUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: CallCreateManyBatchInputEnvelope
+    set?: CallWhereUniqueInput | CallWhereUniqueInput[]
+    disconnect?: CallWhereUniqueInput | CallWhereUniqueInput[]
+    delete?: CallWhereUniqueInput | CallWhereUniqueInput[]
+    connect?: CallWhereUniqueInput | CallWhereUniqueInput[]
+    update?: CallUpdateWithWhereUniqueWithoutBatchInput | CallUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: CallUpdateManyWithWhereWithoutBatchInput | CallUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: CallScalarWhereInput | CallScalarWhereInput[]
+  }
+
   export type TenantCreateNestedOneWithoutLeadsInput = {
     create?: XOR<TenantCreateWithoutLeadsInput, TenantUncheckedCreateWithoutLeadsInput>
     connectOrCreate?: TenantCreateOrConnectWithoutLeadsInput
@@ -16631,6 +18996,12 @@ export namespace Prisma {
     create?: XOR<CampaignCreateWithoutLeadsInput, CampaignUncheckedCreateWithoutLeadsInput>
     connectOrCreate?: CampaignCreateOrConnectWithoutLeadsInput
     connect?: CampaignWhereUniqueInput
+  }
+
+  export type LeadBatchCreateNestedOneWithoutLeadsInput = {
+    create?: XOR<LeadBatchCreateWithoutLeadsInput, LeadBatchUncheckedCreateWithoutLeadsInput>
+    connectOrCreate?: LeadBatchCreateOrConnectWithoutLeadsInput
+    connect?: LeadBatchWhereUniqueInput
   }
 
   export type CallCreateNestedManyWithoutLeadInput = {
@@ -16665,6 +19036,16 @@ export namespace Prisma {
     upsert?: CampaignUpsertWithoutLeadsInput
     connect?: CampaignWhereUniqueInput
     update?: XOR<XOR<CampaignUpdateToOneWithWhereWithoutLeadsInput, CampaignUpdateWithoutLeadsInput>, CampaignUncheckedUpdateWithoutLeadsInput>
+  }
+
+  export type LeadBatchUpdateOneWithoutLeadsNestedInput = {
+    create?: XOR<LeadBatchCreateWithoutLeadsInput, LeadBatchUncheckedCreateWithoutLeadsInput>
+    connectOrCreate?: LeadBatchCreateOrConnectWithoutLeadsInput
+    upsert?: LeadBatchUpsertWithoutLeadsInput
+    disconnect?: LeadBatchWhereInput | boolean
+    delete?: LeadBatchWhereInput | boolean
+    connect?: LeadBatchWhereUniqueInput
+    update?: XOR<XOR<LeadBatchUpdateToOneWithWhereWithoutLeadsInput, LeadBatchUpdateWithoutLeadsInput>, LeadBatchUncheckedUpdateWithoutLeadsInput>
   }
 
   export type CallUpdateManyWithoutLeadNestedInput = {
@@ -16713,6 +19094,12 @@ export namespace Prisma {
     connect?: LeadWhereUniqueInput
   }
 
+  export type LeadBatchCreateNestedOneWithoutCallsInput = {
+    create?: XOR<LeadBatchCreateWithoutCallsInput, LeadBatchUncheckedCreateWithoutCallsInput>
+    connectOrCreate?: LeadBatchCreateOrConnectWithoutCallsInput
+    connect?: LeadBatchWhereUniqueInput
+  }
+
   export type CallAnalysisCreateNestedOneWithoutCallInput = {
     create?: XOR<CallAnalysisCreateWithoutCallInput, CallAnalysisUncheckedCreateWithoutCallInput>
     connectOrCreate?: CallAnalysisCreateOrConnectWithoutCallInput
@@ -16751,6 +19138,16 @@ export namespace Prisma {
     upsert?: LeadUpsertWithoutCallsInput
     connect?: LeadWhereUniqueInput
     update?: XOR<XOR<LeadUpdateToOneWithWhereWithoutCallsInput, LeadUpdateWithoutCallsInput>, LeadUncheckedUpdateWithoutCallsInput>
+  }
+
+  export type LeadBatchUpdateOneWithoutCallsNestedInput = {
+    create?: XOR<LeadBatchCreateWithoutCallsInput, LeadBatchUncheckedCreateWithoutCallsInput>
+    connectOrCreate?: LeadBatchCreateOrConnectWithoutCallsInput
+    upsert?: LeadBatchUpsertWithoutCallsInput
+    disconnect?: LeadBatchWhereInput | boolean
+    delete?: LeadBatchWhereInput | boolean
+    connect?: LeadBatchWhereUniqueInput
+    update?: XOR<XOR<LeadBatchUpdateToOneWithWhereWithoutCallsInput, LeadBatchUpdateWithoutCallsInput>, LeadBatchUncheckedUpdateWithoutCallsInput>
   }
 
   export type CallAnalysisUpdateOneWithoutCallNestedInput = {
@@ -17146,6 +19543,23 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type NestedEnumBatchStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.BatchStatus | EnumBatchStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBatchStatusFilter<$PrismaModel> | $Enums.BatchStatus
+  }
+
+  export type NestedEnumBatchStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BatchStatus | EnumBatchStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBatchStatusWithAggregatesFilter<$PrismaModel> | $Enums.BatchStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBatchStatusFilter<$PrismaModel>
+    _max?: NestedEnumBatchStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumLeadStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
     in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
@@ -17352,11 +19766,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.CampaignStatus
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
-    successLeads?: number
+    completedLeads?: number
     failedLeads?: number
-    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -17365,6 +19779,7 @@ export namespace Prisma {
     brochure?: BrochureCreateNestedOneWithoutCampaignsInput
     leads?: LeadCreateNestedManyWithoutCampaignInput
     calls?: CallCreateNestedManyWithoutCampaignInput
+    batches?: LeadBatchCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignUncheckedCreateWithoutTenantInput = {
@@ -17375,17 +19790,18 @@ export namespace Prisma {
     assistantId: string
     brochureId?: string | null
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
-    successLeads?: number
+    completedLeads?: number
     failedLeads?: number
-    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
     completedAt?: Date | string | null
     leads?: LeadUncheckedCreateNestedManyWithoutCampaignInput
     calls?: CallUncheckedCreateNestedManyWithoutCampaignInput
+    batches?: LeadBatchUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignCreateOrConnectWithoutTenantInput = {
@@ -17395,6 +19811,62 @@ export namespace Prisma {
 
   export type CampaignCreateManyTenantInputEnvelope = {
     data: CampaignCreateManyTenantInput | CampaignCreateManyTenantInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type LeadBatchCreateWithoutTenantInput = {
+    id?: string
+    bolnaBatchId?: string | null
+    status?: $Enums.BatchStatus
+    fileName?: string | null
+    originalFileUrl?: string | null
+    transformedCsvUrl?: string | null
+    totalLeads?: number
+    calledLeads?: number
+    completedLeads?: number
+    failedLeads?: number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: Date | string | null
+    bolnaScheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    campaign: CampaignCreateNestedOneWithoutBatchesInput
+    leads?: LeadCreateNestedManyWithoutBatchInput
+    calls?: CallCreateNestedManyWithoutBatchInput
+  }
+
+  export type LeadBatchUncheckedCreateWithoutTenantInput = {
+    id?: string
+    bolnaBatchId?: string | null
+    campaignId: string
+    status?: $Enums.BatchStatus
+    fileName?: string | null
+    originalFileUrl?: string | null
+    transformedCsvUrl?: string | null
+    totalLeads?: number
+    calledLeads?: number
+    completedLeads?: number
+    failedLeads?: number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: Date | string | null
+    bolnaScheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    leads?: LeadUncheckedCreateNestedManyWithoutBatchInput
+    calls?: CallUncheckedCreateNestedManyWithoutBatchInput
+  }
+
+  export type LeadBatchCreateOrConnectWithoutTenantInput = {
+    where: LeadBatchWhereUniqueInput
+    create: XOR<LeadBatchCreateWithoutTenantInput, LeadBatchUncheckedCreateWithoutTenantInput>
+  }
+
+  export type LeadBatchCreateManyTenantInputEnvelope = {
+    data: LeadBatchCreateManyTenantInput | LeadBatchCreateManyTenantInput[]
     skipDuplicates?: boolean
   }
 
@@ -17410,6 +19882,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     campaign: CampaignCreateNestedOneWithoutLeadsInput
+    batch?: LeadBatchCreateNestedOneWithoutLeadsInput
     calls?: CallCreateNestedManyWithoutLeadInput
   }
 
@@ -17422,6 +19895,7 @@ export namespace Prisma {
     status?: $Enums.LeadStatus
     doNotCall?: boolean
     campaignId: string
+    batchId?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -17448,12 +19922,14 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     campaign: CampaignCreateNestedOneWithoutCallsInput
     lead: LeadCreateNestedOneWithoutCallsInput
+    batch?: LeadBatchCreateNestedOneWithoutCallsInput
     callAnalysis?: CallAnalysisCreateNestedOneWithoutCallInput
   }
 
@@ -17462,6 +19938,7 @@ export namespace Prisma {
     bolnaCallId?: string | null
     campaignId: string
     leadId: string
+    batchId?: string | null
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
@@ -17469,6 +19946,7 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
@@ -17740,15 +20218,56 @@ export namespace Prisma {
     assistantId?: StringFilter<"Campaign"> | string
     brochureId?: StringNullableFilter<"Campaign"> | string | null
     variables?: JsonNullableFilter<"Campaign">
+    defaultRetryConfig?: JsonNullableFilter<"Campaign">
     totalLeads?: IntFilter<"Campaign"> | number
     calledLeads?: IntFilter<"Campaign"> | number
-    successLeads?: IntFilter<"Campaign"> | number
+    completedLeads?: IntFilter<"Campaign"> | number
     failedLeads?: IntFilter<"Campaign"> | number
-    scheduledAt?: DateTimeNullableFilter<"Campaign"> | Date | string | null
     createdAt?: DateTimeFilter<"Campaign"> | Date | string
     updatedAt?: DateTimeFilter<"Campaign"> | Date | string
     startedAt?: DateTimeNullableFilter<"Campaign"> | Date | string | null
     completedAt?: DateTimeNullableFilter<"Campaign"> | Date | string | null
+  }
+
+  export type LeadBatchUpsertWithWhereUniqueWithoutTenantInput = {
+    where: LeadBatchWhereUniqueInput
+    update: XOR<LeadBatchUpdateWithoutTenantInput, LeadBatchUncheckedUpdateWithoutTenantInput>
+    create: XOR<LeadBatchCreateWithoutTenantInput, LeadBatchUncheckedCreateWithoutTenantInput>
+  }
+
+  export type LeadBatchUpdateWithWhereUniqueWithoutTenantInput = {
+    where: LeadBatchWhereUniqueInput
+    data: XOR<LeadBatchUpdateWithoutTenantInput, LeadBatchUncheckedUpdateWithoutTenantInput>
+  }
+
+  export type LeadBatchUpdateManyWithWhereWithoutTenantInput = {
+    where: LeadBatchScalarWhereInput
+    data: XOR<LeadBatchUpdateManyMutationInput, LeadBatchUncheckedUpdateManyWithoutTenantInput>
+  }
+
+  export type LeadBatchScalarWhereInput = {
+    AND?: LeadBatchScalarWhereInput | LeadBatchScalarWhereInput[]
+    OR?: LeadBatchScalarWhereInput[]
+    NOT?: LeadBatchScalarWhereInput | LeadBatchScalarWhereInput[]
+    id?: StringFilter<"LeadBatch"> | string
+    bolnaBatchId?: StringNullableFilter<"LeadBatch"> | string | null
+    campaignId?: StringFilter<"LeadBatch"> | string
+    tenantId?: StringFilter<"LeadBatch"> | string
+    status?: EnumBatchStatusFilter<"LeadBatch"> | $Enums.BatchStatus
+    fileName?: StringNullableFilter<"LeadBatch"> | string | null
+    originalFileUrl?: StringNullableFilter<"LeadBatch"> | string | null
+    transformedCsvUrl?: StringNullableFilter<"LeadBatch"> | string | null
+    totalLeads?: IntFilter<"LeadBatch"> | number
+    calledLeads?: IntFilter<"LeadBatch"> | number
+    completedLeads?: IntFilter<"LeadBatch"> | number
+    failedLeads?: IntFilter<"LeadBatch"> | number
+    retryConfig?: JsonNullableFilter<"LeadBatch">
+    scheduledAt?: DateTimeNullableFilter<"LeadBatch"> | Date | string | null
+    bolnaScheduledAt?: DateTimeNullableFilter<"LeadBatch"> | Date | string | null
+    createdAt?: DateTimeFilter<"LeadBatch"> | Date | string
+    updatedAt?: DateTimeFilter<"LeadBatch"> | Date | string
+    startedAt?: DateTimeNullableFilter<"LeadBatch"> | Date | string | null
+    completedAt?: DateTimeNullableFilter<"LeadBatch"> | Date | string | null
   }
 
   export type LeadUpsertWithWhereUniqueWithoutTenantInput = {
@@ -17780,6 +20299,7 @@ export namespace Prisma {
     doNotCall?: BoolFilter<"Lead"> | boolean
     tenantId?: StringFilter<"Lead"> | string
     campaignId?: StringFilter<"Lead"> | string
+    batchId?: StringNullableFilter<"Lead"> | string | null
     metadata?: JsonNullableFilter<"Lead">
     createdAt?: DateTimeFilter<"Lead"> | Date | string
     updatedAt?: DateTimeFilter<"Lead"> | Date | string
@@ -17810,6 +20330,7 @@ export namespace Prisma {
     tenantId?: StringFilter<"Call"> | string
     campaignId?: StringFilter<"Call"> | string
     leadId?: StringFilter<"Call"> | string
+    batchId?: StringNullableFilter<"Call"> | string | null
     status?: EnumCallStatusFilter<"Call"> | $Enums.CallStatus
     duration?: IntNullableFilter<"Call"> | number | null
     cost?: FloatNullableFilter<"Call"> | number | null
@@ -17817,6 +20338,7 @@ export namespace Prisma {
     transcript?: StringNullableFilter<"Call"> | string | null
     transcriptMessages?: JsonNullableFilter<"Call">
     summary?: StringNullableFilter<"Call"> | string | null
+    callHistory?: JsonNullableFilter<"Call">
     startedAt?: DateTimeNullableFilter<"Call"> | Date | string | null
     endedAt?: DateTimeNullableFilter<"Call"> | Date | string | null
     createdAt?: DateTimeFilter<"Call"> | Date | string
@@ -17973,6 +20495,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
+    batches?: LeadBatchCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
     calls?: CallCreateNestedManyWithoutTenantInput
     assistants?: AssistantCreateNestedManyWithoutTenantInput
@@ -17989,6 +20512,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
+    batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
     assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
@@ -18021,6 +20545,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
+    batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
     calls?: CallUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUpdateManyWithoutTenantNestedInput
@@ -18037,6 +20562,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
+    batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
@@ -18054,6 +20580,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
+    batches?: LeadBatchCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
     calls?: CallCreateNestedManyWithoutTenantInput
     brochures?: BrochureCreateNestedManyWithoutTenantInput
@@ -18070,6 +20597,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
+    batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
     brochures?: BrochureUncheckedCreateNestedManyWithoutTenantInput
@@ -18087,11 +20615,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.CampaignStatus
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
-    successLeads?: number
+    completedLeads?: number
     failedLeads?: number
-    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -18100,6 +20628,7 @@ export namespace Prisma {
     brochure?: BrochureCreateNestedOneWithoutCampaignsInput
     leads?: LeadCreateNestedManyWithoutCampaignInput
     calls?: CallCreateNestedManyWithoutCampaignInput
+    batches?: LeadBatchCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignUncheckedCreateWithoutAssistantInput = {
@@ -18110,17 +20639,18 @@ export namespace Prisma {
     tenantId: string
     brochureId?: string | null
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
-    successLeads?: number
+    completedLeads?: number
     failedLeads?: number
-    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
     completedAt?: Date | string | null
     leads?: LeadUncheckedCreateNestedManyWithoutCampaignInput
     calls?: CallUncheckedCreateNestedManyWithoutCampaignInput
+    batches?: LeadBatchUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignCreateOrConnectWithoutAssistantInput = {
@@ -18154,6 +20684,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
+    batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
     calls?: CallUpdateManyWithoutTenantNestedInput
     brochures?: BrochureUpdateManyWithoutTenantNestedInput
@@ -18170,6 +20701,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
+    batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
     brochures?: BrochureUncheckedUpdateManyWithoutTenantNestedInput
@@ -18202,6 +20734,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
+    batches?: LeadBatchCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
     calls?: CallCreateNestedManyWithoutTenantInput
     assistants?: AssistantCreateNestedManyWithoutTenantInput
@@ -18218,6 +20751,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
+    batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
     assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
@@ -18235,11 +20769,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.CampaignStatus
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
-    successLeads?: number
+    completedLeads?: number
     failedLeads?: number
-    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -18248,6 +20782,7 @@ export namespace Prisma {
     assistant: AssistantCreateNestedOneWithoutCampaignsInput
     leads?: LeadCreateNestedManyWithoutCampaignInput
     calls?: CallCreateNestedManyWithoutCampaignInput
+    batches?: LeadBatchCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignUncheckedCreateWithoutBrochureInput = {
@@ -18258,17 +20793,18 @@ export namespace Prisma {
     tenantId: string
     assistantId: string
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
-    successLeads?: number
+    completedLeads?: number
     failedLeads?: number
-    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
     completedAt?: Date | string | null
     leads?: LeadUncheckedCreateNestedManyWithoutCampaignInput
     calls?: CallUncheckedCreateNestedManyWithoutCampaignInput
+    batches?: LeadBatchUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignCreateOrConnectWithoutBrochureInput = {
@@ -18302,6 +20838,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
+    batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
     calls?: CallUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUpdateManyWithoutTenantNestedInput
@@ -18318,6 +20855,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
+    batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
@@ -18349,6 +20887,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutTenantInput
+    batches?: LeadBatchCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
     calls?: CallCreateNestedManyWithoutTenantInput
     assistants?: AssistantCreateNestedManyWithoutTenantInput
@@ -18365,6 +20904,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutTenantInput
+    batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
     assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
@@ -18525,6 +21065,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     tenant: TenantCreateNestedOneWithoutLeadsInput
+    batch?: LeadBatchCreateNestedOneWithoutLeadsInput
     calls?: CallCreateNestedManyWithoutLeadInput
   }
 
@@ -18537,6 +21078,7 @@ export namespace Prisma {
     status?: $Enums.LeadStatus
     doNotCall?: boolean
     tenantId: string
+    batchId?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -18563,12 +21105,14 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tenant: TenantCreateNestedOneWithoutCallsInput
     lead: LeadCreateNestedOneWithoutCallsInput
+    batch?: LeadBatchCreateNestedOneWithoutCallsInput
     callAnalysis?: CallAnalysisCreateNestedOneWithoutCallInput
   }
 
@@ -18577,6 +21121,7 @@ export namespace Prisma {
     bolnaCallId?: string | null
     tenantId: string
     leadId: string
+    batchId?: string | null
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
@@ -18584,6 +21129,7 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
@@ -18598,6 +21144,62 @@ export namespace Prisma {
 
   export type CallCreateManyCampaignInputEnvelope = {
     data: CallCreateManyCampaignInput | CallCreateManyCampaignInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type LeadBatchCreateWithoutCampaignInput = {
+    id?: string
+    bolnaBatchId?: string | null
+    status?: $Enums.BatchStatus
+    fileName?: string | null
+    originalFileUrl?: string | null
+    transformedCsvUrl?: string | null
+    totalLeads?: number
+    calledLeads?: number
+    completedLeads?: number
+    failedLeads?: number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: Date | string | null
+    bolnaScheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    tenant: TenantCreateNestedOneWithoutBatchesInput
+    leads?: LeadCreateNestedManyWithoutBatchInput
+    calls?: CallCreateNestedManyWithoutBatchInput
+  }
+
+  export type LeadBatchUncheckedCreateWithoutCampaignInput = {
+    id?: string
+    bolnaBatchId?: string | null
+    tenantId: string
+    status?: $Enums.BatchStatus
+    fileName?: string | null
+    originalFileUrl?: string | null
+    transformedCsvUrl?: string | null
+    totalLeads?: number
+    calledLeads?: number
+    completedLeads?: number
+    failedLeads?: number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: Date | string | null
+    bolnaScheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    leads?: LeadUncheckedCreateNestedManyWithoutBatchInput
+    calls?: CallUncheckedCreateNestedManyWithoutBatchInput
+  }
+
+  export type LeadBatchCreateOrConnectWithoutCampaignInput = {
+    where: LeadBatchWhereUniqueInput
+    create: XOR<LeadBatchCreateWithoutCampaignInput, LeadBatchUncheckedCreateWithoutCampaignInput>
+  }
+
+  export type LeadBatchCreateManyCampaignInputEnvelope = {
+    data: LeadBatchCreateManyCampaignInput | LeadBatchCreateManyCampaignInput[]
     skipDuplicates?: boolean
   }
 
@@ -18621,6 +21223,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutTenantNestedInput
+    batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
     calls?: CallUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUpdateManyWithoutTenantNestedInput
@@ -18637,6 +21240,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutTenantNestedInput
+    batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
@@ -18824,6 +21428,336 @@ export namespace Prisma {
     data: XOR<CallUpdateManyMutationInput, CallUncheckedUpdateManyWithoutCampaignInput>
   }
 
+  export type LeadBatchUpsertWithWhereUniqueWithoutCampaignInput = {
+    where: LeadBatchWhereUniqueInput
+    update: XOR<LeadBatchUpdateWithoutCampaignInput, LeadBatchUncheckedUpdateWithoutCampaignInput>
+    create: XOR<LeadBatchCreateWithoutCampaignInput, LeadBatchUncheckedCreateWithoutCampaignInput>
+  }
+
+  export type LeadBatchUpdateWithWhereUniqueWithoutCampaignInput = {
+    where: LeadBatchWhereUniqueInput
+    data: XOR<LeadBatchUpdateWithoutCampaignInput, LeadBatchUncheckedUpdateWithoutCampaignInput>
+  }
+
+  export type LeadBatchUpdateManyWithWhereWithoutCampaignInput = {
+    where: LeadBatchScalarWhereInput
+    data: XOR<LeadBatchUpdateManyMutationInput, LeadBatchUncheckedUpdateManyWithoutCampaignInput>
+  }
+
+  export type TenantCreateWithoutBatchesInput = {
+    id?: string
+    name: string
+    email: string
+    apiKey?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserCreateNestedManyWithoutTenantInput
+    campaigns?: CampaignCreateNestedManyWithoutTenantInput
+    leads?: LeadCreateNestedManyWithoutTenantInput
+    calls?: CallCreateNestedManyWithoutTenantInput
+    assistants?: AssistantCreateNestedManyWithoutTenantInput
+    brochures?: BrochureCreateNestedManyWithoutTenantInput
+    callAnalyses?: CallAnalysisCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutBatchesInput = {
+    id?: string
+    name: string
+    email: string
+    apiKey?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserUncheckedCreateNestedManyWithoutTenantInput
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
+    leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
+    calls?: CallUncheckedCreateNestedManyWithoutTenantInput
+    assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
+    brochures?: BrochureUncheckedCreateNestedManyWithoutTenantInput
+    callAnalyses?: CallAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutBatchesInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutBatchesInput, TenantUncheckedCreateWithoutBatchesInput>
+  }
+
+  export type CampaignCreateWithoutBatchesInput = {
+    id?: string
+    name: string
+    description?: string | null
+    status?: $Enums.CampaignStatus
+    variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
+    totalLeads?: number
+    calledLeads?: number
+    completedLeads?: number
+    failedLeads?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    tenant: TenantCreateNestedOneWithoutCampaignsInput
+    assistant: AssistantCreateNestedOneWithoutCampaignsInput
+    brochure?: BrochureCreateNestedOneWithoutCampaignsInput
+    leads?: LeadCreateNestedManyWithoutCampaignInput
+    calls?: CallCreateNestedManyWithoutCampaignInput
+  }
+
+  export type CampaignUncheckedCreateWithoutBatchesInput = {
+    id?: string
+    name: string
+    description?: string | null
+    status?: $Enums.CampaignStatus
+    tenantId: string
+    assistantId: string
+    brochureId?: string | null
+    variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
+    totalLeads?: number
+    calledLeads?: number
+    completedLeads?: number
+    failedLeads?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    leads?: LeadUncheckedCreateNestedManyWithoutCampaignInput
+    calls?: CallUncheckedCreateNestedManyWithoutCampaignInput
+  }
+
+  export type CampaignCreateOrConnectWithoutBatchesInput = {
+    where: CampaignWhereUniqueInput
+    create: XOR<CampaignCreateWithoutBatchesInput, CampaignUncheckedCreateWithoutBatchesInput>
+  }
+
+  export type LeadCreateWithoutBatchInput = {
+    id?: string
+    name?: string | null
+    phone: string
+    email?: string | null
+    company?: string | null
+    status?: $Enums.LeadStatus
+    doNotCall?: boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutLeadsInput
+    campaign: CampaignCreateNestedOneWithoutLeadsInput
+    calls?: CallCreateNestedManyWithoutLeadInput
+  }
+
+  export type LeadUncheckedCreateWithoutBatchInput = {
+    id?: string
+    name?: string | null
+    phone: string
+    email?: string | null
+    company?: string | null
+    status?: $Enums.LeadStatus
+    doNotCall?: boolean
+    tenantId: string
+    campaignId: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    calls?: CallUncheckedCreateNestedManyWithoutLeadInput
+  }
+
+  export type LeadCreateOrConnectWithoutBatchInput = {
+    where: LeadWhereUniqueInput
+    create: XOR<LeadCreateWithoutBatchInput, LeadUncheckedCreateWithoutBatchInput>
+  }
+
+  export type LeadCreateManyBatchInputEnvelope = {
+    data: LeadCreateManyBatchInput | LeadCreateManyBatchInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CallCreateWithoutBatchInput = {
+    id?: string
+    bolnaCallId?: string | null
+    status?: $Enums.CallStatus
+    duration?: number | null
+    cost?: number | null
+    recording?: string | null
+    transcript?: string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
+    summary?: string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutCallsInput
+    campaign: CampaignCreateNestedOneWithoutCallsInput
+    lead: LeadCreateNestedOneWithoutCallsInput
+    callAnalysis?: CallAnalysisCreateNestedOneWithoutCallInput
+  }
+
+  export type CallUncheckedCreateWithoutBatchInput = {
+    id?: string
+    bolnaCallId?: string | null
+    tenantId: string
+    campaignId: string
+    leadId: string
+    status?: $Enums.CallStatus
+    duration?: number | null
+    cost?: number | null
+    recording?: string | null
+    transcript?: string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
+    summary?: string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    callAnalysis?: CallAnalysisUncheckedCreateNestedOneWithoutCallInput
+  }
+
+  export type CallCreateOrConnectWithoutBatchInput = {
+    where: CallWhereUniqueInput
+    create: XOR<CallCreateWithoutBatchInput, CallUncheckedCreateWithoutBatchInput>
+  }
+
+  export type CallCreateManyBatchInputEnvelope = {
+    data: CallCreateManyBatchInput | CallCreateManyBatchInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TenantUpsertWithoutBatchesInput = {
+    update: XOR<TenantUpdateWithoutBatchesInput, TenantUncheckedUpdateWithoutBatchesInput>
+    create: XOR<TenantCreateWithoutBatchesInput, TenantUncheckedCreateWithoutBatchesInput>
+    where?: TenantWhereInput
+  }
+
+  export type TenantUpdateToOneWithWhereWithoutBatchesInput = {
+    where?: TenantWhereInput
+    data: XOR<TenantUpdateWithoutBatchesInput, TenantUncheckedUpdateWithoutBatchesInput>
+  }
+
+  export type TenantUpdateWithoutBatchesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    apiKey?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUpdateManyWithoutTenantNestedInput
+    campaigns?: CampaignUpdateManyWithoutTenantNestedInput
+    leads?: LeadUpdateManyWithoutTenantNestedInput
+    calls?: CallUpdateManyWithoutTenantNestedInput
+    assistants?: AssistantUpdateManyWithoutTenantNestedInput
+    brochures?: BrochureUpdateManyWithoutTenantNestedInput
+    callAnalyses?: CallAnalysisUpdateManyWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutBatchesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    apiKey?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUncheckedUpdateManyWithoutTenantNestedInput
+    campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
+    calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
+    assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
+    brochures?: BrochureUncheckedUpdateManyWithoutTenantNestedInput
+    callAnalyses?: CallAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  }
+
+  export type CampaignUpsertWithoutBatchesInput = {
+    update: XOR<CampaignUpdateWithoutBatchesInput, CampaignUncheckedUpdateWithoutBatchesInput>
+    create: XOR<CampaignCreateWithoutBatchesInput, CampaignUncheckedCreateWithoutBatchesInput>
+    where?: CampaignWhereInput
+  }
+
+  export type CampaignUpdateToOneWithWhereWithoutBatchesInput = {
+    where?: CampaignWhereInput
+    data: XOR<CampaignUpdateWithoutBatchesInput, CampaignUncheckedUpdateWithoutBatchesInput>
+  }
+
+  export type CampaignUpdateWithoutBatchesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
+    totalLeads?: IntFieldUpdateOperationsInput | number
+    calledLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
+    failedLeads?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tenant?: TenantUpdateOneRequiredWithoutCampaignsNestedInput
+    assistant?: AssistantUpdateOneRequiredWithoutCampaignsNestedInput
+    brochure?: BrochureUpdateOneWithoutCampaignsNestedInput
+    leads?: LeadUpdateManyWithoutCampaignNestedInput
+    calls?: CallUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type CampaignUncheckedUpdateWithoutBatchesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    tenantId?: StringFieldUpdateOperationsInput | string
+    assistantId?: StringFieldUpdateOperationsInput | string
+    brochureId?: NullableStringFieldUpdateOperationsInput | string | null
+    variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
+    totalLeads?: IntFieldUpdateOperationsInput | number
+    calledLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
+    failedLeads?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leads?: LeadUncheckedUpdateManyWithoutCampaignNestedInput
+    calls?: CallUncheckedUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type LeadUpsertWithWhereUniqueWithoutBatchInput = {
+    where: LeadWhereUniqueInput
+    update: XOR<LeadUpdateWithoutBatchInput, LeadUncheckedUpdateWithoutBatchInput>
+    create: XOR<LeadCreateWithoutBatchInput, LeadUncheckedCreateWithoutBatchInput>
+  }
+
+  export type LeadUpdateWithWhereUniqueWithoutBatchInput = {
+    where: LeadWhereUniqueInput
+    data: XOR<LeadUpdateWithoutBatchInput, LeadUncheckedUpdateWithoutBatchInput>
+  }
+
+  export type LeadUpdateManyWithWhereWithoutBatchInput = {
+    where: LeadScalarWhereInput
+    data: XOR<LeadUpdateManyMutationInput, LeadUncheckedUpdateManyWithoutBatchInput>
+  }
+
+  export type CallUpsertWithWhereUniqueWithoutBatchInput = {
+    where: CallWhereUniqueInput
+    update: XOR<CallUpdateWithoutBatchInput, CallUncheckedUpdateWithoutBatchInput>
+    create: XOR<CallCreateWithoutBatchInput, CallUncheckedCreateWithoutBatchInput>
+  }
+
+  export type CallUpdateWithWhereUniqueWithoutBatchInput = {
+    where: CallWhereUniqueInput
+    data: XOR<CallUpdateWithoutBatchInput, CallUncheckedUpdateWithoutBatchInput>
+  }
+
+  export type CallUpdateManyWithWhereWithoutBatchInput = {
+    where: CallScalarWhereInput
+    data: XOR<CallUpdateManyMutationInput, CallUncheckedUpdateManyWithoutBatchInput>
+  }
+
   export type TenantCreateWithoutLeadsInput = {
     id?: string
     name: string
@@ -18834,6 +21768,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
+    batches?: LeadBatchCreateNestedManyWithoutTenantInput
     calls?: CallCreateNestedManyWithoutTenantInput
     assistants?: AssistantCreateNestedManyWithoutTenantInput
     brochures?: BrochureCreateNestedManyWithoutTenantInput
@@ -18850,6 +21785,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
+    batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
     assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
     brochures?: BrochureUncheckedCreateNestedManyWithoutTenantInput
@@ -18867,11 +21803,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.CampaignStatus
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
-    successLeads?: number
+    completedLeads?: number
     failedLeads?: number
-    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -18880,6 +21816,7 @@ export namespace Prisma {
     assistant: AssistantCreateNestedOneWithoutCampaignsInput
     brochure?: BrochureCreateNestedOneWithoutCampaignsInput
     calls?: CallCreateNestedManyWithoutCampaignInput
+    batches?: LeadBatchCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignUncheckedCreateWithoutLeadsInput = {
@@ -18891,21 +21828,73 @@ export namespace Prisma {
     assistantId: string
     brochureId?: string | null
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
-    successLeads?: number
+    completedLeads?: number
     failedLeads?: number
-    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
     completedAt?: Date | string | null
     calls?: CallUncheckedCreateNestedManyWithoutCampaignInput
+    batches?: LeadBatchUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignCreateOrConnectWithoutLeadsInput = {
     where: CampaignWhereUniqueInput
     create: XOR<CampaignCreateWithoutLeadsInput, CampaignUncheckedCreateWithoutLeadsInput>
+  }
+
+  export type LeadBatchCreateWithoutLeadsInput = {
+    id?: string
+    bolnaBatchId?: string | null
+    status?: $Enums.BatchStatus
+    fileName?: string | null
+    originalFileUrl?: string | null
+    transformedCsvUrl?: string | null
+    totalLeads?: number
+    calledLeads?: number
+    completedLeads?: number
+    failedLeads?: number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: Date | string | null
+    bolnaScheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    tenant: TenantCreateNestedOneWithoutBatchesInput
+    campaign: CampaignCreateNestedOneWithoutBatchesInput
+    calls?: CallCreateNestedManyWithoutBatchInput
+  }
+
+  export type LeadBatchUncheckedCreateWithoutLeadsInput = {
+    id?: string
+    bolnaBatchId?: string | null
+    campaignId: string
+    tenantId: string
+    status?: $Enums.BatchStatus
+    fileName?: string | null
+    originalFileUrl?: string | null
+    transformedCsvUrl?: string | null
+    totalLeads?: number
+    calledLeads?: number
+    completedLeads?: number
+    failedLeads?: number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: Date | string | null
+    bolnaScheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    calls?: CallUncheckedCreateNestedManyWithoutBatchInput
+  }
+
+  export type LeadBatchCreateOrConnectWithoutLeadsInput = {
+    where: LeadBatchWhereUniqueInput
+    create: XOR<LeadBatchCreateWithoutLeadsInput, LeadBatchUncheckedCreateWithoutLeadsInput>
   }
 
   export type CallCreateWithoutLeadInput = {
@@ -18918,12 +21907,14 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tenant: TenantCreateNestedOneWithoutCallsInput
     campaign: CampaignCreateNestedOneWithoutCallsInput
+    batch?: LeadBatchCreateNestedOneWithoutCallsInput
     callAnalysis?: CallAnalysisCreateNestedOneWithoutCallInput
   }
 
@@ -18932,6 +21923,7 @@ export namespace Prisma {
     bolnaCallId?: string | null
     tenantId: string
     campaignId: string
+    batchId?: string | null
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
@@ -18939,6 +21931,7 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
@@ -18977,6 +21970,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
+    batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     calls?: CallUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUpdateManyWithoutTenantNestedInput
     brochures?: BrochureUpdateManyWithoutTenantNestedInput
@@ -18993,6 +21987,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
+    batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
     brochures?: BrochureUncheckedUpdateManyWithoutTenantNestedInput
@@ -19016,11 +22011,11 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
-    successLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
-    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -19029,6 +22024,7 @@ export namespace Prisma {
     assistant?: AssistantUpdateOneRequiredWithoutCampaignsNestedInput
     brochure?: BrochureUpdateOneWithoutCampaignsNestedInput
     calls?: CallUpdateManyWithoutCampaignNestedInput
+    batches?: LeadBatchUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateWithoutLeadsInput = {
@@ -19040,16 +22036,74 @@ export namespace Prisma {
     assistantId?: StringFieldUpdateOperationsInput | string
     brochureId?: NullableStringFieldUpdateOperationsInput | string | null
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
-    successLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
-    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     calls?: CallUncheckedUpdateManyWithoutCampaignNestedInput
+    batches?: LeadBatchUncheckedUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type LeadBatchUpsertWithoutLeadsInput = {
+    update: XOR<LeadBatchUpdateWithoutLeadsInput, LeadBatchUncheckedUpdateWithoutLeadsInput>
+    create: XOR<LeadBatchCreateWithoutLeadsInput, LeadBatchUncheckedCreateWithoutLeadsInput>
+    where?: LeadBatchWhereInput
+  }
+
+  export type LeadBatchUpdateToOneWithWhereWithoutLeadsInput = {
+    where?: LeadBatchWhereInput
+    data: XOR<LeadBatchUpdateWithoutLeadsInput, LeadBatchUncheckedUpdateWithoutLeadsInput>
+  }
+
+  export type LeadBatchUpdateWithoutLeadsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bolnaBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    fileName?: NullableStringFieldUpdateOperationsInput | string | null
+    originalFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    transformedCsvUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    totalLeads?: IntFieldUpdateOperationsInput | number
+    calledLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
+    failedLeads?: IntFieldUpdateOperationsInput | number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bolnaScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tenant?: TenantUpdateOneRequiredWithoutBatchesNestedInput
+    campaign?: CampaignUpdateOneRequiredWithoutBatchesNestedInput
+    calls?: CallUpdateManyWithoutBatchNestedInput
+  }
+
+  export type LeadBatchUncheckedUpdateWithoutLeadsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bolnaBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    campaignId?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    fileName?: NullableStringFieldUpdateOperationsInput | string | null
+    originalFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    transformedCsvUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    totalLeads?: IntFieldUpdateOperationsInput | number
+    calledLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
+    failedLeads?: IntFieldUpdateOperationsInput | number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bolnaScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    calls?: CallUncheckedUpdateManyWithoutBatchNestedInput
   }
 
   export type CallUpsertWithWhereUniqueWithoutLeadInput = {
@@ -19078,6 +22132,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
+    batches?: LeadBatchCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
     assistants?: AssistantCreateNestedManyWithoutTenantInput
     brochures?: BrochureCreateNestedManyWithoutTenantInput
@@ -19094,6 +22149,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
+    batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
     assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
     brochures?: BrochureUncheckedCreateNestedManyWithoutTenantInput
@@ -19111,11 +22167,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.CampaignStatus
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
-    successLeads?: number
+    completedLeads?: number
     failedLeads?: number
-    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -19124,6 +22180,7 @@ export namespace Prisma {
     assistant: AssistantCreateNestedOneWithoutCampaignsInput
     brochure?: BrochureCreateNestedOneWithoutCampaignsInput
     leads?: LeadCreateNestedManyWithoutCampaignInput
+    batches?: LeadBatchCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignUncheckedCreateWithoutCallsInput = {
@@ -19135,16 +22192,17 @@ export namespace Prisma {
     assistantId: string
     brochureId?: string | null
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
-    successLeads?: number
+    completedLeads?: number
     failedLeads?: number
-    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
     completedAt?: Date | string | null
     leads?: LeadUncheckedCreateNestedManyWithoutCampaignInput
+    batches?: LeadBatchUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignCreateOrConnectWithoutCallsInput = {
@@ -19165,6 +22223,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     tenant: TenantCreateNestedOneWithoutLeadsInput
     campaign: CampaignCreateNestedOneWithoutLeadsInput
+    batch?: LeadBatchCreateNestedOneWithoutLeadsInput
   }
 
   export type LeadUncheckedCreateWithoutCallsInput = {
@@ -19177,6 +22236,7 @@ export namespace Prisma {
     doNotCall?: boolean
     tenantId: string
     campaignId: string
+    batchId?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19185,6 +22245,57 @@ export namespace Prisma {
   export type LeadCreateOrConnectWithoutCallsInput = {
     where: LeadWhereUniqueInput
     create: XOR<LeadCreateWithoutCallsInput, LeadUncheckedCreateWithoutCallsInput>
+  }
+
+  export type LeadBatchCreateWithoutCallsInput = {
+    id?: string
+    bolnaBatchId?: string | null
+    status?: $Enums.BatchStatus
+    fileName?: string | null
+    originalFileUrl?: string | null
+    transformedCsvUrl?: string | null
+    totalLeads?: number
+    calledLeads?: number
+    completedLeads?: number
+    failedLeads?: number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: Date | string | null
+    bolnaScheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    tenant: TenantCreateNestedOneWithoutBatchesInput
+    campaign: CampaignCreateNestedOneWithoutBatchesInput
+    leads?: LeadCreateNestedManyWithoutBatchInput
+  }
+
+  export type LeadBatchUncheckedCreateWithoutCallsInput = {
+    id?: string
+    bolnaBatchId?: string | null
+    campaignId: string
+    tenantId: string
+    status?: $Enums.BatchStatus
+    fileName?: string | null
+    originalFileUrl?: string | null
+    transformedCsvUrl?: string | null
+    totalLeads?: number
+    calledLeads?: number
+    completedLeads?: number
+    failedLeads?: number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: Date | string | null
+    bolnaScheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    leads?: LeadUncheckedCreateNestedManyWithoutBatchInput
+  }
+
+  export type LeadBatchCreateOrConnectWithoutCallsInput = {
+    where: LeadBatchWhereUniqueInput
+    create: XOR<LeadBatchCreateWithoutCallsInput, LeadBatchUncheckedCreateWithoutCallsInput>
   }
 
   export type CallAnalysisCreateWithoutCallInput = {
@@ -19253,6 +22364,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
+    batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUpdateManyWithoutTenantNestedInput
     brochures?: BrochureUpdateManyWithoutTenantNestedInput
@@ -19269,6 +22381,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
+    batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
     brochures?: BrochureUncheckedUpdateManyWithoutTenantNestedInput
@@ -19292,11 +22405,11 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
-    successLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
-    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -19305,6 +22418,7 @@ export namespace Prisma {
     assistant?: AssistantUpdateOneRequiredWithoutCampaignsNestedInput
     brochure?: BrochureUpdateOneWithoutCampaignsNestedInput
     leads?: LeadUpdateManyWithoutCampaignNestedInput
+    batches?: LeadBatchUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateWithoutCallsInput = {
@@ -19316,16 +22430,17 @@ export namespace Prisma {
     assistantId?: StringFieldUpdateOperationsInput | string
     brochureId?: NullableStringFieldUpdateOperationsInput | string | null
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
-    successLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
-    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leads?: LeadUncheckedUpdateManyWithoutCampaignNestedInput
+    batches?: LeadBatchUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type LeadUpsertWithoutCallsInput = {
@@ -19352,6 +22467,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tenant?: TenantUpdateOneRequiredWithoutLeadsNestedInput
     campaign?: CampaignUpdateOneRequiredWithoutLeadsNestedInput
+    batch?: LeadBatchUpdateOneWithoutLeadsNestedInput
   }
 
   export type LeadUncheckedUpdateWithoutCallsInput = {
@@ -19364,9 +22480,67 @@ export namespace Prisma {
     doNotCall?: BoolFieldUpdateOperationsInput | boolean
     tenantId?: StringFieldUpdateOperationsInput | string
     campaignId?: StringFieldUpdateOperationsInput | string
+    batchId?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LeadBatchUpsertWithoutCallsInput = {
+    update: XOR<LeadBatchUpdateWithoutCallsInput, LeadBatchUncheckedUpdateWithoutCallsInput>
+    create: XOR<LeadBatchCreateWithoutCallsInput, LeadBatchUncheckedCreateWithoutCallsInput>
+    where?: LeadBatchWhereInput
+  }
+
+  export type LeadBatchUpdateToOneWithWhereWithoutCallsInput = {
+    where?: LeadBatchWhereInput
+    data: XOR<LeadBatchUpdateWithoutCallsInput, LeadBatchUncheckedUpdateWithoutCallsInput>
+  }
+
+  export type LeadBatchUpdateWithoutCallsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bolnaBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    fileName?: NullableStringFieldUpdateOperationsInput | string | null
+    originalFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    transformedCsvUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    totalLeads?: IntFieldUpdateOperationsInput | number
+    calledLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
+    failedLeads?: IntFieldUpdateOperationsInput | number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bolnaScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tenant?: TenantUpdateOneRequiredWithoutBatchesNestedInput
+    campaign?: CampaignUpdateOneRequiredWithoutBatchesNestedInput
+    leads?: LeadUpdateManyWithoutBatchNestedInput
+  }
+
+  export type LeadBatchUncheckedUpdateWithoutCallsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bolnaBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    campaignId?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    fileName?: NullableStringFieldUpdateOperationsInput | string | null
+    originalFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    transformedCsvUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    totalLeads?: IntFieldUpdateOperationsInput | number
+    calledLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
+    failedLeads?: IntFieldUpdateOperationsInput | number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bolnaScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leads?: LeadUncheckedUpdateManyWithoutBatchNestedInput
   }
 
   export type CallAnalysisUpsertWithoutCallInput = {
@@ -19430,6 +22604,7 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
@@ -19437,6 +22612,7 @@ export namespace Prisma {
     tenant: TenantCreateNestedOneWithoutCallsInput
     campaign: CampaignCreateNestedOneWithoutCallsInput
     lead: LeadCreateNestedOneWithoutCallsInput
+    batch?: LeadBatchCreateNestedOneWithoutCallsInput
   }
 
   export type CallUncheckedCreateWithoutCallAnalysisInput = {
@@ -19445,6 +22621,7 @@ export namespace Prisma {
     tenantId: string
     campaignId: string
     leadId: string
+    batchId?: string | null
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
@@ -19452,6 +22629,7 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
@@ -19473,6 +22651,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
+    batches?: LeadBatchCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
     calls?: CallCreateNestedManyWithoutTenantInput
     assistants?: AssistantCreateNestedManyWithoutTenantInput
@@ -19489,6 +22668,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
+    batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
     assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
@@ -19521,6 +22701,7 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19528,6 +22709,7 @@ export namespace Prisma {
     tenant?: TenantUpdateOneRequiredWithoutCallsNestedInput
     campaign?: CampaignUpdateOneRequiredWithoutCallsNestedInput
     lead?: LeadUpdateOneRequiredWithoutCallsNestedInput
+    batch?: LeadBatchUpdateOneWithoutCallsNestedInput
   }
 
   export type CallUncheckedUpdateWithoutCallAnalysisInput = {
@@ -19536,6 +22718,7 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     campaignId?: StringFieldUpdateOperationsInput | string
     leadId?: StringFieldUpdateOperationsInput | string
+    batchId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -19543,6 +22726,7 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19570,6 +22754,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
+    batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
     calls?: CallUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUpdateManyWithoutTenantNestedInput
@@ -19586,6 +22771,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
+    batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
     assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
@@ -19610,11 +22796,32 @@ export namespace Prisma {
     assistantId: string
     brochureId?: string | null
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
-    successLeads?: number
+    completedLeads?: number
     failedLeads?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+  }
+
+  export type LeadBatchCreateManyTenantInput = {
+    id?: string
+    bolnaBatchId?: string | null
+    campaignId: string
+    status?: $Enums.BatchStatus
+    fileName?: string | null
+    originalFileUrl?: string | null
+    transformedCsvUrl?: string | null
+    totalLeads?: number
+    calledLeads?: number
+    completedLeads?: number
+    failedLeads?: number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
     scheduledAt?: Date | string | null
+    bolnaScheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -19630,6 +22837,7 @@ export namespace Prisma {
     status?: $Enums.LeadStatus
     doNotCall?: boolean
     campaignId: string
+    batchId?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19640,6 +22848,7 @@ export namespace Prisma {
     bolnaCallId?: string | null
     campaignId: string
     leadId: string
+    batchId?: string | null
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
@@ -19647,6 +22856,7 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
@@ -19770,11 +22980,11 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
-    successLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
-    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -19783,6 +22993,7 @@ export namespace Prisma {
     brochure?: BrochureUpdateOneWithoutCampaignsNestedInput
     leads?: LeadUpdateManyWithoutCampaignNestedInput
     calls?: CallUpdateManyWithoutCampaignNestedInput
+    batches?: LeadBatchUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateWithoutTenantInput = {
@@ -19793,17 +23004,18 @@ export namespace Prisma {
     assistantId?: StringFieldUpdateOperationsInput | string
     brochureId?: NullableStringFieldUpdateOperationsInput | string | null
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
-    successLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
-    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leads?: LeadUncheckedUpdateManyWithoutCampaignNestedInput
     calls?: CallUncheckedUpdateManyWithoutCampaignNestedInput
+    batches?: LeadBatchUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateManyWithoutTenantInput = {
@@ -19814,11 +23026,78 @@ export namespace Prisma {
     assistantId?: StringFieldUpdateOperationsInput | string
     brochureId?: NullableStringFieldUpdateOperationsInput | string | null
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
-    successLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type LeadBatchUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bolnaBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    fileName?: NullableStringFieldUpdateOperationsInput | string | null
+    originalFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    transformedCsvUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    totalLeads?: IntFieldUpdateOperationsInput | number
+    calledLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
+    failedLeads?: IntFieldUpdateOperationsInput | number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bolnaScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    campaign?: CampaignUpdateOneRequiredWithoutBatchesNestedInput
+    leads?: LeadUpdateManyWithoutBatchNestedInput
+    calls?: CallUpdateManyWithoutBatchNestedInput
+  }
+
+  export type LeadBatchUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bolnaBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    campaignId?: StringFieldUpdateOperationsInput | string
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    fileName?: NullableStringFieldUpdateOperationsInput | string | null
+    originalFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    transformedCsvUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    totalLeads?: IntFieldUpdateOperationsInput | number
+    calledLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
+    failedLeads?: IntFieldUpdateOperationsInput | number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bolnaScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leads?: LeadUncheckedUpdateManyWithoutBatchNestedInput
+    calls?: CallUncheckedUpdateManyWithoutBatchNestedInput
+  }
+
+  export type LeadBatchUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bolnaBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    campaignId?: StringFieldUpdateOperationsInput | string
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    fileName?: NullableStringFieldUpdateOperationsInput | string | null
+    originalFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    transformedCsvUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    totalLeads?: IntFieldUpdateOperationsInput | number
+    calledLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
+    failedLeads?: IntFieldUpdateOperationsInput | number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bolnaScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -19837,6 +23116,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     campaign?: CampaignUpdateOneRequiredWithoutLeadsNestedInput
+    batch?: LeadBatchUpdateOneWithoutLeadsNestedInput
     calls?: CallUpdateManyWithoutLeadNestedInput
   }
 
@@ -19849,6 +23129,7 @@ export namespace Prisma {
     status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     doNotCall?: BoolFieldUpdateOperationsInput | boolean
     campaignId?: StringFieldUpdateOperationsInput | string
+    batchId?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19864,6 +23145,7 @@ export namespace Prisma {
     status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     doNotCall?: BoolFieldUpdateOperationsInput | boolean
     campaignId?: StringFieldUpdateOperationsInput | string
+    batchId?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19879,12 +23161,14 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     campaign?: CampaignUpdateOneRequiredWithoutCallsNestedInput
     lead?: LeadUpdateOneRequiredWithoutCallsNestedInput
+    batch?: LeadBatchUpdateOneWithoutCallsNestedInput
     callAnalysis?: CallAnalysisUpdateOneWithoutCallNestedInput
   }
 
@@ -19893,6 +23177,7 @@ export namespace Prisma {
     bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     campaignId?: StringFieldUpdateOperationsInput | string
     leadId?: StringFieldUpdateOperationsInput | string
+    batchId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -19900,6 +23185,7 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19912,6 +23198,7 @@ export namespace Prisma {
     bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     campaignId?: StringFieldUpdateOperationsInput | string
     leadId?: StringFieldUpdateOperationsInput | string
+    batchId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -19919,6 +23206,7 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20180,11 +23468,11 @@ export namespace Prisma {
     tenantId: string
     brochureId?: string | null
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
-    successLeads?: number
+    completedLeads?: number
     failedLeads?: number
-    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -20197,11 +23485,11 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
-    successLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
-    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -20210,6 +23498,7 @@ export namespace Prisma {
     brochure?: BrochureUpdateOneWithoutCampaignsNestedInput
     leads?: LeadUpdateManyWithoutCampaignNestedInput
     calls?: CallUpdateManyWithoutCampaignNestedInput
+    batches?: LeadBatchUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateWithoutAssistantInput = {
@@ -20220,17 +23509,18 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     brochureId?: NullableStringFieldUpdateOperationsInput | string | null
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
-    successLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
-    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leads?: LeadUncheckedUpdateManyWithoutCampaignNestedInput
     calls?: CallUncheckedUpdateManyWithoutCampaignNestedInput
+    batches?: LeadBatchUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateManyWithoutAssistantInput = {
@@ -20241,11 +23531,11 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     brochureId?: NullableStringFieldUpdateOperationsInput | string | null
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
-    successLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
-    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -20260,11 +23550,11 @@ export namespace Prisma {
     tenantId: string
     assistantId: string
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: number
     calledLeads?: number
-    successLeads?: number
+    completedLeads?: number
     failedLeads?: number
-    scheduledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -20277,11 +23567,11 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
-    successLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
-    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -20290,6 +23580,7 @@ export namespace Prisma {
     assistant?: AssistantUpdateOneRequiredWithoutCampaignsNestedInput
     leads?: LeadUpdateManyWithoutCampaignNestedInput
     calls?: CallUpdateManyWithoutCampaignNestedInput
+    batches?: LeadBatchUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateWithoutBrochureInput = {
@@ -20300,17 +23591,18 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     assistantId?: StringFieldUpdateOperationsInput | string
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
-    successLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
-    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leads?: LeadUncheckedUpdateManyWithoutCampaignNestedInput
     calls?: CallUncheckedUpdateManyWithoutCampaignNestedInput
+    batches?: LeadBatchUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateManyWithoutBrochureInput = {
@@ -20321,11 +23613,11 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     assistantId?: StringFieldUpdateOperationsInput | string
     variables?: NullableJsonNullValueInput | InputJsonValue
+    defaultRetryConfig?: NullableJsonNullValueInput | InputJsonValue
     totalLeads?: IntFieldUpdateOperationsInput | number
     calledLeads?: IntFieldUpdateOperationsInput | number
-    successLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
     failedLeads?: IntFieldUpdateOperationsInput | number
-    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -20341,6 +23633,7 @@ export namespace Prisma {
     status?: $Enums.LeadStatus
     doNotCall?: boolean
     tenantId: string
+    batchId?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -20351,6 +23644,7 @@ export namespace Prisma {
     bolnaCallId?: string | null
     tenantId: string
     leadId: string
+    batchId?: string | null
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
@@ -20358,10 +23652,32 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type LeadBatchCreateManyCampaignInput = {
+    id?: string
+    bolnaBatchId?: string | null
+    tenantId: string
+    status?: $Enums.BatchStatus
+    fileName?: string | null
+    originalFileUrl?: string | null
+    transformedCsvUrl?: string | null
+    totalLeads?: number
+    calledLeads?: number
+    completedLeads?: number
+    failedLeads?: number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: Date | string | null
+    bolnaScheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
   }
 
   export type LeadUpdateWithoutCampaignInput = {
@@ -20376,6 +23692,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tenant?: TenantUpdateOneRequiredWithoutLeadsNestedInput
+    batch?: LeadBatchUpdateOneWithoutLeadsNestedInput
     calls?: CallUpdateManyWithoutLeadNestedInput
   }
 
@@ -20388,6 +23705,7 @@ export namespace Prisma {
     status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     doNotCall?: BoolFieldUpdateOperationsInput | boolean
     tenantId?: StringFieldUpdateOperationsInput | string
+    batchId?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20403,6 +23721,7 @@ export namespace Prisma {
     status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     doNotCall?: BoolFieldUpdateOperationsInput | boolean
     tenantId?: StringFieldUpdateOperationsInput | string
+    batchId?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20418,12 +23737,14 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tenant?: TenantUpdateOneRequiredWithoutCallsNestedInput
     lead?: LeadUpdateOneRequiredWithoutCallsNestedInput
+    batch?: LeadBatchUpdateOneWithoutCallsNestedInput
     callAnalysis?: CallAnalysisUpdateOneWithoutCallNestedInput
   }
 
@@ -20432,6 +23753,7 @@ export namespace Prisma {
     bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     tenantId?: StringFieldUpdateOperationsInput | string
     leadId?: StringFieldUpdateOperationsInput | string
+    batchId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -20439,6 +23761,7 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20451,6 +23774,7 @@ export namespace Prisma {
     bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     tenantId?: StringFieldUpdateOperationsInput | string
     leadId?: StringFieldUpdateOperationsInput | string
+    batchId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -20458,6 +23782,218 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LeadBatchUpdateWithoutCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bolnaBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    fileName?: NullableStringFieldUpdateOperationsInput | string | null
+    originalFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    transformedCsvUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    totalLeads?: IntFieldUpdateOperationsInput | number
+    calledLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
+    failedLeads?: IntFieldUpdateOperationsInput | number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bolnaScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tenant?: TenantUpdateOneRequiredWithoutBatchesNestedInput
+    leads?: LeadUpdateManyWithoutBatchNestedInput
+    calls?: CallUpdateManyWithoutBatchNestedInput
+  }
+
+  export type LeadBatchUncheckedUpdateWithoutCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bolnaBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    tenantId?: StringFieldUpdateOperationsInput | string
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    fileName?: NullableStringFieldUpdateOperationsInput | string | null
+    originalFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    transformedCsvUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    totalLeads?: IntFieldUpdateOperationsInput | number
+    calledLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
+    failedLeads?: IntFieldUpdateOperationsInput | number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bolnaScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leads?: LeadUncheckedUpdateManyWithoutBatchNestedInput
+    calls?: CallUncheckedUpdateManyWithoutBatchNestedInput
+  }
+
+  export type LeadBatchUncheckedUpdateManyWithoutCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bolnaBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    tenantId?: StringFieldUpdateOperationsInput | string
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    fileName?: NullableStringFieldUpdateOperationsInput | string | null
+    originalFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    transformedCsvUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    totalLeads?: IntFieldUpdateOperationsInput | number
+    calledLeads?: IntFieldUpdateOperationsInput | number
+    completedLeads?: IntFieldUpdateOperationsInput | number
+    failedLeads?: IntFieldUpdateOperationsInput | number
+    retryConfig?: NullableJsonNullValueInput | InputJsonValue
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bolnaScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type LeadCreateManyBatchInput = {
+    id?: string
+    name?: string | null
+    phone: string
+    email?: string | null
+    company?: string | null
+    status?: $Enums.LeadStatus
+    doNotCall?: boolean
+    tenantId: string
+    campaignId: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CallCreateManyBatchInput = {
+    id?: string
+    bolnaCallId?: string | null
+    tenantId: string
+    campaignId: string
+    leadId: string
+    status?: $Enums.CallStatus
+    duration?: number | null
+    cost?: number | null
+    recording?: string | null
+    transcript?: string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
+    summary?: string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LeadUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    doNotCall?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutLeadsNestedInput
+    campaign?: CampaignUpdateOneRequiredWithoutLeadsNestedInput
+    calls?: CallUpdateManyWithoutLeadNestedInput
+  }
+
+  export type LeadUncheckedUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    doNotCall?: BoolFieldUpdateOperationsInput | boolean
+    tenantId?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    calls?: CallUncheckedUpdateManyWithoutLeadNestedInput
+  }
+
+  export type LeadUncheckedUpdateManyWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    doNotCall?: BoolFieldUpdateOperationsInput | boolean
+    tenantId?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    recording?: NullableStringFieldUpdateOperationsInput | string | null
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutCallsNestedInput
+    campaign?: CampaignUpdateOneRequiredWithoutCallsNestedInput
+    lead?: LeadUpdateOneRequiredWithoutCallsNestedInput
+    callAnalysis?: CallAnalysisUpdateOneWithoutCallNestedInput
+  }
+
+  export type CallUncheckedUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
+    tenantId?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    leadId?: StringFieldUpdateOperationsInput | string
+    status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    recording?: NullableStringFieldUpdateOperationsInput | string | null
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    callAnalysis?: CallAnalysisUncheckedUpdateOneWithoutCallNestedInput
+  }
+
+  export type CallUncheckedUpdateManyWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
+    tenantId?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    leadId?: StringFieldUpdateOperationsInput | string
+    status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    recording?: NullableStringFieldUpdateOperationsInput | string | null
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20469,6 +24005,7 @@ export namespace Prisma {
     bolnaCallId?: string | null
     tenantId: string
     campaignId: string
+    batchId?: string | null
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
@@ -20476,6 +24013,7 @@ export namespace Prisma {
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: Date | string | null
     endedAt?: Date | string | null
     createdAt?: Date | string
@@ -20492,12 +24030,14 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tenant?: TenantUpdateOneRequiredWithoutCallsNestedInput
     campaign?: CampaignUpdateOneRequiredWithoutCallsNestedInput
+    batch?: LeadBatchUpdateOneWithoutCallsNestedInput
     callAnalysis?: CallAnalysisUpdateOneWithoutCallNestedInput
   }
 
@@ -20506,6 +24046,7 @@ export namespace Prisma {
     bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     tenantId?: StringFieldUpdateOperationsInput | string
     campaignId?: StringFieldUpdateOperationsInput | string
+    batchId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -20513,6 +24054,7 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20525,6 +24067,7 @@ export namespace Prisma {
     bolnaCallId?: NullableStringFieldUpdateOperationsInput | string | null
     tenantId?: StringFieldUpdateOperationsInput | string
     campaignId?: StringFieldUpdateOperationsInput | string
+    batchId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -20532,6 +24075,7 @@ export namespace Prisma {
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
     summary?: NullableStringFieldUpdateOperationsInput | string | null
+    callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

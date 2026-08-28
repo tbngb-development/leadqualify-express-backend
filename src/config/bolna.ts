@@ -1,10 +1,14 @@
-// src/config/bolna.ts
-
 import axios, { AxiosInstance } from "axios";
+import FormData from "form-data";
 import {
   BolnaAgentResponse,
   BolnaCallPayload,
   BolnaCallResponse,
+  BolnaBatchResponse,
+  BolnaBatchScheduleResponse,
+  BolnaBatchStatus,
+  BolnaExecution,
+  RetryConfig,
 } from "../types/bolna.types";
 
 const BOLNA_BASE_URL = "https://api.bolna.ai";
@@ -71,7 +75,7 @@ export const normalizePhoneNumber = (
   return `+${cleaned}`;
 };
 
-// ─── Bolna Client — only what we actually use ─────────────────────────────────
+// ─── Bolna Client ─────────────────────────────────────────────────────────────
 
 export const bolnaClient = {
   // ── Calls ──────────────────────────────────────────────────────────────────
@@ -101,19 +105,160 @@ export const bolnaClient = {
 
   // ── Agents — only verify, no create/update/delete ─────────────────────────
   agents: {
-    // Used to verify the agent_id exists in Bolna before saving
     verify: async (agentId: string): Promise<BolnaAgentResponse> => {
       const http = createHttpClient();
+      const response = await http.get<BolnaAgentResponse>(
+        `/v2/agent/${agentId}`,
+      );
+      return response.data;
+    },
 
-      const response = await http.get<BolnaAgentResponse>(`/v2/agent/${agentId}`);
+    list: async (): Promise<BolnaAgentResponse[]> => {
+      const http = createHttpClient();
+      const response = await http.get<BolnaAgentResponse[]>("/v2/agent/all");
+      return response.data;
+    },
+  },
+
+  // ── V1 Batches (NEW IMPLEMENTATION) ────────────────────────────────────────
+  batches: {
+    /**
+     * Creates a campaign batch on Bolna by uploading our normalized CSV asset.
+     * Webhook URL must direct to our incoming API gateway interface.
+     */
+    create: async (params: {
+      agentId: string;
+      csvBuffer: Buffer;
+      fileName: string;
+      retryConfig?: RetryConfig;
+      webhookUrl?: string;
+      fromPhoneNumbers?: string[];
+    }): Promise<BolnaBatchResponse> => {
+      const apiKey = process.env.BOLNA_API_KEY;
+      if (!apiKey) throw new Error("BOLNA_API_KEY not configured.");
+
+      const form = new FormData();
+      form.append("agent_id", params.agentId);
+      form.append("file", params.csvBuffer, {
+        filename: params.fileName,
+        contentType: "text/csv",
+      });
+
+      if (params.webhookUrl) {
+        form.append("webhook_url", params.webhookUrl);
+      }
+
+      if (params.fromPhoneNumbers && params.fromPhoneNumbers.length > 0) {
+        params.fromPhoneNumbers.forEach((phone) => {
+          form.append("from_phone_numbers", normalizePhoneNumber(phone));
+        });
+      }
+
+      if (params.retryConfig && params.retryConfig.enabled) {
+        const payloadRetry = {
+          enabled: true,
+          max_retries: params.retryConfig.max_retries,
+          retry_on_statuses: params.retryConfig.retry_on_statuses || [
+            "no-answer",
+            "busy",
+            "failed",
+          ],
+          retry_on_voicemail: params.retryConfig.retry_on_voicemail || false,
+          retry_intervals_minutes: params.retryConfig
+            .retry_intervals_minutes || [15, 30],
+        };
+        form.append("retry_config", JSON.stringify(payloadRetry));
+      }
+
+      const response = await axios.post<BolnaBatchResponse>(
+        `${BOLNA_BASE_URL}/batches`,
+        form,
+        {
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            ...form.getHeaders(),
+          },
+          maxBodyLength: Infinity,
+          maxContentLength: Infinity,
+        },
+      );
 
       return response.data;
     },
 
-    // List all agents in Bolna dashboard — useful for dropdown in frontend
-    list: async (): Promise<BolnaAgentResponse[]> => {
+    /**
+     * Schedules a batch to run on a targeted date.
+     * Uses numeric UTC offset formats to prevent 500 rejection crashes.
+     */
+    schedule: async (
+      bolnaBatchId: string,
+      scheduledAt: string, // ISO 8601 with timezone (e.g. "2026-06-23T18:30:00+05:30")
+    ): Promise<BolnaBatchScheduleResponse> => {
       const http = createHttpClient();
-      const response = await http.get<BolnaAgentResponse[]>("/v2/agent/all");
+
+      const form = new FormData();
+      form.append("scheduled_at", scheduledAt);
+
+      const apiKey = process.env.BOLNA_API_KEY;
+      const response = await axios.post<BolnaBatchScheduleResponse>(
+        `${BOLNA_BASE_URL}/batches/${bolnaBatchId}/schedule`,
+        form,
+        {
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            ...form.getHeaders(),
+          },
+        },
+      );
+
+      return response.data;
+    },
+
+    /**
+     * Stops a currently running batch immediately on the Bolna telephony node.
+     */
+    stop: async (
+      bolnaBatchId: string,
+    ): Promise<{ message: string; state: "stopped" }> => {
+      const http = createHttpClient();
+      const response = await http.post<{ message: string; state: "stopped" }>(
+        `/batches/${bolnaBatchId}/stop`,
+      );
+      return response.data;
+    },
+
+    /**
+     * Queries batch configurations and current metrics directly from Bolna.
+     */
+    get: async (bolnaBatchId: string): Promise<BolnaBatchStatus> => {
+      const http = createHttpClient();
+      const response = await http.get<BolnaBatchStatus>(
+        `/batches/${bolnaBatchId}`,
+      );
+      return response.data;
+    },
+
+    /**
+     * Lists current executions (individual calls) inside a batch.
+     */
+    getExecutions: async (bolnaBatchId: string): Promise<BolnaExecution[]> => {
+      const http = createHttpClient();
+      const response = await http.get<BolnaExecution[]>(
+        `/batches/${bolnaBatchId}/executions`,
+      );
+      return response.data;
+    },
+
+    /**
+     * Deletes a batch resource definition.
+     */
+    delete: async (
+      bolnaBatchId: string,
+    ): Promise<{ message: string; state: "deleted" }> => {
+      const http = createHttpClient();
+      const response = await http.delete<{ message: string; state: "deleted" }>(
+        `/batches/${bolnaBatchId}`,
+      );
       return response.data;
     },
   },

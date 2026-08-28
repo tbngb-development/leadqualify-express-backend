@@ -1,10 +1,9 @@
-// src/types/bolna.types.ts
-
 export interface BolnaCallPayload {
   agent_id: string;
   recipient_phone_number: string;
   user_data?: Record<string, string>;
   scheduled_at?: string;
+  from_phone_number?: string;
 }
 
 export interface BolnaCallResponse {
@@ -40,16 +39,96 @@ export interface BolnaCallResponse {
   };
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// V1 AUTO-RETRY SCHEMAS
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface RetryConfig {
+  enabled: boolean;
+  max_retries: number; // Maximum retry attempts (1-3)
+  retry_on_statuses?: Array<"no-answer" | "busy" | "failed">;
+  retry_on_voicemail?: boolean;
+  retry_intervals_minutes?: number[];
+}
+
+export interface BolnaBatchResponse {
+  batch_id: string;
+  state: "created";
+}
+
+export interface BolnaBatchScheduleResponse {
+  message: string;
+  state: string; // Returns: "scheduled at <timestamp>"
+}
+
+export interface BolnaBatchStatus {
+  batch_id: string;
+  humanized_created_at: string;
+  created_at: string;
+  updated_at: string;
+  status:
+    | "created"
+    | "scheduled"
+    | "running"
+    | "completed"
+    | "stopped"
+    | "failed";
+  scheduled_at?: string;
+  from_phone_numbers?: string[];
+  file_name?: string;
+  valid_contacts?: number;
+  total_contacts?: number;
+  execution_status?: Record<string, number>;
+}
+
+export interface BolnaExecution {
+  id: string;
+  agent_id: string;
+  batch_id?: string;
+  conversation_duration: number;
+  total_cost: number;
+  status: string;
+  error_message?: string | null;
+  answered_by_voice_mail?: boolean;
+  transcript?: string;
+  created_at: string;
+  updated_at: string;
+  telephony_data?: {
+    duration: string;
+    to_number: string;
+    from_number: string;
+    recording_url?: string;
+    provider_call_id?: string;
+  };
+  extracted_data?: Record<string, any> | null;
+  context_details?: {
+    recipient_data?: Record<string, string>;
+  };
+  batch_run_details?: {
+    status: string;
+    created_at: string;
+    updated_at: string;
+    retried: number;
+  };
+}
+
+export interface CallHistoryItem {
+  attempt: number;
+  bolnaCallId: string;
+  status: string;
+  duration?: number | null;
+  cost?: number | null;
+  timestamp: string;
+  errorMessage?: string | null;
+}
+
+// Existing Assistant, Task and Prompt Configuration structures remain unmodified below...
 export interface BolnaCreateAgentPayload {
   agent_name: string;
   agent_welcome_message: string;
   agent_type: string;
   tasks: BolnaTask[];
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// LLM CONFIG
-// ─────────────────────────────────────────────────────────────────────────────
 
 export interface BolnaLLMConfig {
   agent_flow_type: string;
@@ -69,10 +148,6 @@ export interface BolnaLLMConfig {
   request_json: boolean;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// ROUTES
-// ─────────────────────────────────────────────────────────────────────────────
-
 export interface BolnaRoute {
   route_name: string;
   utterances: string[];
@@ -85,20 +160,12 @@ export interface BolnaRoutesConfig {
   routes: BolnaRoute[];
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// LLM AGENT
-// ─────────────────────────────────────────────────────────────────────────────
-
 export interface BolnaLLMAgent {
   agent_type: string;
   agent_flow_type: string;
   routes: BolnaRoutesConfig | null;
   llm_config: BolnaLLMConfig;
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// SYNTHESIZER
-// ─────────────────────────────────────────────────────────────────────────────
 
 export interface BolnaSynthesizerProviderConfig {
   voice: string;
@@ -114,10 +181,6 @@ export interface BolnaSynthesizer {
   audio_format: string;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// TRANSCRIBER
-// ─────────────────────────────────────────────────────────────────────────────
-
 export interface BolnaTranscriber {
   provider: string;
   model: string;
@@ -128,18 +191,10 @@ export interface BolnaTranscriber {
   endpointing: number;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// INPUT / OUTPUT
-// ─────────────────────────────────────────────────────────────────────────────
-
 export interface BolnaIOConfig {
   provider: string;
   format: string;
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// TOOLS CONFIG
-// ─────────────────────────────────────────────────────────────────────────────
 
 export interface BolnaToolsConfig {
   llm_agent: BolnaLLMAgent;
@@ -151,17 +206,9 @@ export interface BolnaToolsConfig {
   multilingual_config: unknown | null;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// TOOLCHAIN
-// ─────────────────────────────────────────────────────────────────────────────
-
 export interface BolnaToolchain {
   pipelines: string[][];
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// TASK CONFIG
-// ─────────────────────────────────────────────────────────────────────────────
 
 export interface BolnaTaskConfig {
   hangup_after_silence: number;
@@ -180,19 +227,11 @@ export interface BolnaTaskConfig {
   disallow_unknown_numbers: boolean;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// TASK
-// ─────────────────────────────────────────────────────────────────────────────
-
 export interface BolnaTask {
   tools_config: BolnaToolsConfig;
   toolchain: BolnaToolchain;
   task_config: BolnaTaskConfig;
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// INGEST SOURCE CONFIG
-// ─────────────────────────────────────────────────────────────────────────────
 
 export interface BolnaIngestSourceConfig {
   source_type: string;
@@ -200,10 +239,6 @@ export interface BolnaIngestSourceConfig {
   source_auth_token: string | null;
   source_name: string | null;
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// AGENT PROMPTS
-// ─────────────────────────────────────────────────────────────────────────────
 
 export interface BolnaTaskPrompt {
   system_prompt: string;
@@ -214,10 +249,6 @@ export interface BolnaAgentPrompts {
   [taskKey: string]: BolnaTaskPrompt;
   task_1: BolnaTaskPrompt;
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// MAIN AGENT RESPONSE
-// ─────────────────────────────────────────────────────────────────────────────
 
 export interface BolnaAgentResponse {
   id: string;
@@ -231,9 +262,6 @@ export interface BolnaAgentResponse {
   agent_prompts: BolnaAgentPrompts;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// BOLNA EXTRACTION — per-field shape returned by Bolna AI
-// ─────────────────────────────────────────────────────────────────────────────
 export enum BolnaDataSection {
   CALL_OUTCOME = "Call Outcome",
   LEAD_QUALIFICATION = "Lead Qualification",
@@ -281,10 +309,6 @@ export interface BolnaExtractedData {
     call_summary?: BolnaExtractedField;
   };
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// FLAT PARSED OUTPUT — what we store in CallAnalysis model
-// ─────────────────────────────────────────────────────────────────────────────
 
 export interface ParsedCallAnalysis {
   disposition: string | null;

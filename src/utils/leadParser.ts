@@ -4,7 +4,7 @@ import fs from "fs";
 import path from "path";
 
 export interface LeadRow {
-  name: string | null; // <─── Updated to allow null
+  name: string | null;
   phone: string;
   email?: string;
   company?: string;
@@ -16,12 +16,37 @@ const sanitizePhone = (raw: string): string => {
 
   const cleaned = raw.trim();
 
-  // Keep "+" if present at start, then digits only
   if (cleaned.startsWith("+")) {
     return "+" + cleaned.slice(1).replace(/\D/g, "");
   }
 
-  return cleaned.replace(/\D/g, ""); // digits only, normalization happens at call time
+  return cleaned.replace(/\D/g, "");
+};
+
+// ─── V1: Indian Phone Validator ──────────────────────────────────────────────
+/**
+ * Validates that a sanitized phone number belongs to the Indian telecom space.
+ *
+ * Accepted formats after sanitization:
+ *   +91XXXXXXXXXX  (13 chars with +)
+ *   91XXXXXXXXXX   (12 digits)
+ *   XXXXXXXXXX     (10 digits — will be normalized later)
+ *
+ * Returns true if the number is Indian, false otherwise.
+ */
+export const isIndianPhone = (sanitizedPhone: string): boolean => {
+  if (!sanitizedPhone) return false;
+
+  const digits = sanitizedPhone.replace("+", "");
+
+  // 10-digit bare Indian mobile
+  if (digits.length === 10) return true;
+
+  // 12-digit with 91 prefix
+  if (digits.length === 12 && digits.startsWith("91")) return true;
+
+  // Anything else is non-Indian
+  return false;
 };
 
 // ─── Normalize a raw row from any source ──────────────────────────────────────
@@ -40,7 +65,6 @@ const normalizeRow = (row: Record<string, unknown>): LeadRow => {
     str(row["FullName"]);
 
   return {
-    // Store exactly as uploaded; null if missing/empty
     name: rawName ?? null,
 
     phone: sanitizePhone(
@@ -52,6 +76,8 @@ const normalizeRow = (row: Record<string, unknown>): LeadRow => {
         str(row["Mobile"]) ||
         str(row["contact"]) ||
         str(row["Contact"]) ||
+        str(row["contact_number"]) ||
+        str(row["Contact Number"]) ||
         "",
     ),
 
@@ -83,7 +109,7 @@ const parseCSVFile = (filePath: string): LeadRow[] => {
     columns: true,
     skip_empty_lines: true,
     trim: true,
-    bom: true, // Handle BOM character in some CSV exports
+    bom: true,
   }) as Record<string, string>[];
 
   return records.map(normalizeRow);
@@ -93,12 +119,11 @@ const parseCSVFile = (filePath: string): LeadRow[] => {
 const parseExcelFile = (filePath: string): LeadRow[] => {
   const workbook = XLSX.readFile(filePath, {
     type: "file",
-    cellText: true, // Read cells as text
-    cellDates: false, // Keep dates as strings
-    raw: false, // Format values (numbers as strings, etc.)
+    cellText: true,
+    cellDates: false,
+    raw: false,
   });
 
-  // Use the first sheet
   const sheetName = workbook.SheetNames[0];
   if (!sheetName) {
     throw new Error("Excel file has no sheets");
@@ -109,10 +134,9 @@ const parseExcelFile = (filePath: string): LeadRow[] => {
     throw new Error(`Sheet "${sheetName}" could not be read`);
   }
 
-  // Convert sheet to JSON — header row becomes keys
   const records = XLSX.utils.sheet_to_json<Record<string, unknown>>(worksheet, {
-    defval: "", // Default value for empty cells
-    raw: false, // All values as formatted strings
+    defval: "",
+    raw: false,
     blankrows: false,
   });
 
