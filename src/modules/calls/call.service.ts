@@ -1,11 +1,7 @@
 // src/modules/calls/call.service.ts
 
 import prisma from "../../config/database";
-import {
-  CallStatus,
-  Disposition,
-  LeadTemperature,
-} from "../../generated/prisma";
+import { Disposition } from "../../generated/prisma";
 
 // ─── Qualifying dispositions (mirrors dashboard constants) ────────────────────
 const QUALIFYING_DISPOSITIONS: Disposition[] = [
@@ -26,6 +22,7 @@ export class CallService {
       status?: string;
       disposition?: string;
       leadTemperature?: string;
+      locationMatch?: string;
       search?: string;
       dateFrom?: string;
       dateTo?: string;
@@ -41,6 +38,7 @@ export class CallService {
       status,
       disposition,
       leadTemperature,
+      locationMatch,
       search,
       dateFrom,
       dateTo,
@@ -90,6 +88,15 @@ export class CallService {
         .filter(Boolean);
       callAnalysisWhere.leadTemperature =
         temps.length > 1 ? { in: temps } : temps[0];
+    }
+    
+    if (locationMatch) {
+      const matches = locationMatch
+        .split(",")
+        .map((m) => m.trim())
+        .filter(Boolean);
+      callAnalysisWhere.locationMatch =
+        matches.length > 1 ? { in: matches } : matches[0];
     }
 
     if (Object.keys(callAnalysisWhere).length > 0) {

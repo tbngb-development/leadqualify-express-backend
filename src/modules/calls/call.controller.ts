@@ -17,6 +17,7 @@ export const list = async (
       status,
       disposition,
       leadTemperature,
+      locationMatch,
       search,
       dateFrom,
       dateTo,
@@ -32,6 +33,7 @@ export const list = async (
       status: status ? String(status) : undefined,
       disposition: disposition ? String(disposition) : undefined,
       leadTemperature: leadTemperature ? String(leadTemperature) : undefined,
+      locationMatch: locationMatch ? String(locationMatch) : undefined,
       search: search ? String(search) : undefined, // <─── ADDED
       dateFrom: dateFrom ? String(dateFrom) : undefined,
       dateTo: dateTo ? String(dateTo) : undefined,
@@ -46,6 +48,7 @@ export const list = async (
     next(error);
   }
 };
+
 export const get = async (
   req: AuthRequest,
   res: Response,
