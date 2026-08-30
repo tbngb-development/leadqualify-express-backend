@@ -9,19 +9,19 @@ datasource db {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// TENANT
+// AUTH & MULTI-TENANCY
 // ─────────────────────────────────────────────────────────────────────────────
 
 model Tenant {
   id        String   @id @default(uuid())
   name      String
   email     String   @unique
-  apiKey    String   @unique @default(uuid())
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  users        User[]
+  memberships  TenantUser[]
+  apiKeys      ApiKey[]
   campaigns    Campaign[]
   batches      LeadBatch[]
   leads        Lead[]
@@ -29,29 +29,77 @@ model Tenant {
   assistants   Assistant[]
   brochures    Brochure[]
   callAnalyses CallAnalysis[]
-}
 
-// ─────────────────────────────────────────────────────────────────────────────
-// USER
-// ─────────────────────────────────────────────────────────────────────────────
+  @@index([email])
+}
 
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
   password  String
   name      String
-  role      Role     @default(USER)
-  tenantId  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  tenant Tenant @relation(fields: [tenantId], references: [id])
+  memberships   TenantUser[]
+  platformAdmin PlatformAdmin?
+  refreshTokens RefreshToken[]
 }
 
-enum Role {
-  SUPER_ADMIN
+model TenantUser {
+  id        String     @id @default(uuid())
+  userId    String
+  tenantId  String
+  role      TenantRole @default(USER)
+  createdAt DateTime   @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, tenantId])
+  @@index([tenantId])
+}
+
+enum TenantRole {
+  OWNER
   ADMIN
   USER
+}
+
+model PlatformAdmin {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ApiKey {
+  id         String    @id @default(uuid())
+  tenantId   String
+  name       String
+  keyHash    String    @unique
+  lastUsedAt DateTime?
+  expiresAt  DateTime?
+  isActive   Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+}
+
+model RefreshToken {
+  id        String    @id @default(uuid())
+  tokenHash String    @unique
+  userId    String
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -157,7 +205,7 @@ model Campaign {
   assistantId        String
   brochureId         String?
   variables          Json?
-  defaultRetryConfig Json? // Campaign level defaults for all its batches
+  defaultRetryConfig Json?
   totalLeads         Int            @default(0)
   calledLeads        Int            @default(0)
   completedLeads     Int            @default(0)
@@ -185,7 +233,7 @@ enum CampaignStatus {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// LEAD BATCH (NEW V1 MODEL)
+// LEAD BATCH
 // ─────────────────────────────────────────────────────────────────────────────
 
 model LeadBatch {
@@ -201,7 +249,7 @@ model LeadBatch {
   calledLeads       Int         @default(0)
   completedLeads    Int         @default(0)
   failedLeads       Int         @default(0)
-  retryConfig       Json? // JSON: RetryConfig shape
+  retryConfig       Json?
   scheduledAt       DateTime?
   bolnaScheduledAt  DateTime?
   createdAt         DateTime    @default(now())
@@ -242,7 +290,7 @@ model Lead {
   doNotCall  Boolean    @default(false)
   tenantId   String
   campaignId String
-  batchId    String? // Nullable to ensure zero migration disruption
+  batchId    String?
   metadata   Json?
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
@@ -252,7 +300,7 @@ model Lead {
   batch    LeadBatch? @relation(fields: [batchId], references: [id], onDelete: Cascade)
   calls    Call[]
 
-  @@unique([phone, campaignId]) // Unique constraint per campaign is maintained
+  @@unique([phone, campaignId])
   @@index([tenantId])
   @@index([campaignId])
   @@index([batchId])
@@ -274,11 +322,11 @@ enum LeadStatus {
 
 model Call {
   id                 String     @id @default(uuid())
-  bolnaCallId        String?    @unique // Stores the latest execution_id
+  bolnaCallId        String?    @unique
   tenantId           String
   campaignId         String
   leadId             String
-  batchId            String? // Linked to the batch context
+  batchId            String?
   status             CallStatus @default(PENDING)
   duration           Int?
   cost               Float?
@@ -286,7 +334,7 @@ model Call {
   transcript         String?
   transcriptMessages Json?
   summary            String?
-  callHistory        Json? // JSON: callHistory shape tracking retries
+  callHistory        Json?
   startedAt          DateTime?
   endedAt            DateTime?
   createdAt          DateTime   @default(now())
@@ -347,10 +395,6 @@ model CallAnalysis {
   @@index([disposition])
   @@index([leadTemperature])
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// CALL ANALYSIS ENUMS
-// ─────────────────────────────────────────────────────────────────────────────
 
 enum Disposition {
   INTERESTED_SEND_DETAILS
