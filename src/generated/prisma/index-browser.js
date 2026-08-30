@@ -125,7 +125,6 @@ exports.Prisma.TenantScalarFieldEnum = {
   id: 'id',
   name: 'name',
   email: 'email',
-  apiKey: 'apiKey',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -136,10 +135,42 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   name: 'name',
-  role: 'role',
-  tenantId: 'tenantId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TenantUserScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  tenantId: 'tenantId',
+  role: 'role',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.PlatformAdminScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ApiKeyScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  name: 'name',
+  keyHash: 'keyHash',
+  lastUsedAt: 'lastUsedAt',
+  expiresAt: 'expiresAt',
+  isActive: 'isActive',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.RefreshTokenScalarFieldEnum = {
+  id: 'id',
+  tokenHash: 'tokenHash',
+  userId: 'userId',
+  expiresAt: 'expiresAt',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.AssistantScalarFieldEnum = {
@@ -324,18 +355,18 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+
 exports.Prisma.JsonNullValueFilter = {
   DbNull: Prisma.DbNull,
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
 };
-
-exports.Prisma.NullsOrder = {
-  first: 'first',
-  last: 'last'
-};
-exports.Role = exports.$Enums.Role = {
-  SUPER_ADMIN: 'SUPER_ADMIN',
+exports.TenantRole = exports.$Enums.TenantRole = {
+  OWNER: 'OWNER',
   ADMIN: 'ADMIN',
   USER: 'USER'
 };
@@ -446,6 +477,10 @@ exports.ExtractionFlag = exports.$Enums.ExtractionFlag = {
 exports.Prisma.ModelName = {
   Tenant: 'Tenant',
   User: 'User',
+  TenantUser: 'TenantUser',
+  PlatformAdmin: 'PlatformAdmin',
+  ApiKey: 'ApiKey',
+  RefreshToken: 'RefreshToken',
   Assistant: 'Assistant',
   Brochure: 'Brochure',
   Campaign: 'Campaign',
