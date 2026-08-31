@@ -25,7 +25,6 @@ export class AdminLeadController {
       (req.body?.tenantId as string) ??
       ((req as AuthRequest).user as TenantAuthContext)?.tenantId;
 
-    console.log("tenant id: ", tenantId);
 
     if (!tenantId) {
       throw new TenantBadRequestError(AdminMessages.TENANT_ID_REQUIRED);
@@ -39,11 +38,8 @@ export class AdminLeadController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      console.log("req: ", req.url);
-      console.log("req: ", req.params?.tenantId);
       const tenantId = this.resolveTenantId(req);
       const query = req.query as unknown as AdminListLeadsQuery;
-      console.log("lead tenant id: ", tenantId);
 
       const data = await this.listLeadsUseCase.execute({
         tenantId,
