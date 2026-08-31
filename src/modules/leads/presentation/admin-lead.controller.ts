@@ -1,6 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
 import type { AuthRequest, TenantAuthContext } from "../../../shared/types";
-import type { ListLeadsQuery, GetLeadsStatsQuery } from "./lead.schema";
 import { sendSuccess } from "../../../shared/utils/response";
 import { AdminMessages } from "../../../shared/constants/messages";
 import { param } from "../../../shared/utils/paramHelper";
@@ -8,6 +7,10 @@ import type { ListLeadsUseCase } from "../application/use-cases/list-leads.use-c
 import type { GetLeadUseCase } from "../application/use-cases/get-lead.use-case";
 import type { GetLeadStatsUseCase } from "../application/use-cases/get-lead-stats.use-case";
 import { TenantBadRequestError } from "../../tenants/domain/tenant.errors";
+import type {
+  AdminGetLeadsStatsQuery,
+  AdminListLeadsQuery,
+} from "./lead.schema";
 
 export class AdminLeadController {
   constructor(
@@ -22,6 +25,8 @@ export class AdminLeadController {
       (req.body?.tenantId as string) ??
       ((req as AuthRequest).user as TenantAuthContext)?.tenantId;
 
+    console.log("tenant id: ", tenantId);
+
     if (!tenantId) {
       throw new TenantBadRequestError(AdminMessages.TENANT_ID_REQUIRED);
     }
@@ -34,8 +39,11 @@ export class AdminLeadController {
     next: NextFunction,
   ): Promise<void> => {
     try {
+      console.log("req: ", req.url);
+      console.log("req: ", req.params?.tenantId);
       const tenantId = this.resolveTenantId(req);
-      const query = req.query as unknown as ListLeadsQuery;
+      const query = req.query as unknown as AdminListLeadsQuery;
+      console.log("lead tenant id: ", tenantId);
 
       const data = await this.listLeadsUseCase.execute({
         tenantId,
@@ -80,7 +88,7 @@ export class AdminLeadController {
   ): Promise<void> => {
     try {
       const tenantId = this.resolveTenantId(req);
-      const query = req.query as unknown as GetLeadsStatsQuery;
+      const query = req.query as unknown as AdminGetLeadsStatsQuery;
       const data = await this.getLeadStatsUseCase.execute(
         tenantId,
         query.campaignId,

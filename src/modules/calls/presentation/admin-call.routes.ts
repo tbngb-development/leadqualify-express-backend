@@ -3,7 +3,10 @@ import type { AdminCallController } from "./admin-call.controller";
 import type { AuthenticateMiddleware } from "../../../shared/middleware/authenticate";
 import type { AuthorizeMiddleware } from "../../../shared/middleware/authorize";
 import { validateQuery } from "../../../shared/middleware/validate";
-import { listCallsQuerySchema, getCallStatsQuerySchema } from "./call.schema";
+import {
+  adminGetCallStatsQuerySchema,
+  adminListCallsQuerySchema,
+} from "./call.schema";
 
 export function buildAdminCallRoutes(
   controller: AdminCallController,
@@ -15,12 +18,13 @@ export function buildAdminCallRoutes(
   router.use(authenticate.admin());
   router.use(authorize.platformAdmin());
 
+  // Use the admin-specific schemas that allow tenantId
   router.get(
     "/stats",
-    validateQuery(getCallStatsQuerySchema),
+    validateQuery(adminGetCallStatsQuerySchema),
     controller.stats,
   );
-  router.get("/", validateQuery(listCallsQuerySchema), controller.list);
+  router.get("/", validateQuery(adminListCallsQuerySchema), controller.list);
   router.get("/:id/transcript", controller.getTranscript);
   router.get("/:id", controller.get);
 

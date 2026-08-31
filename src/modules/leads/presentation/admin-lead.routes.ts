@@ -3,8 +3,10 @@ import type { AdminLeadController } from "./admin-lead.controller";
 import type { AuthenticateMiddleware } from "../../../shared/middleware/authenticate";
 import type { AuthorizeMiddleware } from "../../../shared/middleware/authorize";
 import { validateQuery } from "../../../shared/middleware/validate";
-import { listLeadsQuerySchema, getLeadsStatsQuerySchema } from "./lead.schema";
-
+import {
+  adminGetLeadsStatsQuerySchema,
+  adminListLeadsQuerySchema,
+} from "./lead.schema";
 export function buildAdminLeadRoutes(
   controller: AdminLeadController,
   authenticate: AuthenticateMiddleware,
@@ -15,12 +17,13 @@ export function buildAdminLeadRoutes(
   router.use(authenticate.admin());
   router.use(authorize.platformAdmin());
 
+  // Use the admin-specific schemas that allow tenantId
   router.get(
     "/stats",
-    validateQuery(getLeadsStatsQuerySchema),
+    validateQuery(adminGetLeadsStatsQuerySchema),
     controller.stats,
   );
-  router.get("/", validateQuery(listLeadsQuerySchema), controller.list);
+  router.get("/", validateQuery(adminListLeadsQuerySchema), controller.list);
   router.get("/:id", controller.get);
 
   return router;

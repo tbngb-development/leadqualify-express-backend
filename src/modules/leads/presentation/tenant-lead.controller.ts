@@ -1,11 +1,11 @@
 import type { Request, Response, NextFunction } from "express";
 import type { AuthRequest, TenantAuthContext } from "../../../shared/types";
-import type { ListLeadsQuery, GetLeadsStatsQuery } from "./lead.schema";
 import { sendSuccess } from "../../../shared/utils/response";
 import { param } from "../../../shared/utils/paramHelper";
 import type { ListLeadsUseCase } from "../application/use-cases/list-leads.use-case";
 import type { GetLeadUseCase } from "../application/use-cases/get-lead.use-case";
 import type { GetLeadStatsUseCase } from "../application/use-cases/get-lead-stats.use-case";
+import type { AdminGetLeadsStatsQuery, AdminListLeadsQuery } from "./lead.schema";
 
 export class TenantLeadController {
   constructor(
@@ -21,7 +21,7 @@ export class TenantLeadController {
   ): Promise<void> => {
     try {
       const { tenantId } = (req as AuthRequest).user as TenantAuthContext;
-      const query = req.query as unknown as ListLeadsQuery;
+      const query = req.query as unknown as AdminListLeadsQuery;
 
       const data = await this.listLeadsUseCase.execute({
         tenantId,
@@ -66,7 +66,7 @@ export class TenantLeadController {
   ): Promise<void> => {
     try {
       const { tenantId } = (req as AuthRequest).user as TenantAuthContext;
-      const query = req.query as unknown as GetLeadsStatsQuery;
+      const query = req.query as unknown as AdminGetLeadsStatsQuery;
 
       const data = await this.getLeadStatsUseCase.execute(
         tenantId,

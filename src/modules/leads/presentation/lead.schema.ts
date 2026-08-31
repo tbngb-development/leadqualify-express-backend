@@ -26,5 +26,15 @@ export const getLeadsStatsQuerySchema = z.object({
   campaignId: z.uuid("Invalid campaign ID").optional(),
 });
 
-export type ListLeadsQuery = z.infer<typeof listLeadsQuerySchema>;
-export type GetLeadsStatsQuery = z.infer<typeof getLeadsStatsQuerySchema>;
+export const adminListLeadsQuerySchema = listLeadsQuerySchema.extend({
+  tenantId: z.string().uuid("Invalid tenant ID"),
+});
+
+export const adminGetLeadsStatsQuerySchema = getLeadsStatsQuerySchema.extend({
+  tenantId: z.string().uuid("Invalid tenant ID"),
+});
+
+export type AdminListLeadsQuery = z.infer<typeof adminListLeadsQuerySchema>;
+export type AdminGetLeadsStatsQuery = z.infer<
+  typeof adminGetLeadsStatsQuerySchema
+>;
