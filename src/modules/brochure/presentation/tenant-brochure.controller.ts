@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import type { AuthRequest, TenantAuthContext } from "../../../shared/types";
-import type { SaveBrochureBody, UpdateBrochureBody } from "./brochure.schema";
+import type { SaveBrochureBody } from "./brochure.schema";
 import { sendSuccess } from "../../../shared/utils/response";
 import { HttpStatus } from "../../../shared/constants/http-status";
 import { cleanupUploadedFile } from "../../../shared/middleware/upload";

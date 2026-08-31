@@ -1,6 +1,6 @@
-import { BrochureRepository } from "../interfaces/brochure-repository.interface";
-import { SaveBrochureInput } from "../dto/brochure.dto";
-import { BrochureEntityData } from "../../domain/entities/brochure.entity";
+import { type BrochureRepository } from "../interfaces/brochure-repository.interface";
+import { type SaveBrochureInput } from "../dto/brochure.dto";
+import { type BrochureEntityData } from "../../domain/entities/brochure.entity";
 
 export class SaveBrochureUseCase {
   constructor(private readonly brochureRepo: BrochureRepository) {}

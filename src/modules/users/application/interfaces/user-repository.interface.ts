@@ -1,5 +1,5 @@
-import { TenantRole } from "../../../../generated/prisma";
-import { TenantMemberData } from "../../domain/entities/tenant-member.entity";
+import { type TenantRole } from "../../../../generated/prisma";
+import { type TenantMemberData } from "../../domain/entities/tenant-member.entity";
 
 export interface CreateUserData {
   email: string;

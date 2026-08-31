@@ -11,7 +11,7 @@ import {
 import { env } from "../../../shared/config/env";
 import { UnauthorizedError } from "../../../shared/errors/unauthorized.error";
 import { AuthMessages } from "../../../shared/constants/messages";
-import { LoginUseCase } from "../application/use-cases/login.use-case";
+import { type LoginUseCase } from "../application/use-cases/login.use-case";
 
 const DEFAULT_ACCESS_EXPIRY = 900;
 const DEFAULT_REFRESH_EXPIRY = 604800;

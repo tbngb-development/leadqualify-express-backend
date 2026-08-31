@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { PasswordService } from "../../application/interfaces/password-service.interface";
+import { type PasswordService } from "../../application/interfaces/password-service.interface";
 
 const SALT_ROUNDS = 12;
 

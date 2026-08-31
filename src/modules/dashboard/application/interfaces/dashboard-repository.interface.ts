@@ -1,7 +1,7 @@
 import {
-  DashboardOverviewOutput,
-  DashboardActivityOutput,
-  CampaignPerformanceOutput,
+  type DashboardOverviewOutput,
+  type DashboardActivityOutput,
+  type CampaignPerformanceOutput,
 } from "../dto/dashboard.dto";
 
 export interface DashboardRepository {

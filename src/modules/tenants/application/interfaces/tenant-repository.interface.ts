@@ -1,4 +1,4 @@
-import { TenantEntityData } from "../../domain/tenant.entity";
+import { type TenantEntityData } from "../../domain/tenant.entity";
 
 export interface TenantWithCounts extends TenantEntityData {
   _count: {

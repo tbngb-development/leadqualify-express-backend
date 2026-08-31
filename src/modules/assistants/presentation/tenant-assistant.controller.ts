@@ -2,8 +2,8 @@ import type { Request, Response, NextFunction } from "express";
 import type { AuthRequest, TenantAuthContext } from "../../../shared/types";
 import { sendSuccess } from "../../../shared/utils/response";
 import { param } from "../../../shared/utils/paramHelper";
-import { ListAssistantsUseCase } from "../application/use-cases/list-assistants.use-case";
-import { GetAssistantUseCase } from "../application/use-cases/get-assistant.use-case";
+import { type ListAssistantsUseCase } from "../application/use-cases/list-assistants.use-case";
+import { type GetAssistantUseCase } from "../application/use-cases/get-assistant.use-case";
 
 export class TenantAssistantController {
   constructor(

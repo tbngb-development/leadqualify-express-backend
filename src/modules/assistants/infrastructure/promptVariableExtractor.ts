@@ -1,4 +1,4 @@
-import { BolnaAgentResponse } from "../../../shared/types/bolna.types";
+import { type BolnaAgentResponse } from "../../../shared/types/bolna.types";
 
 type PromptInputField = {
   key: string;

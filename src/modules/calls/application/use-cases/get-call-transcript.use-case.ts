@@ -1,6 +1,6 @@
 import {
-  CallRepository,
-  CallTranscriptResult,
+  type CallRepository,
+  type CallTranscriptResult,
 } from "../interfaces/call-repository.interface";
 import { CallNotFoundError } from "../../domain/errors/call.errors";
 

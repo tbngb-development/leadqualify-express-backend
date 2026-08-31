@@ -1,9 +1,9 @@
 import jwt, { type SignOptions } from "jsonwebtoken";
 import crypto from "crypto";
-import { TenantTokenContext, TokenService } from "../../application/interfaces/token-service.interface";
-import { AccessTokenPayload, InviteTokenPayload, RefreshTokenPayload } from "../../../../shared/types";
+import { type TenantTokenContext, type TokenService } from "../../application/interfaces/token-service.interface";
+import { type AccessTokenPayload, type InviteTokenPayload, type RefreshTokenPayload } from "../../../../shared/types";
 import { env } from "../../../../shared/config/env";
-import { TenantRole } from "../../../../generated/prisma";
+import { type TenantRole } from "../../../../generated/prisma";
 import { UnauthorizedError } from "../../../../shared/errors";
 import { AuthMessages } from "../../../../shared/constants";
 

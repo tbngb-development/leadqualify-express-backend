@@ -1,10 +1,10 @@
-import { PasswordService } from "../../../auth/application/interfaces/password-service.interface";
-import { CreateUserInput } from "../dto/user.dto";
+import { type PasswordService } from "../../../auth/application/interfaces/password-service.interface";
+import { type CreateUserInput } from "../dto/user.dto";
 import { validatePasswordStrength } from "../../../auth/domain/rules/password.rules";
 import { ValidationError } from "../../../../shared/errors/validation.error";
 import crypto from "crypto";
-import { UserRepository } from "../interfaces/user-repository.interface";
-import { TenantMemberData } from "../../domain/entities/tenant-member.entity";
+import { type UserRepository } from "../interfaces/user-repository.interface";
+import { type TenantMemberData } from "../../domain/entities/tenant-member.entity";
 import { EmailAlreadyRegisteredError } from "../../domain/errors/user.errors";
 
 export class CreateUserUseCase {

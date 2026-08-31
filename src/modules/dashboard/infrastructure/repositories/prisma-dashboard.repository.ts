@@ -1,5 +1,5 @@
 import prisma from "../../../../shared/config/database/prisma";
-import { Disposition } from "../../../../generated/prisma";
+import { type Disposition } from "../../../../generated/prisma";
 import type { DashboardRepository } from "../../application/interfaces/dashboard-repository.interface";
 import type {
   DashboardOverviewOutput,

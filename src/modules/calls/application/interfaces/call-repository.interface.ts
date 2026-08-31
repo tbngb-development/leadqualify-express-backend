@@ -1,5 +1,9 @@
-import { CallStatus, Disposition, LeadTemperature, LocationMatch } from "../../../../generated/prisma";
-import { CallEntityData } from "../../domain/entities/call.entity";
+import {
+  type Disposition,
+  type LeadTemperature,
+  type LocationMatch,
+} from "../../../../generated/prisma";
+import { type CallEntityData } from "../../domain/entities/call.entity";
 
 export interface ListCallsFilters {
   campaignId?: string;
@@ -110,8 +114,17 @@ export interface CallStatsResult {
 }
 
 export interface CallRepository {
-  list(tenantId: string, filters: ListCallsFilters): Promise<PaginatedCallsResult>;
+  list(
+    tenantId: string,
+    filters: ListCallsFilters,
+  ): Promise<PaginatedCallsResult>;
   findById(tenantId: string, id: string): Promise<DetailedCallResult | null>;
-  findTranscriptById(tenantId: string, id: string): Promise<CallTranscriptResult | null>;
-  getStats(tenantId: string, filters: CallStatsFilters): Promise<CallStatsResult>;
+  findTranscriptById(
+    tenantId: string,
+    id: string,
+  ): Promise<CallTranscriptResult | null>;
+  getStats(
+    tenantId: string,
+    filters: CallStatsFilters,
+  ): Promise<CallStatsResult>;
 }

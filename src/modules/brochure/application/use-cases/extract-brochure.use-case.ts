@@ -8,7 +8,7 @@ import {
   UnprocessablePdfError,
   AIQuotaExceededError,
 } from "../../domain/errors/brochure.errors";
-import { ExtractBrochureInput } from "../dto/brochure.dto";
+import { type ExtractBrochureInput } from "../dto/brochure.dto";
 
 export class ExtractBrochureUseCase {
   async execute(input: ExtractBrochureInput) {

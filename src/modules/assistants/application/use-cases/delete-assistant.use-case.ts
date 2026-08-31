@@ -1,4 +1,4 @@
-import { AssistantRepository } from "../interfaces/assistant-repository.interface";
+import { type AssistantRepository } from "../interfaces/assistant-repository.interface";
 import { AssistantNotFoundError, AssistantInUseError } from "../../domain/errors/assistant.errors";
 
 export class DeleteAssistantUseCase {

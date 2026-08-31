@@ -1,4 +1,4 @@
-import { LeadRepository, LeadStatsResult } from "../interfaces/lead-repository.interface";
+import { type LeadRepository, type LeadStatsResult } from "../interfaces/lead-repository.interface";
 
 export class GetLeadStatsUseCase {
   constructor(private readonly leadRepo: LeadRepository) {}

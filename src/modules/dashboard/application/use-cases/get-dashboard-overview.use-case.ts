@@ -1,5 +1,5 @@
-import { DashboardRepository } from "../interfaces/dashboard-repository.interface";
-import { DashboardOverviewOutput } from "../dto/dashboard.dto";
+import { type DashboardRepository } from "../interfaces/dashboard-repository.interface";
+import { type DashboardOverviewOutput } from "../dto/dashboard.dto";
 
 export class GetDashboardOverviewUseCase {
   constructor(private readonly dashboardRepo: DashboardRepository) {}

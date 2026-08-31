@@ -1,7 +1,7 @@
 import fs from "fs";
-// ─── CORRECT import for pdf-parse with TypeScript ─────────────────────────────
-// pdf-parse exports a function as module.exports — needs this exact import style
 import pdfParse from "pdf-parse";
+import { AppError } from "../../../shared/errors";
+import { HttpStatus } from "../../../shared/constants";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 export interface PDFExtractionResult {
@@ -30,31 +30,42 @@ export async function extractTextFromPDF(
   const fileSizeBytes = fs.statSync(filePath).size;
   const fileSizeMB = fileSizeBytes / (1024 * 1024);
 
-  console.log(
+  console.info(
     `[PDFExtractor] Processing: ${fileName} | Size: ${fileSizeMB.toFixed(2)}MB`,
   );
 
   const dataBuffer = fs.readFileSync(filePath);
 
+  // eslint-disable-next-line no-useless-assignment
   let pageCount = 0;
+  // eslint-disable-next-line no-useless-assignment
   let rawText = "";
 
   try {
     const pdfData = await pdfParse(dataBuffer);
     pageCount = pdfData.numpages;
     rawText = pdfData.text;
-  } catch (parseError: any) {
-    if (parseError.message?.includes("No password")) {
-      throw new Error(
+  } catch (parseError: unknown) {
+    const error = parseError as Error;
+    if (error.message?.includes("No password")) {
+      throw new AppError(
+        HttpStatus.BAD_REQUEST,
         "PDF is password protected. Please upload an unlocked PDF.",
+        "PDF_PROTECTED_BY_PASSWORD",
       );
     }
-    if (parseError.message?.includes("Invalid")) {
-      throw new Error(
+    if (error.message?.includes("Invalid")) {
+      throw new AppError(
+        HttpStatus.BAD_REQUEST,
         "PDF appears to be corrupted or is not a valid PDF file.",
+        "INVALID_PDF_FILE_UNABLE_TO_PROCESS",
       );
     }
-    throw new Error(`PDF parsing failed: ${parseError.message}`);
+    throw new AppError(
+      HttpStatus.BAD_REQUEST,
+      `PDF parsing failed: ${error.message}`,
+      "UNABLE_TO_PROCESS_PDF",
+    );
   }
 
   rawText = cleanExtractedText(rawText);
@@ -79,7 +90,7 @@ export async function extractTextFromPDF(
     truncated,
   };
 
-  console.log(
+  console.info(
     `[PDFExtractor] Done: ${pageCount} pages | ${rawText.length} chars | Truncated: ${truncated}`,
   );
 
@@ -92,6 +103,7 @@ function cleanExtractedText(text: string): string {
     .replace(/\r\n/g, "\n")
     .replace(/\r/g, "\n")
     .replace(/\n{3,}/g, "\n\n")
+    // eslint-disable-next-line no-control-regex
     .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "")
     .replace(/ {2,}/g, " ")
     .replace(/^\s+$/gm, "")

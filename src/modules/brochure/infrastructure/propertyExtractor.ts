@@ -1,10 +1,10 @@
-import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { z } from "zod";
-import { PDFExtractionResult } from "./pdfExtractor";
+import type { PDFExtractionResult } from "./pdfExtractor";
+import { AppError } from "../../../shared/errors";
+import { HttpStatus } from "../../../shared/constants";
 
 // ─── Zod Schema ───────────────────────────────────────────────────────────────
-// This is our ground truth schema — used for validation after Gemini responds
-
 const LocationSchema = z.object({
   city: z.string().nullable(),
   area: z.string().nullable(),
@@ -24,45 +24,36 @@ const PricingSchema = z.object({
   maxPrice: z.number().nullable(),
   pricePerSqft: z.number().nullable(),
   currency: z.string().default("INR"),
-  priceLabel: z.string().nullable(), // e.g. "Starting from ₹45 Lakhs"
+  priceLabel: z.string().nullable(),
 });
 
 const QualificationCriteriaSchema = z.object({
-  minimumBudget: z.number().nullable(), // Minimum a lead should have
+  minimumBudget: z.number().nullable(),
   maximumBudget: z.number().nullable(),
-  targetBuyerProfile: z.string().nullable(), // e.g. "First-time homebuyers, NRIs, Investors"
-  preferredLocations: z.array(z.string()), // Where target buyers should be from
-  investmentType: z.array(z.string()), // ['end-use', 'investment', 'nri']
-  keyQualifyingQuestions: z.array(z.string()), // AI-generated questions for the call
+  targetBuyerProfile: z.string().nullable(),
+  preferredLocations: z.array(z.string()),
+  investmentType: z.array(z.string()),
+  keyQualifyingQuestions: z.array(z.string()),
 });
 
 export const PropertyDetailsSchema = z.object({
-  // ── Core Identity ──────────────────────────────────────────────
   projectName: z.string().nullable(),
   developerName: z.string().nullable(),
   reraNumber: z.string().nullable(),
   projectWebsite: z.string().nullable(),
   contactNumber: z.string().nullable(),
-
-  // ── Location ───────────────────────────────────────────────────
   location: LocationSchema,
-
-  // ── Property Specs ─────────────────────────────────────────────
-  propertyTypes: z.array(z.string()), // ['Apartment', 'Villa', 'Plot']
-  configurations: z.array(z.string()), // ['1 BHK', '2 BHK', '3 BHK']
+  propertyTypes: z.array(z.string()),
+  configurations: z.array(z.string()),
   totalUnits: z.number().nullable(),
   totalTowers: z.number().nullable(),
   totalFloors: z.number().nullable(),
   sizeRange: SizeRangeSchema,
-
-  // ── Financials ─────────────────────────────────────────────────
   pricing: PricingSchema,
-  paymentPlan: z.string().nullable(), // e.g. "20:80", "Construction Linked"
-  bankApprovals: z.array(z.string()), // ['SBI', 'HDFC', 'ICICI']
+  paymentPlan: z.string().nullable(),
+  bankApprovals: z.array(z.string()),
   maintenanceCharge: z.string().nullable(),
-
-  // ── Timeline ───────────────────────────────────────────────────
-  possessionDate: z.string().nullable(), // e.g. "December 2026"
+  possessionDate: z.string().nullable(),
   launchDate: z.string().nullable(),
   constructionStatus: z
     .enum([
@@ -73,26 +64,20 @@ export const PropertyDetailsSchema = z.object({
       "unknown",
     ])
     .default("unknown"),
-
-  // ── Features ───────────────────────────────────────────────────
   amenities: z.array(z.string()),
-  specifications: z.array(z.string()), // Flat specs, flooring, fixtures etc.
-  nearbyInfrastructure: z.array(z.string()), // Schools, hospitals, metro, malls nearby
-  usps: z.array(z.string()), // Unique selling points
-
-  // ── Lead Qualification (Critical for call script) ──────────────
+  specifications: z.array(z.string()),
+  nearbyInfrastructure: z.array(z.string()),
+  usps: z.array(z.string()),
   qualificationCriteria: QualificationCriteriaSchema,
-
-  // ── Meta ───────────────────────────────────────────────────────
-  confidence: z.number().min(0).max(1), // How confident is the extraction
-  extractionWarnings: z.array(z.string()), // Fields that couldn't be found
+  confidence: z.number().min(0).max(1),
+  extractionWarnings: z.array(z.string()),
   rawTextLength: z.number(),
 });
 
 export type PropertyDetails = z.infer<typeof PropertyDetailsSchema>;
 
 // ─── Gemini Client ────────────────────────────────────────────────────────────
-function getGeminiClient() {
+function getGeminiClient(): GoogleGenerativeAI {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     throw new Error("GEMINI_API_KEY is not set in environment variables");
@@ -104,7 +89,7 @@ function getGeminiClient() {
 export async function extractPropertyDetails(
   pdfResult: PDFExtractionResult,
 ): Promise<PropertyDetails> {
-  console.log(
+  console.info(
     `[PropertyExtractor] Starting AI extraction for: ${pdfResult.fileName}`,
   );
 
@@ -115,7 +100,6 @@ export async function extractPropertyDetails(
   const genAI = getGeminiClient();
   const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
 
-  // Use gemini-1.5-flash for speed and large context
   const model = genAI.getGenerativeModel({
     model: GEMINI_MODEL,
     generationConfig: {
@@ -125,40 +109,54 @@ export async function extractPropertyDetails(
 
   const prompt = buildExtractionPrompt(pdfResult);
 
-  console.log(
+  console.info(
     `[PropertyExtractor] Sending ${prompt.length} chars to Gemini...`,
   );
 
+  // eslint-disable-next-line no-useless-assignment
   let responseText = "";
 
   try {
     const result = await model.generateContent(prompt);
     const response = result.response;
     responseText = response.text();
-  } catch (geminiError: any) {
-    if (geminiError.message?.includes("SAFETY")) {
-      throw new Error(
+  } catch (geminiError: unknown) {
+    const error = geminiError as {
+      message?: string;
+      status?: number;
+      statusText?: string;
+      errorDetails?: unknown;
+    };
+
+    if (error.message?.includes("SAFETY")) {
+      throw new AppError(
+        HttpStatus.INTERNAL_SERVER_ERROR,
         "Content was blocked by Gemini safety filters. Please check the PDF content.",
+        "LLM_MODEL_BLOCKED_DUE_TO_SAFETY",
       );
     }
 
-    console.log("[Gemini Raw Error]", {
-      message: geminiError.message,
-      status: geminiError.status,
-      statusText: geminiError.statusText,
-      errorDetails: geminiError.errorDetails, // ← This tells you exactly which limit
+    console.error("[Gemini Raw Error]", {
+      message: error.message,
+      status: error.status,
+      statusText: error.statusText,
+      errorDetails: error.errorDetails,
     });
 
-    if (
-      geminiError.message?.includes("quota") ||
-      geminiError.message?.includes("429")
-    ) {
-      throw new Error("Gemini API quota exceeded. Please try again later.");
+    if (error.message?.includes("quota") || error.message?.includes("429")) {
+      throw new AppError(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        "Gemini API quota exceeded. Please try again later.",
+        "LLM_MODEL_DAILY_QUOTA_EXCEEDED",
+      );
     }
-    throw new Error(`Gemini API error: ${geminiError.message}`);
+    throw new AppError(
+      HttpStatus.BAD_REQUEST,
+      `Gemini API error: ${error.message}`,
+      "LLM_MODEL_API_ERROR",
+    );
   }
 
-  // ─── Parse & Validate Response ───────────────────────────────────────────────
   let parsed: unknown;
 
   try {
@@ -168,11 +166,9 @@ export async function extractPropertyDetails(
       "[PropertyExtractor] Gemini returned invalid JSON:",
       responseText.substring(0, 500),
     );
-
     throw new Error("AI returned invalid JSON. Please try again.");
   }
 
-  // ─── Zod Validation ──────────────────────────────────────────────────────────
   const validated = PropertyDetailsSchema.safeParse(parsed);
 
   if (!validated.success) {
@@ -180,11 +176,10 @@ export async function extractPropertyDetails(
       "[PropertyExtractor] Zod validation failed:",
       validated.error.flatten(),
     );
-    // Attempt partial recovery — return raw parsed with defaults
     return applyDefaults(parsed as Partial<PropertyDetails>, pdfResult);
   }
 
-  console.log(
+  console.info(
     `[PropertyExtractor] Extraction successful. Confidence: ${validated.data.confidence}`,
   );
 

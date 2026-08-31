@@ -1,5 +1,4 @@
 import type { Request, Response, NextFunction } from "express";
-import type { AdminUpdateTenantBody } from "./tenant.schema";
 import { sendSuccess } from "../../../shared/utils/response";
 import { param } from "../../../shared/utils/paramHelper";
 import type { ListTenantsUseCase } from "../application/use-cases/list-tenants.use-case";

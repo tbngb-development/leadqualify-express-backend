@@ -8,7 +8,7 @@ import type {
   PendingLeadRow,
 } from "../../application/interfaces/batch-repository.interface";
 import type { LeadBatchEntityData } from "../../domain/entities/lead-batch.entity";
-import { BatchStatus, LeadStatus, Prisma } from "../../../../generated/prisma";
+import { type BatchStatus, LeadStatus, type Prisma } from "../../../../generated/prisma";
 
 export class PrismaBatchRepository implements BatchRepository {
   async list(tenantId: string, campaignId: string): Promise<BatchListItem[]> {

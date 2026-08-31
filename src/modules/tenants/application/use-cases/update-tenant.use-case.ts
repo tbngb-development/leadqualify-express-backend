@@ -1,5 +1,5 @@
-import { TenantRepository } from "../interfaces/tenant-repository.interface";
-import { UpdateTenantInput } from "../dto/tenant.dto";
+import { type TenantRepository } from "../interfaces/tenant-repository.interface";
+import { type UpdateTenantInput } from "../dto/tenant.dto";
 import { TenantNotFoundError } from "../../domain/tenant.errors";
 
 export class UpdateTenantUseCase {

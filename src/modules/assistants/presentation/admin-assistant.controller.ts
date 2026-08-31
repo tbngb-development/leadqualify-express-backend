@@ -5,13 +5,13 @@ import { HttpStatus } from "../../../shared/constants/http-status";
 import { AdminMessages } from "../../../shared/constants/messages";
 import { ValidationError } from "../../../shared/errors/validation.error";
 import { param } from "../../../shared/utils/paramHelper";
-import { ListAssistantsUseCase } from "../application/use-cases/list-assistants.use-case";
-import { ListBolnaAgentsUseCase } from "../application/use-cases/list-bolna-agents.use-case";
-import { GetAssistantUseCase } from "../application/use-cases/get-assistant.use-case";
-import { RegisterAssistantUseCase } from "../application/use-cases/register-assistant.use-case";
-import { UpdateAssistantUseCase } from "../application/use-cases/update-assistant.use-case";
-import { SyncAssistantUseCase } from "../application/use-cases/sync-assistant.use-case";
-import { DeleteAssistantUseCase } from "../application/use-cases/delete-assistant.use-case";
+import { type ListAssistantsUseCase } from "../application/use-cases/list-assistants.use-case";
+import { type ListBolnaAgentsUseCase } from "../application/use-cases/list-bolna-agents.use-case";
+import { type GetAssistantUseCase } from "../application/use-cases/get-assistant.use-case";
+import { type RegisterAssistantUseCase } from "../application/use-cases/register-assistant.use-case";
+import { type UpdateAssistantUseCase } from "../application/use-cases/update-assistant.use-case";
+import { type SyncAssistantUseCase } from "../application/use-cases/sync-assistant.use-case";
+import { type DeleteAssistantUseCase } from "../application/use-cases/delete-assistant.use-case";
 import { TenantBadRequestError } from "../../tenants/domain/tenant.errors";
 
 export class AdminAssistantController {

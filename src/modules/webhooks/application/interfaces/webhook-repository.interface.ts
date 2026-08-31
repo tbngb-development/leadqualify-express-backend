@@ -1,8 +1,8 @@
 import {
-  CallStatus,
-  LeadStatus,
-  BatchStatus,
-  CampaignStatus,
+  type CallStatus,
+  type LeadStatus,
+  type BatchStatus,
+  type CampaignStatus,
 } from "../../../../generated/prisma";
 import type {
   CallHistoryItem,

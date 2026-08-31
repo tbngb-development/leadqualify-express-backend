@@ -1,6 +1,6 @@
-import { WebhookRepository } from "../interfaces/webhook-repository.interface";
-import { WebhookBatchPayload } from "../dto/webhook.dto";
-import { BatchStatus, CampaignStatus } from "../../../../generated/prisma";
+import { type WebhookRepository } from "../interfaces/webhook-repository.interface";
+import { type WebhookBatchPayload } from "../dto/webhook.dto";
+import { type BatchStatus, CampaignStatus } from "../../../../generated/prisma";
 import { WebhookResolutionError } from "../../domain/errors/webhook.errors";
 
 export class ProcessBatchWebhookUseCase {

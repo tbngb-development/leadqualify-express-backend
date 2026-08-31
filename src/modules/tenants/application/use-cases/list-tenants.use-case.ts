@@ -1,6 +1,6 @@
 import {
-  TenantRepository,
-  TenantWithCounts,
+  type TenantRepository,
+  type TenantWithCounts,
 } from "../interfaces/tenant-repository.interface";
 
 export class ListTenantsUseCase {

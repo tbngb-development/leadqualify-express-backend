@@ -4,7 +4,7 @@ import type { AuthorizeMiddleware } from "../../../shared/middleware/authorize";
 import { validate } from "../../../shared/middleware/validate";
 import { saveBrochureSchema, updateBrochureSchema } from "./brochure.schema";
 import { brochureUpload } from "../../../shared/middleware/upload";
-import { TenantBrochureController } from "./tenant-brochure.controller";
+import { type TenantBrochureController } from "./tenant-brochure.controller";
 
 export function buildTenantBrochureRoutes(
   controller: TenantBrochureController,

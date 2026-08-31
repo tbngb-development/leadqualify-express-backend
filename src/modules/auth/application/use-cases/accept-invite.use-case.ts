@@ -4,9 +4,9 @@ import type {
   AcceptInviteInput,
   AcceptInviteOutput,
 } from "../dto/invite.dto";
-import { AuthRepository } from "../interfaces/auth-repository.interface";
-import { PasswordService } from "../interfaces/password-service.interface";
-import { TokenService } from "../interfaces/token-service.interface";
+import { type AuthRepository } from "../interfaces/auth-repository.interface";
+import { type PasswordService } from "../interfaces/password-service.interface";
+import { type TokenService } from "../interfaces/token-service.interface";
 import { AlreadyMemberError, InvalidInviteError } from "../../domain/errors/auth.errors";
 import { validatePasswordStrength } from "../../domain/rules/password.rules";
 

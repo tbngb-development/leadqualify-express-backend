@@ -20,14 +20,14 @@ import {
 import { env } from "../../../shared/config/env";
 import { UnauthorizedError } from "../../../shared/errors/unauthorized.error";
 import { AuthMessages } from "../../../shared/constants/messages";
-import { RegisterTenantOwnerUseCase } from "../application/use-cases/register-tenant-owner.use-case";
-import { LoginUseCase } from "../application/use-cases/login.use-case";
-import { SelectTenantUseCase } from "../application/use-cases/select-tenant.use-case";
-import { RefreshTokensUseCase } from "../application/use-cases/refresh-tokens.use-case";
-import { GetProfileUseCase } from "../application/use-cases/get-profile.use-case";
-import { CreateInviteUseCase } from "../application/use-cases/create-invite.use-case";
-import { AcceptInviteUseCase } from "../application/use-cases/accept-invite.use-case";
-import { LogoutUseCase } from "../application/use-cases/logout.use-case";
+import { type RegisterTenantOwnerUseCase } from "../application/use-cases/register-tenant-owner.use-case";
+import { type LoginUseCase } from "../application/use-cases/login.use-case";
+import { type SelectTenantUseCase } from "../application/use-cases/select-tenant.use-case";
+import { type RefreshTokensUseCase } from "../application/use-cases/refresh-tokens.use-case";
+import { type GetProfileUseCase } from "../application/use-cases/get-profile.use-case";
+import { type CreateInviteUseCase } from "../application/use-cases/create-invite.use-case";
+import { type AcceptInviteUseCase } from "../application/use-cases/accept-invite.use-case";
+import { type LogoutUseCase } from "../application/use-cases/logout.use-case";
 
 const DEFAULT_ACCESS_EXPIRY = 900;
 const DEFAULT_REFRESH_EXPIRY = 604800;

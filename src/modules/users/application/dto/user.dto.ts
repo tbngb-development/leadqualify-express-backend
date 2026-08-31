@@ -1,4 +1,4 @@
-import { TenantRole } from "../../../../generated/prisma";
+import { type TenantRole } from "../../../../generated/prisma";
 
 export interface CreateUserInput {
   email: string;

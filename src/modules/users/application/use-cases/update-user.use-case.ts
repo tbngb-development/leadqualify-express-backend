@@ -1,6 +1,6 @@
-import { UserRepository } from "../interfaces/user-repository.interface";
-import { UpdateUserInput } from "../dto/user.dto";
-import { TenantMemberData } from "../../domain/entities/tenant-member.entity";
+import { type UserRepository } from "../interfaces/user-repository.interface";
+import { type UpdateUserInput } from "../dto/user.dto";
+import { type TenantMemberData } from "../../domain/entities/tenant-member.entity";
 import { UserNotFoundError } from "../../domain/errors/user.errors";
 
 export class UpdateUserUseCase {

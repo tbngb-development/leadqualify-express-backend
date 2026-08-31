@@ -3,7 +3,7 @@ import type {
   CreateInviteInput,
   CreateInviteOutput,
 } from "../dto/invite.dto";
-import { TokenService } from "../interfaces/token-service.interface";
+import { type TokenService } from "../interfaces/token-service.interface";
 
 const INVITE_EXPIRY_HOURS = 168; // 7 days
 

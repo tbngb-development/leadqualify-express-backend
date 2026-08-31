@@ -1,8 +1,8 @@
-import { MembershipInfo } from "../../../../shared/types";
+import { type MembershipInfo } from "../../../../shared/types";
 import type { LoginInput, LoginOutput } from "../dto/login.dto";
-import { AuthRepository } from "../interfaces/auth-repository.interface";
-import { PasswordService } from "../interfaces/password-service.interface";
-import { TokenService } from "../interfaces/token-service.interface";
+import { type AuthRepository } from "../interfaces/auth-repository.interface";
+import { type PasswordService } from "../interfaces/password-service.interface";
+import { type TokenService } from "../interfaces/token-service.interface";
 import { InvalidCredentialsError } from "../../domain/errors/auth.errors";
 
 export class LoginUseCase {
