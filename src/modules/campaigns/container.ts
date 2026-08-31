@@ -7,23 +7,38 @@ import { ParseLeadsUseCase } from "./application/use-cases/parse-leads.use-case"
 import { GetCampaignStatsUseCase } from "./application/use-cases/get-campaign-stats.use-case";
 import { GetCampaignPerformanceUseCase } from "./application/use-cases/get-campaign-performance.use-case";
 import { TenantCampaignController } from "./presentation/tenant-campaign.controller";
+import { AdminCampaignController } from "./presentation/admin-campaign.controller";
 
 export interface CampaignModule {
   tenantController: TenantCampaignController;
+  adminController: AdminCampaignController;
 }
 
 export function buildCampaignModule(): CampaignModule {
   const campaignRepo = new PrismaCampaignRepository();
   const batchRepo = new PrismaBatchRepository();
 
+  const listCampaigns = new ListCampaignsUseCase(campaignRepo);
+  const getCampaign = new GetCampaignUseCase(campaignRepo);
+  const getCampaignStats = new GetCampaignStatsUseCase(campaignRepo);
+  const getCampaignPerformance = new GetCampaignPerformanceUseCase(
+    campaignRepo,
+  );
+
   return {
     tenantController: new TenantCampaignController(
-      new ListCampaignsUseCase(campaignRepo),
-      new GetCampaignUseCase(campaignRepo),
+      listCampaigns,
+      getCampaign,
       new CreateCampaignUseCase(campaignRepo),
       new ParseLeadsUseCase(campaignRepo, batchRepo),
-      new GetCampaignStatsUseCase(campaignRepo),
-      new GetCampaignPerformanceUseCase(campaignRepo),
+      getCampaignStats,
+      getCampaignPerformance,
+    ),
+    adminController: new AdminCampaignController(
+      listCampaigns,
+      getCampaign,
+      getCampaignStats,
+      getCampaignPerformance,
     ),
   };
 }

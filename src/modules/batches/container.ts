@@ -12,9 +12,11 @@ import { ResumeBatchUseCase } from "./application/use-cases/resume-batch.use-cas
 import { DeleteBatchUseCase } from "./application/use-cases/delete-batch.use-case";
 import { GetBatchStatsUseCase } from "./application/use-cases/get-batch-stats.use-case";
 import { TenantBatchController } from "./presentation/tenant-batch.controller";
+import { AdminBatchController } from "./presentation/admin-batch.controller";
 
 export interface BatchModule {
   tenantController: TenantBatchController;
+  adminController: AdminBatchController;
 }
 
 export function buildBatchModule(): BatchModule {
@@ -23,17 +25,26 @@ export function buildBatchModule(): BatchModule {
   const storage = new CloudinaryStorageProvider();
   const bolna = new BolnaBatchProviderImpl();
 
+  const listBatches = new ListBatchesUseCase(batchRepo, campaignRepo);
+  const getBatch = new GetBatchUseCase(batchRepo);
+  const getBatchStats = new GetBatchStatsUseCase(batchRepo);
+
   return {
     tenantController: new TenantBatchController(
-      new ListBatchesUseCase(batchRepo, campaignRepo),
-      new GetBatchUseCase(batchRepo),
+      listBatches,
+      getBatch,
       new CreateBatchUseCase(batchRepo, campaignRepo, storage, bolna),
       new RunBatchUseCase(batchRepo, campaignRepo, bolna),
       new ScheduleBatchUseCase(batchRepo, campaignRepo, bolna),
       new StopBatchUseCase(batchRepo, campaignRepo, bolna),
       new ResumeBatchUseCase(batchRepo, campaignRepo, storage, bolna),
       new DeleteBatchUseCase(batchRepo, bolna),
-      new GetBatchStatsUseCase(batchRepo),
+      getBatchStats,
+    ),
+    adminController: new AdminBatchController(
+      listBatches,
+      getBatch,
+      getBatchStats,
     ),
   };
 }

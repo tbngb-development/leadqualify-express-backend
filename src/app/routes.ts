@@ -7,12 +7,18 @@ import { buildAdminAssistantRoutes } from "../modules/assistants/presentation/ad
 import { buildTenantWorkspaceRoutes } from "../modules/tenants/presentation/tenant-workspace.routes";
 import { buildAdminTenantRoutes } from "../modules/tenants/presentation/admin-tenant.routes";
 import { buildTenantCampaignRoutes } from "../modules/campaigns/presentation/tenant-campaign.routes";
+import { buildAdminCampaignRoutes } from "../modules/campaigns/presentation/admin-campaign.routes";
 import { buildTenantLeadRoutes } from "../modules/leads/presentation/tenant-lead.routes";
+import { buildAdminLeadRoutes } from "../modules/leads/presentation/admin-lead.routes";
 import { buildTenantCallRoutes } from "../modules/calls/presentation/tenant-call.routes";
+import { buildAdminCallRoutes } from "../modules/calls/presentation/admin-call.routes";
 import { buildTenantDashboardRoutes } from "../modules/dashboard/presentation/tenant-dashboard.routes";
+import { buildAdminDashboardRoutes } from "../modules/dashboard/presentation/admin-dashboard.routes";
 import { buildTenantBrochureRoutes } from "../modules/brochure/presentation/tenant-brochure.routes";
-import { buildWebhookRoutes } from "../modules/webhooks/presentation/webhook.routes";
+import { buildAdminBrochureRoutes } from "../modules/brochure/presentation/admin-brochure.routes";
 import { buildTenantUserRoutes } from "../modules/users/presentation/tenant-user.routes";
+import { buildWebhookRoutes } from "../modules/webhooks/presentation/webhook.routes";
+import { buildAdminBatchRoutes } from "../modules/batches/presentation/admin-batch.routes";
 
 export function buildRoutes(c: AppContainer): Router {
   const router = Router();
@@ -26,10 +32,10 @@ export function buildRoutes(c: AppContainer): Router {
     });
   });
 
-  // ── Public ──────────────────────────────────────────────────────────────
+  // ── Public Webhooks ─────────────────────────────────────────────────────
   router.use("/webhooks", buildWebhookRoutes(c.webhooks.controller));
 
-  // ── Tenant API v1 ──────────────────────────────────────────────────────
+  // ── Tenant API v1 (Scoped workspace actions) ─────────────────────────────
   router.use(
     "/v1/auth",
     buildTenantAuthRoutes(c.auth.tenantController, c.authenticate, c.authorize),
@@ -84,7 +90,7 @@ export function buildRoutes(c: AppContainer): Router {
     ),
   );
 
-  // ── Admin API v1 ───────────────────────────────────────────────────────
+  // ── Admin API v1 (Cross-tenant platform overrides) ──────────────────────
   router.use("/v1/admin/auth", buildAdminAuthRoutes(c.auth.adminController));
   router.use(
     "/v1/admin/tenants",
@@ -98,6 +104,46 @@ export function buildRoutes(c: AppContainer): Router {
     "/v1/admin/assistants",
     buildAdminAssistantRoutes(
       c.assistants.adminController,
+      c.authenticate,
+      c.authorize,
+    ),
+  );
+  router.use(
+    "/v1/admin/dashboard",
+    buildAdminDashboardRoutes(
+      c.dashboard.adminController,
+      c.authenticate,
+      c.authorize,
+    ),
+  );
+  router.use(
+    "/v1/admin/campaigns",
+    buildAdminCampaignRoutes(
+      c.campaigns.adminController,
+      c.authenticate,
+      c.authorize,
+    ),
+  );
+  router.use(
+    "/v1/admin/batches",
+    buildAdminBatchRoutes(
+      c.batches.adminController,
+      c.authenticate,
+      c.authorize,
+    ),
+  );
+  router.use(
+    "/v1/admin/leads",
+    buildAdminLeadRoutes(c.leads.adminController, c.authenticate, c.authorize),
+  );
+  router.use(
+    "/v1/admin/calls",
+    buildAdminCallRoutes(c.calls.adminController, c.authenticate, c.authorize),
+  );
+  router.use(
+    "/v1/admin/brochures",
+    buildAdminBrochureRoutes(
+      c.brochures.adminController,
       c.authenticate,
       c.authorize,
     ),
