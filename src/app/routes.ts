@@ -1,22 +1,20 @@
 import { Router } from "express";
-import type { Container } from "./container";
-import {
-  buildTenantAuthRoutes,
-  buildAdminAuthRoutes,
-} from "../modules/auth/presentation/auth.routes";
-import { buildCampaignRoutes } from "../modules/campaigns/presentation/campaign.routes";
-import { buildUserRoutes } from "../modules/users/presentation/user.routes";
-import { buildTenantRoutes } from "../modules/tenants/presentation/tenant.routes";
-import { buildAdminTenantRoutes } from "../modules/tenants/presentation/admin-tenant.routes";
-import { buildAssistantRoutes } from "../modules/assistants/presentation/assistant.routes";
+import type { AppContainer } from "./container";
+import { buildTenantAuthRoutes } from "../modules/auth/presentation/tenant-auth.routes";
+import { buildAdminAuthRoutes } from "../modules/auth/presentation/admin-auth.routes";
+import { buildTenantAssistantRoutes } from "../modules/assistants/presentation/tenant-assistant.routes";
 import { buildAdminAssistantRoutes } from "../modules/assistants/presentation/admin-assistant.routes";
-import { buildLeadRoutes } from "../modules/leads/presentation/lead.routes";
-import { buildCallRoutes } from "../modules/calls/presentation/call.routes";
-import { buildDashboardRoutes } from "../modules/dashboard/presentation/dashboard.routes";
+import { buildTenantWorkspaceRoutes } from "../modules/tenants/presentation/tenant-workspace.routes";
+import { buildAdminTenantRoutes } from "../modules/tenants/presentation/admin-tenant.routes";
+import { buildTenantCampaignRoutes } from "../modules/campaigns/presentation/tenant-campaign.routes";
+import { buildTenantLeadRoutes } from "../modules/leads/presentation/tenant-lead.routes";
+import { buildTenantCallRoutes } from "../modules/calls/presentation/tenant-call.routes";
+import { buildTenantDashboardRoutes } from "../modules/dashboard/presentation/tenant-dashboard.routes";
+import { buildTenantBrochureRoutes } from "../modules/brochure/presentation/tenant-brochure.routes";
 import { buildWebhookRoutes } from "../modules/webhooks/presentation/webhook.routes";
-import { buildBrochureRoutes } from "../modules/brochure/presentation/brochure.routes";
+import { buildTenantUserRoutes } from "../modules/users/presentation/tenant-user.routes";
 
-export function buildRoutes(container: Container): Router {
+export function buildRoutes(c: AppContainer): Router {
   const router = Router();
 
   router.get("/health", (_req, res) => {
@@ -28,93 +26,80 @@ export function buildRoutes(container: Container): Router {
     });
   });
 
-  router.use("/webhooks", buildWebhookRoutes(container.webhookController));
+  // ── Public ──────────────────────────────────────────────────────────────
+  router.use("/webhooks", buildWebhookRoutes(c.webhooks.controller));
 
-  // ── Tenant API v1 ─────────────────────────────────────────────────────────
+  // ── Tenant API v1 ──────────────────────────────────────────────────────
   router.use(
     "/v1/auth",
-    buildTenantAuthRoutes(
-      container.authController,
-      container.authenticate,
-      container.authorize,
-    ),
+    buildTenantAuthRoutes(c.auth.tenantController, c.authenticate, c.authorize),
   );
-  
-  router.use(
-    "/v1/campaigns",
-    buildCampaignRoutes(
-      container.campaignController,
-      container.batchController,
-      container.authenticate,
-      container.authorize,
-    ),
-  );
-
-  router.use(
-    "/v1/users",
-    buildUserRoutes(
-      container.userController,
-      container.authenticate,
-      container.authorize,
-    ),
-  );
-
   router.use(
     "/v1/assistants",
-    buildAssistantRoutes(container.assistantController, container.authenticate),
+    buildTenantAssistantRoutes(c.assistants.tenantController, c.authenticate),
   );
-
+  router.use(
+    "/v1/campaigns",
+    buildTenantCampaignRoutes(
+      c.campaigns.tenantController,
+      c.batches.tenantController,
+      c.authenticate,
+      c.authorize,
+    ),
+  );
   router.use(
     "/v1/leads",
-    buildLeadRoutes(container.leadController, container.authenticate),
+    buildTenantLeadRoutes(c.leads.tenantController, c.authenticate),
   );
-
   router.use(
     "/v1/calls",
-    buildCallRoutes(container.callController, container.authenticate),
+    buildTenantCallRoutes(c.calls.tenantController, c.authenticate),
   );
-
   router.use(
     "/v1/dashboard",
-    buildDashboardRoutes(container.dashboardController, container.authenticate),
+    buildTenantDashboardRoutes(c.dashboard.tenantController, c.authenticate),
   );
   router.use(
     "/v1/brochures",
-    buildBrochureRoutes(
-      container.brochureController,
-      container.authenticate,
-      container.authorize,
+    buildTenantBrochureRoutes(
+      c.brochures.tenantController,
+      c.authenticate,
+      c.authorize,
     ),
   );
-
-  // Tenant Workspace routes
+  router.use(
+    "/v1/users",
+    buildTenantUserRoutes(
+      c.users.tenantController,
+      c.authenticate,
+      c.authorize,
+    ),
+  );
   router.use(
     "/v1/tenants",
-    buildTenantRoutes(
-      container.tenantController,
-      container.authenticate,
-      container.authorize,
+    buildTenantWorkspaceRoutes(
+      c.tenants.workspaceController,
+      c.authenticate,
+      c.authorize,
     ),
   );
 
-  // ── Admin API v1 ──────────────────────────────────────────────────────────
-  router.use("/v1/admin/auth", buildAdminAuthRoutes(container.authController));
-
+  // ── Admin API v1 ───────────────────────────────────────────────────────
+  router.use("/v1/admin/auth", buildAdminAuthRoutes(c.auth.adminController));
   router.use(
     "/v1/admin/tenants",
     buildAdminTenantRoutes(
-      container.tenantController,
-      container.authenticate,
-      container.authorize,
+      c.tenants.adminController,
+      c.authenticate,
+      c.authorize,
     ),
   );
-
   router.use(
     "/v1/admin/assistants",
     buildAdminAssistantRoutes(
-      container.assistantController,
-      container.authenticate,
-      container.authorize,
+      c.assistants.adminController,
+      c.authenticate,
+      c.authorize,
     ),
   );
 

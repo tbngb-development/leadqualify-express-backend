@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { CallController } from "./call.controller";
-import { AuthenticateMiddleware } from "../../../shared/middleware/authenticate";
+import type { TenantCallController } from "./tenant-call.controller";
+import type { AuthenticateMiddleware } from "../../../shared/middleware/authenticate";
 import { validateQuery } from "../../../shared/middleware/validate";
 import { listCallsQuerySchema, getCallStatsQuerySchema } from "./call.schema";
 
-export function buildCallRoutes(
-  controller: CallController,
+export function buildTenantCallRoutes(
+  controller: TenantCallController,
   authenticate: AuthenticateMiddleware,
 ): Router {
   const router = Router();

@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { TenantController } from "./tenant.controller";
-import { AuthenticateMiddleware } from "../../../shared/middleware/authenticate";
-import { AuthorizeMiddleware } from "../../../shared/middleware/authorize";
+import type { TenantWorkspaceController } from "./tenant-workspace.controller";
+import type { AuthenticateMiddleware } from "../../../shared/middleware/authenticate";
+import type { AuthorizeMiddleware } from "../../../shared/middleware/authorize";
 import { validate } from "../../../shared/middleware/validate";
 import { updateWorkspaceSchema } from "./tenant.schema";
 
@@ -9,8 +9,8 @@ import { updateWorkspaceSchema } from "./tenant.schema";
  * Tenant-scoped routes for active workspace management.
  * Mounted at: /api/v1/tenants
  */
-export function buildTenantRoutes(
-  controller: TenantController,
+export function buildTenantWorkspaceRoutes(
+  controller: TenantWorkspaceController,
   authenticate: AuthenticateMiddleware,
   authorize: AuthorizeMiddleware,
 ): Router {
@@ -24,7 +24,7 @@ export function buildTenantRoutes(
   // Only OWNER or ADMIN can update workspace name
   router.patch(
     "/current",
-    authorize.tenantRoles(),
+    authorize.tenantRoles("OWNER", "ADMIN"),
     validate(updateWorkspaceSchema),
     controller.updateCurrent,
   );
@@ -32,7 +32,7 @@ export function buildTenantRoutes(
   // Workspace stats
   router.get(
     "/current/stats",
-    authorize.tenantRoles(),
+    authorize.tenantRoles("OWNER", "ADMIN"),
     controller.getCurrentStats,
   );
 

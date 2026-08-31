@@ -1,15 +1,15 @@
 import { Router } from "express";
-import { BrochureController } from "./brochure.controller";
-import { AuthenticateMiddleware } from "../../../shared/middleware/authenticate";
-import { AuthorizeMiddleware } from "../../../shared/middleware/authorize";
+import type { AuthenticateMiddleware } from "../../../shared/middleware/authenticate";
+import type { AuthorizeMiddleware } from "../../../shared/middleware/authorize";
 import { validate } from "../../../shared/middleware/validate";
 import { saveBrochureSchema, updateBrochureSchema } from "./brochure.schema";
 import { brochureUpload } from "../../../shared/middleware/upload";
+import { TenantBrochureController } from "./tenant-brochure.controller";
 
-export function buildBrochureRoutes(
-  controller: BrochureController,
+export function buildTenantBrochureRoutes(
+  controller: TenantBrochureController,
   authenticate: AuthenticateMiddleware,
-  authorize: AuthorizeMiddleware
+  authorize: AuthorizeMiddleware,
 ): Router {
   const router = Router();
 
@@ -19,14 +19,14 @@ export function buildBrochureRoutes(
     "/extract",
     authorize.tenantRoles("OWNER", "ADMIN"),
     brochureUpload.single("file"),
-    controller.extract
+    controller.extract,
   );
 
   router.post(
     "/save",
     authorize.tenantRoles("OWNER", "ADMIN"),
     validate(saveBrochureSchema),
-    controller.save
+    controller.save,
   );
 
   router.get("/", controller.list);
@@ -36,13 +36,13 @@ export function buildBrochureRoutes(
     "/:id",
     authorize.tenantRoles("OWNER", "ADMIN"),
     validate(updateBrochureSchema),
-    controller.updateHandler
+    controller.updateHandler,
   );
 
   router.delete(
     "/:id",
     authorize.tenantRoles("OWNER", "ADMIN"),
-    controller.deleteHandler
+    controller.deleteHandler,
   );
 
   return router;

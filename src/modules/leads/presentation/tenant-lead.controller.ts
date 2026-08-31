@@ -1,16 +1,17 @@
-import { Request, Response, NextFunction } from "express";
-import { ListLeadsUseCase } from "../application/use-cases/list-leads.use-case";
-import { GetLeadUseCase } from "../application/use-cases/get-lead.use-case";
-import { GetLeadStatsUseCase } from "../application/use-cases/get-lead-stats.use-case";
+import type { Request, Response, NextFunction } from "express";
+import type { AuthRequest, TenantAuthContext } from "../../../shared/types";
+import type { ListLeadsQuery, GetLeadsStatsQuery } from "./lead.schema";
 import { sendSuccess } from "../../../shared/utils/response";
-import { AuthRequest, TenantAuthContext } from "../../../shared/types";
-import { ListLeadsQuery, GetLeadsStatsQuery } from "./lead.schema";
+import { param } from "../../../shared/utils/paramHelper";
+import type { ListLeadsUseCase } from "../application/use-cases/list-leads.use-case";
+import type { GetLeadUseCase } from "../application/use-cases/get-lead.use-case";
+import type { GetLeadStatsUseCase } from "../application/use-cases/get-lead-stats.use-case";
 
-export class LeadController {
+export class TenantLeadController {
   constructor(
-    private readonly listLeads: ListLeadsUseCase,
-    private readonly getLeadDetails: GetLeadUseCase,
-    private readonly getLeadStats: GetLeadStatsUseCase,
+    private readonly listLeadsUseCase: ListLeadsUseCase,
+    private readonly getLeadDetailsUseCase: GetLeadUseCase,
+    private readonly getLeadStatsUseCase: GetLeadStatsUseCase,
   ) {}
 
   list = async (
@@ -22,7 +23,7 @@ export class LeadController {
       const { tenantId } = (req as AuthRequest).user as TenantAuthContext;
       const query = req.query as unknown as ListLeadsQuery;
 
-      const data = await this.listLeads.execute({
+      const data = await this.listLeadsUseCase.execute({
         tenantId,
         campaignId: query.campaignId,
         status: query.status,
@@ -48,7 +49,10 @@ export class LeadController {
   ): Promise<void> => {
     try {
       const { tenantId } = (req as AuthRequest).user as TenantAuthContext;
-      const data = await this.getLeadDetails.execute(tenantId, req.params.id as string);
+      const data = await this.getLeadDetailsUseCase.execute(
+        tenantId,
+        param(req, "id"),
+      );
       sendSuccess(res, data);
     } catch (err) {
       next(err);
@@ -64,7 +68,10 @@ export class LeadController {
       const { tenantId } = (req as AuthRequest).user as TenantAuthContext;
       const query = req.query as unknown as GetLeadsStatsQuery;
 
-      const data = await this.getLeadStats.execute(tenantId, query.campaignId);
+      const data = await this.getLeadStatsUseCase.execute(
+        tenantId,
+        query.campaignId,
+      );
       sendSuccess(res, data);
     } catch (err) {
       next(err);

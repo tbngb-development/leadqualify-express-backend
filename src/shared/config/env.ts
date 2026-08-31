@@ -11,7 +11,7 @@ function requireEnv(key: string): string {
 }
 
 export const env = {
-  port: Number(process.env.PORT) || 3000,
+  port: Number(process.env.PORT) || 5001,
   nodeEnv: process.env.NODE_ENV || "development",
   isDev: (process.env.NODE_ENV || "development") === "development",
 
@@ -39,6 +39,7 @@ export const env = {
 
   webhook: {
     baseUrl: process.env.WEBHOOK_BASE_URL || "",
+    webhookSecret: process.env.WEBHOOK_SECRET || "",
   },
 
   skipCrossBatchDedup: process.env.SKIP_CROSS_BATCH_DEDUP === "true",

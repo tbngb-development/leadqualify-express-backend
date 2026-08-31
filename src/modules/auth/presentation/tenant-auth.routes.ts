@@ -1,5 +1,5 @@
 import { Router } from "express";
-import type { AuthController } from "./auth.controller";
+import type { TenantAuthController } from "./tenant-auth.controller";
 import type { AuthenticateMiddleware } from "../../../shared/middleware/authenticate";
 import type { AuthorizeMiddleware } from "../../../shared/middleware/authorize";
 import { validate } from "../../../shared/middleware/validate";
@@ -14,28 +14,30 @@ import {
 } from "./auth.schema";
 
 export function buildTenantAuthRoutes(
-  controller: AuthController,
+  controller: TenantAuthController,
   authenticate: AuthenticateMiddleware,
   authorize: AuthorizeMiddleware,
 ): Router {
   const router = Router();
 
-  // Public
+  // Public routes
   router.post(
     "/register",
     validate(registerTenantOwnerSchema),
     controller.register,
   );
   router.post("/login", validate(loginSchema), controller.login);
-  router.post("/refresh", validate(refreshTokensSchema), controller.refresh);
-  router.post("/logout", validate(logoutSchema), controller.logout);
   router.post(
     "/accept-invite",
     validate(acceptInviteSchema),
     controller.acceptInvite,
   );
 
-  // Authenticated (any type)
+  // Authenticated routes
+  router.post("/refresh", validate(refreshTokensSchema), controller.refresh);
+  router.post("/logout", validate(logoutSchema), controller.logout);
+
+  // Tenant-scoped routes
   router.post(
     "/select-tenant",
     authenticate.any(),
@@ -43,8 +45,6 @@ export function buildTenantAuthRoutes(
     controller.selectTenant,
   );
   router.get("/profile", authenticate.any(), controller.profile);
-
-  // Tenant-scoped (OWNER/ADMIN can invite)
   router.post(
     "/invites",
     authenticate.tenant(),
@@ -52,16 +52,6 @@ export function buildTenantAuthRoutes(
     validate(createInviteSchema),
     controller.createInvite,
   );
-
-  return router;
-}
-
-export function buildAdminAuthRoutes(controller: AuthController): Router {
-  const router = Router();
-
-  router.post("/login", validate(loginSchema), controller.adminLogin);
-  router.post("/refresh", validate(refreshTokensSchema), controller.refresh);
-  router.post("/logout", validate(logoutSchema), controller.logout);
 
   return router;
 }

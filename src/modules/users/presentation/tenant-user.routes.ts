@@ -1,14 +1,14 @@
 import { Router } from "express";
-import { UserController } from "./user.controller";
-import { AuthenticateMiddleware } from "../../../shared/middleware/authenticate";
-import { AuthorizeMiddleware } from "../../../shared/middleware/authorize";
+import type { TenantUserController } from "./tenant-user.controller";
+import type { AuthenticateMiddleware } from "../../../shared/middleware/authenticate";
+import type { AuthorizeMiddleware } from "../../../shared/middleware/authorize";
 import { validate } from "../../../shared/middleware/validate";
 import { createUserSchema, updateUserSchema } from "./user.schema";
 
-export function buildUserRoutes(
-  controller: UserController,
+export function buildTenantUserRoutes(
+  controller: TenantUserController,
   authenticate: AuthenticateMiddleware,
-  authorize: AuthorizeMiddleware
+  authorize: AuthorizeMiddleware,
 ): Router {
   const router = Router();
 

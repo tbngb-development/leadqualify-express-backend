@@ -1,17 +1,18 @@
-import { Request, Response, NextFunction } from "express";
-import { ExtractBrochureUseCase } from "../application/use-cases/extract-brochure.use-case";
-import { SaveBrochureUseCase } from "../application/use-cases/save-brochure.use-case";
-import { ListBrochuresUseCase } from "../application/use-cases/list-brochures.use-case";
-import { GetBrochureUseCase } from "../application/use-cases/get-brochure.use-case";
-import { UpdateBrochureUseCase } from "../application/use-cases/update-brochure.use-case";
-import { DeleteBrochureUseCase } from "../application/use-cases/delete-brochure.use-case";
+import type { Request, Response, NextFunction } from "express";
+import type { AuthRequest, TenantAuthContext } from "../../../shared/types";
+import type { SaveBrochureBody, UpdateBrochureBody } from "./brochure.schema";
 import { sendSuccess } from "../../../shared/utils/response";
 import { HttpStatus } from "../../../shared/constants/http-status";
 import { cleanupUploadedFile } from "../../../shared/middleware/upload";
-import { AuthRequest, TenantAuthContext } from "../../../shared/types";
-import { SaveBrochureBody, UpdateBrochureBody } from "./brochure.schema";
+import { param } from "../../../shared/utils/paramHelper";
+import type { ExtractBrochureUseCase } from "../application/use-cases/extract-brochure.use-case";
+import type { SaveBrochureUseCase } from "../application/use-cases/save-brochure.use-case";
+import type { ListBrochuresUseCase } from "../application/use-cases/list-brochures.use-case";
+import type { GetBrochureUseCase } from "../application/use-cases/get-brochure.use-case";
+import type { UpdateBrochureUseCase } from "../application/use-cases/update-brochure.use-case";
+import type { DeleteBrochureUseCase } from "../application/use-cases/delete-brochure.use-case";
 
-export class BrochureController {
+export class TenantBrochureController {
   constructor(
     private readonly extractUseCase: ExtractBrochureUseCase,
     private readonly saveUseCase: SaveBrochureUseCase,
@@ -90,10 +91,7 @@ export class BrochureController {
   ): Promise<void> => {
     try {
       const { tenantId } = (req as AuthRequest).user as TenantAuthContext;
-      const data = await this.getUseCase.execute(
-        tenantId,
-        req.params.id as string,
-      );
+      const data = await this.getUseCase.execute(tenantId, param(req, "id"));
       sendSuccess(res, data);
     } catch (err) {
       next(err);
@@ -109,7 +107,7 @@ export class BrochureController {
       const { tenantId } = (req as AuthRequest).user as TenantAuthContext;
       const data = await this.updateUseCase.execute(
         tenantId,
-        req.params.id as string,
+        param(req, "id"),
         req.body,
       );
       sendSuccess(res, data, HttpStatus.OK, "Brochure updated successfully");
@@ -125,7 +123,7 @@ export class BrochureController {
   ): Promise<void> => {
     try {
       const { tenantId } = (req as AuthRequest).user as TenantAuthContext;
-      await this.deleteUseCase.execute(tenantId, req.params.id as string);
+      await this.deleteUseCase.execute(tenantId, param(req, "id"));
       sendSuccess(res, { message: "Brochure removed successfully" });
     } catch (err) {
       next(err);

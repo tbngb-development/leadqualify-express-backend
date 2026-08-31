@@ -1,4 +1,9 @@
 import type { Request, Response, NextFunction } from "express";
+import type { AuthRequest, TenantAuthContext } from "../../../shared/types";
+import type { RetryConfig } from "../../../shared/types/bolna.types";
+import { sendSuccess } from "../../../shared/utils/response";
+import { HttpStatus } from "../../../shared/constants/http-status";
+import { param } from "../../../shared/utils/paramHelper";
 import type { ListBatchesUseCase } from "../application/use-cases/list-batches.use-case";
 import type { GetBatchUseCase } from "../application/use-cases/get-batch.use-case";
 import type { CreateBatchUseCase } from "../application/use-cases/create-batch.use-case";
@@ -8,23 +13,23 @@ import type { StopBatchUseCase } from "../application/use-cases/stop-batch.use-c
 import type { ResumeBatchUseCase } from "../application/use-cases/resume-batch.use-case";
 import type { DeleteBatchUseCase } from "../application/use-cases/delete-batch.use-case";
 import type { GetBatchStatsUseCase } from "../application/use-cases/get-batch-stats.use-case";
-import { sendSuccess } from "../../../shared/utils/response";
-import { HttpStatus } from "../../../shared/constants/http-status";
-import type { AuthRequest, TenantAuthContext } from "../../../shared/types";
-import type { RetryConfig } from "../../../shared/types/bolna.types";
 
-export class BatchController {
+export class TenantBatchController {
   constructor(
-    private readonly listBatches: ListBatchesUseCase,
-    private readonly getBatch: GetBatchUseCase,
-    private readonly createBatch: CreateBatchUseCase,
-    private readonly runBatch: RunBatchUseCase,
-    private readonly scheduleBatch: ScheduleBatchUseCase,
-    private readonly stopBatch: StopBatchUseCase,
-    private readonly resumeBatch: ResumeBatchUseCase,
-    private readonly deleteBatch: DeleteBatchUseCase,
-    private readonly getBatchStats: GetBatchStatsUseCase,
+    private readonly listBatchesUseCase: ListBatchesUseCase,
+    private readonly getBatchUseCase: GetBatchUseCase,
+    private readonly createBatchUseCase: CreateBatchUseCase,
+    private readonly runBatchUseCase: RunBatchUseCase,
+    private readonly scheduleBatchUseCase: ScheduleBatchUseCase,
+    private readonly stopBatchUseCase: StopBatchUseCase,
+    private readonly resumeBatchUseCase: ResumeBatchUseCase,
+    private readonly deleteBatchUseCase: DeleteBatchUseCase,
+    private readonly getBatchStatsUseCase: GetBatchStatsUseCase,
   ) {}
+
+  private getTenant(req: Request): TenantAuthContext {
+    return (req as AuthRequest).user as TenantAuthContext;
+  }
 
   list = async (
     req: Request,
@@ -32,9 +37,9 @@ export class BatchController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const { tenantId } = (req as AuthRequest).user as TenantAuthContext;
-      const campaignId = req.params.campaignId as string;
-      const data = await this.listBatches.execute(tenantId, campaignId);
+      const { tenantId } = this.getTenant(req);
+      const campaignId = param(req, "campaignId");
+      const data = await this.listBatchesUseCase.execute(tenantId, campaignId);
       sendSuccess(res, data);
     } catch (err) {
       next(err);
@@ -47,10 +52,14 @@ export class BatchController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const { tenantId } = (req as AuthRequest).user as TenantAuthContext;
-      const campaignId = req.params.campaignId as string;
-      const batchId = req.params.batchId as string;
-      const data = await this.getBatch.execute(tenantId, campaignId, batchId);
+      const { tenantId } = this.getTenant(req);
+      const campaignId = param(req, "campaignId");
+      const batchId = param(req, "batchId");
+      const data = await this.getBatchUseCase.execute(
+        tenantId,
+        campaignId,
+        batchId,
+      );
       sendSuccess(res, data);
     } catch (err) {
       next(err);
@@ -63,8 +72,8 @@ export class BatchController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const { tenantId } = (req as AuthRequest).user as TenantAuthContext;
-      const campaignId = req.params.campaignId as string as string;
+      const { tenantId } = this.getTenant(req);
+      const campaignId = param(req, "campaignId");
 
       if (!req.file) {
         res.status(HttpStatus.BAD_REQUEST).json({
@@ -90,7 +99,7 @@ export class BatchController {
         }
       }
 
-      const data = await this.createBatch.execute({
+      const data = await this.createBatchUseCase.execute({
         tenantId,
         campaignId,
         fileBuffer: req.file.buffer,
@@ -110,10 +119,12 @@ export class BatchController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const { tenantId } = (req as AuthRequest).user as TenantAuthContext;
-      const campaignId = req.params.campaignId as string;
-      const batchId = req.params.batchId as string;
-      const data = await this.runBatch.execute(tenantId, campaignId, batchId);
+      const { tenantId } = this.getTenant(req);
+      const data = await this.runBatchUseCase.execute(
+        tenantId,
+        param(req, "campaignId"),
+        param(req, "batchId"),
+      );
       sendSuccess(res, data);
     } catch (err) {
       next(err);
@@ -126,13 +137,11 @@ export class BatchController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const { tenantId } = (req as AuthRequest).user as TenantAuthContext;
-      const campaignId = req.params.campaignId as string;
-      const batchId = req.params.batchId as string;
-      const data = await this.scheduleBatch.execute(
+      const { tenantId } = this.getTenant(req);
+      const data = await this.scheduleBatchUseCase.execute(
         tenantId,
-        campaignId,
-        batchId,
+        param(req, "campaignId"),
+        param(req, "batchId"),
         req.body.scheduledAt,
       );
       sendSuccess(res, data);
@@ -147,10 +156,12 @@ export class BatchController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const { tenantId } = (req as AuthRequest).user as TenantAuthContext;
-      const campaignId = req.params.campaignId as string;
-      const batchId = req.params.batchId as string;
-      const data = await this.stopBatch.execute(tenantId, campaignId, batchId);
+      const { tenantId } = this.getTenant(req);
+      const data = await this.stopBatchUseCase.execute(
+        tenantId,
+        param(req, "campaignId"),
+        param(req, "batchId"),
+      );
       sendSuccess(res, data);
     } catch (err) {
       next(err);
@@ -163,13 +174,11 @@ export class BatchController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const { tenantId } = (req as AuthRequest).user as TenantAuthContext;
-      const campaignId = req.params.campaignId as string;
-      const batchId = req.params.batchId as string;
-      const data = await this.resumeBatch.execute(
+      const { tenantId } = this.getTenant(req);
+      const data = await this.resumeBatchUseCase.execute(
         tenantId,
-        campaignId,
-        batchId,
+        param(req, "campaignId"),
+        param(req, "batchId"),
       );
       sendSuccess(res, data, HttpStatus.CREATED);
     } catch (err) {
@@ -183,13 +192,11 @@ export class BatchController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const { tenantId } = (req as AuthRequest).user as TenantAuthContext;
-      const campaignId = req.params.campaignId as string;
-      const batchId = req.params.batchId as string;
-      const data = await this.deleteBatch.execute(
+      const { tenantId } = this.getTenant(req);
+      const data = await this.deleteBatchUseCase.execute(
         tenantId,
-        campaignId,
-        batchId,
+        param(req, "campaignId"),
+        param(req, "batchId"),
       );
       sendSuccess(res, data);
     } catch (err) {
@@ -203,13 +210,11 @@ export class BatchController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const { tenantId } = (req as AuthRequest).user as TenantAuthContext;
-      const campaignId = req.params.campaignId as string;
-      const batchId = req.params.batchId as string;
-      const data = await this.getBatchStats.execute(
+      const { tenantId } = this.getTenant(req);
+      const data = await this.getBatchStatsUseCase.execute(
         tenantId,
-        campaignId,
-        batchId,
+        param(req, "campaignId"),
+        param(req, "batchId"),
       );
       sendSuccess(res, data);
     } catch (err) {

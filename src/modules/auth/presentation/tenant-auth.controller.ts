@@ -1,11 +1,4 @@
 import type { Request, Response, NextFunction } from "express";
-
-import { AuthMapper } from "./auth.mapper";
-import { sendSuccess } from "../../../shared/utils/response";
-import { env } from "../../../shared/config/env";
-import { HttpStatus } from "../../../shared/constants/http-status";
-import { AuthMessages } from "../../../shared/constants/messages";
-import { UnauthorizedError } from "../../../shared/errors/unauthorized.error";
 import type {
   RegisterTenantOwnerBody,
   LoginBody,
@@ -14,9 +7,19 @@ import type {
   LogoutBody,
   CreateInviteBody,
   AcceptInviteBody,
-  AdminLoginBody,
 } from "./auth.schema";
 import type { AuthRequest, TenantAuthContext } from "../../../shared/types";
+import { AuthMapper } from "./auth.mapper";
+import { sendSuccess } from "../../../shared/utils/response";
+import { HttpStatus } from "../../../shared/constants/http-status";
+import {
+  COOKIE_ACCESS_TOKEN,
+  COOKIE_REFRESH_TOKEN,
+  getCookieSameSite,
+} from "../../../shared/constants/cookies";
+import { env } from "../../../shared/config/env";
+import { UnauthorizedError } from "../../../shared/errors/unauthorized.error";
+import { AuthMessages } from "../../../shared/constants/messages";
 import { RegisterTenantOwnerUseCase } from "../application/use-cases/register-tenant-owner.use-case";
 import { LoginUseCase } from "../application/use-cases/login.use-case";
 import { SelectTenantUseCase } from "../application/use-cases/select-tenant.use-case";
@@ -26,7 +29,10 @@ import { CreateInviteUseCase } from "../application/use-cases/create-invite.use-
 import { AcceptInviteUseCase } from "../application/use-cases/accept-invite.use-case";
 import { LogoutUseCase } from "../application/use-cases/logout.use-case";
 
-export class AuthController {
+const DEFAULT_ACCESS_EXPIRY = 900;
+const DEFAULT_REFRESH_EXPIRY = 604800;
+
+export class TenantAuthController {
   constructor(
     private readonly registerTenantOwnerUseCase: RegisterTenantOwnerUseCase,
     private readonly loginUseCase: LoginUseCase,
@@ -45,14 +51,13 @@ export class AuthController {
   ): Promise<void> => {
     try {
       const output = await this.registerTenantOwnerUseCase.execute(req.body);
-
-      this.setTokenCookies(res, {
-        accessToken: output.accessToken,
-        refreshToken: output.refreshToken,
-        accessTokenExpiresIn: output.accessTokenExpiresIn,
-        refreshTokenExpiresIn: output.refreshTokenExpiresIn,
-      });
-
+      this.setTokenCookies(
+        res,
+        output.accessToken,
+        output.refreshToken,
+        output.accessTokenExpiresIn,
+        output.refreshTokenExpiresIn,
+      );
       sendSuccess(
         res,
         AuthMapper.toRegisterResponse(output),
@@ -70,44 +75,15 @@ export class AuthController {
   ): Promise<void> => {
     try {
       const output = await this.loginUseCase.execute(req.body);
-
-      // Only set cookies if authentication completed (no tenant selection step needed)
       if (output.accessToken && output.refreshToken) {
-        this.setTokenCookies(res, {
-          accessToken: output.accessToken,
-          refreshToken: output.refreshToken,
-          accessTokenExpiresIn: output.accessTokenExpiresIn ?? 900,
-          refreshTokenExpiresIn: output.refreshTokenExpiresIn ?? 604800,
-        });
+        this.setTokenCookies(
+          res,
+          output.accessToken,
+          output.refreshToken,
+          output.accessTokenExpiresIn ?? DEFAULT_ACCESS_EXPIRY,
+          output.refreshTokenExpiresIn ?? DEFAULT_REFRESH_EXPIRY,
+        );
       }
-
-      sendSuccess(res, AuthMapper.toLoginResponse(output), HttpStatus.OK);
-    } catch (err) {
-      next(err);
-    }
-  };
-
-  adminLogin = async (
-    req: Request<unknown, unknown, AdminLoginBody>,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
-    try {
-      const output = await this.loginUseCase.execute(req.body);
-
-      if (!output.user.isPlatformAdmin) {
-        throw new UnauthorizedError(AuthMessages.NOT_PLATFORM_ADMIN);
-      }
-
-      if (output.accessToken && output.refreshToken) {
-        this.setTokenCookies(res, {
-          accessToken: output.accessToken,
-          refreshToken: output.refreshToken,
-          accessTokenExpiresIn: output.accessTokenExpiresIn ?? 900,
-          refreshTokenExpiresIn: output.refreshTokenExpiresIn ?? 604800,
-        });
-      }
-
       sendSuccess(res, AuthMapper.toLoginResponse(output), HttpStatus.OK);
     } catch (err) {
       next(err);
@@ -125,14 +101,13 @@ export class AuthController {
         userId: authReq.user.userId,
         tenantId: req.body.tenantId,
       });
-
-      this.setTokenCookies(res, {
-        accessToken: output.accessToken,
-        refreshToken: output.refreshToken,
-        accessTokenExpiresIn: output.accessTokenExpiresIn,
-        refreshTokenExpiresIn: output.refreshTokenExpiresIn,
-      });
-
+      this.setTokenCookies(
+        res,
+        output.accessToken,
+        output.refreshToken,
+        output.accessTokenExpiresIn,
+        output.refreshTokenExpiresIn,
+      );
       sendSuccess(
         res,
         AuthMapper.toSelectTenantResponse(output),
@@ -149,26 +124,22 @@ export class AuthController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      // Pull refresh token from body or from cookie fallback
       let refreshToken = req.body.refreshToken;
-      if (!refreshToken && req.cookies && req.cookies.refresh_token) {
-        refreshToken = req.cookies.refresh_token as string;
+      if (!refreshToken && req.cookies?.[COOKIE_REFRESH_TOKEN]) {
+        refreshToken = req.cookies[COOKIE_REFRESH_TOKEN] as string;
       }
-
       if (!refreshToken) {
         throw new UnauthorizedError(AuthMessages.REFRESH_TOKEN_INVALID);
       }
-
       const output = await this.refreshTokensUseCase.execute({ refreshToken });
-
-      this.setTokenCookies(res, {
-        accessToken: output.accessToken,
-        refreshToken: output.refreshToken,
-        accessTokenExpiresIn: output.accessTokenExpiresIn,
-        refreshTokenExpiresIn: output.refreshTokenExpiresIn,
-      });
-
-      sendSuccess(res, AuthMapper.toRefreshResponse(output), HttpStatus.OK);
+      this.setTokenCookies(
+        res,
+        output.accessToken,
+        output.refreshToken,
+        output.accessTokenExpiresIn,
+        output.refreshTokenExpiresIn,
+      );
+      sendSuccess(res, AuthMapper.toRefreshResponse(), HttpStatus.OK);
     } catch (err) {
       next(err);
     }
@@ -194,16 +165,13 @@ export class AuthController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const authReq = req as AuthRequest;
-      const context = authReq.user as TenantAuthContext;
-
+      const context = (req as AuthRequest).user as TenantAuthContext;
       const output = this.createInviteUseCase.execute({
         tenantId: context.tenantId,
         email: req.body.email,
         role: req.body.role,
         inviterId: context.userId,
       });
-
       sendSuccess(res, AuthMapper.toInviteResponse(output), HttpStatus.CREATED);
     } catch (err) {
       next(err);
@@ -217,14 +185,13 @@ export class AuthController {
   ): Promise<void> => {
     try {
       const output = await this.acceptInviteUseCase.execute(req.body);
-
-      this.setTokenCookies(res, {
-        accessToken: output.accessToken,
-        refreshToken: output.refreshToken,
-        accessTokenExpiresIn: output.accessTokenExpiresIn,
-        refreshTokenExpiresIn: output.refreshTokenExpiresIn,
-      });
-
+      this.setTokenCookies(
+        res,
+        output.accessToken,
+        output.refreshToken,
+        output.accessTokenExpiresIn,
+        output.refreshTokenExpiresIn,
+      );
       sendSuccess(
         res,
         AuthMapper.toAcceptInviteResponse(output),
@@ -242,69 +209,54 @@ export class AuthController {
   ): Promise<void> => {
     try {
       let refreshToken = req.body.refreshToken;
-      if (!refreshToken && req.cookies && req.cookies.refresh_token) {
-        refreshToken = req.cookies.refresh_token as string;
+      if (!refreshToken && req.cookies?.[COOKIE_REFRESH_TOKEN]) {
+        refreshToken = req.cookies[COOKIE_REFRESH_TOKEN] as string;
       }
-
       if (refreshToken) {
         await this.logoutUseCase.execute({ refreshToken });
       }
-
       this.clearTokenCookies(res);
-
       sendSuccess(res, { message: AuthMessages.LOGOUT_SUCCESS }, HttpStatus.OK);
     } catch (err) {
       next(err);
     }
   };
 
-  // ── Cookie Helpers ────────────────────────────────────────────────────────
+  // ── Cookie Helpers ──────────────────────────────────────────────────────
 
   private setTokenCookies(
     res: Response,
-    tokens: {
-      accessToken: string;
-      refreshToken: string;
-      accessTokenExpiresIn: number;
-      refreshTokenExpiresIn: number;
-    },
+    accessToken: string,
+    refreshToken: string,
+    accessExpiry: number,
+    refreshExpiry: number,
   ): void {
     const isProduction = env.nodeEnv === "production";
+    const sameSite = getCookieSameSite(isProduction);
 
-    // Access Token Cookie
-    res.cookie("access_token", tokens.accessToken, {
+    res.cookie(COOKIE_ACCESS_TOKEN, accessToken, {
       httpOnly: true,
-      secure: isProduction, // Uses secure SSL connection only in production
-      sameSite: isProduction ? "none" : "lax", // Lax local, None cross-origin production
-      maxAge: tokens.accessTokenExpiresIn * 1000,
+      secure: isProduction,
+      sameSite,
+      maxAge: accessExpiry * 1000,
       path: "/",
     });
 
-    // Refresh Token Cookie
-    res.cookie("refresh_token", tokens.refreshToken, {
+    res.cookie(COOKIE_REFRESH_TOKEN, refreshToken, {
       httpOnly: true,
       secure: isProduction,
-      sameSite: isProduction ? "none" : "lax",
-      maxAge: tokens.refreshTokenExpiresIn * 1000,
+      sameSite,
+      maxAge: refreshExpiry * 1000,
       path: "/",
     });
   }
 
   private clearTokenCookies(res: Response): void {
     const isProduction = env.nodeEnv === "production";
+    const sameSite = getCookieSameSite(isProduction);
+    const opts = { httpOnly: true, secure: isProduction, sameSite, path: "/" };
 
-    res.clearCookie("access_token", {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? "none" : "lax",
-      path: "/",
-    });
-
-    res.clearCookie("refresh_token", {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? "none" : "lax",
-      path: "/",
-    });
+    res.clearCookie(COOKIE_ACCESS_TOKEN, opts);
+    res.clearCookie(COOKIE_REFRESH_TOKEN, opts);
   }
 }

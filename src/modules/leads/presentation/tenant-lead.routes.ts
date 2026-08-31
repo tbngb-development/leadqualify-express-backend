@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { LeadController } from "./lead.controller";
-import { AuthenticateMiddleware } from "../../../shared/middleware/authenticate";
+import type { TenantLeadController } from "./tenant-lead.controller";
+import type { AuthenticateMiddleware } from "../../../shared/middleware/authenticate";
 import { validateQuery } from "../../../shared/middleware/validate";
 import { listLeadsQuerySchema, getLeadsStatsQuerySchema } from "./lead.schema";
 
-export function buildLeadRoutes(
-  controller: LeadController,
+export function buildTenantLeadRoutes(
+  controller: TenantLeadController,
   authenticate: AuthenticateMiddleware,
 ): Router {
   const router = Router();

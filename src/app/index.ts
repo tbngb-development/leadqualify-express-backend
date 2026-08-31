@@ -30,6 +30,9 @@ export function buildApp(): Express {
     if (env.isDev) {
       console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
     }
+    if (env.isDev) {
+      console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+    }
     next();
   });
 

@@ -1,24 +1,29 @@
 import type { Request, Response, NextFunction } from "express";
+import type { AuthRequest, TenantAuthContext } from "../../../shared/types";
+import type { CreateCampaignInput } from "../application/dto/campaign.dto";
+import { sendSuccess } from "../../../shared/utils/response";
+import { HttpStatus } from "../../../shared/constants/http-status";
+import { param } from "../../../shared/utils/paramHelper";
 import type { ListCampaignsUseCase } from "../application/use-cases/list-campaigns.use-case";
 import type { GetCampaignUseCase } from "../application/use-cases/get-campaign.use-case";
 import type { CreateCampaignUseCase } from "../application/use-cases/create-campaign.use-case";
 import type { ParseLeadsUseCase } from "../application/use-cases/parse-leads.use-case";
 import type { GetCampaignStatsUseCase } from "../application/use-cases/get-campaign-stats.use-case";
 import type { GetCampaignPerformanceUseCase } from "../application/use-cases/get-campaign-performance.use-case";
-import { sendSuccess } from "../../../shared/utils/response";
-import { HttpStatus } from "../../../shared/constants/http-status";
-import type { AuthRequest, TenantAuthContext } from "../../../shared/types";
-import { CreateCampaignInput } from "../application/dto/campaign.dto";
 
-export class CampaignController {
+export class TenantCampaignController {
   constructor(
-    private readonly listCampaigns: ListCampaignsUseCase,
-    private readonly getCampaign: GetCampaignUseCase,
-    private readonly createCampaign: CreateCampaignUseCase,
-    private readonly parseLeads: ParseLeadsUseCase,
-    private readonly getCampaignStats: GetCampaignStatsUseCase,
-    private readonly getCampaignPerformance: GetCampaignPerformanceUseCase,
+    private readonly listCampaignsUseCase: ListCampaignsUseCase,
+    private readonly getCampaignUseCase: GetCampaignUseCase,
+    private readonly createCampaignUseCase: CreateCampaignUseCase,
+    private readonly parseLeadsUseCase: ParseLeadsUseCase,
+    private readonly getCampaignStatsUseCase: GetCampaignStatsUseCase,
+    private readonly getCampaignPerformanceUseCase: GetCampaignPerformanceUseCase,
   ) {}
+
+  private getTenant(req: Request): TenantAuthContext {
+    return (req as AuthRequest).user as TenantAuthContext;
+  }
 
   list = async (
     req: Request,
@@ -26,8 +31,8 @@ export class CampaignController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const { tenantId } = (req as AuthRequest).user as TenantAuthContext;
-      const data = await this.listCampaigns.execute(tenantId);
+      const { tenantId } = this.getTenant(req);
+      const data = await this.listCampaignsUseCase.execute(tenantId);
       sendSuccess(res, data);
     } catch (err) {
       next(err);
@@ -40,9 +45,11 @@ export class CampaignController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const { tenantId } = (req as AuthRequest).user as TenantAuthContext;
-      const campaignId = req.params.id as string;
-      const data = await this.getCampaign.execute(tenantId, campaignId);
+      const { tenantId } = this.getTenant(req);
+      const data = await this.getCampaignUseCase.execute(
+        tenantId,
+        param(req, "id"),
+      );
       sendSuccess(res, data);
     } catch (err) {
       next(err);
@@ -55,23 +62,23 @@ export class CampaignController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const { tenantId } = (req as AuthRequest).user as TenantAuthContext;
+      const { tenantId } = this.getTenant(req);
       const payload = req.body as CreateCampaignInput;
-      const data = await this.createCampaign.execute(tenantId, payload);
+      const data = await this.createCampaignUseCase.execute(tenantId, payload);
       sendSuccess(res, data, HttpStatus.CREATED);
     } catch (err) {
       next(err);
     }
   };
 
-  parseLeadsHandler = async (
+  parseLeads = async (
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const { tenantId } = (req as AuthRequest).user as TenantAuthContext;
-      const campaignId = req.params.id as string;
+      const { tenantId } = this.getTenant(req);
+      const campaignId = param(req, "id");
 
       if (!req.file) {
         res.status(HttpStatus.BAD_REQUEST).json({
@@ -81,7 +88,7 @@ export class CampaignController {
         return;
       }
 
-      const result = await this.parseLeads.execute({
+      const result = await this.parseLeadsUseCase.execute({
         tenantId,
         campaignId,
         fileBuffer: req.file.buffer,
@@ -100,9 +107,11 @@ export class CampaignController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const { tenantId } = (req as AuthRequest).user as TenantAuthContext;
-      const campaignId = req.params.id as string;
-      const data = await this.getCampaignStats.execute(tenantId, campaignId);
+      const { tenantId } = this.getTenant(req);
+      const data = await this.getCampaignStatsUseCase.execute(
+        tenantId,
+        param(req, "id"),
+      );
       sendSuccess(res, data);
     } catch (err) {
       next(err);
@@ -115,12 +124,10 @@ export class CampaignController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const { tenantId } = (req as AuthRequest).user as TenantAuthContext;
-      const campaignId = req.params.id as string;
-
-      const data = await this.getCampaignPerformance.execute(
+      const { tenantId } = this.getTenant(req);
+      const data = await this.getCampaignPerformanceUseCase.execute(
         tenantId,
-        campaignId,
+        param(req, "id"),
       );
       sendSuccess(res, data);
     } catch (err) {
