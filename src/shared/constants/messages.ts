@@ -43,3 +43,11 @@ export const GeneralMessages = {
   RESOURCE_UPDATED: "Resource updated successfully",
   RESOURCE_DELETED: "Resource deleted successfully",
 } as const;
+
+export const AdminMessages = {
+  TENANT_ID_REQUIRED: "tenantId is required for admin operations",
+} as const;
+
+export const WebhookMessages = {
+  INVALID_SECRET: "Invalid or missing webhook secret",
+} as const;

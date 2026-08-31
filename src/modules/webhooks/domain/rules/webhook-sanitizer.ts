@@ -1,12 +1,12 @@
 import {
-  Disposition,
-  LeadTemperature,
-  PurchaseTimeline,
-  PurchasePurpose,
-  LocationMatch,
-  PreferredNextAction,
-  ContactChannel,
-  ExtractionFlag,
+  type Disposition,
+  type LeadTemperature,
+  type PurchaseTimeline,
+  type PurchasePurpose,
+  type LocationMatch,
+  type PreferredNextAction,
+  type ContactChannel,
+  type ExtractionFlag,
 } from "../../../../generated/prisma";
 
 // ── Allowed enum values matching generated Prisma definitions ────────────────

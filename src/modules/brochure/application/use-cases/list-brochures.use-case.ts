@@ -1,6 +1,6 @@
 import {
-  BrochureRepository,
-  BrochureListItem,
+  type BrochureRepository,
+  type BrochureListItem,
 } from "../interfaces/brochure-repository.interface";
 
 export class ListBrochuresUseCase {

@@ -1,5 +1,5 @@
-import { CallRepository, PaginatedCallsResult } from "../interfaces/call-repository.interface";
-import { ListCallsInput } from "../dto/call.dto";
+import { type CallRepository, type PaginatedCallsResult } from "../interfaces/call-repository.interface";
+import { type ListCallsInput } from "../dto/call.dto";
 
 export class ListCallsUseCase {
   constructor(private readonly callRepo: CallRepository) {}

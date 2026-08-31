@@ -1,7 +1,7 @@
-import { AssistantRepository } from "../interfaces/assistant-repository.interface";
-import { BolnaAgentProvider } from "../interfaces/bolna-agent-provider.interface";
+import { type AssistantRepository } from "../interfaces/assistant-repository.interface";
+import { type BolnaAgentProvider } from "../interfaces/bolna-agent-provider.interface";
 import { AssistantNotFoundError } from "../../domain/errors/assistant.errors";
-import { GetAssistantOutput } from "../dto/assistant.dto";
+import { type GetAssistantOutput } from "../dto/assistant.dto";
 import {
   getAgentSystemPrompt,
   extractPromptInputFields,

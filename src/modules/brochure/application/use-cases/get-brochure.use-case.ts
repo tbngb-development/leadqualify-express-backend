@@ -1,4 +1,4 @@
-import { BrochureRepository } from "../interfaces/brochure-repository.interface";
+import { type BrochureRepository } from "../interfaces/brochure-repository.interface";
 import { BrochureNotFoundError } from "../../domain/errors/brochure.errors";
 
 export class GetBrochureUseCase {

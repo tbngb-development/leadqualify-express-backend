@@ -72,7 +72,7 @@ export class ParseLeadsUseCase {
     }
 
     // Cross-batch dedup
-    let dbDuplicateNumbers: string[] = [];
+    const dbDuplicateNumbers: string[] = [];
     let newLeads: LeadRow[] = [];
 
     if (env.skipCrossBatchDedup) {

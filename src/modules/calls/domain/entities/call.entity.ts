@@ -1,4 +1,4 @@
-import { CallStatus } from "../../../../generated/prisma";
+import { type CallStatus } from "../../../../generated/prisma";
 
 export interface CallEntityData {
   id: string;

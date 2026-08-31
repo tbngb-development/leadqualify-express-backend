@@ -1,5 +1,4 @@
 import { NotFoundError } from "../../../../shared/errors/not-found.error";
-import { ConflictError } from "../../../../shared/errors/conflict.error";
 import { AppError } from "../../../../shared/errors/app.error";
 import { HttpStatus } from "../../../../shared/constants/http-status";
 import type { CampaignStatus } from "../../../../generated/prisma";

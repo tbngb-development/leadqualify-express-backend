@@ -1,7 +1,7 @@
-import { AssistantRepository } from "../interfaces/assistant-repository.interface";
-import { UpdateAssistantInput } from "../dto/assistant.dto";
+import { type AssistantRepository } from "../interfaces/assistant-repository.interface";
+import { type UpdateAssistantInput } from "../dto/assistant.dto";
 import { AssistantNotFoundError } from "../../domain/errors/assistant.errors";
-import { AssistantEntityData } from "../../domain/entities/assistant.entity";
+import { type AssistantEntityData } from "../../domain/entities/assistant.entity";
 
 export class UpdateAssistantUseCase {
   constructor(private readonly assistantRepo: AssistantRepository) {}

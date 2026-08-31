@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
-import { ProcessCallWebhookUseCase } from "../application/use-cases/process-call-webhook.use-case";
-import { ProcessBatchWebhookUseCase } from "../application/use-cases/process-batch-webhook.use-case";
-import {
+import type { Request, Response } from "express";
+import type { ProcessCallWebhookUseCase } from "../application/use-cases/process-call-webhook.use-case";
+import type { ProcessBatchWebhookUseCase } from "../application/use-cases/process-batch-webhook.use-case";
+import type {
   WebhookCallPayload,
   WebhookBatchPayload,
 } from "../application/dto/webhook.dto";
@@ -16,7 +16,7 @@ export class WebhookController {
     req: Request<unknown, unknown, WebhookCallPayload>,
     res: Response,
   ): Promise<void> => {
-    // Statelesly response received immediately to prevent timeout blocks
+    // Stateless response received immediately to prevent timeout blocks
     res.json({ received: true });
 
     try {

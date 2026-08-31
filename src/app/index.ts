@@ -30,12 +30,15 @@ export function buildApp(): Express {
     if (env.isDev) {
       console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
     }
+    if (env.isDev) {
+      console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+    }
     next();
   });
 
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 100,
+    max: 200,
     standardHeaders: true,
     legacyHeaders: false,
   });

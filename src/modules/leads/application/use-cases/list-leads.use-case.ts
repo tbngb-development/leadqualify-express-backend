@@ -1,8 +1,8 @@
 import {
-  LeadRepository,
-  PaginatedLeadsResult,
+  type LeadRepository,
+  type PaginatedLeadsResult,
 } from "../interfaces/lead-repository.interface";
-import { ListLeadsInput } from "../dto/lead.dto";
+import { type ListLeadsInput } from "../dto/lead.dto";
 
 export class ListLeadsUseCase {
   constructor(private readonly leadRepo: LeadRepository) {}

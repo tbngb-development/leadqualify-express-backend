@@ -1,4 +1,4 @@
-import { UserRepository } from "../interfaces/user-repository.interface";
+import { type UserRepository } from "../interfaces/user-repository.interface";
 import {
   UserNotFoundError,
   SelfDeletionError,

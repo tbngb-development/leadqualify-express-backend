@@ -1,6 +1,6 @@
-import { Prisma } from "../../../../generated/prisma";
+import { type Prisma } from "../../../../generated/prisma";
 import prisma from "../../../../shared/config/database/prisma";
-import { LeadStatus, CallStatus, Disposition } from "../../../../generated/prisma";
+import { type LeadStatus, type CallStatus, type Disposition } from "../../../../generated/prisma";
 import type {
   LeadRepository,
   ListLeadsFilters,

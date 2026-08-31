@@ -1,16 +1,16 @@
 import { Router } from "express";
-import { TenantController } from "./tenant.controller";
-import { AuthenticateMiddleware } from "../../../shared/middleware/authenticate";
-import { AuthorizeMiddleware } from "../../../shared/middleware/authorize";
+import type { AdminTenantController } from "./admin-tenant.controller";
+import type { AuthenticateMiddleware } from "../../../shared/middleware/authenticate";
+import type { AuthorizeMiddleware } from "../../../shared/middleware/authorize";
 import { validate } from "../../../shared/middleware/validate";
 import { adminUpdateTenantSchema } from "./tenant.schema";
 
 /**
- * Platform administrative routes for cross-tenant management.
+ * Platform Admin tenant management routes.
  * Mounted at: /api/v1/admin/tenants
  */
 export function buildAdminTenantRoutes(
-  controller: TenantController,
+  controller: AdminTenantController,
   authenticate: AuthenticateMiddleware,
   authorize: AuthorizeMiddleware,
 ): Router {
@@ -19,14 +19,10 @@ export function buildAdminTenantRoutes(
   router.use(authenticate.admin());
   router.use(authorize.platformAdmin());
 
-  router.get("/", controller.adminList);
-  router.get("/:id", controller.adminGet);
-  router.patch(
-    "/:id",
-    validate(adminUpdateTenantSchema),
-    controller.adminUpdate,
-  );
-  router.get("/:id/stats", controller.adminStats);
+  router.get("/", controller.list);
+  router.get("/:id", controller.get);
+  router.get("/:id/stats", controller.stats);
+  router.patch("/:id", validate(adminUpdateTenantSchema), controller.update);
 
   return router;
 }

@@ -1,0 +1,44 @@
+import { PrismaCampaignRepository } from "./infrastructure/repositories/prisma-campaign.repository";
+import { PrismaBatchRepository } from "../batches/infrastructure/repositories/prisma-batch.repository";
+import { ListCampaignsUseCase } from "./application/use-cases/list-campaigns.use-case";
+import { GetCampaignUseCase } from "./application/use-cases/get-campaign.use-case";
+import { CreateCampaignUseCase } from "./application/use-cases/create-campaign.use-case";
+import { ParseLeadsUseCase } from "./application/use-cases/parse-leads.use-case";
+import { GetCampaignStatsUseCase } from "./application/use-cases/get-campaign-stats.use-case";
+import { GetCampaignPerformanceUseCase } from "./application/use-cases/get-campaign-performance.use-case";
+import { TenantCampaignController } from "./presentation/tenant-campaign.controller";
+import { AdminCampaignController } from "./presentation/admin-campaign.controller";
+
+export interface CampaignModule {
+  tenantController: TenantCampaignController;
+  adminController: AdminCampaignController;
+}
+
+export function buildCampaignModule(): CampaignModule {
+  const campaignRepo = new PrismaCampaignRepository();
+  const batchRepo = new PrismaBatchRepository();
+
+  const listCampaigns = new ListCampaignsUseCase(campaignRepo);
+  const getCampaign = new GetCampaignUseCase(campaignRepo);
+  const getCampaignStats = new GetCampaignStatsUseCase(campaignRepo);
+  const getCampaignPerformance = new GetCampaignPerformanceUseCase(
+    campaignRepo,
+  );
+
+  return {
+    tenantController: new TenantCampaignController(
+      listCampaigns,
+      getCampaign,
+      new CreateCampaignUseCase(campaignRepo),
+      new ParseLeadsUseCase(campaignRepo, batchRepo),
+      getCampaignStats,
+      getCampaignPerformance,
+    ),
+    adminController: new AdminCampaignController(
+      listCampaigns,
+      getCampaign,
+      getCampaignStats,
+      getCampaignPerformance,
+    ),
+  };
+}

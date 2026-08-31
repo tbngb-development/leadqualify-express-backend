@@ -1,6 +1,6 @@
 import { bolnaClient } from "../../../../shared/config/external/bolna/bolna.client";
-import { BolnaAgentProvider } from "../../application/interfaces/bolna-agent-provider.interface";
-import { BolnaAgentResponse } from "../../../../shared/types/bolna.types";
+import { type BolnaAgentProvider } from "../../application/interfaces/bolna-agent-provider.interface";
+import { type BolnaAgentResponse } from "../../../../shared/types/bolna.types";
 import { BolnaAgentNotFoundError, BolnaVerificationFailedError } from "../../domain/errors/assistant.errors";
 
 export class BolnaAgentProviderImpl implements BolnaAgentProvider {

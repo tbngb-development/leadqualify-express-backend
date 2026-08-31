@@ -1,4 +1,4 @@
-import { TenantRepository } from "../interfaces/tenant-repository.interface";
+import { type TenantRepository } from "../interfaces/tenant-repository.interface";
 import { TenantNotFoundError } from "../../domain/tenant.errors";
 
 export class GetTenantStatsUseCase {

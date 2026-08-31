@@ -1,5 +1,5 @@
 import { TenantNotFoundError } from "../../domain/tenant.errors";
-import { TenantRepository } from "../interfaces/tenant-repository.interface";
+import { type TenantRepository } from "../interfaces/tenant-repository.interface";
 
 export class GetTenantUseCase {
   constructor(private readonly tenantRepo: TenantRepository) {}

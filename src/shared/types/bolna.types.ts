@@ -1,12 +1,12 @@
 import {
-  ContactChannel,
-  Disposition,
-  ExtractionFlag,
-  LeadTemperature,
-  LocationMatch,
-  PreferredNextAction,
-  PurchasePurpose,
-  PurchaseTimeline,
+  type ContactChannel,
+  type Disposition,
+  type ExtractionFlag,
+  type LeadTemperature,
+  type LocationMatch,
+  type PreferredNextAction,
+  type PurchasePurpose,
+  type PurchaseTimeline,
 } from "../../generated/prisma";
 
 export interface BolnaCallPayload {

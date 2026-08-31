@@ -1,9 +1,8 @@
 import {
-  LeadStatus,
-  CallStatus,
-  Disposition,
+  type CallStatus,
+  type Disposition,
 } from "../../../../generated/prisma";
-import { LeadEntityData } from "../../domain/entities/lead.entity";
+import { type LeadEntityData } from "../../domain/entities/lead.entity";
 
 export interface ListLeadsFilters {
   campaignId?: string;

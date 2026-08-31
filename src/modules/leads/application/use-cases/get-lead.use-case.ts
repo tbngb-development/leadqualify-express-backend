@@ -1,6 +1,6 @@
 import {
-  LeadRepository,
-  DetailedLeadResult,
+  type LeadRepository,
+  type DetailedLeadResult,
 } from "../interfaces/lead-repository.interface";
 import { LeadNotFoundError } from "../../domain/errors/lead.errors";
 

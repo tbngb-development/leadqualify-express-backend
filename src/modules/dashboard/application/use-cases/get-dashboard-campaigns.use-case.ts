@@ -1,5 +1,5 @@
-import { DashboardRepository } from "../interfaces/dashboard-repository.interface";
-import { CampaignPerformanceOutput } from "../dto/dashboard.dto";
+import { type DashboardRepository } from "../interfaces/dashboard-repository.interface";
+import { type CampaignPerformanceOutput } from "../dto/dashboard.dto";
 
 export class GetDashboardCampaignsUseCase {
   constructor(private readonly dashboardRepo: DashboardRepository) {}

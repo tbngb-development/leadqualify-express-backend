@@ -1,4 +1,4 @@
-import { LeadStatus } from "../../../../generated/prisma";
+import { type LeadStatus } from "../../../../generated/prisma";
 
 export interface LeadEntityData {
   id: string;

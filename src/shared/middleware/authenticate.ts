@@ -4,6 +4,8 @@ import type { AuthRepository } from "../../modules/auth/application/interfaces/a
 import { UnauthorizedError } from "../errors/unauthorized.error";
 import { ForbiddenError } from "../errors/forbidden.error";
 import { AuthMessages } from "../constants/messages";
+import { COOKIE_ACCESS_TOKEN } from "../constants/cookies";
+import { BEARER_PREFIX, HEADER_AUTHORIZATION } from "../constants/headers";
 import type {
   AuthContext,
   TenantAuthContext,
@@ -62,16 +64,17 @@ export class AuthenticateMiddleware {
   private async resolveContext(req: Request): Promise<AuthContext> {
     let token: string | undefined;
 
-    // 1. Try reading the access token from HTTP-Only Cookies
-    if (req.cookies && req.cookies.access_token) {
-      token = req.cookies.access_token as string;
+    if (req.cookies?.[COOKIE_ACCESS_TOKEN]) {
+      token = req.cookies[COOKIE_ACCESS_TOKEN] as string;
     }
 
-    // 2. Fallback to standard Authorization Header if cookie is missing
     if (!token) {
-      const authHeader = req.headers.authorization;
-      if (authHeader && authHeader.startsWith("Bearer ")) {
-        token = authHeader.slice(7);
+      const authHeader = req.headers[HEADER_AUTHORIZATION];
+      if (
+        typeof authHeader === "string" &&
+        authHeader.startsWith(BEARER_PREFIX)
+      ) {
+        token = authHeader.slice(BEARER_PREFIX.length);
       }
     }
 
@@ -80,14 +83,11 @@ export class AuthenticateMiddleware {
     }
 
     const payload = this.tokenService.verifyAccessToken(token);
-
-    // Verify user still exists in database
     const user = await this.authRepository.findUserById(payload.userId);
     if (!user) {
       throw new UnauthorizedError(AuthMessages.USER_NOT_FOUND);
     }
 
-    // Tenant-scoped token payload evaluation
     if (
       payload.type === "tenant" &&
       payload.tenantId &&
@@ -98,14 +98,12 @@ export class AuthenticateMiddleware {
         payload.userId,
         payload.tenantId,
       );
-      if (!membership) {
+      if (!membership)
         throw new UnauthorizedError(AuthMessages.MEMBERSHIP_NOT_FOUND);
-      }
-      if (!membership.tenantActive) {
+      if (!membership.tenantActive)
         throw new ForbiddenError(AuthMessages.TENANT_INACTIVE);
-      }
 
-      const context: TenantAuthContext = {
+      return {
         type: "tenant",
         userId: user.id,
         email: user.email,
@@ -114,27 +112,22 @@ export class AuthenticateMiddleware {
         tenantRole: payload.tenantRole,
         isPlatformAdmin: payload.isPlatformAdmin,
       };
-      return context;
     }
 
-    // Admin token
     if (payload.type === "admin" && payload.isPlatformAdmin) {
-      const context: AdminAuthContext = {
+      return {
         type: "admin",
         userId: user.id,
         email: user.email,
         isPlatformAdmin: true,
       };
-      return context;
     }
 
-    // Base token (user is authenticated but hasn't completed tenant selection yet)
-    const context: BaseAuthContext = {
+    return {
       type: "base",
       userId: user.id,
       email: user.email,
       isPlatformAdmin: payload.isPlatformAdmin,
     };
-    return context;
   }
 }

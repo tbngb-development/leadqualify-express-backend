@@ -1,4 +1,4 @@
-import { AssistantEntityData } from "../../domain/entities/assistant.entity";
+import { type AssistantEntityData } from "../../domain/entities/assistant.entity";
 
 export interface RegisterAssistantData {
   bolnaId: string;

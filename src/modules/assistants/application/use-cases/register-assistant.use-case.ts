@@ -1,8 +1,8 @@
-import { AssistantRepository } from "../interfaces/assistant-repository.interface";
-import { BolnaAgentProvider } from "../interfaces/bolna-agent-provider.interface";
-import { RegisterAssistantInput } from "../dto/assistant.dto";
+import { type AssistantRepository } from "../interfaces/assistant-repository.interface";
+import { type BolnaAgentProvider } from "../interfaces/bolna-agent-provider.interface";
+import { type RegisterAssistantInput } from "../dto/assistant.dto";
 import { DuplicateAssistantError } from "../../domain/errors/assistant.errors";
-import { AssistantEntityData } from "../../domain/entities/assistant.entity";
+import { type AssistantEntityData } from "../../domain/entities/assistant.entity";
 
 export class RegisterAssistantUseCase {
   constructor(

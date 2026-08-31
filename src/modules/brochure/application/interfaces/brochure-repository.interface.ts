@@ -1,4 +1,4 @@
-import { BrochureEntityData } from "../../domain/entities/brochure.entity";
+import { type BrochureEntityData } from "../../domain/entities/brochure.entity";
 
 export interface BrochureListItem {
   id: string;

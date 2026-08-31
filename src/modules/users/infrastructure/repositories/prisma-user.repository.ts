@@ -1,11 +1,11 @@
-import { TenantRole } from "../../../../generated/prisma";
+import { type TenantRole } from "../../../../generated/prisma";
 import prisma from "../../../../shared/config/database/prisma";
 import {
-  CreateUserData,
-  UpdateUserData,
-  UserRepository,
+  type CreateUserData,
+  type UpdateUserData,
+  type UserRepository,
 } from "../../application/interfaces/user-repository.interface";
-import { TenantMemberData } from "../../domain/entities/tenant-member.entity";
+import { type TenantMemberData } from "../../domain/entities/tenant-member.entity";
 
 export class PrismaUserRepository implements UserRepository {
   async list(tenantId: string): Promise<TenantMemberData[]> {

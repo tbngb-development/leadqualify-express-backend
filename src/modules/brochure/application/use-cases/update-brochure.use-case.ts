@@ -1,6 +1,6 @@
-import { BrochureRepository } from "../interfaces/brochure-repository.interface";
+import { type BrochureRepository } from "../interfaces/brochure-repository.interface";
 import { BrochureNotFoundError } from "../../domain/errors/brochure.errors";
-import { BrochureEntityData } from "../../domain/entities/brochure.entity";
+import { type BrochureEntityData } from "../../domain/entities/brochure.entity";
 
 export class UpdateBrochureUseCase {
   constructor(private readonly brochureRepo: BrochureRepository) {}

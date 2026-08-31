@@ -1,6 +1,6 @@
 import { NotFoundError } from "../../../../shared/errors";
-import { MembershipInfo } from "../../../../shared/types";
-import { AuthRepository } from "../interfaces/auth-repository.interface";
+import { type MembershipInfo } from "../../../../shared/types";
+import { type AuthRepository } from "../interfaces/auth-repository.interface";
 
 export interface ProfileOutput {
   user: {

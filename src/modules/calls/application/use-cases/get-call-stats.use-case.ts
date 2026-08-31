@@ -1,6 +1,6 @@
 import {
-  CallRepository,
-  CallStatsResult,
+  type CallRepository,
+  type CallStatsResult,
 } from "../interfaces/call-repository.interface";
 
 export interface GetCallStatsInput {

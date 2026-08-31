@@ -1,8 +1,8 @@
 import {
-  WebhookRepository,
-  ResolvedCallContext,
+  type WebhookRepository,
+  type ResolvedCallContext,
 } from "../interfaces/webhook-repository.interface";
-import { WebhookCallPayload } from "../dto/webhook.dto";
+import { type WebhookCallPayload } from "../dto/webhook.dto";
 import { WebhookResolutionError } from "../../domain/errors/webhook.errors";
 import {
   sanitizeEnum,
@@ -116,7 +116,7 @@ export class ProcessCallWebhookUseCase {
     payload: WebhookCallPayload,
   ): Promise<ResolvedCallContext | null> {
     // 1. Resolve by direct remote ID
-    let call = await this.webhookRepo.findCallByBolnaCallId(bolnaCallId);
+    const call = await this.webhookRepo.findCallByBolnaCallId(bolnaCallId);
     if (call) return call;
 
     // 2. Resolve via batch context
