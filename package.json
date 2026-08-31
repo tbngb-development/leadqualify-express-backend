@@ -11,6 +11,9 @@
     "seed:admin": "tsx prisma/seeds/platform-admin.seed.ts",
     "postinstall": "prisma generate"
   },
+  "prisma": {
+    "seed": "tsx src/seeds/platform-admin.seed.ts"
+  },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@prisma/client": "^6.19.3",
