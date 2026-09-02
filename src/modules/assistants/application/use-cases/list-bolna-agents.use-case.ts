@@ -4,7 +4,7 @@ import { type BolnaAgentResponse } from "../../../../shared/types/bolna.types";
 export class ListBolnaAgentsUseCase {
   constructor(private readonly bolnaProvider: BolnaAgentProvider) {}
 
-  async execute(): Promise<BolnaAgentResponse[]> {
-    return this.bolnaProvider.listAgents();
+  async execute(tenantId: string): Promise<BolnaAgentResponse[]> {
+    return this.bolnaProvider.listAgents(tenantId);
   }
 }

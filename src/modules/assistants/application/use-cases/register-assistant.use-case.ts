@@ -7,15 +7,21 @@ import { type AssistantEntityData } from "../../domain/entities/assistant.entity
 export class RegisterAssistantUseCase {
   constructor(
     private readonly assistantRepo: AssistantRepository,
-    private readonly bolnaProvider: BolnaAgentProvider
+    private readonly bolnaProvider: BolnaAgentProvider,
   ) {}
 
   async execute(input: RegisterAssistantInput): Promise<AssistantEntityData> {
     // 1. Verify agent remote context exists
-    const bolnaAgent = await this.bolnaProvider.verifyAgent(input.bolnaId);
+    const bolnaAgent = await this.bolnaProvider.verifyAgent(
+      input.tenantId,
+      input.bolnaId,
+    );
 
     // 2. Reject registrations of identical Bolna agents inside same Tenant
-    const existing = await this.assistantRepo.findByBolnaId(input.tenantId, input.bolnaId);
+    const existing = await this.assistantRepo.findByBolnaId(
+      input.tenantId,
+      input.bolnaId,
+    );
     if (existing) {
       throw new DuplicateAssistantError(input.bolnaId, existing.name);
     }

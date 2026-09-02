@@ -9,15 +9,22 @@ import { SyncAssistantUseCase } from "./application/use-cases/sync-assistant.use
 import { DeleteAssistantUseCase } from "./application/use-cases/delete-assistant.use-case";
 import { TenantAssistantController } from "./presentation/tenant-assistant.controller";
 import { AdminAssistantController } from "./presentation/admin-assistant.controller";
+import type { IBolnaClientFactory } from "../../shared/config/external/bolna/bolna-client.factory";
 
-export interface AssistantModule {
-  tenantController: TenantAssistantController;
-  adminController: AdminAssistantController;
+export interface AssistantModuleDeps {
+  bolnaClientFactory: IBolnaClientFactory;
 }
 
-export function buildAssistantModule(): AssistantModule {
+export interface AssistantModule {
+  adminController: AdminAssistantController;
+  tenantController: TenantAssistantController;
+}
+
+export function buildAssistantModule(
+  deps: AssistantModuleDeps,
+): AssistantModule {
   const repository = new PrismaAssistantRepository();
-  const bolnaProvider = new BolnaAgentProviderImpl();
+  const bolnaProvider = new BolnaAgentProviderImpl(deps.bolnaClientFactory);
 
   const listAssistants = new ListAssistantsUseCase(repository);
   const getAssistant = new GetAssistantUseCase(repository, bolnaProvider);

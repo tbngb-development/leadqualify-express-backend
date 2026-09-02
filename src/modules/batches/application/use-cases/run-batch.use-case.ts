@@ -35,7 +35,8 @@ export class RunBatchUseCase {
     const scheduledAt = new Date(Date.now() + 2 * 60 * 1000);
     const isoString = toBolnaISO(scheduledAt);
 
-    const bolnaResult = await this.bolnaProvider.schedule(
+    const bolnaResult = await this.bolnaProvider.scheduleBatch(
+      tenantId,
       batchData.bolnaBatchId,
       isoString,
     );

@@ -21,7 +21,10 @@ export class GetAssistantUseCase {
     }
 
     // Dynamic extraction of metadata directly from remote config mapping
-    const bolnaAgent = await this.bolnaProvider.verifyAgent(assistant.bolnaId);
+    const bolnaAgent = await this.bolnaProvider.verifyAgent(
+      tenantId,
+      assistant.bolnaId,
+    );
 
     const systemPrompt = getAgentSystemPrompt(bolnaAgent);
     const firstMessage = getAgentFirstMessage(bolnaAgent);

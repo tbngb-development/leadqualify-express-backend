@@ -5,18 +5,25 @@ import { GetCallTranscriptUseCase } from "./application/use-cases/get-call-trans
 import { GetCallStatsUseCase } from "./application/use-cases/get-call-stats.use-case";
 import { TenantCallController } from "./presentation/tenant-call.controller";
 import { AdminCallController } from "./presentation/admin-call.controller";
+import type { IBolnaClientFactory } from "../../shared/config/external/bolna/bolna-client.factory";
+import { BolnaCallProviderImpl } from "../plans/infrastructure/repositories/bolna-call.provider";
 
-export interface CallModule {
-  tenantController: TenantCallController;
-  adminController: AdminCallController;
+export interface CallModuleDeps {
+  bolnaClientFactory: IBolnaClientFactory;
 }
 
-export function buildCallModule(): CallModule {
+export interface CallModule {
+  adminController: AdminCallController;
+  tenantController: TenantCallController;
+}
+
+export function buildCallModule(deps: CallModuleDeps): CallModule {
   const repo = new PrismaCallRepository();
   const listCalls = new ListCallsUseCase(repo);
   const getCall = new GetCallUseCase(repo);
   const getTranscript = new GetCallTranscriptUseCase(repo);
   const getStats = new GetCallStatsUseCase(repo);
+  const bolnaProvider = new BolnaCallProviderImpl(deps.bolnaClientFactory);
 
   return {
     tenantController: new TenantCallController(

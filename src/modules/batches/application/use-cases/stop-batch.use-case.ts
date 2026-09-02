@@ -29,7 +29,7 @@ export class StopBatchUseCase {
 
     if (batchData.bolnaBatchId) {
       try {
-        await this.bolnaProvider.stop(batchData.bolnaBatchId);
+        await this.bolnaProvider.stopBatch(tenantId, batchData.bolnaBatchId);
       } catch (err) {
         console.warn("[StopBatch] Bolna stop error:", err);
       }

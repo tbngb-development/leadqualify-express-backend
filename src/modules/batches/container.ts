@@ -13,17 +13,22 @@ import { DeleteBatchUseCase } from "./application/use-cases/delete-batch.use-cas
 import { GetBatchStatsUseCase } from "./application/use-cases/get-batch-stats.use-case";
 import { TenantBatchController } from "./presentation/tenant-batch.controller";
 import { AdminBatchController } from "./presentation/admin-batch.controller";
+import { type IBolnaClientFactory } from "../../shared/config/external/bolna/bolna-client.factory";
 
-export interface BatchModule {
-  tenantController: TenantBatchController;
-  adminController: AdminBatchController;
+export interface BatchModuleDeps {
+  bolnaClientFactory: IBolnaClientFactory;
 }
 
-export function buildBatchModule(): BatchModule {
+export interface BatchModule {
+  adminController: AdminBatchController;
+  tenantController: TenantBatchController;
+}
+
+export function buildBatchModule(deps: BatchModuleDeps): BatchModule {
   const batchRepo = new PrismaBatchRepository();
   const campaignRepo = new PrismaCampaignRepository();
   const storage = new CloudinaryStorageProvider();
-  const bolna = new BolnaBatchProviderImpl();
+  const bolnaProvider = new BolnaBatchProviderImpl(deps.bolnaClientFactory);
 
   const listBatches = new ListBatchesUseCase(batchRepo, campaignRepo);
   const getBatch = new GetBatchUseCase(batchRepo);
@@ -33,12 +38,12 @@ export function buildBatchModule(): BatchModule {
     tenantController: new TenantBatchController(
       listBatches,
       getBatch,
-      new CreateBatchUseCase(batchRepo, campaignRepo, storage, bolna),
-      new RunBatchUseCase(batchRepo, campaignRepo, bolna),
-      new ScheduleBatchUseCase(batchRepo, campaignRepo, bolna),
-      new StopBatchUseCase(batchRepo, campaignRepo, bolna),
-      new ResumeBatchUseCase(batchRepo, campaignRepo, storage, bolna),
-      new DeleteBatchUseCase(batchRepo, bolna),
+      new CreateBatchUseCase(batchRepo, campaignRepo, storage, bolnaProvider),
+      new RunBatchUseCase(batchRepo, campaignRepo, bolnaProvider),
+      new ScheduleBatchUseCase(batchRepo, campaignRepo, bolnaProvider),
+      new StopBatchUseCase(batchRepo, campaignRepo, bolnaProvider),
+      new ResumeBatchUseCase(batchRepo, campaignRepo, storage, bolnaProvider),
+      new DeleteBatchUseCase(batchRepo, bolnaProvider),
       getBatchStats,
     ),
     adminController: new AdminBatchController(

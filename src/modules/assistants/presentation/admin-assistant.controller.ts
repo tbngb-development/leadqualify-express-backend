@@ -3,7 +3,6 @@ import type { AuthRequest, TenantAuthContext } from "../../../shared/types";
 import { sendSuccess } from "../../../shared/utils/response";
 import { HttpStatus } from "../../../shared/constants/http-status";
 import { AdminMessages } from "../../../shared/constants/messages";
-import { ValidationError } from "../../../shared/errors/validation.error";
 import { param } from "../../../shared/utils/paramHelper";
 import { type ListAssistantsUseCase } from "../application/use-cases/list-assistants.use-case";
 import { type ListBolnaAgentsUseCase } from "../application/use-cases/list-bolna-agents.use-case";
@@ -38,12 +37,17 @@ export class AdminAssistantController {
   }
 
   listBolnaAgents = async (
-    _req: Request,
+    req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
     try {
-      sendSuccess(res, await this.listBolnaAgentsUseCase.execute());
+      const tenantId =
+        (req.query.tenantId as string) ??
+        (req.body?.tenantId as string) ??
+        ((req as AuthRequest).user as TenantAuthContext)?.tenantId;
+
+      sendSuccess(res, await this.listBolnaAgentsUseCase.execute(tenantId));
     } catch (err) {
       next(err);
     }
