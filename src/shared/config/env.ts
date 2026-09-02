@@ -33,8 +33,8 @@ export const env = {
   frontendUrl: process.env.FRONTEND_URL || "http://localhost:3001",
 
   bolna: {
-    apiKey: requireEnv("BOLNA_API_KEY"),
     apiUrl: process.env.BOLNA_API_URL || "https://api.bolna.ai",
+    encryptionSecret: requireEnv("BOLNA_KEY_ENCRYPTION_SECRET"),
   },
 
   webhook: {

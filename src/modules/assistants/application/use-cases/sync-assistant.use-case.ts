@@ -6,7 +6,7 @@ import { type AssistantEntityData } from "../../domain/entities/assistant.entity
 export class SyncAssistantUseCase {
   constructor(
     private readonly assistantRepo: AssistantRepository,
-    private readonly bolnaProvider: BolnaAgentProvider
+    private readonly bolnaProvider: BolnaAgentProvider,
   ) {}
 
   async execute(tenantId: string, id: string): Promise<AssistantEntityData> {
@@ -15,12 +15,15 @@ export class SyncAssistantUseCase {
       throw new AssistantNotFoundError();
     }
 
-    const bolnaAgent = await this.bolnaProvider.verifyAgent(assistant.bolnaId);
+    const bolnaAgent = await this.bolnaProvider.verifyAgent(
+      tenantId,
+      assistant.bolnaId,
+    );
 
     return this.assistantRepo.updateConfig(
       tenantId,
       id,
-      bolnaAgent as unknown as Record<string, unknown>
+      bolnaAgent as unknown as Record<string, unknown>,
     );
   }
 }

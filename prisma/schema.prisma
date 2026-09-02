@@ -20,15 +20,18 @@ model Tenant {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  memberships  TenantUser[]
-  apiKeys      ApiKey[]
-  campaigns    Campaign[]
-  batches      LeadBatch[]
-  leads        Lead[]
-  calls        Call[]
-  assistants   Assistant[]
-  brochures    Brochure[]
-  callAnalyses CallAnalysis[]
+  memberships   TenantUser[]
+  bolnaApiKeyId String?
+  bolnaApiKey   BolnaApiKey?   @relation(fields: [bolnaApiKeyId], references: [id])
+  tenantPlan    TenantPlan?
+  // wallet        Wallet? // Uncomment in Sprint 2
+  campaigns     Campaign[]
+  batches       LeadBatch[]
+  leads         Lead[]
+  calls         Call[]
+  assistants    Assistant[]
+  brochures     Brochure[]
+  callAnalyses  CallAnalysis[]
 
   @@index([email])
 }
@@ -72,21 +75,6 @@ model PlatformAdmin {
   createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model ApiKey {
-  id         String    @id @default(uuid())
-  tenantId   String
-  name       String
-  keyHash    String    @unique
-  lastUsedAt DateTime?
-  expiresAt  DateTime?
-  isActive   Boolean   @default(true)
-  createdAt  DateTime  @default(now())
-
-  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-
-  @@index([tenantId])
 }
 
 model RefreshToken {
@@ -462,4 +450,87 @@ enum LocationMatch {
 enum ExtractionFlag {
   YES
   NO
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PLANS & SUBSCRIPTIONS
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Plan {
+  id           String  @id @default(uuid())
+  name         String
+  slug         String  @unique
+  isActive     Boolean @default(true)
+  displayOrder Int     @default(0)
+
+  // Pricing (in paisa)
+  onboardingFee       Int
+  perMinuteRate       Int
+  billingMinimumSec   Int @default(30)
+  billingIncrementSec Int @default(15)
+
+  // Limits
+  maxActiveCampaigns Int?
+  maxLeadsPerBatch   Int?
+  retryAutomation    Boolean @default(false)
+  industryPackLimit  Int?
+
+  // Features JSON
+  features Json
+
+  // Bonus
+  includedBalance   Int  @default(0)
+  bonusValidityDays Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenantPlans TenantPlan[]
+  // invites             TenantInvite[] // Uncomment in Sprint 2
+}
+
+model TenantPlan {
+  id             String     @id @default(uuid())
+  tenantId       String     @unique
+  planId         String
+  status         PlanStatus @default(PENDING_PAYMENT)
+  activatedAt    DateTime?
+  bonusExpiresAt DateTime?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  plan   Plan   @relation(fields: [planId], references: [id])
+}
+
+enum PlanStatus {
+  PENDING_PAYMENT
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BOLNA API KEYS
+// ─────────────────────────────────────────────────────────────────────────────
+
+model BolnaApiKey {
+  id                String          @id @default(uuid())
+  keyIdentifier     String
+  encryptedKey      String
+  type              BolnaApiKeyType @default(GENERAL)
+  isPlatformDefault Boolean         @default(false)
+  isActive          Boolean         @default(true)
+
+  createdBy      String // PlatformAdmin userId
+  lastAccessedAt DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  tenants Tenant[] // Reverse relation
+}
+
+enum BolnaApiKeyType {
+  GENERAL
+  CUSTOM
 }

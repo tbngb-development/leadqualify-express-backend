@@ -34,11 +34,6 @@ export type TenantUser = $Result.DefaultSelection<Prisma.$TenantUserPayload>
  */
 export type PlatformAdmin = $Result.DefaultSelection<Prisma.$PlatformAdminPayload>
 /**
- * Model ApiKey
- * 
- */
-export type ApiKey = $Result.DefaultSelection<Prisma.$ApiKeyPayload>
-/**
  * Model RefreshToken
  * 
  */
@@ -78,6 +73,21 @@ export type Call = $Result.DefaultSelection<Prisma.$CallPayload>
  * 
  */
 export type CallAnalysis = $Result.DefaultSelection<Prisma.$CallAnalysisPayload>
+/**
+ * Model Plan
+ * 
+ */
+export type Plan = $Result.DefaultSelection<Prisma.$PlanPayload>
+/**
+ * Model TenantPlan
+ * 
+ */
+export type TenantPlan = $Result.DefaultSelection<Prisma.$TenantPlanPayload>
+/**
+ * Model BolnaApiKey
+ * 
+ */
+export type BolnaApiKey = $Result.DefaultSelection<Prisma.$BolnaApiKeyPayload>
 
 /**
  * Enums
@@ -230,6 +240,24 @@ export const ExtractionFlag: {
 
 export type ExtractionFlag = (typeof ExtractionFlag)[keyof typeof ExtractionFlag]
 
+
+export const PlanStatus: {
+  PENDING_PAYMENT: 'PENDING_PAYMENT',
+  ACTIVE: 'ACTIVE',
+  EXPIRED: 'EXPIRED',
+  CANCELLED: 'CANCELLED'
+};
+
+export type PlanStatus = (typeof PlanStatus)[keyof typeof PlanStatus]
+
+
+export const BolnaApiKeyType: {
+  GENERAL: 'GENERAL',
+  CUSTOM: 'CUSTOM'
+};
+
+export type BolnaApiKeyType = (typeof BolnaApiKeyType)[keyof typeof BolnaApiKeyType]
+
 }
 
 export type TenantRole = $Enums.TenantRole
@@ -283,6 +311,14 @@ export const LocationMatch: typeof $Enums.LocationMatch
 export type ExtractionFlag = $Enums.ExtractionFlag
 
 export const ExtractionFlag: typeof $Enums.ExtractionFlag
+
+export type PlanStatus = $Enums.PlanStatus
+
+export const PlanStatus: typeof $Enums.PlanStatus
+
+export type BolnaApiKeyType = $Enums.BolnaApiKeyType
+
+export const BolnaApiKeyType: typeof $Enums.BolnaApiKeyType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -443,16 +479,6 @@ export class PrismaClient<
   get platformAdmin(): Prisma.PlatformAdminDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.apiKey`: Exposes CRUD operations for the **ApiKey** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more ApiKeys
-    * const apiKeys = await prisma.apiKey.findMany()
-    * ```
-    */
-  get apiKey(): Prisma.ApiKeyDelegate<ExtArgs, ClientOptions>;
-
-  /**
    * `prisma.refreshToken`: Exposes CRUD operations for the **RefreshToken** model.
     * Example usage:
     * ```ts
@@ -531,6 +557,36 @@ export class PrismaClient<
     * ```
     */
   get callAnalysis(): Prisma.CallAnalysisDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.plan`: Exposes CRUD operations for the **Plan** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Plans
+    * const plans = await prisma.plan.findMany()
+    * ```
+    */
+  get plan(): Prisma.PlanDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.tenantPlan`: Exposes CRUD operations for the **TenantPlan** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TenantPlans
+    * const tenantPlans = await prisma.tenantPlan.findMany()
+    * ```
+    */
+  get tenantPlan(): Prisma.TenantPlanDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.bolnaApiKey`: Exposes CRUD operations for the **BolnaApiKey** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BolnaApiKeys
+    * const bolnaApiKeys = await prisma.bolnaApiKey.findMany()
+    * ```
+    */
+  get bolnaApiKey(): Prisma.BolnaApiKeyDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -976,7 +1032,6 @@ export namespace Prisma {
     User: 'User',
     TenantUser: 'TenantUser',
     PlatformAdmin: 'PlatformAdmin',
-    ApiKey: 'ApiKey',
     RefreshToken: 'RefreshToken',
     Assistant: 'Assistant',
     Brochure: 'Brochure',
@@ -984,7 +1039,10 @@ export namespace Prisma {
     LeadBatch: 'LeadBatch',
     Lead: 'Lead',
     Call: 'Call',
-    CallAnalysis: 'CallAnalysis'
+    CallAnalysis: 'CallAnalysis',
+    Plan: 'Plan',
+    TenantPlan: 'TenantPlan',
+    BolnaApiKey: 'BolnaApiKey'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1003,7 +1061,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "tenant" | "user" | "tenantUser" | "platformAdmin" | "apiKey" | "refreshToken" | "assistant" | "brochure" | "campaign" | "leadBatch" | "lead" | "call" | "callAnalysis"
+      modelProps: "tenant" | "user" | "tenantUser" | "platformAdmin" | "refreshToken" | "assistant" | "brochure" | "campaign" | "leadBatch" | "lead" | "call" | "callAnalysis" | "plan" | "tenantPlan" | "bolnaApiKey"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1300,80 +1358,6 @@ export namespace Prisma {
           count: {
             args: Prisma.PlatformAdminCountArgs<ExtArgs>
             result: $Utils.Optional<PlatformAdminCountAggregateOutputType> | number
-          }
-        }
-      }
-      ApiKey: {
-        payload: Prisma.$ApiKeyPayload<ExtArgs>
-        fields: Prisma.ApiKeyFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.ApiKeyFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.ApiKeyFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>
-          }
-          findFirst: {
-            args: Prisma.ApiKeyFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.ApiKeyFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>
-          }
-          findMany: {
-            args: Prisma.ApiKeyFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>[]
-          }
-          create: {
-            args: Prisma.ApiKeyCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>
-          }
-          createMany: {
-            args: Prisma.ApiKeyCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.ApiKeyCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>[]
-          }
-          delete: {
-            args: Prisma.ApiKeyDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>
-          }
-          update: {
-            args: Prisma.ApiKeyUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>
-          }
-          deleteMany: {
-            args: Prisma.ApiKeyDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.ApiKeyUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.ApiKeyUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>[]
-          }
-          upsert: {
-            args: Prisma.ApiKeyUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>
-          }
-          aggregate: {
-            args: Prisma.ApiKeyAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateApiKey>
-          }
-          groupBy: {
-            args: Prisma.ApiKeyGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ApiKeyGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.ApiKeyCountArgs<ExtArgs>
-            result: $Utils.Optional<ApiKeyCountAggregateOutputType> | number
           }
         }
       }
@@ -1969,6 +1953,228 @@ export namespace Prisma {
           }
         }
       }
+      Plan: {
+        payload: Prisma.$PlanPayload<ExtArgs>
+        fields: Prisma.PlanFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PlanFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PlanFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanPayload>
+          }
+          findFirst: {
+            args: Prisma.PlanFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PlanFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanPayload>
+          }
+          findMany: {
+            args: Prisma.PlanFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanPayload>[]
+          }
+          create: {
+            args: Prisma.PlanCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanPayload>
+          }
+          createMany: {
+            args: Prisma.PlanCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PlanCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanPayload>[]
+          }
+          delete: {
+            args: Prisma.PlanDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanPayload>
+          }
+          update: {
+            args: Prisma.PlanUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanPayload>
+          }
+          deleteMany: {
+            args: Prisma.PlanDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PlanUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PlanUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanPayload>[]
+          }
+          upsert: {
+            args: Prisma.PlanUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanPayload>
+          }
+          aggregate: {
+            args: Prisma.PlanAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePlan>
+          }
+          groupBy: {
+            args: Prisma.PlanGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PlanGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PlanCountArgs<ExtArgs>
+            result: $Utils.Optional<PlanCountAggregateOutputType> | number
+          }
+        }
+      }
+      TenantPlan: {
+        payload: Prisma.$TenantPlanPayload<ExtArgs>
+        fields: Prisma.TenantPlanFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TenantPlanFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPlanPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TenantPlanFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPlanPayload>
+          }
+          findFirst: {
+            args: Prisma.TenantPlanFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPlanPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TenantPlanFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPlanPayload>
+          }
+          findMany: {
+            args: Prisma.TenantPlanFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPlanPayload>[]
+          }
+          create: {
+            args: Prisma.TenantPlanCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPlanPayload>
+          }
+          createMany: {
+            args: Prisma.TenantPlanCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TenantPlanCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPlanPayload>[]
+          }
+          delete: {
+            args: Prisma.TenantPlanDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPlanPayload>
+          }
+          update: {
+            args: Prisma.TenantPlanUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPlanPayload>
+          }
+          deleteMany: {
+            args: Prisma.TenantPlanDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TenantPlanUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TenantPlanUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPlanPayload>[]
+          }
+          upsert: {
+            args: Prisma.TenantPlanUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPlanPayload>
+          }
+          aggregate: {
+            args: Prisma.TenantPlanAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTenantPlan>
+          }
+          groupBy: {
+            args: Prisma.TenantPlanGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TenantPlanGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TenantPlanCountArgs<ExtArgs>
+            result: $Utils.Optional<TenantPlanCountAggregateOutputType> | number
+          }
+        }
+      }
+      BolnaApiKey: {
+        payload: Prisma.$BolnaApiKeyPayload<ExtArgs>
+        fields: Prisma.BolnaApiKeyFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BolnaApiKeyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BolnaApiKeyPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BolnaApiKeyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BolnaApiKeyPayload>
+          }
+          findFirst: {
+            args: Prisma.BolnaApiKeyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BolnaApiKeyPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BolnaApiKeyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BolnaApiKeyPayload>
+          }
+          findMany: {
+            args: Prisma.BolnaApiKeyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BolnaApiKeyPayload>[]
+          }
+          create: {
+            args: Prisma.BolnaApiKeyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BolnaApiKeyPayload>
+          }
+          createMany: {
+            args: Prisma.BolnaApiKeyCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BolnaApiKeyCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BolnaApiKeyPayload>[]
+          }
+          delete: {
+            args: Prisma.BolnaApiKeyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BolnaApiKeyPayload>
+          }
+          update: {
+            args: Prisma.BolnaApiKeyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BolnaApiKeyPayload>
+          }
+          deleteMany: {
+            args: Prisma.BolnaApiKeyDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BolnaApiKeyUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BolnaApiKeyUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BolnaApiKeyPayload>[]
+          }
+          upsert: {
+            args: Prisma.BolnaApiKeyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BolnaApiKeyPayload>
+          }
+          aggregate: {
+            args: Prisma.BolnaApiKeyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBolnaApiKey>
+          }
+          groupBy: {
+            args: Prisma.BolnaApiKeyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BolnaApiKeyGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BolnaApiKeyCountArgs<ExtArgs>
+            result: $Utils.Optional<BolnaApiKeyCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2069,7 +2275,6 @@ export namespace Prisma {
     user?: UserOmit
     tenantUser?: TenantUserOmit
     platformAdmin?: PlatformAdminOmit
-    apiKey?: ApiKeyOmit
     refreshToken?: RefreshTokenOmit
     assistant?: AssistantOmit
     brochure?: BrochureOmit
@@ -2078,6 +2283,9 @@ export namespace Prisma {
     lead?: LeadOmit
     call?: CallOmit
     callAnalysis?: CallAnalysisOmit
+    plan?: PlanOmit
+    tenantPlan?: TenantPlanOmit
+    bolnaApiKey?: BolnaApiKeyOmit
   }
 
   /* Types for Logging */
@@ -2159,7 +2367,6 @@ export namespace Prisma {
 
   export type TenantCountOutputType = {
     memberships: number
-    apiKeys: number
     campaigns: number
     batches: number
     leads: number
@@ -2171,7 +2378,6 @@ export namespace Prisma {
 
   export type TenantCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     memberships?: boolean | TenantCountOutputTypeCountMembershipsArgs
-    apiKeys?: boolean | TenantCountOutputTypeCountApiKeysArgs
     campaigns?: boolean | TenantCountOutputTypeCountCampaignsArgs
     batches?: boolean | TenantCountOutputTypeCountBatchesArgs
     leads?: boolean | TenantCountOutputTypeCountLeadsArgs
@@ -2197,13 +2403,6 @@ export namespace Prisma {
    */
   export type TenantCountOutputTypeCountMembershipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TenantUserWhereInput
-  }
-
-  /**
-   * TenantCountOutputType without action
-   */
-  export type TenantCountOutputTypeCountApiKeysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ApiKeyWhereInput
   }
 
   /**
@@ -2479,6 +2678,68 @@ export namespace Prisma {
 
 
   /**
+   * Count Type PlanCountOutputType
+   */
+
+  export type PlanCountOutputType = {
+    tenantPlans: number
+  }
+
+  export type PlanCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenantPlans?: boolean | PlanCountOutputTypeCountTenantPlansArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * PlanCountOutputType without action
+   */
+  export type PlanCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanCountOutputType
+     */
+    select?: PlanCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * PlanCountOutputType without action
+   */
+  export type PlanCountOutputTypeCountTenantPlansArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TenantPlanWhereInput
+  }
+
+
+  /**
+   * Count Type BolnaApiKeyCountOutputType
+   */
+
+  export type BolnaApiKeyCountOutputType = {
+    tenants: number
+  }
+
+  export type BolnaApiKeyCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenants?: boolean | BolnaApiKeyCountOutputTypeCountTenantsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * BolnaApiKeyCountOutputType without action
+   */
+  export type BolnaApiKeyCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BolnaApiKeyCountOutputType
+     */
+    select?: BolnaApiKeyCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * BolnaApiKeyCountOutputType without action
+   */
+  export type BolnaApiKeyCountOutputTypeCountTenantsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TenantWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -2499,6 +2760,7 @@ export namespace Prisma {
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
+    bolnaApiKeyId: string | null
   }
 
   export type TenantMaxAggregateOutputType = {
@@ -2508,6 +2770,7 @@ export namespace Prisma {
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
+    bolnaApiKeyId: string | null
   }
 
   export type TenantCountAggregateOutputType = {
@@ -2517,6 +2780,7 @@ export namespace Prisma {
     isActive: number
     createdAt: number
     updatedAt: number
+    bolnaApiKeyId: number
     _all: number
   }
 
@@ -2528,6 +2792,7 @@ export namespace Prisma {
     isActive?: true
     createdAt?: true
     updatedAt?: true
+    bolnaApiKeyId?: true
   }
 
   export type TenantMaxAggregateInputType = {
@@ -2537,6 +2802,7 @@ export namespace Prisma {
     isActive?: true
     createdAt?: true
     updatedAt?: true
+    bolnaApiKeyId?: true
   }
 
   export type TenantCountAggregateInputType = {
@@ -2546,6 +2812,7 @@ export namespace Prisma {
     isActive?: true
     createdAt?: true
     updatedAt?: true
+    bolnaApiKeyId?: true
     _all?: true
   }
 
@@ -2628,6 +2895,7 @@ export namespace Prisma {
     isActive: boolean
     createdAt: Date
     updatedAt: Date
+    bolnaApiKeyId: string | null
     _count: TenantCountAggregateOutputType | null
     _min: TenantMinAggregateOutputType | null
     _max: TenantMaxAggregateOutputType | null
@@ -2654,8 +2922,10 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    bolnaApiKeyId?: boolean
     memberships?: boolean | Tenant$membershipsArgs<ExtArgs>
-    apiKeys?: boolean | Tenant$apiKeysArgs<ExtArgs>
+    bolnaApiKey?: boolean | Tenant$bolnaApiKeyArgs<ExtArgs>
+    tenantPlan?: boolean | Tenant$tenantPlanArgs<ExtArgs>
     campaigns?: boolean | Tenant$campaignsArgs<ExtArgs>
     batches?: boolean | Tenant$batchesArgs<ExtArgs>
     leads?: boolean | Tenant$leadsArgs<ExtArgs>
@@ -2673,6 +2943,8 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    bolnaApiKeyId?: boolean
+    bolnaApiKey?: boolean | Tenant$bolnaApiKeyArgs<ExtArgs>
   }, ExtArgs["result"]["tenant"]>
 
   export type TenantSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2682,6 +2954,8 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    bolnaApiKeyId?: boolean
+    bolnaApiKey?: boolean | Tenant$bolnaApiKeyArgs<ExtArgs>
   }, ExtArgs["result"]["tenant"]>
 
   export type TenantSelectScalar = {
@@ -2691,12 +2965,14 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    bolnaApiKeyId?: boolean
   }
 
-  export type TenantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["tenant"]>
+  export type TenantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "isActive" | "createdAt" | "updatedAt" | "bolnaApiKeyId", ExtArgs["result"]["tenant"]>
   export type TenantInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     memberships?: boolean | Tenant$membershipsArgs<ExtArgs>
-    apiKeys?: boolean | Tenant$apiKeysArgs<ExtArgs>
+    bolnaApiKey?: boolean | Tenant$bolnaApiKeyArgs<ExtArgs>
+    tenantPlan?: boolean | Tenant$tenantPlanArgs<ExtArgs>
     campaigns?: boolean | Tenant$campaignsArgs<ExtArgs>
     batches?: boolean | Tenant$batchesArgs<ExtArgs>
     leads?: boolean | Tenant$leadsArgs<ExtArgs>
@@ -2706,14 +2982,19 @@ export namespace Prisma {
     callAnalyses?: boolean | Tenant$callAnalysesArgs<ExtArgs>
     _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type TenantIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type TenantIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type TenantIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bolnaApiKey?: boolean | Tenant$bolnaApiKeyArgs<ExtArgs>
+  }
+  export type TenantIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bolnaApiKey?: boolean | Tenant$bolnaApiKeyArgs<ExtArgs>
+  }
 
   export type $TenantPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Tenant"
     objects: {
       memberships: Prisma.$TenantUserPayload<ExtArgs>[]
-      apiKeys: Prisma.$ApiKeyPayload<ExtArgs>[]
+      bolnaApiKey: Prisma.$BolnaApiKeyPayload<ExtArgs> | null
+      tenantPlan: Prisma.$TenantPlanPayload<ExtArgs> | null
       campaigns: Prisma.$CampaignPayload<ExtArgs>[]
       batches: Prisma.$LeadBatchPayload<ExtArgs>[]
       leads: Prisma.$LeadPayload<ExtArgs>[]
@@ -2729,6 +3010,7 @@ export namespace Prisma {
       isActive: boolean
       createdAt: Date
       updatedAt: Date
+      bolnaApiKeyId: string | null
     }, ExtArgs["result"]["tenant"]>
     composites: {}
   }
@@ -3124,7 +3406,8 @@ export namespace Prisma {
   export interface Prisma__TenantClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     memberships<T extends Tenant$membershipsArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$membershipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    apiKeys<T extends Tenant$apiKeysArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$apiKeysArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    bolnaApiKey<T extends Tenant$bolnaApiKeyArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$bolnaApiKeyArgs<ExtArgs>>): Prisma__BolnaApiKeyClient<$Result.GetResult<Prisma.$BolnaApiKeyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    tenantPlan<T extends Tenant$tenantPlanArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$tenantPlanArgs<ExtArgs>>): Prisma__TenantPlanClient<$Result.GetResult<Prisma.$TenantPlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     campaigns<T extends Tenant$campaignsArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$campaignsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     batches<T extends Tenant$batchesArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$batchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadBatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     leads<T extends Tenant$leadsArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$leadsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3167,6 +3450,7 @@ export namespace Prisma {
     readonly isActive: FieldRef<"Tenant", 'Boolean'>
     readonly createdAt: FieldRef<"Tenant", 'DateTime'>
     readonly updatedAt: FieldRef<"Tenant", 'DateTime'>
+    readonly bolnaApiKeyId: FieldRef<"Tenant", 'String'>
   }
     
 
@@ -3416,6 +3700,10 @@ export namespace Prisma {
      */
     data: TenantCreateManyInput | TenantCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -3486,6 +3774,10 @@ export namespace Prisma {
      * Limit how many Tenants to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -3579,27 +3871,41 @@ export namespace Prisma {
   }
 
   /**
-   * Tenant.apiKeys
+   * Tenant.bolnaApiKey
    */
-  export type Tenant$apiKeysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Tenant$bolnaApiKeyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ApiKey
+     * Select specific fields to fetch from the BolnaApiKey
      */
-    select?: ApiKeySelect<ExtArgs> | null
+    select?: BolnaApiKeySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ApiKey
+     * Omit specific fields from the BolnaApiKey
      */
-    omit?: ApiKeyOmit<ExtArgs> | null
+    omit?: BolnaApiKeyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ApiKeyInclude<ExtArgs> | null
-    where?: ApiKeyWhereInput
-    orderBy?: ApiKeyOrderByWithRelationInput | ApiKeyOrderByWithRelationInput[]
-    cursor?: ApiKeyWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ApiKeyScalarFieldEnum | ApiKeyScalarFieldEnum[]
+    include?: BolnaApiKeyInclude<ExtArgs> | null
+    where?: BolnaApiKeyWhereInput
+  }
+
+  /**
+   * Tenant.tenantPlan
+   */
+  export type Tenant$tenantPlanArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantPlan
+     */
+    select?: TenantPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantPlan
+     */
+    omit?: TenantPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantPlanInclude<ExtArgs> | null
+    where?: TenantPlanWhereInput
   }
 
   /**
@@ -7018,1103 +7324,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: PlatformAdminInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model ApiKey
-   */
-
-  export type AggregateApiKey = {
-    _count: ApiKeyCountAggregateOutputType | null
-    _min: ApiKeyMinAggregateOutputType | null
-    _max: ApiKeyMaxAggregateOutputType | null
-  }
-
-  export type ApiKeyMinAggregateOutputType = {
-    id: string | null
-    tenantId: string | null
-    name: string | null
-    keyHash: string | null
-    lastUsedAt: Date | null
-    expiresAt: Date | null
-    isActive: boolean | null
-    createdAt: Date | null
-  }
-
-  export type ApiKeyMaxAggregateOutputType = {
-    id: string | null
-    tenantId: string | null
-    name: string | null
-    keyHash: string | null
-    lastUsedAt: Date | null
-    expiresAt: Date | null
-    isActive: boolean | null
-    createdAt: Date | null
-  }
-
-  export type ApiKeyCountAggregateOutputType = {
-    id: number
-    tenantId: number
-    name: number
-    keyHash: number
-    lastUsedAt: number
-    expiresAt: number
-    isActive: number
-    createdAt: number
-    _all: number
-  }
-
-
-  export type ApiKeyMinAggregateInputType = {
-    id?: true
-    tenantId?: true
-    name?: true
-    keyHash?: true
-    lastUsedAt?: true
-    expiresAt?: true
-    isActive?: true
-    createdAt?: true
-  }
-
-  export type ApiKeyMaxAggregateInputType = {
-    id?: true
-    tenantId?: true
-    name?: true
-    keyHash?: true
-    lastUsedAt?: true
-    expiresAt?: true
-    isActive?: true
-    createdAt?: true
-  }
-
-  export type ApiKeyCountAggregateInputType = {
-    id?: true
-    tenantId?: true
-    name?: true
-    keyHash?: true
-    lastUsedAt?: true
-    expiresAt?: true
-    isActive?: true
-    createdAt?: true
-    _all?: true
-  }
-
-  export type ApiKeyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ApiKey to aggregate.
-     */
-    where?: ApiKeyWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ApiKeys to fetch.
-     */
-    orderBy?: ApiKeyOrderByWithRelationInput | ApiKeyOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: ApiKeyWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ApiKeys from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ApiKeys.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned ApiKeys
-    **/
-    _count?: true | ApiKeyCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: ApiKeyMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: ApiKeyMaxAggregateInputType
-  }
-
-  export type GetApiKeyAggregateType<T extends ApiKeyAggregateArgs> = {
-        [P in keyof T & keyof AggregateApiKey]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateApiKey[P]>
-      : GetScalarType<T[P], AggregateApiKey[P]>
-  }
-
-
-
-
-  export type ApiKeyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ApiKeyWhereInput
-    orderBy?: ApiKeyOrderByWithAggregationInput | ApiKeyOrderByWithAggregationInput[]
-    by: ApiKeyScalarFieldEnum[] | ApiKeyScalarFieldEnum
-    having?: ApiKeyScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: ApiKeyCountAggregateInputType | true
-    _min?: ApiKeyMinAggregateInputType
-    _max?: ApiKeyMaxAggregateInputType
-  }
-
-  export type ApiKeyGroupByOutputType = {
-    id: string
-    tenantId: string
-    name: string
-    keyHash: string
-    lastUsedAt: Date | null
-    expiresAt: Date | null
-    isActive: boolean
-    createdAt: Date
-    _count: ApiKeyCountAggregateOutputType | null
-    _min: ApiKeyMinAggregateOutputType | null
-    _max: ApiKeyMaxAggregateOutputType | null
-  }
-
-  type GetApiKeyGroupByPayload<T extends ApiKeyGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<ApiKeyGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof ApiKeyGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], ApiKeyGroupByOutputType[P]>
-            : GetScalarType<T[P], ApiKeyGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type ApiKeySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    tenantId?: boolean
-    name?: boolean
-    keyHash?: boolean
-    lastUsedAt?: boolean
-    expiresAt?: boolean
-    isActive?: boolean
-    createdAt?: boolean
-    tenant?: boolean | TenantDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["apiKey"]>
-
-  export type ApiKeySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    tenantId?: boolean
-    name?: boolean
-    keyHash?: boolean
-    lastUsedAt?: boolean
-    expiresAt?: boolean
-    isActive?: boolean
-    createdAt?: boolean
-    tenant?: boolean | TenantDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["apiKey"]>
-
-  export type ApiKeySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    tenantId?: boolean
-    name?: boolean
-    keyHash?: boolean
-    lastUsedAt?: boolean
-    expiresAt?: boolean
-    isActive?: boolean
-    createdAt?: boolean
-    tenant?: boolean | TenantDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["apiKey"]>
-
-  export type ApiKeySelectScalar = {
-    id?: boolean
-    tenantId?: boolean
-    name?: boolean
-    keyHash?: boolean
-    lastUsedAt?: boolean
-    expiresAt?: boolean
-    isActive?: boolean
-    createdAt?: boolean
-  }
-
-  export type ApiKeyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "name" | "keyHash" | "lastUsedAt" | "expiresAt" | "isActive" | "createdAt", ExtArgs["result"]["apiKey"]>
-  export type ApiKeyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    tenant?: boolean | TenantDefaultArgs<ExtArgs>
-  }
-  export type ApiKeyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    tenant?: boolean | TenantDefaultArgs<ExtArgs>
-  }
-  export type ApiKeyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    tenant?: boolean | TenantDefaultArgs<ExtArgs>
-  }
-
-  export type $ApiKeyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "ApiKey"
-    objects: {
-      tenant: Prisma.$TenantPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      tenantId: string
-      name: string
-      keyHash: string
-      lastUsedAt: Date | null
-      expiresAt: Date | null
-      isActive: boolean
-      createdAt: Date
-    }, ExtArgs["result"]["apiKey"]>
-    composites: {}
-  }
-
-  type ApiKeyGetPayload<S extends boolean | null | undefined | ApiKeyDefaultArgs> = $Result.GetResult<Prisma.$ApiKeyPayload, S>
-
-  type ApiKeyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<ApiKeyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: ApiKeyCountAggregateInputType | true
-    }
-
-  export interface ApiKeyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ApiKey'], meta: { name: 'ApiKey' } }
-    /**
-     * Find zero or one ApiKey that matches the filter.
-     * @param {ApiKeyFindUniqueArgs} args - Arguments to find a ApiKey
-     * @example
-     * // Get one ApiKey
-     * const apiKey = await prisma.apiKey.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends ApiKeyFindUniqueArgs>(args: SelectSubset<T, ApiKeyFindUniqueArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one ApiKey that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {ApiKeyFindUniqueOrThrowArgs} args - Arguments to find a ApiKey
-     * @example
-     * // Get one ApiKey
-     * const apiKey = await prisma.apiKey.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends ApiKeyFindUniqueOrThrowArgs>(args: SelectSubset<T, ApiKeyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first ApiKey that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ApiKeyFindFirstArgs} args - Arguments to find a ApiKey
-     * @example
-     * // Get one ApiKey
-     * const apiKey = await prisma.apiKey.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends ApiKeyFindFirstArgs>(args?: SelectSubset<T, ApiKeyFindFirstArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first ApiKey that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ApiKeyFindFirstOrThrowArgs} args - Arguments to find a ApiKey
-     * @example
-     * // Get one ApiKey
-     * const apiKey = await prisma.apiKey.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends ApiKeyFindFirstOrThrowArgs>(args?: SelectSubset<T, ApiKeyFindFirstOrThrowArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more ApiKeys that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ApiKeyFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all ApiKeys
-     * const apiKeys = await prisma.apiKey.findMany()
-     * 
-     * // Get first 10 ApiKeys
-     * const apiKeys = await prisma.apiKey.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const apiKeyWithIdOnly = await prisma.apiKey.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends ApiKeyFindManyArgs>(args?: SelectSubset<T, ApiKeyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a ApiKey.
-     * @param {ApiKeyCreateArgs} args - Arguments to create a ApiKey.
-     * @example
-     * // Create one ApiKey
-     * const ApiKey = await prisma.apiKey.create({
-     *   data: {
-     *     // ... data to create a ApiKey
-     *   }
-     * })
-     * 
-     */
-    create<T extends ApiKeyCreateArgs>(args: SelectSubset<T, ApiKeyCreateArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many ApiKeys.
-     * @param {ApiKeyCreateManyArgs} args - Arguments to create many ApiKeys.
-     * @example
-     * // Create many ApiKeys
-     * const apiKey = await prisma.apiKey.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends ApiKeyCreateManyArgs>(args?: SelectSubset<T, ApiKeyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many ApiKeys and returns the data saved in the database.
-     * @param {ApiKeyCreateManyAndReturnArgs} args - Arguments to create many ApiKeys.
-     * @example
-     * // Create many ApiKeys
-     * const apiKey = await prisma.apiKey.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many ApiKeys and only return the `id`
-     * const apiKeyWithIdOnly = await prisma.apiKey.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends ApiKeyCreateManyAndReturnArgs>(args?: SelectSubset<T, ApiKeyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a ApiKey.
-     * @param {ApiKeyDeleteArgs} args - Arguments to delete one ApiKey.
-     * @example
-     * // Delete one ApiKey
-     * const ApiKey = await prisma.apiKey.delete({
-     *   where: {
-     *     // ... filter to delete one ApiKey
-     *   }
-     * })
-     * 
-     */
-    delete<T extends ApiKeyDeleteArgs>(args: SelectSubset<T, ApiKeyDeleteArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one ApiKey.
-     * @param {ApiKeyUpdateArgs} args - Arguments to update one ApiKey.
-     * @example
-     * // Update one ApiKey
-     * const apiKey = await prisma.apiKey.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends ApiKeyUpdateArgs>(args: SelectSubset<T, ApiKeyUpdateArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more ApiKeys.
-     * @param {ApiKeyDeleteManyArgs} args - Arguments to filter ApiKeys to delete.
-     * @example
-     * // Delete a few ApiKeys
-     * const { count } = await prisma.apiKey.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends ApiKeyDeleteManyArgs>(args?: SelectSubset<T, ApiKeyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more ApiKeys.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ApiKeyUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many ApiKeys
-     * const apiKey = await prisma.apiKey.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends ApiKeyUpdateManyArgs>(args: SelectSubset<T, ApiKeyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more ApiKeys and returns the data updated in the database.
-     * @param {ApiKeyUpdateManyAndReturnArgs} args - Arguments to update many ApiKeys.
-     * @example
-     * // Update many ApiKeys
-     * const apiKey = await prisma.apiKey.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more ApiKeys and only return the `id`
-     * const apiKeyWithIdOnly = await prisma.apiKey.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends ApiKeyUpdateManyAndReturnArgs>(args: SelectSubset<T, ApiKeyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one ApiKey.
-     * @param {ApiKeyUpsertArgs} args - Arguments to update or create a ApiKey.
-     * @example
-     * // Update or create a ApiKey
-     * const apiKey = await prisma.apiKey.upsert({
-     *   create: {
-     *     // ... data to create a ApiKey
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the ApiKey we want to update
-     *   }
-     * })
-     */
-    upsert<T extends ApiKeyUpsertArgs>(args: SelectSubset<T, ApiKeyUpsertArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of ApiKeys.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ApiKeyCountArgs} args - Arguments to filter ApiKeys to count.
-     * @example
-     * // Count the number of ApiKeys
-     * const count = await prisma.apiKey.count({
-     *   where: {
-     *     // ... the filter for the ApiKeys we want to count
-     *   }
-     * })
-    **/
-    count<T extends ApiKeyCountArgs>(
-      args?: Subset<T, ApiKeyCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], ApiKeyCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a ApiKey.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ApiKeyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends ApiKeyAggregateArgs>(args: Subset<T, ApiKeyAggregateArgs>): Prisma.PrismaPromise<GetApiKeyAggregateType<T>>
-
-    /**
-     * Group by ApiKey.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ApiKeyGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends ApiKeyGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ApiKeyGroupByArgs['orderBy'] }
-        : { orderBy?: ApiKeyGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, ApiKeyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetApiKeyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the ApiKey model
-   */
-  readonly fields: ApiKeyFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for ApiKey.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__ApiKeyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the ApiKey model
-   */
-  interface ApiKeyFieldRefs {
-    readonly id: FieldRef<"ApiKey", 'String'>
-    readonly tenantId: FieldRef<"ApiKey", 'String'>
-    readonly name: FieldRef<"ApiKey", 'String'>
-    readonly keyHash: FieldRef<"ApiKey", 'String'>
-    readonly lastUsedAt: FieldRef<"ApiKey", 'DateTime'>
-    readonly expiresAt: FieldRef<"ApiKey", 'DateTime'>
-    readonly isActive: FieldRef<"ApiKey", 'Boolean'>
-    readonly createdAt: FieldRef<"ApiKey", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * ApiKey findUnique
-   */
-  export type ApiKeyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ApiKey
-     */
-    select?: ApiKeySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ApiKey
-     */
-    omit?: ApiKeyOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApiKeyInclude<ExtArgs> | null
-    /**
-     * Filter, which ApiKey to fetch.
-     */
-    where: ApiKeyWhereUniqueInput
-  }
-
-  /**
-   * ApiKey findUniqueOrThrow
-   */
-  export type ApiKeyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ApiKey
-     */
-    select?: ApiKeySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ApiKey
-     */
-    omit?: ApiKeyOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApiKeyInclude<ExtArgs> | null
-    /**
-     * Filter, which ApiKey to fetch.
-     */
-    where: ApiKeyWhereUniqueInput
-  }
-
-  /**
-   * ApiKey findFirst
-   */
-  export type ApiKeyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ApiKey
-     */
-    select?: ApiKeySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ApiKey
-     */
-    omit?: ApiKeyOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApiKeyInclude<ExtArgs> | null
-    /**
-     * Filter, which ApiKey to fetch.
-     */
-    where?: ApiKeyWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ApiKeys to fetch.
-     */
-    orderBy?: ApiKeyOrderByWithRelationInput | ApiKeyOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ApiKeys.
-     */
-    cursor?: ApiKeyWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ApiKeys from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ApiKeys.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ApiKeys.
-     */
-    distinct?: ApiKeyScalarFieldEnum | ApiKeyScalarFieldEnum[]
-  }
-
-  /**
-   * ApiKey findFirstOrThrow
-   */
-  export type ApiKeyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ApiKey
-     */
-    select?: ApiKeySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ApiKey
-     */
-    omit?: ApiKeyOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApiKeyInclude<ExtArgs> | null
-    /**
-     * Filter, which ApiKey to fetch.
-     */
-    where?: ApiKeyWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ApiKeys to fetch.
-     */
-    orderBy?: ApiKeyOrderByWithRelationInput | ApiKeyOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ApiKeys.
-     */
-    cursor?: ApiKeyWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ApiKeys from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ApiKeys.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ApiKeys.
-     */
-    distinct?: ApiKeyScalarFieldEnum | ApiKeyScalarFieldEnum[]
-  }
-
-  /**
-   * ApiKey findMany
-   */
-  export type ApiKeyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ApiKey
-     */
-    select?: ApiKeySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ApiKey
-     */
-    omit?: ApiKeyOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApiKeyInclude<ExtArgs> | null
-    /**
-     * Filter, which ApiKeys to fetch.
-     */
-    where?: ApiKeyWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ApiKeys to fetch.
-     */
-    orderBy?: ApiKeyOrderByWithRelationInput | ApiKeyOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing ApiKeys.
-     */
-    cursor?: ApiKeyWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ApiKeys from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ApiKeys.
-     */
-    skip?: number
-    distinct?: ApiKeyScalarFieldEnum | ApiKeyScalarFieldEnum[]
-  }
-
-  /**
-   * ApiKey create
-   */
-  export type ApiKeyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ApiKey
-     */
-    select?: ApiKeySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ApiKey
-     */
-    omit?: ApiKeyOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApiKeyInclude<ExtArgs> | null
-    /**
-     * The data needed to create a ApiKey.
-     */
-    data: XOR<ApiKeyCreateInput, ApiKeyUncheckedCreateInput>
-  }
-
-  /**
-   * ApiKey createMany
-   */
-  export type ApiKeyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many ApiKeys.
-     */
-    data: ApiKeyCreateManyInput | ApiKeyCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * ApiKey createManyAndReturn
-   */
-  export type ApiKeyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ApiKey
-     */
-    select?: ApiKeySelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the ApiKey
-     */
-    omit?: ApiKeyOmit<ExtArgs> | null
-    /**
-     * The data used to create many ApiKeys.
-     */
-    data: ApiKeyCreateManyInput | ApiKeyCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApiKeyIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * ApiKey update
-   */
-  export type ApiKeyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ApiKey
-     */
-    select?: ApiKeySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ApiKey
-     */
-    omit?: ApiKeyOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApiKeyInclude<ExtArgs> | null
-    /**
-     * The data needed to update a ApiKey.
-     */
-    data: XOR<ApiKeyUpdateInput, ApiKeyUncheckedUpdateInput>
-    /**
-     * Choose, which ApiKey to update.
-     */
-    where: ApiKeyWhereUniqueInput
-  }
-
-  /**
-   * ApiKey updateMany
-   */
-  export type ApiKeyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update ApiKeys.
-     */
-    data: XOR<ApiKeyUpdateManyMutationInput, ApiKeyUncheckedUpdateManyInput>
-    /**
-     * Filter which ApiKeys to update
-     */
-    where?: ApiKeyWhereInput
-    /**
-     * Limit how many ApiKeys to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * ApiKey updateManyAndReturn
-   */
-  export type ApiKeyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ApiKey
-     */
-    select?: ApiKeySelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the ApiKey
-     */
-    omit?: ApiKeyOmit<ExtArgs> | null
-    /**
-     * The data used to update ApiKeys.
-     */
-    data: XOR<ApiKeyUpdateManyMutationInput, ApiKeyUncheckedUpdateManyInput>
-    /**
-     * Filter which ApiKeys to update
-     */
-    where?: ApiKeyWhereInput
-    /**
-     * Limit how many ApiKeys to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApiKeyIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * ApiKey upsert
-   */
-  export type ApiKeyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ApiKey
-     */
-    select?: ApiKeySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ApiKey
-     */
-    omit?: ApiKeyOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApiKeyInclude<ExtArgs> | null
-    /**
-     * The filter to search for the ApiKey to update in case it exists.
-     */
-    where: ApiKeyWhereUniqueInput
-    /**
-     * In case the ApiKey found by the `where` argument doesn't exist, create a new ApiKey with this data.
-     */
-    create: XOR<ApiKeyCreateInput, ApiKeyUncheckedCreateInput>
-    /**
-     * In case the ApiKey was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<ApiKeyUpdateInput, ApiKeyUncheckedUpdateInput>
-  }
-
-  /**
-   * ApiKey delete
-   */
-  export type ApiKeyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ApiKey
-     */
-    select?: ApiKeySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ApiKey
-     */
-    omit?: ApiKeyOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApiKeyInclude<ExtArgs> | null
-    /**
-     * Filter which ApiKey to delete.
-     */
-    where: ApiKeyWhereUniqueInput
-  }
-
-  /**
-   * ApiKey deleteMany
-   */
-  export type ApiKeyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ApiKeys to delete
-     */
-    where?: ApiKeyWhereInput
-    /**
-     * Limit how many ApiKeys to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * ApiKey without action
-   */
-  export type ApiKeyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ApiKey
-     */
-    select?: ApiKeySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ApiKey
-     */
-    omit?: ApiKeyOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApiKeyInclude<ExtArgs> | null
   }
 
 
@@ -18513,6 +17722,3551 @@ export namespace Prisma {
 
 
   /**
+   * Model Plan
+   */
+
+  export type AggregatePlan = {
+    _count: PlanCountAggregateOutputType | null
+    _avg: PlanAvgAggregateOutputType | null
+    _sum: PlanSumAggregateOutputType | null
+    _min: PlanMinAggregateOutputType | null
+    _max: PlanMaxAggregateOutputType | null
+  }
+
+  export type PlanAvgAggregateOutputType = {
+    displayOrder: number | null
+    onboardingFee: number | null
+    perMinuteRate: number | null
+    billingMinimumSec: number | null
+    billingIncrementSec: number | null
+    maxActiveCampaigns: number | null
+    maxLeadsPerBatch: number | null
+    industryPackLimit: number | null
+    includedBalance: number | null
+    bonusValidityDays: number | null
+  }
+
+  export type PlanSumAggregateOutputType = {
+    displayOrder: number | null
+    onboardingFee: number | null
+    perMinuteRate: number | null
+    billingMinimumSec: number | null
+    billingIncrementSec: number | null
+    maxActiveCampaigns: number | null
+    maxLeadsPerBatch: number | null
+    industryPackLimit: number | null
+    includedBalance: number | null
+    bonusValidityDays: number | null
+  }
+
+  export type PlanMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    slug: string | null
+    isActive: boolean | null
+    displayOrder: number | null
+    onboardingFee: number | null
+    perMinuteRate: number | null
+    billingMinimumSec: number | null
+    billingIncrementSec: number | null
+    maxActiveCampaigns: number | null
+    maxLeadsPerBatch: number | null
+    retryAutomation: boolean | null
+    industryPackLimit: number | null
+    includedBalance: number | null
+    bonusValidityDays: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PlanMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    slug: string | null
+    isActive: boolean | null
+    displayOrder: number | null
+    onboardingFee: number | null
+    perMinuteRate: number | null
+    billingMinimumSec: number | null
+    billingIncrementSec: number | null
+    maxActiveCampaigns: number | null
+    maxLeadsPerBatch: number | null
+    retryAutomation: boolean | null
+    industryPackLimit: number | null
+    includedBalance: number | null
+    bonusValidityDays: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PlanCountAggregateOutputType = {
+    id: number
+    name: number
+    slug: number
+    isActive: number
+    displayOrder: number
+    onboardingFee: number
+    perMinuteRate: number
+    billingMinimumSec: number
+    billingIncrementSec: number
+    maxActiveCampaigns: number
+    maxLeadsPerBatch: number
+    retryAutomation: number
+    industryPackLimit: number
+    features: number
+    includedBalance: number
+    bonusValidityDays: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PlanAvgAggregateInputType = {
+    displayOrder?: true
+    onboardingFee?: true
+    perMinuteRate?: true
+    billingMinimumSec?: true
+    billingIncrementSec?: true
+    maxActiveCampaigns?: true
+    maxLeadsPerBatch?: true
+    industryPackLimit?: true
+    includedBalance?: true
+    bonusValidityDays?: true
+  }
+
+  export type PlanSumAggregateInputType = {
+    displayOrder?: true
+    onboardingFee?: true
+    perMinuteRate?: true
+    billingMinimumSec?: true
+    billingIncrementSec?: true
+    maxActiveCampaigns?: true
+    maxLeadsPerBatch?: true
+    industryPackLimit?: true
+    includedBalance?: true
+    bonusValidityDays?: true
+  }
+
+  export type PlanMinAggregateInputType = {
+    id?: true
+    name?: true
+    slug?: true
+    isActive?: true
+    displayOrder?: true
+    onboardingFee?: true
+    perMinuteRate?: true
+    billingMinimumSec?: true
+    billingIncrementSec?: true
+    maxActiveCampaigns?: true
+    maxLeadsPerBatch?: true
+    retryAutomation?: true
+    industryPackLimit?: true
+    includedBalance?: true
+    bonusValidityDays?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PlanMaxAggregateInputType = {
+    id?: true
+    name?: true
+    slug?: true
+    isActive?: true
+    displayOrder?: true
+    onboardingFee?: true
+    perMinuteRate?: true
+    billingMinimumSec?: true
+    billingIncrementSec?: true
+    maxActiveCampaigns?: true
+    maxLeadsPerBatch?: true
+    retryAutomation?: true
+    industryPackLimit?: true
+    includedBalance?: true
+    bonusValidityDays?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PlanCountAggregateInputType = {
+    id?: true
+    name?: true
+    slug?: true
+    isActive?: true
+    displayOrder?: true
+    onboardingFee?: true
+    perMinuteRate?: true
+    billingMinimumSec?: true
+    billingIncrementSec?: true
+    maxActiveCampaigns?: true
+    maxLeadsPerBatch?: true
+    retryAutomation?: true
+    industryPackLimit?: true
+    features?: true
+    includedBalance?: true
+    bonusValidityDays?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PlanAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Plan to aggregate.
+     */
+    where?: PlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Plans to fetch.
+     */
+    orderBy?: PlanOrderByWithRelationInput | PlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Plans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Plans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Plans
+    **/
+    _count?: true | PlanCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PlanAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PlanSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PlanMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PlanMaxAggregateInputType
+  }
+
+  export type GetPlanAggregateType<T extends PlanAggregateArgs> = {
+        [P in keyof T & keyof AggregatePlan]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePlan[P]>
+      : GetScalarType<T[P], AggregatePlan[P]>
+  }
+
+
+
+
+  export type PlanGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PlanWhereInput
+    orderBy?: PlanOrderByWithAggregationInput | PlanOrderByWithAggregationInput[]
+    by: PlanScalarFieldEnum[] | PlanScalarFieldEnum
+    having?: PlanScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PlanCountAggregateInputType | true
+    _avg?: PlanAvgAggregateInputType
+    _sum?: PlanSumAggregateInputType
+    _min?: PlanMinAggregateInputType
+    _max?: PlanMaxAggregateInputType
+  }
+
+  export type PlanGroupByOutputType = {
+    id: string
+    name: string
+    slug: string
+    isActive: boolean
+    displayOrder: number
+    onboardingFee: number
+    perMinuteRate: number
+    billingMinimumSec: number
+    billingIncrementSec: number
+    maxActiveCampaigns: number | null
+    maxLeadsPerBatch: number | null
+    retryAutomation: boolean
+    industryPackLimit: number | null
+    features: JsonValue
+    includedBalance: number
+    bonusValidityDays: number | null
+    createdAt: Date
+    updatedAt: Date
+    _count: PlanCountAggregateOutputType | null
+    _avg: PlanAvgAggregateOutputType | null
+    _sum: PlanSumAggregateOutputType | null
+    _min: PlanMinAggregateOutputType | null
+    _max: PlanMaxAggregateOutputType | null
+  }
+
+  type GetPlanGroupByPayload<T extends PlanGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PlanGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PlanGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PlanGroupByOutputType[P]>
+            : GetScalarType<T[P], PlanGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PlanSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    isActive?: boolean
+    displayOrder?: boolean
+    onboardingFee?: boolean
+    perMinuteRate?: boolean
+    billingMinimumSec?: boolean
+    billingIncrementSec?: boolean
+    maxActiveCampaigns?: boolean
+    maxLeadsPerBatch?: boolean
+    retryAutomation?: boolean
+    industryPackLimit?: boolean
+    features?: boolean
+    includedBalance?: boolean
+    bonusValidityDays?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenantPlans?: boolean | Plan$tenantPlansArgs<ExtArgs>
+    _count?: boolean | PlanCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["plan"]>
+
+  export type PlanSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    isActive?: boolean
+    displayOrder?: boolean
+    onboardingFee?: boolean
+    perMinuteRate?: boolean
+    billingMinimumSec?: boolean
+    billingIncrementSec?: boolean
+    maxActiveCampaigns?: boolean
+    maxLeadsPerBatch?: boolean
+    retryAutomation?: boolean
+    industryPackLimit?: boolean
+    features?: boolean
+    includedBalance?: boolean
+    bonusValidityDays?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["plan"]>
+
+  export type PlanSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    isActive?: boolean
+    displayOrder?: boolean
+    onboardingFee?: boolean
+    perMinuteRate?: boolean
+    billingMinimumSec?: boolean
+    billingIncrementSec?: boolean
+    maxActiveCampaigns?: boolean
+    maxLeadsPerBatch?: boolean
+    retryAutomation?: boolean
+    industryPackLimit?: boolean
+    features?: boolean
+    includedBalance?: boolean
+    bonusValidityDays?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["plan"]>
+
+  export type PlanSelectScalar = {
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    isActive?: boolean
+    displayOrder?: boolean
+    onboardingFee?: boolean
+    perMinuteRate?: boolean
+    billingMinimumSec?: boolean
+    billingIncrementSec?: boolean
+    maxActiveCampaigns?: boolean
+    maxLeadsPerBatch?: boolean
+    retryAutomation?: boolean
+    industryPackLimit?: boolean
+    features?: boolean
+    includedBalance?: boolean
+    bonusValidityDays?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "isActive" | "displayOrder" | "onboardingFee" | "perMinuteRate" | "billingMinimumSec" | "billingIncrementSec" | "maxActiveCampaigns" | "maxLeadsPerBatch" | "retryAutomation" | "industryPackLimit" | "features" | "includedBalance" | "bonusValidityDays" | "createdAt" | "updatedAt", ExtArgs["result"]["plan"]>
+  export type PlanInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenantPlans?: boolean | Plan$tenantPlansArgs<ExtArgs>
+    _count?: boolean | PlanCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type PlanIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type PlanIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $PlanPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Plan"
+    objects: {
+      tenantPlans: Prisma.$TenantPlanPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      slug: string
+      isActive: boolean
+      displayOrder: number
+      onboardingFee: number
+      perMinuteRate: number
+      billingMinimumSec: number
+      billingIncrementSec: number
+      maxActiveCampaigns: number | null
+      maxLeadsPerBatch: number | null
+      retryAutomation: boolean
+      industryPackLimit: number | null
+      features: Prisma.JsonValue
+      includedBalance: number
+      bonusValidityDays: number | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["plan"]>
+    composites: {}
+  }
+
+  type PlanGetPayload<S extends boolean | null | undefined | PlanDefaultArgs> = $Result.GetResult<Prisma.$PlanPayload, S>
+
+  type PlanCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PlanFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PlanCountAggregateInputType | true
+    }
+
+  export interface PlanDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Plan'], meta: { name: 'Plan' } }
+    /**
+     * Find zero or one Plan that matches the filter.
+     * @param {PlanFindUniqueArgs} args - Arguments to find a Plan
+     * @example
+     * // Get one Plan
+     * const plan = await prisma.plan.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PlanFindUniqueArgs>(args: SelectSubset<T, PlanFindUniqueArgs<ExtArgs>>): Prisma__PlanClient<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Plan that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PlanFindUniqueOrThrowArgs} args - Arguments to find a Plan
+     * @example
+     * // Get one Plan
+     * const plan = await prisma.plan.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PlanFindUniqueOrThrowArgs>(args: SelectSubset<T, PlanFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PlanClient<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Plan that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanFindFirstArgs} args - Arguments to find a Plan
+     * @example
+     * // Get one Plan
+     * const plan = await prisma.plan.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PlanFindFirstArgs>(args?: SelectSubset<T, PlanFindFirstArgs<ExtArgs>>): Prisma__PlanClient<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Plan that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanFindFirstOrThrowArgs} args - Arguments to find a Plan
+     * @example
+     * // Get one Plan
+     * const plan = await prisma.plan.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PlanFindFirstOrThrowArgs>(args?: SelectSubset<T, PlanFindFirstOrThrowArgs<ExtArgs>>): Prisma__PlanClient<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Plans that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Plans
+     * const plans = await prisma.plan.findMany()
+     * 
+     * // Get first 10 Plans
+     * const plans = await prisma.plan.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const planWithIdOnly = await prisma.plan.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PlanFindManyArgs>(args?: SelectSubset<T, PlanFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Plan.
+     * @param {PlanCreateArgs} args - Arguments to create a Plan.
+     * @example
+     * // Create one Plan
+     * const Plan = await prisma.plan.create({
+     *   data: {
+     *     // ... data to create a Plan
+     *   }
+     * })
+     * 
+     */
+    create<T extends PlanCreateArgs>(args: SelectSubset<T, PlanCreateArgs<ExtArgs>>): Prisma__PlanClient<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Plans.
+     * @param {PlanCreateManyArgs} args - Arguments to create many Plans.
+     * @example
+     * // Create many Plans
+     * const plan = await prisma.plan.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PlanCreateManyArgs>(args?: SelectSubset<T, PlanCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Plans and returns the data saved in the database.
+     * @param {PlanCreateManyAndReturnArgs} args - Arguments to create many Plans.
+     * @example
+     * // Create many Plans
+     * const plan = await prisma.plan.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Plans and only return the `id`
+     * const planWithIdOnly = await prisma.plan.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PlanCreateManyAndReturnArgs>(args?: SelectSubset<T, PlanCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Plan.
+     * @param {PlanDeleteArgs} args - Arguments to delete one Plan.
+     * @example
+     * // Delete one Plan
+     * const Plan = await prisma.plan.delete({
+     *   where: {
+     *     // ... filter to delete one Plan
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PlanDeleteArgs>(args: SelectSubset<T, PlanDeleteArgs<ExtArgs>>): Prisma__PlanClient<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Plan.
+     * @param {PlanUpdateArgs} args - Arguments to update one Plan.
+     * @example
+     * // Update one Plan
+     * const plan = await prisma.plan.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PlanUpdateArgs>(args: SelectSubset<T, PlanUpdateArgs<ExtArgs>>): Prisma__PlanClient<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Plans.
+     * @param {PlanDeleteManyArgs} args - Arguments to filter Plans to delete.
+     * @example
+     * // Delete a few Plans
+     * const { count } = await prisma.plan.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PlanDeleteManyArgs>(args?: SelectSubset<T, PlanDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Plans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Plans
+     * const plan = await prisma.plan.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PlanUpdateManyArgs>(args: SelectSubset<T, PlanUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Plans and returns the data updated in the database.
+     * @param {PlanUpdateManyAndReturnArgs} args - Arguments to update many Plans.
+     * @example
+     * // Update many Plans
+     * const plan = await prisma.plan.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Plans and only return the `id`
+     * const planWithIdOnly = await prisma.plan.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PlanUpdateManyAndReturnArgs>(args: SelectSubset<T, PlanUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Plan.
+     * @param {PlanUpsertArgs} args - Arguments to update or create a Plan.
+     * @example
+     * // Update or create a Plan
+     * const plan = await prisma.plan.upsert({
+     *   create: {
+     *     // ... data to create a Plan
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Plan we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PlanUpsertArgs>(args: SelectSubset<T, PlanUpsertArgs<ExtArgs>>): Prisma__PlanClient<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Plans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanCountArgs} args - Arguments to filter Plans to count.
+     * @example
+     * // Count the number of Plans
+     * const count = await prisma.plan.count({
+     *   where: {
+     *     // ... the filter for the Plans we want to count
+     *   }
+     * })
+    **/
+    count<T extends PlanCountArgs>(
+      args?: Subset<T, PlanCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PlanCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Plan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PlanAggregateArgs>(args: Subset<T, PlanAggregateArgs>): Prisma.PrismaPromise<GetPlanAggregateType<T>>
+
+    /**
+     * Group by Plan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PlanGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PlanGroupByArgs['orderBy'] }
+        : { orderBy?: PlanGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PlanGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPlanGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Plan model
+   */
+  readonly fields: PlanFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Plan.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PlanClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    tenantPlans<T extends Plan$tenantPlansArgs<ExtArgs> = {}>(args?: Subset<T, Plan$tenantPlansArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Plan model
+   */
+  interface PlanFieldRefs {
+    readonly id: FieldRef<"Plan", 'String'>
+    readonly name: FieldRef<"Plan", 'String'>
+    readonly slug: FieldRef<"Plan", 'String'>
+    readonly isActive: FieldRef<"Plan", 'Boolean'>
+    readonly displayOrder: FieldRef<"Plan", 'Int'>
+    readonly onboardingFee: FieldRef<"Plan", 'Int'>
+    readonly perMinuteRate: FieldRef<"Plan", 'Int'>
+    readonly billingMinimumSec: FieldRef<"Plan", 'Int'>
+    readonly billingIncrementSec: FieldRef<"Plan", 'Int'>
+    readonly maxActiveCampaigns: FieldRef<"Plan", 'Int'>
+    readonly maxLeadsPerBatch: FieldRef<"Plan", 'Int'>
+    readonly retryAutomation: FieldRef<"Plan", 'Boolean'>
+    readonly industryPackLimit: FieldRef<"Plan", 'Int'>
+    readonly features: FieldRef<"Plan", 'Json'>
+    readonly includedBalance: FieldRef<"Plan", 'Int'>
+    readonly bonusValidityDays: FieldRef<"Plan", 'Int'>
+    readonly createdAt: FieldRef<"Plan", 'DateTime'>
+    readonly updatedAt: FieldRef<"Plan", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Plan findUnique
+   */
+  export type PlanFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plan
+     */
+    omit?: PlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanInclude<ExtArgs> | null
+    /**
+     * Filter, which Plan to fetch.
+     */
+    where: PlanWhereUniqueInput
+  }
+
+  /**
+   * Plan findUniqueOrThrow
+   */
+  export type PlanFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plan
+     */
+    omit?: PlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanInclude<ExtArgs> | null
+    /**
+     * Filter, which Plan to fetch.
+     */
+    where: PlanWhereUniqueInput
+  }
+
+  /**
+   * Plan findFirst
+   */
+  export type PlanFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plan
+     */
+    omit?: PlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanInclude<ExtArgs> | null
+    /**
+     * Filter, which Plan to fetch.
+     */
+    where?: PlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Plans to fetch.
+     */
+    orderBy?: PlanOrderByWithRelationInput | PlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Plans.
+     */
+    cursor?: PlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Plans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Plans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Plans.
+     */
+    distinct?: PlanScalarFieldEnum | PlanScalarFieldEnum[]
+  }
+
+  /**
+   * Plan findFirstOrThrow
+   */
+  export type PlanFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plan
+     */
+    omit?: PlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanInclude<ExtArgs> | null
+    /**
+     * Filter, which Plan to fetch.
+     */
+    where?: PlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Plans to fetch.
+     */
+    orderBy?: PlanOrderByWithRelationInput | PlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Plans.
+     */
+    cursor?: PlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Plans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Plans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Plans.
+     */
+    distinct?: PlanScalarFieldEnum | PlanScalarFieldEnum[]
+  }
+
+  /**
+   * Plan findMany
+   */
+  export type PlanFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plan
+     */
+    omit?: PlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanInclude<ExtArgs> | null
+    /**
+     * Filter, which Plans to fetch.
+     */
+    where?: PlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Plans to fetch.
+     */
+    orderBy?: PlanOrderByWithRelationInput | PlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Plans.
+     */
+    cursor?: PlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Plans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Plans.
+     */
+    skip?: number
+    distinct?: PlanScalarFieldEnum | PlanScalarFieldEnum[]
+  }
+
+  /**
+   * Plan create
+   */
+  export type PlanCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plan
+     */
+    omit?: PlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Plan.
+     */
+    data: XOR<PlanCreateInput, PlanUncheckedCreateInput>
+  }
+
+  /**
+   * Plan createMany
+   */
+  export type PlanCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Plans.
+     */
+    data: PlanCreateManyInput | PlanCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Plan createManyAndReturn
+   */
+  export type PlanCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plan
+     */
+    omit?: PlanOmit<ExtArgs> | null
+    /**
+     * The data used to create many Plans.
+     */
+    data: PlanCreateManyInput | PlanCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Plan update
+   */
+  export type PlanUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plan
+     */
+    omit?: PlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Plan.
+     */
+    data: XOR<PlanUpdateInput, PlanUncheckedUpdateInput>
+    /**
+     * Choose, which Plan to update.
+     */
+    where: PlanWhereUniqueInput
+  }
+
+  /**
+   * Plan updateMany
+   */
+  export type PlanUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Plans.
+     */
+    data: XOR<PlanUpdateManyMutationInput, PlanUncheckedUpdateManyInput>
+    /**
+     * Filter which Plans to update
+     */
+    where?: PlanWhereInput
+    /**
+     * Limit how many Plans to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Plan updateManyAndReturn
+   */
+  export type PlanUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plan
+     */
+    omit?: PlanOmit<ExtArgs> | null
+    /**
+     * The data used to update Plans.
+     */
+    data: XOR<PlanUpdateManyMutationInput, PlanUncheckedUpdateManyInput>
+    /**
+     * Filter which Plans to update
+     */
+    where?: PlanWhereInput
+    /**
+     * Limit how many Plans to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Plan upsert
+   */
+  export type PlanUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plan
+     */
+    omit?: PlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Plan to update in case it exists.
+     */
+    where: PlanWhereUniqueInput
+    /**
+     * In case the Plan found by the `where` argument doesn't exist, create a new Plan with this data.
+     */
+    create: XOR<PlanCreateInput, PlanUncheckedCreateInput>
+    /**
+     * In case the Plan was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PlanUpdateInput, PlanUncheckedUpdateInput>
+  }
+
+  /**
+   * Plan delete
+   */
+  export type PlanDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plan
+     */
+    omit?: PlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanInclude<ExtArgs> | null
+    /**
+     * Filter which Plan to delete.
+     */
+    where: PlanWhereUniqueInput
+  }
+
+  /**
+   * Plan deleteMany
+   */
+  export type PlanDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Plans to delete
+     */
+    where?: PlanWhereInput
+    /**
+     * Limit how many Plans to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Plan.tenantPlans
+   */
+  export type Plan$tenantPlansArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantPlan
+     */
+    select?: TenantPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantPlan
+     */
+    omit?: TenantPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantPlanInclude<ExtArgs> | null
+    where?: TenantPlanWhereInput
+    orderBy?: TenantPlanOrderByWithRelationInput | TenantPlanOrderByWithRelationInput[]
+    cursor?: TenantPlanWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TenantPlanScalarFieldEnum | TenantPlanScalarFieldEnum[]
+  }
+
+  /**
+   * Plan without action
+   */
+  export type PlanDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plan
+     */
+    omit?: PlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model TenantPlan
+   */
+
+  export type AggregateTenantPlan = {
+    _count: TenantPlanCountAggregateOutputType | null
+    _min: TenantPlanMinAggregateOutputType | null
+    _max: TenantPlanMaxAggregateOutputType | null
+  }
+
+  export type TenantPlanMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    planId: string | null
+    status: $Enums.PlanStatus | null
+    activatedAt: Date | null
+    bonusExpiresAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TenantPlanMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    planId: string | null
+    status: $Enums.PlanStatus | null
+    activatedAt: Date | null
+    bonusExpiresAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TenantPlanCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    planId: number
+    status: number
+    activatedAt: number
+    bonusExpiresAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type TenantPlanMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    planId?: true
+    status?: true
+    activatedAt?: true
+    bonusExpiresAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TenantPlanMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    planId?: true
+    status?: true
+    activatedAt?: true
+    bonusExpiresAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TenantPlanCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    planId?: true
+    status?: true
+    activatedAt?: true
+    bonusExpiresAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TenantPlanAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TenantPlan to aggregate.
+     */
+    where?: TenantPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TenantPlans to fetch.
+     */
+    orderBy?: TenantPlanOrderByWithRelationInput | TenantPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TenantPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TenantPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TenantPlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TenantPlans
+    **/
+    _count?: true | TenantPlanCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TenantPlanMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TenantPlanMaxAggregateInputType
+  }
+
+  export type GetTenantPlanAggregateType<T extends TenantPlanAggregateArgs> = {
+        [P in keyof T & keyof AggregateTenantPlan]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTenantPlan[P]>
+      : GetScalarType<T[P], AggregateTenantPlan[P]>
+  }
+
+
+
+
+  export type TenantPlanGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TenantPlanWhereInput
+    orderBy?: TenantPlanOrderByWithAggregationInput | TenantPlanOrderByWithAggregationInput[]
+    by: TenantPlanScalarFieldEnum[] | TenantPlanScalarFieldEnum
+    having?: TenantPlanScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TenantPlanCountAggregateInputType | true
+    _min?: TenantPlanMinAggregateInputType
+    _max?: TenantPlanMaxAggregateInputType
+  }
+
+  export type TenantPlanGroupByOutputType = {
+    id: string
+    tenantId: string
+    planId: string
+    status: $Enums.PlanStatus
+    activatedAt: Date | null
+    bonusExpiresAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: TenantPlanCountAggregateOutputType | null
+    _min: TenantPlanMinAggregateOutputType | null
+    _max: TenantPlanMaxAggregateOutputType | null
+  }
+
+  type GetTenantPlanGroupByPayload<T extends TenantPlanGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TenantPlanGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TenantPlanGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TenantPlanGroupByOutputType[P]>
+            : GetScalarType<T[P], TenantPlanGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TenantPlanSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    planId?: boolean
+    status?: boolean
+    activatedAt?: boolean
+    bonusExpiresAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    plan?: boolean | PlanDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tenantPlan"]>
+
+  export type TenantPlanSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    planId?: boolean
+    status?: boolean
+    activatedAt?: boolean
+    bonusExpiresAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    plan?: boolean | PlanDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tenantPlan"]>
+
+  export type TenantPlanSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    planId?: boolean
+    status?: boolean
+    activatedAt?: boolean
+    bonusExpiresAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    plan?: boolean | PlanDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tenantPlan"]>
+
+  export type TenantPlanSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    planId?: boolean
+    status?: boolean
+    activatedAt?: boolean
+    bonusExpiresAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TenantPlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "planId" | "status" | "activatedAt" | "bonusExpiresAt" | "createdAt" | "updatedAt", ExtArgs["result"]["tenantPlan"]>
+  export type TenantPlanInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    plan?: boolean | PlanDefaultArgs<ExtArgs>
+  }
+  export type TenantPlanIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    plan?: boolean | PlanDefaultArgs<ExtArgs>
+  }
+  export type TenantPlanIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    plan?: boolean | PlanDefaultArgs<ExtArgs>
+  }
+
+  export type $TenantPlanPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TenantPlan"
+    objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>
+      plan: Prisma.$PlanPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      planId: string
+      status: $Enums.PlanStatus
+      activatedAt: Date | null
+      bonusExpiresAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["tenantPlan"]>
+    composites: {}
+  }
+
+  type TenantPlanGetPayload<S extends boolean | null | undefined | TenantPlanDefaultArgs> = $Result.GetResult<Prisma.$TenantPlanPayload, S>
+
+  type TenantPlanCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TenantPlanFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TenantPlanCountAggregateInputType | true
+    }
+
+  export interface TenantPlanDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TenantPlan'], meta: { name: 'TenantPlan' } }
+    /**
+     * Find zero or one TenantPlan that matches the filter.
+     * @param {TenantPlanFindUniqueArgs} args - Arguments to find a TenantPlan
+     * @example
+     * // Get one TenantPlan
+     * const tenantPlan = await prisma.tenantPlan.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TenantPlanFindUniqueArgs>(args: SelectSubset<T, TenantPlanFindUniqueArgs<ExtArgs>>): Prisma__TenantPlanClient<$Result.GetResult<Prisma.$TenantPlanPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one TenantPlan that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TenantPlanFindUniqueOrThrowArgs} args - Arguments to find a TenantPlan
+     * @example
+     * // Get one TenantPlan
+     * const tenantPlan = await prisma.tenantPlan.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TenantPlanFindUniqueOrThrowArgs>(args: SelectSubset<T, TenantPlanFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TenantPlanClient<$Result.GetResult<Prisma.$TenantPlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TenantPlan that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantPlanFindFirstArgs} args - Arguments to find a TenantPlan
+     * @example
+     * // Get one TenantPlan
+     * const tenantPlan = await prisma.tenantPlan.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TenantPlanFindFirstArgs>(args?: SelectSubset<T, TenantPlanFindFirstArgs<ExtArgs>>): Prisma__TenantPlanClient<$Result.GetResult<Prisma.$TenantPlanPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TenantPlan that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantPlanFindFirstOrThrowArgs} args - Arguments to find a TenantPlan
+     * @example
+     * // Get one TenantPlan
+     * const tenantPlan = await prisma.tenantPlan.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TenantPlanFindFirstOrThrowArgs>(args?: SelectSubset<T, TenantPlanFindFirstOrThrowArgs<ExtArgs>>): Prisma__TenantPlanClient<$Result.GetResult<Prisma.$TenantPlanPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more TenantPlans that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantPlanFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TenantPlans
+     * const tenantPlans = await prisma.tenantPlan.findMany()
+     * 
+     * // Get first 10 TenantPlans
+     * const tenantPlans = await prisma.tenantPlan.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const tenantPlanWithIdOnly = await prisma.tenantPlan.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TenantPlanFindManyArgs>(args?: SelectSubset<T, TenantPlanFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a TenantPlan.
+     * @param {TenantPlanCreateArgs} args - Arguments to create a TenantPlan.
+     * @example
+     * // Create one TenantPlan
+     * const TenantPlan = await prisma.tenantPlan.create({
+     *   data: {
+     *     // ... data to create a TenantPlan
+     *   }
+     * })
+     * 
+     */
+    create<T extends TenantPlanCreateArgs>(args: SelectSubset<T, TenantPlanCreateArgs<ExtArgs>>): Prisma__TenantPlanClient<$Result.GetResult<Prisma.$TenantPlanPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many TenantPlans.
+     * @param {TenantPlanCreateManyArgs} args - Arguments to create many TenantPlans.
+     * @example
+     * // Create many TenantPlans
+     * const tenantPlan = await prisma.tenantPlan.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TenantPlanCreateManyArgs>(args?: SelectSubset<T, TenantPlanCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TenantPlans and returns the data saved in the database.
+     * @param {TenantPlanCreateManyAndReturnArgs} args - Arguments to create many TenantPlans.
+     * @example
+     * // Create many TenantPlans
+     * const tenantPlan = await prisma.tenantPlan.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TenantPlans and only return the `id`
+     * const tenantPlanWithIdOnly = await prisma.tenantPlan.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TenantPlanCreateManyAndReturnArgs>(args?: SelectSubset<T, TenantPlanCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantPlanPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a TenantPlan.
+     * @param {TenantPlanDeleteArgs} args - Arguments to delete one TenantPlan.
+     * @example
+     * // Delete one TenantPlan
+     * const TenantPlan = await prisma.tenantPlan.delete({
+     *   where: {
+     *     // ... filter to delete one TenantPlan
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TenantPlanDeleteArgs>(args: SelectSubset<T, TenantPlanDeleteArgs<ExtArgs>>): Prisma__TenantPlanClient<$Result.GetResult<Prisma.$TenantPlanPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one TenantPlan.
+     * @param {TenantPlanUpdateArgs} args - Arguments to update one TenantPlan.
+     * @example
+     * // Update one TenantPlan
+     * const tenantPlan = await prisma.tenantPlan.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TenantPlanUpdateArgs>(args: SelectSubset<T, TenantPlanUpdateArgs<ExtArgs>>): Prisma__TenantPlanClient<$Result.GetResult<Prisma.$TenantPlanPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more TenantPlans.
+     * @param {TenantPlanDeleteManyArgs} args - Arguments to filter TenantPlans to delete.
+     * @example
+     * // Delete a few TenantPlans
+     * const { count } = await prisma.tenantPlan.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TenantPlanDeleteManyArgs>(args?: SelectSubset<T, TenantPlanDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TenantPlans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantPlanUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TenantPlans
+     * const tenantPlan = await prisma.tenantPlan.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TenantPlanUpdateManyArgs>(args: SelectSubset<T, TenantPlanUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TenantPlans and returns the data updated in the database.
+     * @param {TenantPlanUpdateManyAndReturnArgs} args - Arguments to update many TenantPlans.
+     * @example
+     * // Update many TenantPlans
+     * const tenantPlan = await prisma.tenantPlan.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more TenantPlans and only return the `id`
+     * const tenantPlanWithIdOnly = await prisma.tenantPlan.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TenantPlanUpdateManyAndReturnArgs>(args: SelectSubset<T, TenantPlanUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantPlanPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one TenantPlan.
+     * @param {TenantPlanUpsertArgs} args - Arguments to update or create a TenantPlan.
+     * @example
+     * // Update or create a TenantPlan
+     * const tenantPlan = await prisma.tenantPlan.upsert({
+     *   create: {
+     *     // ... data to create a TenantPlan
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TenantPlan we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TenantPlanUpsertArgs>(args: SelectSubset<T, TenantPlanUpsertArgs<ExtArgs>>): Prisma__TenantPlanClient<$Result.GetResult<Prisma.$TenantPlanPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of TenantPlans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantPlanCountArgs} args - Arguments to filter TenantPlans to count.
+     * @example
+     * // Count the number of TenantPlans
+     * const count = await prisma.tenantPlan.count({
+     *   where: {
+     *     // ... the filter for the TenantPlans we want to count
+     *   }
+     * })
+    **/
+    count<T extends TenantPlanCountArgs>(
+      args?: Subset<T, TenantPlanCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TenantPlanCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TenantPlan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantPlanAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TenantPlanAggregateArgs>(args: Subset<T, TenantPlanAggregateArgs>): Prisma.PrismaPromise<GetTenantPlanAggregateType<T>>
+
+    /**
+     * Group by TenantPlan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantPlanGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TenantPlanGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TenantPlanGroupByArgs['orderBy'] }
+        : { orderBy?: TenantPlanGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TenantPlanGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTenantPlanGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TenantPlan model
+   */
+  readonly fields: TenantPlanFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TenantPlan.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TenantPlanClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    plan<T extends PlanDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PlanDefaultArgs<ExtArgs>>): Prisma__PlanClient<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TenantPlan model
+   */
+  interface TenantPlanFieldRefs {
+    readonly id: FieldRef<"TenantPlan", 'String'>
+    readonly tenantId: FieldRef<"TenantPlan", 'String'>
+    readonly planId: FieldRef<"TenantPlan", 'String'>
+    readonly status: FieldRef<"TenantPlan", 'PlanStatus'>
+    readonly activatedAt: FieldRef<"TenantPlan", 'DateTime'>
+    readonly bonusExpiresAt: FieldRef<"TenantPlan", 'DateTime'>
+    readonly createdAt: FieldRef<"TenantPlan", 'DateTime'>
+    readonly updatedAt: FieldRef<"TenantPlan", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TenantPlan findUnique
+   */
+  export type TenantPlanFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantPlan
+     */
+    select?: TenantPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantPlan
+     */
+    omit?: TenantPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which TenantPlan to fetch.
+     */
+    where: TenantPlanWhereUniqueInput
+  }
+
+  /**
+   * TenantPlan findUniqueOrThrow
+   */
+  export type TenantPlanFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantPlan
+     */
+    select?: TenantPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantPlan
+     */
+    omit?: TenantPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which TenantPlan to fetch.
+     */
+    where: TenantPlanWhereUniqueInput
+  }
+
+  /**
+   * TenantPlan findFirst
+   */
+  export type TenantPlanFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantPlan
+     */
+    select?: TenantPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantPlan
+     */
+    omit?: TenantPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which TenantPlan to fetch.
+     */
+    where?: TenantPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TenantPlans to fetch.
+     */
+    orderBy?: TenantPlanOrderByWithRelationInput | TenantPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TenantPlans.
+     */
+    cursor?: TenantPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TenantPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TenantPlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TenantPlans.
+     */
+    distinct?: TenantPlanScalarFieldEnum | TenantPlanScalarFieldEnum[]
+  }
+
+  /**
+   * TenantPlan findFirstOrThrow
+   */
+  export type TenantPlanFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantPlan
+     */
+    select?: TenantPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantPlan
+     */
+    omit?: TenantPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which TenantPlan to fetch.
+     */
+    where?: TenantPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TenantPlans to fetch.
+     */
+    orderBy?: TenantPlanOrderByWithRelationInput | TenantPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TenantPlans.
+     */
+    cursor?: TenantPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TenantPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TenantPlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TenantPlans.
+     */
+    distinct?: TenantPlanScalarFieldEnum | TenantPlanScalarFieldEnum[]
+  }
+
+  /**
+   * TenantPlan findMany
+   */
+  export type TenantPlanFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantPlan
+     */
+    select?: TenantPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantPlan
+     */
+    omit?: TenantPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which TenantPlans to fetch.
+     */
+    where?: TenantPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TenantPlans to fetch.
+     */
+    orderBy?: TenantPlanOrderByWithRelationInput | TenantPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TenantPlans.
+     */
+    cursor?: TenantPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TenantPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TenantPlans.
+     */
+    skip?: number
+    distinct?: TenantPlanScalarFieldEnum | TenantPlanScalarFieldEnum[]
+  }
+
+  /**
+   * TenantPlan create
+   */
+  export type TenantPlanCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantPlan
+     */
+    select?: TenantPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantPlan
+     */
+    omit?: TenantPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantPlanInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TenantPlan.
+     */
+    data: XOR<TenantPlanCreateInput, TenantPlanUncheckedCreateInput>
+  }
+
+  /**
+   * TenantPlan createMany
+   */
+  export type TenantPlanCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TenantPlans.
+     */
+    data: TenantPlanCreateManyInput | TenantPlanCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TenantPlan createManyAndReturn
+   */
+  export type TenantPlanCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantPlan
+     */
+    select?: TenantPlanSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantPlan
+     */
+    omit?: TenantPlanOmit<ExtArgs> | null
+    /**
+     * The data used to create many TenantPlans.
+     */
+    data: TenantPlanCreateManyInput | TenantPlanCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantPlanIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TenantPlan update
+   */
+  export type TenantPlanUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantPlan
+     */
+    select?: TenantPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantPlan
+     */
+    omit?: TenantPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantPlanInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TenantPlan.
+     */
+    data: XOR<TenantPlanUpdateInput, TenantPlanUncheckedUpdateInput>
+    /**
+     * Choose, which TenantPlan to update.
+     */
+    where: TenantPlanWhereUniqueInput
+  }
+
+  /**
+   * TenantPlan updateMany
+   */
+  export type TenantPlanUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TenantPlans.
+     */
+    data: XOR<TenantPlanUpdateManyMutationInput, TenantPlanUncheckedUpdateManyInput>
+    /**
+     * Filter which TenantPlans to update
+     */
+    where?: TenantPlanWhereInput
+    /**
+     * Limit how many TenantPlans to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TenantPlan updateManyAndReturn
+   */
+  export type TenantPlanUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantPlan
+     */
+    select?: TenantPlanSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantPlan
+     */
+    omit?: TenantPlanOmit<ExtArgs> | null
+    /**
+     * The data used to update TenantPlans.
+     */
+    data: XOR<TenantPlanUpdateManyMutationInput, TenantPlanUncheckedUpdateManyInput>
+    /**
+     * Filter which TenantPlans to update
+     */
+    where?: TenantPlanWhereInput
+    /**
+     * Limit how many TenantPlans to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantPlanIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TenantPlan upsert
+   */
+  export type TenantPlanUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantPlan
+     */
+    select?: TenantPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantPlan
+     */
+    omit?: TenantPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantPlanInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TenantPlan to update in case it exists.
+     */
+    where: TenantPlanWhereUniqueInput
+    /**
+     * In case the TenantPlan found by the `where` argument doesn't exist, create a new TenantPlan with this data.
+     */
+    create: XOR<TenantPlanCreateInput, TenantPlanUncheckedCreateInput>
+    /**
+     * In case the TenantPlan was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TenantPlanUpdateInput, TenantPlanUncheckedUpdateInput>
+  }
+
+  /**
+   * TenantPlan delete
+   */
+  export type TenantPlanDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantPlan
+     */
+    select?: TenantPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantPlan
+     */
+    omit?: TenantPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantPlanInclude<ExtArgs> | null
+    /**
+     * Filter which TenantPlan to delete.
+     */
+    where: TenantPlanWhereUniqueInput
+  }
+
+  /**
+   * TenantPlan deleteMany
+   */
+  export type TenantPlanDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TenantPlans to delete
+     */
+    where?: TenantPlanWhereInput
+    /**
+     * Limit how many TenantPlans to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TenantPlan without action
+   */
+  export type TenantPlanDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantPlan
+     */
+    select?: TenantPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantPlan
+     */
+    omit?: TenantPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantPlanInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model BolnaApiKey
+   */
+
+  export type AggregateBolnaApiKey = {
+    _count: BolnaApiKeyCountAggregateOutputType | null
+    _min: BolnaApiKeyMinAggregateOutputType | null
+    _max: BolnaApiKeyMaxAggregateOutputType | null
+  }
+
+  export type BolnaApiKeyMinAggregateOutputType = {
+    id: string | null
+    keyIdentifier: string | null
+    encryptedKey: string | null
+    type: $Enums.BolnaApiKeyType | null
+    isPlatformDefault: boolean | null
+    isActive: boolean | null
+    createdBy: string | null
+    lastAccessedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BolnaApiKeyMaxAggregateOutputType = {
+    id: string | null
+    keyIdentifier: string | null
+    encryptedKey: string | null
+    type: $Enums.BolnaApiKeyType | null
+    isPlatformDefault: boolean | null
+    isActive: boolean | null
+    createdBy: string | null
+    lastAccessedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BolnaApiKeyCountAggregateOutputType = {
+    id: number
+    keyIdentifier: number
+    encryptedKey: number
+    type: number
+    isPlatformDefault: number
+    isActive: number
+    createdBy: number
+    lastAccessedAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type BolnaApiKeyMinAggregateInputType = {
+    id?: true
+    keyIdentifier?: true
+    encryptedKey?: true
+    type?: true
+    isPlatformDefault?: true
+    isActive?: true
+    createdBy?: true
+    lastAccessedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BolnaApiKeyMaxAggregateInputType = {
+    id?: true
+    keyIdentifier?: true
+    encryptedKey?: true
+    type?: true
+    isPlatformDefault?: true
+    isActive?: true
+    createdBy?: true
+    lastAccessedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BolnaApiKeyCountAggregateInputType = {
+    id?: true
+    keyIdentifier?: true
+    encryptedKey?: true
+    type?: true
+    isPlatformDefault?: true
+    isActive?: true
+    createdBy?: true
+    lastAccessedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type BolnaApiKeyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BolnaApiKey to aggregate.
+     */
+    where?: BolnaApiKeyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BolnaApiKeys to fetch.
+     */
+    orderBy?: BolnaApiKeyOrderByWithRelationInput | BolnaApiKeyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BolnaApiKeyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BolnaApiKeys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BolnaApiKeys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BolnaApiKeys
+    **/
+    _count?: true | BolnaApiKeyCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BolnaApiKeyMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BolnaApiKeyMaxAggregateInputType
+  }
+
+  export type GetBolnaApiKeyAggregateType<T extends BolnaApiKeyAggregateArgs> = {
+        [P in keyof T & keyof AggregateBolnaApiKey]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBolnaApiKey[P]>
+      : GetScalarType<T[P], AggregateBolnaApiKey[P]>
+  }
+
+
+
+
+  export type BolnaApiKeyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BolnaApiKeyWhereInput
+    orderBy?: BolnaApiKeyOrderByWithAggregationInput | BolnaApiKeyOrderByWithAggregationInput[]
+    by: BolnaApiKeyScalarFieldEnum[] | BolnaApiKeyScalarFieldEnum
+    having?: BolnaApiKeyScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BolnaApiKeyCountAggregateInputType | true
+    _min?: BolnaApiKeyMinAggregateInputType
+    _max?: BolnaApiKeyMaxAggregateInputType
+  }
+
+  export type BolnaApiKeyGroupByOutputType = {
+    id: string
+    keyIdentifier: string
+    encryptedKey: string
+    type: $Enums.BolnaApiKeyType
+    isPlatformDefault: boolean
+    isActive: boolean
+    createdBy: string
+    lastAccessedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: BolnaApiKeyCountAggregateOutputType | null
+    _min: BolnaApiKeyMinAggregateOutputType | null
+    _max: BolnaApiKeyMaxAggregateOutputType | null
+  }
+
+  type GetBolnaApiKeyGroupByPayload<T extends BolnaApiKeyGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BolnaApiKeyGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BolnaApiKeyGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BolnaApiKeyGroupByOutputType[P]>
+            : GetScalarType<T[P], BolnaApiKeyGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BolnaApiKeySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    keyIdentifier?: boolean
+    encryptedKey?: boolean
+    type?: boolean
+    isPlatformDefault?: boolean
+    isActive?: boolean
+    createdBy?: boolean
+    lastAccessedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenants?: boolean | BolnaApiKey$tenantsArgs<ExtArgs>
+    _count?: boolean | BolnaApiKeyCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bolnaApiKey"]>
+
+  export type BolnaApiKeySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    keyIdentifier?: boolean
+    encryptedKey?: boolean
+    type?: boolean
+    isPlatformDefault?: boolean
+    isActive?: boolean
+    createdBy?: boolean
+    lastAccessedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["bolnaApiKey"]>
+
+  export type BolnaApiKeySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    keyIdentifier?: boolean
+    encryptedKey?: boolean
+    type?: boolean
+    isPlatformDefault?: boolean
+    isActive?: boolean
+    createdBy?: boolean
+    lastAccessedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["bolnaApiKey"]>
+
+  export type BolnaApiKeySelectScalar = {
+    id?: boolean
+    keyIdentifier?: boolean
+    encryptedKey?: boolean
+    type?: boolean
+    isPlatformDefault?: boolean
+    isActive?: boolean
+    createdBy?: boolean
+    lastAccessedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type BolnaApiKeyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "keyIdentifier" | "encryptedKey" | "type" | "isPlatformDefault" | "isActive" | "createdBy" | "lastAccessedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["bolnaApiKey"]>
+  export type BolnaApiKeyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenants?: boolean | BolnaApiKey$tenantsArgs<ExtArgs>
+    _count?: boolean | BolnaApiKeyCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type BolnaApiKeyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type BolnaApiKeyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $BolnaApiKeyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BolnaApiKey"
+    objects: {
+      tenants: Prisma.$TenantPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      keyIdentifier: string
+      encryptedKey: string
+      type: $Enums.BolnaApiKeyType
+      isPlatformDefault: boolean
+      isActive: boolean
+      createdBy: string
+      lastAccessedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["bolnaApiKey"]>
+    composites: {}
+  }
+
+  type BolnaApiKeyGetPayload<S extends boolean | null | undefined | BolnaApiKeyDefaultArgs> = $Result.GetResult<Prisma.$BolnaApiKeyPayload, S>
+
+  type BolnaApiKeyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BolnaApiKeyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BolnaApiKeyCountAggregateInputType | true
+    }
+
+  export interface BolnaApiKeyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BolnaApiKey'], meta: { name: 'BolnaApiKey' } }
+    /**
+     * Find zero or one BolnaApiKey that matches the filter.
+     * @param {BolnaApiKeyFindUniqueArgs} args - Arguments to find a BolnaApiKey
+     * @example
+     * // Get one BolnaApiKey
+     * const bolnaApiKey = await prisma.bolnaApiKey.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BolnaApiKeyFindUniqueArgs>(args: SelectSubset<T, BolnaApiKeyFindUniqueArgs<ExtArgs>>): Prisma__BolnaApiKeyClient<$Result.GetResult<Prisma.$BolnaApiKeyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one BolnaApiKey that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BolnaApiKeyFindUniqueOrThrowArgs} args - Arguments to find a BolnaApiKey
+     * @example
+     * // Get one BolnaApiKey
+     * const bolnaApiKey = await prisma.bolnaApiKey.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BolnaApiKeyFindUniqueOrThrowArgs>(args: SelectSubset<T, BolnaApiKeyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BolnaApiKeyClient<$Result.GetResult<Prisma.$BolnaApiKeyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BolnaApiKey that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BolnaApiKeyFindFirstArgs} args - Arguments to find a BolnaApiKey
+     * @example
+     * // Get one BolnaApiKey
+     * const bolnaApiKey = await prisma.bolnaApiKey.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BolnaApiKeyFindFirstArgs>(args?: SelectSubset<T, BolnaApiKeyFindFirstArgs<ExtArgs>>): Prisma__BolnaApiKeyClient<$Result.GetResult<Prisma.$BolnaApiKeyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BolnaApiKey that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BolnaApiKeyFindFirstOrThrowArgs} args - Arguments to find a BolnaApiKey
+     * @example
+     * // Get one BolnaApiKey
+     * const bolnaApiKey = await prisma.bolnaApiKey.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BolnaApiKeyFindFirstOrThrowArgs>(args?: SelectSubset<T, BolnaApiKeyFindFirstOrThrowArgs<ExtArgs>>): Prisma__BolnaApiKeyClient<$Result.GetResult<Prisma.$BolnaApiKeyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more BolnaApiKeys that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BolnaApiKeyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BolnaApiKeys
+     * const bolnaApiKeys = await prisma.bolnaApiKey.findMany()
+     * 
+     * // Get first 10 BolnaApiKeys
+     * const bolnaApiKeys = await prisma.bolnaApiKey.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const bolnaApiKeyWithIdOnly = await prisma.bolnaApiKey.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BolnaApiKeyFindManyArgs>(args?: SelectSubset<T, BolnaApiKeyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BolnaApiKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a BolnaApiKey.
+     * @param {BolnaApiKeyCreateArgs} args - Arguments to create a BolnaApiKey.
+     * @example
+     * // Create one BolnaApiKey
+     * const BolnaApiKey = await prisma.bolnaApiKey.create({
+     *   data: {
+     *     // ... data to create a BolnaApiKey
+     *   }
+     * })
+     * 
+     */
+    create<T extends BolnaApiKeyCreateArgs>(args: SelectSubset<T, BolnaApiKeyCreateArgs<ExtArgs>>): Prisma__BolnaApiKeyClient<$Result.GetResult<Prisma.$BolnaApiKeyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many BolnaApiKeys.
+     * @param {BolnaApiKeyCreateManyArgs} args - Arguments to create many BolnaApiKeys.
+     * @example
+     * // Create many BolnaApiKeys
+     * const bolnaApiKey = await prisma.bolnaApiKey.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BolnaApiKeyCreateManyArgs>(args?: SelectSubset<T, BolnaApiKeyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BolnaApiKeys and returns the data saved in the database.
+     * @param {BolnaApiKeyCreateManyAndReturnArgs} args - Arguments to create many BolnaApiKeys.
+     * @example
+     * // Create many BolnaApiKeys
+     * const bolnaApiKey = await prisma.bolnaApiKey.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BolnaApiKeys and only return the `id`
+     * const bolnaApiKeyWithIdOnly = await prisma.bolnaApiKey.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BolnaApiKeyCreateManyAndReturnArgs>(args?: SelectSubset<T, BolnaApiKeyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BolnaApiKeyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a BolnaApiKey.
+     * @param {BolnaApiKeyDeleteArgs} args - Arguments to delete one BolnaApiKey.
+     * @example
+     * // Delete one BolnaApiKey
+     * const BolnaApiKey = await prisma.bolnaApiKey.delete({
+     *   where: {
+     *     // ... filter to delete one BolnaApiKey
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BolnaApiKeyDeleteArgs>(args: SelectSubset<T, BolnaApiKeyDeleteArgs<ExtArgs>>): Prisma__BolnaApiKeyClient<$Result.GetResult<Prisma.$BolnaApiKeyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one BolnaApiKey.
+     * @param {BolnaApiKeyUpdateArgs} args - Arguments to update one BolnaApiKey.
+     * @example
+     * // Update one BolnaApiKey
+     * const bolnaApiKey = await prisma.bolnaApiKey.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BolnaApiKeyUpdateArgs>(args: SelectSubset<T, BolnaApiKeyUpdateArgs<ExtArgs>>): Prisma__BolnaApiKeyClient<$Result.GetResult<Prisma.$BolnaApiKeyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more BolnaApiKeys.
+     * @param {BolnaApiKeyDeleteManyArgs} args - Arguments to filter BolnaApiKeys to delete.
+     * @example
+     * // Delete a few BolnaApiKeys
+     * const { count } = await prisma.bolnaApiKey.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BolnaApiKeyDeleteManyArgs>(args?: SelectSubset<T, BolnaApiKeyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BolnaApiKeys.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BolnaApiKeyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BolnaApiKeys
+     * const bolnaApiKey = await prisma.bolnaApiKey.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BolnaApiKeyUpdateManyArgs>(args: SelectSubset<T, BolnaApiKeyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BolnaApiKeys and returns the data updated in the database.
+     * @param {BolnaApiKeyUpdateManyAndReturnArgs} args - Arguments to update many BolnaApiKeys.
+     * @example
+     * // Update many BolnaApiKeys
+     * const bolnaApiKey = await prisma.bolnaApiKey.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more BolnaApiKeys and only return the `id`
+     * const bolnaApiKeyWithIdOnly = await prisma.bolnaApiKey.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BolnaApiKeyUpdateManyAndReturnArgs>(args: SelectSubset<T, BolnaApiKeyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BolnaApiKeyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one BolnaApiKey.
+     * @param {BolnaApiKeyUpsertArgs} args - Arguments to update or create a BolnaApiKey.
+     * @example
+     * // Update or create a BolnaApiKey
+     * const bolnaApiKey = await prisma.bolnaApiKey.upsert({
+     *   create: {
+     *     // ... data to create a BolnaApiKey
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BolnaApiKey we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BolnaApiKeyUpsertArgs>(args: SelectSubset<T, BolnaApiKeyUpsertArgs<ExtArgs>>): Prisma__BolnaApiKeyClient<$Result.GetResult<Prisma.$BolnaApiKeyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of BolnaApiKeys.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BolnaApiKeyCountArgs} args - Arguments to filter BolnaApiKeys to count.
+     * @example
+     * // Count the number of BolnaApiKeys
+     * const count = await prisma.bolnaApiKey.count({
+     *   where: {
+     *     // ... the filter for the BolnaApiKeys we want to count
+     *   }
+     * })
+    **/
+    count<T extends BolnaApiKeyCountArgs>(
+      args?: Subset<T, BolnaApiKeyCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BolnaApiKeyCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BolnaApiKey.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BolnaApiKeyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BolnaApiKeyAggregateArgs>(args: Subset<T, BolnaApiKeyAggregateArgs>): Prisma.PrismaPromise<GetBolnaApiKeyAggregateType<T>>
+
+    /**
+     * Group by BolnaApiKey.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BolnaApiKeyGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BolnaApiKeyGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BolnaApiKeyGroupByArgs['orderBy'] }
+        : { orderBy?: BolnaApiKeyGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BolnaApiKeyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBolnaApiKeyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BolnaApiKey model
+   */
+  readonly fields: BolnaApiKeyFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BolnaApiKey.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BolnaApiKeyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    tenants<T extends BolnaApiKey$tenantsArgs<ExtArgs> = {}>(args?: Subset<T, BolnaApiKey$tenantsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BolnaApiKey model
+   */
+  interface BolnaApiKeyFieldRefs {
+    readonly id: FieldRef<"BolnaApiKey", 'String'>
+    readonly keyIdentifier: FieldRef<"BolnaApiKey", 'String'>
+    readonly encryptedKey: FieldRef<"BolnaApiKey", 'String'>
+    readonly type: FieldRef<"BolnaApiKey", 'BolnaApiKeyType'>
+    readonly isPlatformDefault: FieldRef<"BolnaApiKey", 'Boolean'>
+    readonly isActive: FieldRef<"BolnaApiKey", 'Boolean'>
+    readonly createdBy: FieldRef<"BolnaApiKey", 'String'>
+    readonly lastAccessedAt: FieldRef<"BolnaApiKey", 'DateTime'>
+    readonly createdAt: FieldRef<"BolnaApiKey", 'DateTime'>
+    readonly updatedAt: FieldRef<"BolnaApiKey", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BolnaApiKey findUnique
+   */
+  export type BolnaApiKeyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BolnaApiKey
+     */
+    select?: BolnaApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BolnaApiKey
+     */
+    omit?: BolnaApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BolnaApiKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which BolnaApiKey to fetch.
+     */
+    where: BolnaApiKeyWhereUniqueInput
+  }
+
+  /**
+   * BolnaApiKey findUniqueOrThrow
+   */
+  export type BolnaApiKeyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BolnaApiKey
+     */
+    select?: BolnaApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BolnaApiKey
+     */
+    omit?: BolnaApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BolnaApiKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which BolnaApiKey to fetch.
+     */
+    where: BolnaApiKeyWhereUniqueInput
+  }
+
+  /**
+   * BolnaApiKey findFirst
+   */
+  export type BolnaApiKeyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BolnaApiKey
+     */
+    select?: BolnaApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BolnaApiKey
+     */
+    omit?: BolnaApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BolnaApiKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which BolnaApiKey to fetch.
+     */
+    where?: BolnaApiKeyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BolnaApiKeys to fetch.
+     */
+    orderBy?: BolnaApiKeyOrderByWithRelationInput | BolnaApiKeyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BolnaApiKeys.
+     */
+    cursor?: BolnaApiKeyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BolnaApiKeys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BolnaApiKeys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BolnaApiKeys.
+     */
+    distinct?: BolnaApiKeyScalarFieldEnum | BolnaApiKeyScalarFieldEnum[]
+  }
+
+  /**
+   * BolnaApiKey findFirstOrThrow
+   */
+  export type BolnaApiKeyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BolnaApiKey
+     */
+    select?: BolnaApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BolnaApiKey
+     */
+    omit?: BolnaApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BolnaApiKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which BolnaApiKey to fetch.
+     */
+    where?: BolnaApiKeyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BolnaApiKeys to fetch.
+     */
+    orderBy?: BolnaApiKeyOrderByWithRelationInput | BolnaApiKeyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BolnaApiKeys.
+     */
+    cursor?: BolnaApiKeyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BolnaApiKeys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BolnaApiKeys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BolnaApiKeys.
+     */
+    distinct?: BolnaApiKeyScalarFieldEnum | BolnaApiKeyScalarFieldEnum[]
+  }
+
+  /**
+   * BolnaApiKey findMany
+   */
+  export type BolnaApiKeyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BolnaApiKey
+     */
+    select?: BolnaApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BolnaApiKey
+     */
+    omit?: BolnaApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BolnaApiKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which BolnaApiKeys to fetch.
+     */
+    where?: BolnaApiKeyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BolnaApiKeys to fetch.
+     */
+    orderBy?: BolnaApiKeyOrderByWithRelationInput | BolnaApiKeyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BolnaApiKeys.
+     */
+    cursor?: BolnaApiKeyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BolnaApiKeys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BolnaApiKeys.
+     */
+    skip?: number
+    distinct?: BolnaApiKeyScalarFieldEnum | BolnaApiKeyScalarFieldEnum[]
+  }
+
+  /**
+   * BolnaApiKey create
+   */
+  export type BolnaApiKeyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BolnaApiKey
+     */
+    select?: BolnaApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BolnaApiKey
+     */
+    omit?: BolnaApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BolnaApiKeyInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BolnaApiKey.
+     */
+    data: XOR<BolnaApiKeyCreateInput, BolnaApiKeyUncheckedCreateInput>
+  }
+
+  /**
+   * BolnaApiKey createMany
+   */
+  export type BolnaApiKeyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BolnaApiKeys.
+     */
+    data: BolnaApiKeyCreateManyInput | BolnaApiKeyCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BolnaApiKey createManyAndReturn
+   */
+  export type BolnaApiKeyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BolnaApiKey
+     */
+    select?: BolnaApiKeySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BolnaApiKey
+     */
+    omit?: BolnaApiKeyOmit<ExtArgs> | null
+    /**
+     * The data used to create many BolnaApiKeys.
+     */
+    data: BolnaApiKeyCreateManyInput | BolnaApiKeyCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BolnaApiKey update
+   */
+  export type BolnaApiKeyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BolnaApiKey
+     */
+    select?: BolnaApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BolnaApiKey
+     */
+    omit?: BolnaApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BolnaApiKeyInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BolnaApiKey.
+     */
+    data: XOR<BolnaApiKeyUpdateInput, BolnaApiKeyUncheckedUpdateInput>
+    /**
+     * Choose, which BolnaApiKey to update.
+     */
+    where: BolnaApiKeyWhereUniqueInput
+  }
+
+  /**
+   * BolnaApiKey updateMany
+   */
+  export type BolnaApiKeyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BolnaApiKeys.
+     */
+    data: XOR<BolnaApiKeyUpdateManyMutationInput, BolnaApiKeyUncheckedUpdateManyInput>
+    /**
+     * Filter which BolnaApiKeys to update
+     */
+    where?: BolnaApiKeyWhereInput
+    /**
+     * Limit how many BolnaApiKeys to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BolnaApiKey updateManyAndReturn
+   */
+  export type BolnaApiKeyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BolnaApiKey
+     */
+    select?: BolnaApiKeySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BolnaApiKey
+     */
+    omit?: BolnaApiKeyOmit<ExtArgs> | null
+    /**
+     * The data used to update BolnaApiKeys.
+     */
+    data: XOR<BolnaApiKeyUpdateManyMutationInput, BolnaApiKeyUncheckedUpdateManyInput>
+    /**
+     * Filter which BolnaApiKeys to update
+     */
+    where?: BolnaApiKeyWhereInput
+    /**
+     * Limit how many BolnaApiKeys to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BolnaApiKey upsert
+   */
+  export type BolnaApiKeyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BolnaApiKey
+     */
+    select?: BolnaApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BolnaApiKey
+     */
+    omit?: BolnaApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BolnaApiKeyInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BolnaApiKey to update in case it exists.
+     */
+    where: BolnaApiKeyWhereUniqueInput
+    /**
+     * In case the BolnaApiKey found by the `where` argument doesn't exist, create a new BolnaApiKey with this data.
+     */
+    create: XOR<BolnaApiKeyCreateInput, BolnaApiKeyUncheckedCreateInput>
+    /**
+     * In case the BolnaApiKey was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BolnaApiKeyUpdateInput, BolnaApiKeyUncheckedUpdateInput>
+  }
+
+  /**
+   * BolnaApiKey delete
+   */
+  export type BolnaApiKeyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BolnaApiKey
+     */
+    select?: BolnaApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BolnaApiKey
+     */
+    omit?: BolnaApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BolnaApiKeyInclude<ExtArgs> | null
+    /**
+     * Filter which BolnaApiKey to delete.
+     */
+    where: BolnaApiKeyWhereUniqueInput
+  }
+
+  /**
+   * BolnaApiKey deleteMany
+   */
+  export type BolnaApiKeyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BolnaApiKeys to delete
+     */
+    where?: BolnaApiKeyWhereInput
+    /**
+     * Limit how many BolnaApiKeys to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * BolnaApiKey.tenants
+   */
+  export type BolnaApiKey$tenantsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+    where?: TenantWhereInput
+    orderBy?: TenantOrderByWithRelationInput | TenantOrderByWithRelationInput[]
+    cursor?: TenantWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TenantScalarFieldEnum | TenantScalarFieldEnum[]
+  }
+
+  /**
+   * BolnaApiKey without action
+   */
+  export type BolnaApiKeyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BolnaApiKey
+     */
+    select?: BolnaApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BolnaApiKey
+     */
+    omit?: BolnaApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BolnaApiKeyInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -18532,7 +21286,8 @@ export namespace Prisma {
     email: 'email',
     isActive: 'isActive',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    bolnaApiKeyId: 'bolnaApiKeyId'
   };
 
   export type TenantScalarFieldEnum = (typeof TenantScalarFieldEnum)[keyof typeof TenantScalarFieldEnum]
@@ -18568,20 +21323,6 @@ export namespace Prisma {
   };
 
   export type PlatformAdminScalarFieldEnum = (typeof PlatformAdminScalarFieldEnum)[keyof typeof PlatformAdminScalarFieldEnum]
-
-
-  export const ApiKeyScalarFieldEnum: {
-    id: 'id',
-    tenantId: 'tenantId',
-    name: 'name',
-    keyHash: 'keyHash',
-    lastUsedAt: 'lastUsedAt',
-    expiresAt: 'expiresAt',
-    isActive: 'isActive',
-    createdAt: 'createdAt'
-  };
-
-  export type ApiKeyScalarFieldEnum = (typeof ApiKeyScalarFieldEnum)[keyof typeof ApiKeyScalarFieldEnum]
 
 
   export const RefreshTokenScalarFieldEnum: {
@@ -18778,6 +21519,60 @@ export namespace Prisma {
   };
 
   export type CallAnalysisScalarFieldEnum = (typeof CallAnalysisScalarFieldEnum)[keyof typeof CallAnalysisScalarFieldEnum]
+
+
+  export const PlanScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    slug: 'slug',
+    isActive: 'isActive',
+    displayOrder: 'displayOrder',
+    onboardingFee: 'onboardingFee',
+    perMinuteRate: 'perMinuteRate',
+    billingMinimumSec: 'billingMinimumSec',
+    billingIncrementSec: 'billingIncrementSec',
+    maxActiveCampaigns: 'maxActiveCampaigns',
+    maxLeadsPerBatch: 'maxLeadsPerBatch',
+    retryAutomation: 'retryAutomation',
+    industryPackLimit: 'industryPackLimit',
+    features: 'features',
+    includedBalance: 'includedBalance',
+    bonusValidityDays: 'bonusValidityDays',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PlanScalarFieldEnum = (typeof PlanScalarFieldEnum)[keyof typeof PlanScalarFieldEnum]
+
+
+  export const TenantPlanScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    planId: 'planId',
+    status: 'status',
+    activatedAt: 'activatedAt',
+    bonusExpiresAt: 'bonusExpiresAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type TenantPlanScalarFieldEnum = (typeof TenantPlanScalarFieldEnum)[keyof typeof TenantPlanScalarFieldEnum]
+
+
+  export const BolnaApiKeyScalarFieldEnum: {
+    id: 'id',
+    keyIdentifier: 'keyIdentifier',
+    encryptedKey: 'encryptedKey',
+    type: 'type',
+    isPlatformDefault: 'isPlatformDefault',
+    isActive: 'isActive',
+    createdBy: 'createdBy',
+    lastAccessedAt: 'lastAccessedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type BolnaApiKeyScalarFieldEnum = (typeof BolnaApiKeyScalarFieldEnum)[keyof typeof BolnaApiKeyScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -19090,6 +21885,34 @@ export namespace Prisma {
    */
   export type ListEnumExtractionFlagFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExtractionFlag[]'>
     
+
+
+  /**
+   * Reference to a field of type 'PlanStatus'
+   */
+  export type EnumPlanStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PlanStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'PlanStatus[]'
+   */
+  export type ListEnumPlanStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PlanStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'BolnaApiKeyType'
+   */
+  export type EnumBolnaApiKeyTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BolnaApiKeyType'>
+    
+
+
+  /**
+   * Reference to a field of type 'BolnaApiKeyType[]'
+   */
+  export type ListEnumBolnaApiKeyTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BolnaApiKeyType[]'>
+    
   /**
    * Deep Input Types
    */
@@ -19105,8 +21928,10 @@ export namespace Prisma {
     isActive?: BoolFilter<"Tenant"> | boolean
     createdAt?: DateTimeFilter<"Tenant"> | Date | string
     updatedAt?: DateTimeFilter<"Tenant"> | Date | string
+    bolnaApiKeyId?: StringNullableFilter<"Tenant"> | string | null
     memberships?: TenantUserListRelationFilter
-    apiKeys?: ApiKeyListRelationFilter
+    bolnaApiKey?: XOR<BolnaApiKeyNullableScalarRelationFilter, BolnaApiKeyWhereInput> | null
+    tenantPlan?: XOR<TenantPlanNullableScalarRelationFilter, TenantPlanWhereInput> | null
     campaigns?: CampaignListRelationFilter
     batches?: LeadBatchListRelationFilter
     leads?: LeadListRelationFilter
@@ -19123,8 +21948,10 @@ export namespace Prisma {
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    bolnaApiKeyId?: SortOrderInput | SortOrder
     memberships?: TenantUserOrderByRelationAggregateInput
-    apiKeys?: ApiKeyOrderByRelationAggregateInput
+    bolnaApiKey?: BolnaApiKeyOrderByWithRelationInput
+    tenantPlan?: TenantPlanOrderByWithRelationInput
     campaigns?: CampaignOrderByRelationAggregateInput
     batches?: LeadBatchOrderByRelationAggregateInput
     leads?: LeadOrderByRelationAggregateInput
@@ -19144,8 +21971,10 @@ export namespace Prisma {
     isActive?: BoolFilter<"Tenant"> | boolean
     createdAt?: DateTimeFilter<"Tenant"> | Date | string
     updatedAt?: DateTimeFilter<"Tenant"> | Date | string
+    bolnaApiKeyId?: StringNullableFilter<"Tenant"> | string | null
     memberships?: TenantUserListRelationFilter
-    apiKeys?: ApiKeyListRelationFilter
+    bolnaApiKey?: XOR<BolnaApiKeyNullableScalarRelationFilter, BolnaApiKeyWhereInput> | null
+    tenantPlan?: XOR<TenantPlanNullableScalarRelationFilter, TenantPlanWhereInput> | null
     campaigns?: CampaignListRelationFilter
     batches?: LeadBatchListRelationFilter
     leads?: LeadListRelationFilter
@@ -19162,6 +21991,7 @@ export namespace Prisma {
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    bolnaApiKeyId?: SortOrderInput | SortOrder
     _count?: TenantCountOrderByAggregateInput
     _max?: TenantMaxOrderByAggregateInput
     _min?: TenantMinOrderByAggregateInput
@@ -19177,6 +22007,7 @@ export namespace Prisma {
     isActive?: BoolWithAggregatesFilter<"Tenant"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Tenant"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Tenant"> | Date | string
+    bolnaApiKeyId?: StringNullableWithAggregatesFilter<"Tenant"> | string | null
   }
 
   export type UserWhereInput = {
@@ -19347,76 +22178,6 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"PlatformAdmin"> | string
     userId?: StringWithAggregatesFilter<"PlatformAdmin"> | string
     createdAt?: DateTimeWithAggregatesFilter<"PlatformAdmin"> | Date | string
-  }
-
-  export type ApiKeyWhereInput = {
-    AND?: ApiKeyWhereInput | ApiKeyWhereInput[]
-    OR?: ApiKeyWhereInput[]
-    NOT?: ApiKeyWhereInput | ApiKeyWhereInput[]
-    id?: StringFilter<"ApiKey"> | string
-    tenantId?: StringFilter<"ApiKey"> | string
-    name?: StringFilter<"ApiKey"> | string
-    keyHash?: StringFilter<"ApiKey"> | string
-    lastUsedAt?: DateTimeNullableFilter<"ApiKey"> | Date | string | null
-    expiresAt?: DateTimeNullableFilter<"ApiKey"> | Date | string | null
-    isActive?: BoolFilter<"ApiKey"> | boolean
-    createdAt?: DateTimeFilter<"ApiKey"> | Date | string
-    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
-  }
-
-  export type ApiKeyOrderByWithRelationInput = {
-    id?: SortOrder
-    tenantId?: SortOrder
-    name?: SortOrder
-    keyHash?: SortOrder
-    lastUsedAt?: SortOrderInput | SortOrder
-    expiresAt?: SortOrderInput | SortOrder
-    isActive?: SortOrder
-    createdAt?: SortOrder
-    tenant?: TenantOrderByWithRelationInput
-  }
-
-  export type ApiKeyWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    keyHash?: string
-    AND?: ApiKeyWhereInput | ApiKeyWhereInput[]
-    OR?: ApiKeyWhereInput[]
-    NOT?: ApiKeyWhereInput | ApiKeyWhereInput[]
-    tenantId?: StringFilter<"ApiKey"> | string
-    name?: StringFilter<"ApiKey"> | string
-    lastUsedAt?: DateTimeNullableFilter<"ApiKey"> | Date | string | null
-    expiresAt?: DateTimeNullableFilter<"ApiKey"> | Date | string | null
-    isActive?: BoolFilter<"ApiKey"> | boolean
-    createdAt?: DateTimeFilter<"ApiKey"> | Date | string
-    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
-  }, "id" | "keyHash">
-
-  export type ApiKeyOrderByWithAggregationInput = {
-    id?: SortOrder
-    tenantId?: SortOrder
-    name?: SortOrder
-    keyHash?: SortOrder
-    lastUsedAt?: SortOrderInput | SortOrder
-    expiresAt?: SortOrderInput | SortOrder
-    isActive?: SortOrder
-    createdAt?: SortOrder
-    _count?: ApiKeyCountOrderByAggregateInput
-    _max?: ApiKeyMaxOrderByAggregateInput
-    _min?: ApiKeyMinOrderByAggregateInput
-  }
-
-  export type ApiKeyScalarWhereWithAggregatesInput = {
-    AND?: ApiKeyScalarWhereWithAggregatesInput | ApiKeyScalarWhereWithAggregatesInput[]
-    OR?: ApiKeyScalarWhereWithAggregatesInput[]
-    NOT?: ApiKeyScalarWhereWithAggregatesInput | ApiKeyScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"ApiKey"> | string
-    tenantId?: StringWithAggregatesFilter<"ApiKey"> | string
-    name?: StringWithAggregatesFilter<"ApiKey"> | string
-    keyHash?: StringWithAggregatesFilter<"ApiKey"> | string
-    lastUsedAt?: DateTimeNullableWithAggregatesFilter<"ApiKey"> | Date | string | null
-    expiresAt?: DateTimeNullableWithAggregatesFilter<"ApiKey"> | Date | string | null
-    isActive?: BoolWithAggregatesFilter<"ApiKey"> | boolean
-    createdAt?: DateTimeWithAggregatesFilter<"ApiKey"> | Date | string
   }
 
   export type RefreshTokenWhereInput = {
@@ -20462,6 +23223,281 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"CallAnalysis"> | Date | string
   }
 
+  export type PlanWhereInput = {
+    AND?: PlanWhereInput | PlanWhereInput[]
+    OR?: PlanWhereInput[]
+    NOT?: PlanWhereInput | PlanWhereInput[]
+    id?: StringFilter<"Plan"> | string
+    name?: StringFilter<"Plan"> | string
+    slug?: StringFilter<"Plan"> | string
+    isActive?: BoolFilter<"Plan"> | boolean
+    displayOrder?: IntFilter<"Plan"> | number
+    onboardingFee?: IntFilter<"Plan"> | number
+    perMinuteRate?: IntFilter<"Plan"> | number
+    billingMinimumSec?: IntFilter<"Plan"> | number
+    billingIncrementSec?: IntFilter<"Plan"> | number
+    maxActiveCampaigns?: IntNullableFilter<"Plan"> | number | null
+    maxLeadsPerBatch?: IntNullableFilter<"Plan"> | number | null
+    retryAutomation?: BoolFilter<"Plan"> | boolean
+    industryPackLimit?: IntNullableFilter<"Plan"> | number | null
+    features?: JsonFilter<"Plan">
+    includedBalance?: IntFilter<"Plan"> | number
+    bonusValidityDays?: IntNullableFilter<"Plan"> | number | null
+    createdAt?: DateTimeFilter<"Plan"> | Date | string
+    updatedAt?: DateTimeFilter<"Plan"> | Date | string
+    tenantPlans?: TenantPlanListRelationFilter
+  }
+
+  export type PlanOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    isActive?: SortOrder
+    displayOrder?: SortOrder
+    onboardingFee?: SortOrder
+    perMinuteRate?: SortOrder
+    billingMinimumSec?: SortOrder
+    billingIncrementSec?: SortOrder
+    maxActiveCampaigns?: SortOrderInput | SortOrder
+    maxLeadsPerBatch?: SortOrderInput | SortOrder
+    retryAutomation?: SortOrder
+    industryPackLimit?: SortOrderInput | SortOrder
+    features?: SortOrder
+    includedBalance?: SortOrder
+    bonusValidityDays?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    tenantPlans?: TenantPlanOrderByRelationAggregateInput
+  }
+
+  export type PlanWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    slug?: string
+    AND?: PlanWhereInput | PlanWhereInput[]
+    OR?: PlanWhereInput[]
+    NOT?: PlanWhereInput | PlanWhereInput[]
+    name?: StringFilter<"Plan"> | string
+    isActive?: BoolFilter<"Plan"> | boolean
+    displayOrder?: IntFilter<"Plan"> | number
+    onboardingFee?: IntFilter<"Plan"> | number
+    perMinuteRate?: IntFilter<"Plan"> | number
+    billingMinimumSec?: IntFilter<"Plan"> | number
+    billingIncrementSec?: IntFilter<"Plan"> | number
+    maxActiveCampaigns?: IntNullableFilter<"Plan"> | number | null
+    maxLeadsPerBatch?: IntNullableFilter<"Plan"> | number | null
+    retryAutomation?: BoolFilter<"Plan"> | boolean
+    industryPackLimit?: IntNullableFilter<"Plan"> | number | null
+    features?: JsonFilter<"Plan">
+    includedBalance?: IntFilter<"Plan"> | number
+    bonusValidityDays?: IntNullableFilter<"Plan"> | number | null
+    createdAt?: DateTimeFilter<"Plan"> | Date | string
+    updatedAt?: DateTimeFilter<"Plan"> | Date | string
+    tenantPlans?: TenantPlanListRelationFilter
+  }, "id" | "slug">
+
+  export type PlanOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    isActive?: SortOrder
+    displayOrder?: SortOrder
+    onboardingFee?: SortOrder
+    perMinuteRate?: SortOrder
+    billingMinimumSec?: SortOrder
+    billingIncrementSec?: SortOrder
+    maxActiveCampaigns?: SortOrderInput | SortOrder
+    maxLeadsPerBatch?: SortOrderInput | SortOrder
+    retryAutomation?: SortOrder
+    industryPackLimit?: SortOrderInput | SortOrder
+    features?: SortOrder
+    includedBalance?: SortOrder
+    bonusValidityDays?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PlanCountOrderByAggregateInput
+    _avg?: PlanAvgOrderByAggregateInput
+    _max?: PlanMaxOrderByAggregateInput
+    _min?: PlanMinOrderByAggregateInput
+    _sum?: PlanSumOrderByAggregateInput
+  }
+
+  export type PlanScalarWhereWithAggregatesInput = {
+    AND?: PlanScalarWhereWithAggregatesInput | PlanScalarWhereWithAggregatesInput[]
+    OR?: PlanScalarWhereWithAggregatesInput[]
+    NOT?: PlanScalarWhereWithAggregatesInput | PlanScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Plan"> | string
+    name?: StringWithAggregatesFilter<"Plan"> | string
+    slug?: StringWithAggregatesFilter<"Plan"> | string
+    isActive?: BoolWithAggregatesFilter<"Plan"> | boolean
+    displayOrder?: IntWithAggregatesFilter<"Plan"> | number
+    onboardingFee?: IntWithAggregatesFilter<"Plan"> | number
+    perMinuteRate?: IntWithAggregatesFilter<"Plan"> | number
+    billingMinimumSec?: IntWithAggregatesFilter<"Plan"> | number
+    billingIncrementSec?: IntWithAggregatesFilter<"Plan"> | number
+    maxActiveCampaigns?: IntNullableWithAggregatesFilter<"Plan"> | number | null
+    maxLeadsPerBatch?: IntNullableWithAggregatesFilter<"Plan"> | number | null
+    retryAutomation?: BoolWithAggregatesFilter<"Plan"> | boolean
+    industryPackLimit?: IntNullableWithAggregatesFilter<"Plan"> | number | null
+    features?: JsonWithAggregatesFilter<"Plan">
+    includedBalance?: IntWithAggregatesFilter<"Plan"> | number
+    bonusValidityDays?: IntNullableWithAggregatesFilter<"Plan"> | number | null
+    createdAt?: DateTimeWithAggregatesFilter<"Plan"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Plan"> | Date | string
+  }
+
+  export type TenantPlanWhereInput = {
+    AND?: TenantPlanWhereInput | TenantPlanWhereInput[]
+    OR?: TenantPlanWhereInput[]
+    NOT?: TenantPlanWhereInput | TenantPlanWhereInput[]
+    id?: StringFilter<"TenantPlan"> | string
+    tenantId?: StringFilter<"TenantPlan"> | string
+    planId?: StringFilter<"TenantPlan"> | string
+    status?: EnumPlanStatusFilter<"TenantPlan"> | $Enums.PlanStatus
+    activatedAt?: DateTimeNullableFilter<"TenantPlan"> | Date | string | null
+    bonusExpiresAt?: DateTimeNullableFilter<"TenantPlan"> | Date | string | null
+    createdAt?: DateTimeFilter<"TenantPlan"> | Date | string
+    updatedAt?: DateTimeFilter<"TenantPlan"> | Date | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
+    plan?: XOR<PlanScalarRelationFilter, PlanWhereInput>
+  }
+
+  export type TenantPlanOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    planId?: SortOrder
+    status?: SortOrder
+    activatedAt?: SortOrderInput | SortOrder
+    bonusExpiresAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    tenant?: TenantOrderByWithRelationInput
+    plan?: PlanOrderByWithRelationInput
+  }
+
+  export type TenantPlanWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId?: string
+    AND?: TenantPlanWhereInput | TenantPlanWhereInput[]
+    OR?: TenantPlanWhereInput[]
+    NOT?: TenantPlanWhereInput | TenantPlanWhereInput[]
+    planId?: StringFilter<"TenantPlan"> | string
+    status?: EnumPlanStatusFilter<"TenantPlan"> | $Enums.PlanStatus
+    activatedAt?: DateTimeNullableFilter<"TenantPlan"> | Date | string | null
+    bonusExpiresAt?: DateTimeNullableFilter<"TenantPlan"> | Date | string | null
+    createdAt?: DateTimeFilter<"TenantPlan"> | Date | string
+    updatedAt?: DateTimeFilter<"TenantPlan"> | Date | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
+    plan?: XOR<PlanScalarRelationFilter, PlanWhereInput>
+  }, "id" | "tenantId">
+
+  export type TenantPlanOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    planId?: SortOrder
+    status?: SortOrder
+    activatedAt?: SortOrderInput | SortOrder
+    bonusExpiresAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TenantPlanCountOrderByAggregateInput
+    _max?: TenantPlanMaxOrderByAggregateInput
+    _min?: TenantPlanMinOrderByAggregateInput
+  }
+
+  export type TenantPlanScalarWhereWithAggregatesInput = {
+    AND?: TenantPlanScalarWhereWithAggregatesInput | TenantPlanScalarWhereWithAggregatesInput[]
+    OR?: TenantPlanScalarWhereWithAggregatesInput[]
+    NOT?: TenantPlanScalarWhereWithAggregatesInput | TenantPlanScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TenantPlan"> | string
+    tenantId?: StringWithAggregatesFilter<"TenantPlan"> | string
+    planId?: StringWithAggregatesFilter<"TenantPlan"> | string
+    status?: EnumPlanStatusWithAggregatesFilter<"TenantPlan"> | $Enums.PlanStatus
+    activatedAt?: DateTimeNullableWithAggregatesFilter<"TenantPlan"> | Date | string | null
+    bonusExpiresAt?: DateTimeNullableWithAggregatesFilter<"TenantPlan"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"TenantPlan"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"TenantPlan"> | Date | string
+  }
+
+  export type BolnaApiKeyWhereInput = {
+    AND?: BolnaApiKeyWhereInput | BolnaApiKeyWhereInput[]
+    OR?: BolnaApiKeyWhereInput[]
+    NOT?: BolnaApiKeyWhereInput | BolnaApiKeyWhereInput[]
+    id?: StringFilter<"BolnaApiKey"> | string
+    keyIdentifier?: StringFilter<"BolnaApiKey"> | string
+    encryptedKey?: StringFilter<"BolnaApiKey"> | string
+    type?: EnumBolnaApiKeyTypeFilter<"BolnaApiKey"> | $Enums.BolnaApiKeyType
+    isPlatformDefault?: BoolFilter<"BolnaApiKey"> | boolean
+    isActive?: BoolFilter<"BolnaApiKey"> | boolean
+    createdBy?: StringFilter<"BolnaApiKey"> | string
+    lastAccessedAt?: DateTimeNullableFilter<"BolnaApiKey"> | Date | string | null
+    createdAt?: DateTimeFilter<"BolnaApiKey"> | Date | string
+    updatedAt?: DateTimeFilter<"BolnaApiKey"> | Date | string
+    tenants?: TenantListRelationFilter
+  }
+
+  export type BolnaApiKeyOrderByWithRelationInput = {
+    id?: SortOrder
+    keyIdentifier?: SortOrder
+    encryptedKey?: SortOrder
+    type?: SortOrder
+    isPlatformDefault?: SortOrder
+    isActive?: SortOrder
+    createdBy?: SortOrder
+    lastAccessedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    tenants?: TenantOrderByRelationAggregateInput
+  }
+
+  export type BolnaApiKeyWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: BolnaApiKeyWhereInput | BolnaApiKeyWhereInput[]
+    OR?: BolnaApiKeyWhereInput[]
+    NOT?: BolnaApiKeyWhereInput | BolnaApiKeyWhereInput[]
+    keyIdentifier?: StringFilter<"BolnaApiKey"> | string
+    encryptedKey?: StringFilter<"BolnaApiKey"> | string
+    type?: EnumBolnaApiKeyTypeFilter<"BolnaApiKey"> | $Enums.BolnaApiKeyType
+    isPlatformDefault?: BoolFilter<"BolnaApiKey"> | boolean
+    isActive?: BoolFilter<"BolnaApiKey"> | boolean
+    createdBy?: StringFilter<"BolnaApiKey"> | string
+    lastAccessedAt?: DateTimeNullableFilter<"BolnaApiKey"> | Date | string | null
+    createdAt?: DateTimeFilter<"BolnaApiKey"> | Date | string
+    updatedAt?: DateTimeFilter<"BolnaApiKey"> | Date | string
+    tenants?: TenantListRelationFilter
+  }, "id">
+
+  export type BolnaApiKeyOrderByWithAggregationInput = {
+    id?: SortOrder
+    keyIdentifier?: SortOrder
+    encryptedKey?: SortOrder
+    type?: SortOrder
+    isPlatformDefault?: SortOrder
+    isActive?: SortOrder
+    createdBy?: SortOrder
+    lastAccessedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: BolnaApiKeyCountOrderByAggregateInput
+    _max?: BolnaApiKeyMaxOrderByAggregateInput
+    _min?: BolnaApiKeyMinOrderByAggregateInput
+  }
+
+  export type BolnaApiKeyScalarWhereWithAggregatesInput = {
+    AND?: BolnaApiKeyScalarWhereWithAggregatesInput | BolnaApiKeyScalarWhereWithAggregatesInput[]
+    OR?: BolnaApiKeyScalarWhereWithAggregatesInput[]
+    NOT?: BolnaApiKeyScalarWhereWithAggregatesInput | BolnaApiKeyScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"BolnaApiKey"> | string
+    keyIdentifier?: StringWithAggregatesFilter<"BolnaApiKey"> | string
+    encryptedKey?: StringWithAggregatesFilter<"BolnaApiKey"> | string
+    type?: EnumBolnaApiKeyTypeWithAggregatesFilter<"BolnaApiKey"> | $Enums.BolnaApiKeyType
+    isPlatformDefault?: BoolWithAggregatesFilter<"BolnaApiKey"> | boolean
+    isActive?: BoolWithAggregatesFilter<"BolnaApiKey"> | boolean
+    createdBy?: StringWithAggregatesFilter<"BolnaApiKey"> | string
+    lastAccessedAt?: DateTimeNullableWithAggregatesFilter<"BolnaApiKey"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"BolnaApiKey"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"BolnaApiKey"> | Date | string
+  }
+
   export type TenantCreateInput = {
     id?: string
     name: string
@@ -20470,7 +23506,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: TenantUserCreateNestedManyWithoutTenantInput
-    apiKeys?: ApiKeyCreateNestedManyWithoutTenantInput
+    bolnaApiKey?: BolnaApiKeyCreateNestedOneWithoutTenantsInput
+    tenantPlan?: TenantPlanCreateNestedOneWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
     batches?: LeadBatchCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
@@ -20487,8 +23524,9 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    bolnaApiKeyId?: string | null
     memberships?: TenantUserUncheckedCreateNestedManyWithoutTenantInput
-    apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutTenantInput
+    tenantPlan?: TenantPlanUncheckedCreateNestedOneWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
     batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
@@ -20506,7 +23544,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUpdateManyWithoutTenantNestedInput
-    apiKeys?: ApiKeyUpdateManyWithoutTenantNestedInput
+    bolnaApiKey?: BolnaApiKeyUpdateOneWithoutTenantsNestedInput
+    tenantPlan?: TenantPlanUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
@@ -20523,8 +23562,9 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bolnaApiKeyId?: NullableStringFieldUpdateOperationsInput | string | null
     memberships?: TenantUserUncheckedUpdateManyWithoutTenantNestedInput
-    apiKeys?: ApiKeyUncheckedUpdateManyWithoutTenantNestedInput
+    tenantPlan?: TenantPlanUncheckedUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
@@ -20541,6 +23581,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    bolnaApiKeyId?: string | null
   }
 
   export type TenantUpdateManyMutationInput = {
@@ -20559,6 +23600,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bolnaApiKeyId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserCreateInput = {
@@ -20728,82 +23770,6 @@ export namespace Prisma {
   export type PlatformAdminUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ApiKeyCreateInput = {
-    id?: string
-    name: string
-    keyHash: string
-    lastUsedAt?: Date | string | null
-    expiresAt?: Date | string | null
-    isActive?: boolean
-    createdAt?: Date | string
-    tenant: TenantCreateNestedOneWithoutApiKeysInput
-  }
-
-  export type ApiKeyUncheckedCreateInput = {
-    id?: string
-    tenantId: string
-    name: string
-    keyHash: string
-    lastUsedAt?: Date | string | null
-    expiresAt?: Date | string | null
-    isActive?: boolean
-    createdAt?: Date | string
-  }
-
-  export type ApiKeyUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    keyHash?: StringFieldUpdateOperationsInput | string
-    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    tenant?: TenantUpdateOneRequiredWithoutApiKeysNestedInput
-  }
-
-  export type ApiKeyUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tenantId?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    keyHash?: StringFieldUpdateOperationsInput | string
-    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ApiKeyCreateManyInput = {
-    id?: string
-    tenantId: string
-    name: string
-    keyHash: string
-    lastUsedAt?: Date | string | null
-    expiresAt?: Date | string | null
-    isActive?: boolean
-    createdAt?: Date | string
-  }
-
-  export type ApiKeyUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    keyHash?: StringFieldUpdateOperationsInput | string
-    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ApiKeyUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tenantId?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    keyHash?: StringFieldUpdateOperationsInput | string
-    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -22030,6 +24996,327 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PlanCreateInput = {
+    id?: string
+    name: string
+    slug: string
+    isActive?: boolean
+    displayOrder?: number
+    onboardingFee: number
+    perMinuteRate: number
+    billingMinimumSec?: number
+    billingIncrementSec?: number
+    maxActiveCampaigns?: number | null
+    maxLeadsPerBatch?: number | null
+    retryAutomation?: boolean
+    industryPackLimit?: number | null
+    features: JsonNullValueInput | InputJsonValue
+    includedBalance?: number
+    bonusValidityDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenantPlans?: TenantPlanCreateNestedManyWithoutPlanInput
+  }
+
+  export type PlanUncheckedCreateInput = {
+    id?: string
+    name: string
+    slug: string
+    isActive?: boolean
+    displayOrder?: number
+    onboardingFee: number
+    perMinuteRate: number
+    billingMinimumSec?: number
+    billingIncrementSec?: number
+    maxActiveCampaigns?: number | null
+    maxLeadsPerBatch?: number | null
+    retryAutomation?: boolean
+    industryPackLimit?: number | null
+    features: JsonNullValueInput | InputJsonValue
+    includedBalance?: number
+    bonusValidityDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenantPlans?: TenantPlanUncheckedCreateNestedManyWithoutPlanInput
+  }
+
+  export type PlanUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    onboardingFee?: IntFieldUpdateOperationsInput | number
+    perMinuteRate?: IntFieldUpdateOperationsInput | number
+    billingMinimumSec?: IntFieldUpdateOperationsInput | number
+    billingIncrementSec?: IntFieldUpdateOperationsInput | number
+    maxActiveCampaigns?: NullableIntFieldUpdateOperationsInput | number | null
+    maxLeadsPerBatch?: NullableIntFieldUpdateOperationsInput | number | null
+    retryAutomation?: BoolFieldUpdateOperationsInput | boolean
+    industryPackLimit?: NullableIntFieldUpdateOperationsInput | number | null
+    features?: JsonNullValueInput | InputJsonValue
+    includedBalance?: IntFieldUpdateOperationsInput | number
+    bonusValidityDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenantPlans?: TenantPlanUpdateManyWithoutPlanNestedInput
+  }
+
+  export type PlanUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    onboardingFee?: IntFieldUpdateOperationsInput | number
+    perMinuteRate?: IntFieldUpdateOperationsInput | number
+    billingMinimumSec?: IntFieldUpdateOperationsInput | number
+    billingIncrementSec?: IntFieldUpdateOperationsInput | number
+    maxActiveCampaigns?: NullableIntFieldUpdateOperationsInput | number | null
+    maxLeadsPerBatch?: NullableIntFieldUpdateOperationsInput | number | null
+    retryAutomation?: BoolFieldUpdateOperationsInput | boolean
+    industryPackLimit?: NullableIntFieldUpdateOperationsInput | number | null
+    features?: JsonNullValueInput | InputJsonValue
+    includedBalance?: IntFieldUpdateOperationsInput | number
+    bonusValidityDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenantPlans?: TenantPlanUncheckedUpdateManyWithoutPlanNestedInput
+  }
+
+  export type PlanCreateManyInput = {
+    id?: string
+    name: string
+    slug: string
+    isActive?: boolean
+    displayOrder?: number
+    onboardingFee: number
+    perMinuteRate: number
+    billingMinimumSec?: number
+    billingIncrementSec?: number
+    maxActiveCampaigns?: number | null
+    maxLeadsPerBatch?: number | null
+    retryAutomation?: boolean
+    industryPackLimit?: number | null
+    features: JsonNullValueInput | InputJsonValue
+    includedBalance?: number
+    bonusValidityDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PlanUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    onboardingFee?: IntFieldUpdateOperationsInput | number
+    perMinuteRate?: IntFieldUpdateOperationsInput | number
+    billingMinimumSec?: IntFieldUpdateOperationsInput | number
+    billingIncrementSec?: IntFieldUpdateOperationsInput | number
+    maxActiveCampaigns?: NullableIntFieldUpdateOperationsInput | number | null
+    maxLeadsPerBatch?: NullableIntFieldUpdateOperationsInput | number | null
+    retryAutomation?: BoolFieldUpdateOperationsInput | boolean
+    industryPackLimit?: NullableIntFieldUpdateOperationsInput | number | null
+    features?: JsonNullValueInput | InputJsonValue
+    includedBalance?: IntFieldUpdateOperationsInput | number
+    bonusValidityDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlanUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    onboardingFee?: IntFieldUpdateOperationsInput | number
+    perMinuteRate?: IntFieldUpdateOperationsInput | number
+    billingMinimumSec?: IntFieldUpdateOperationsInput | number
+    billingIncrementSec?: IntFieldUpdateOperationsInput | number
+    maxActiveCampaigns?: NullableIntFieldUpdateOperationsInput | number | null
+    maxLeadsPerBatch?: NullableIntFieldUpdateOperationsInput | number | null
+    retryAutomation?: BoolFieldUpdateOperationsInput | boolean
+    industryPackLimit?: NullableIntFieldUpdateOperationsInput | number | null
+    features?: JsonNullValueInput | InputJsonValue
+    includedBalance?: IntFieldUpdateOperationsInput | number
+    bonusValidityDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TenantPlanCreateInput = {
+    id?: string
+    status?: $Enums.PlanStatus
+    activatedAt?: Date | string | null
+    bonusExpiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutTenantPlanInput
+    plan: PlanCreateNestedOneWithoutTenantPlansInput
+  }
+
+  export type TenantPlanUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    planId: string
+    status?: $Enums.PlanStatus
+    activatedAt?: Date | string | null
+    bonusExpiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TenantPlanUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumPlanStatusFieldUpdateOperationsInput | $Enums.PlanStatus
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bonusExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutTenantPlanNestedInput
+    plan?: PlanUpdateOneRequiredWithoutTenantPlansNestedInput
+  }
+
+  export type TenantPlanUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    planId?: StringFieldUpdateOperationsInput | string
+    status?: EnumPlanStatusFieldUpdateOperationsInput | $Enums.PlanStatus
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bonusExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TenantPlanCreateManyInput = {
+    id?: string
+    tenantId: string
+    planId: string
+    status?: $Enums.PlanStatus
+    activatedAt?: Date | string | null
+    bonusExpiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TenantPlanUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumPlanStatusFieldUpdateOperationsInput | $Enums.PlanStatus
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bonusExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TenantPlanUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    planId?: StringFieldUpdateOperationsInput | string
+    status?: EnumPlanStatusFieldUpdateOperationsInput | $Enums.PlanStatus
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bonusExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BolnaApiKeyCreateInput = {
+    id?: string
+    keyIdentifier: string
+    encryptedKey: string
+    type?: $Enums.BolnaApiKeyType
+    isPlatformDefault?: boolean
+    isActive?: boolean
+    createdBy: string
+    lastAccessedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenants?: TenantCreateNestedManyWithoutBolnaApiKeyInput
+  }
+
+  export type BolnaApiKeyUncheckedCreateInput = {
+    id?: string
+    keyIdentifier: string
+    encryptedKey: string
+    type?: $Enums.BolnaApiKeyType
+    isPlatformDefault?: boolean
+    isActive?: boolean
+    createdBy: string
+    lastAccessedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenants?: TenantUncheckedCreateNestedManyWithoutBolnaApiKeyInput
+  }
+
+  export type BolnaApiKeyUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keyIdentifier?: StringFieldUpdateOperationsInput | string
+    encryptedKey?: StringFieldUpdateOperationsInput | string
+    type?: EnumBolnaApiKeyTypeFieldUpdateOperationsInput | $Enums.BolnaApiKeyType
+    isPlatformDefault?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdBy?: StringFieldUpdateOperationsInput | string
+    lastAccessedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenants?: TenantUpdateManyWithoutBolnaApiKeyNestedInput
+  }
+
+  export type BolnaApiKeyUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keyIdentifier?: StringFieldUpdateOperationsInput | string
+    encryptedKey?: StringFieldUpdateOperationsInput | string
+    type?: EnumBolnaApiKeyTypeFieldUpdateOperationsInput | $Enums.BolnaApiKeyType
+    isPlatformDefault?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdBy?: StringFieldUpdateOperationsInput | string
+    lastAccessedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenants?: TenantUncheckedUpdateManyWithoutBolnaApiKeyNestedInput
+  }
+
+  export type BolnaApiKeyCreateManyInput = {
+    id?: string
+    keyIdentifier: string
+    encryptedKey: string
+    type?: $Enums.BolnaApiKeyType
+    isPlatformDefault?: boolean
+    isActive?: boolean
+    createdBy: string
+    lastAccessedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BolnaApiKeyUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keyIdentifier?: StringFieldUpdateOperationsInput | string
+    encryptedKey?: StringFieldUpdateOperationsInput | string
+    type?: EnumBolnaApiKeyTypeFieldUpdateOperationsInput | $Enums.BolnaApiKeyType
+    isPlatformDefault?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdBy?: StringFieldUpdateOperationsInput | string
+    lastAccessedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BolnaApiKeyUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keyIdentifier?: StringFieldUpdateOperationsInput | string
+    encryptedKey?: StringFieldUpdateOperationsInput | string
+    type?: EnumBolnaApiKeyTypeFieldUpdateOperationsInput | $Enums.BolnaApiKeyType
+    isPlatformDefault?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdBy?: StringFieldUpdateOperationsInput | string
+    lastAccessedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -22061,16 +25348,35 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type TenantUserListRelationFilter = {
     every?: TenantUserWhereInput
     some?: TenantUserWhereInput
     none?: TenantUserWhereInput
   }
 
-  export type ApiKeyListRelationFilter = {
-    every?: ApiKeyWhereInput
-    some?: ApiKeyWhereInput
-    none?: ApiKeyWhereInput
+  export type BolnaApiKeyNullableScalarRelationFilter = {
+    is?: BolnaApiKeyWhereInput | null
+    isNot?: BolnaApiKeyWhereInput | null
+  }
+
+  export type TenantPlanNullableScalarRelationFilter = {
+    is?: TenantPlanWhereInput | null
+    isNot?: TenantPlanWhereInput | null
   }
 
   export type CampaignListRelationFilter = {
@@ -22115,11 +25421,12 @@ export namespace Prisma {
     none?: CallAnalysisWhereInput
   }
 
-  export type TenantUserOrderByRelationAggregateInput = {
-    _count?: SortOrder
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
   }
 
-  export type ApiKeyOrderByRelationAggregateInput = {
+  export type TenantUserOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -22158,6 +25465,7 @@ export namespace Prisma {
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    bolnaApiKeyId?: SortOrder
   }
 
   export type TenantMaxOrderByAggregateInput = {
@@ -22167,6 +25475,7 @@ export namespace Prisma {
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    bolnaApiKeyId?: SortOrder
   }
 
   export type TenantMinOrderByAggregateInput = {
@@ -22176,6 +25485,7 @@ export namespace Prisma {
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    bolnaApiKeyId?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -22216,6 +25526,24 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type PlatformAdminNullableScalarRelationFilter = {
@@ -22345,58 +25673,6 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
-  }
-
-  export type ApiKeyCountOrderByAggregateInput = {
-    id?: SortOrder
-    tenantId?: SortOrder
-    name?: SortOrder
-    keyHash?: SortOrder
-    lastUsedAt?: SortOrder
-    expiresAt?: SortOrder
-    isActive?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type ApiKeyMaxOrderByAggregateInput = {
-    id?: SortOrder
-    tenantId?: SortOrder
-    name?: SortOrder
-    keyHash?: SortOrder
-    lastUsedAt?: SortOrder
-    expiresAt?: SortOrder
-    isActive?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type ApiKeyMinOrderByAggregateInput = {
-    id?: SortOrder
-    tenantId?: SortOrder
-    name?: SortOrder
-    keyHash?: SortOrder
-    lastUsedAt?: SortOrder
-    expiresAt?: SortOrder
-    isActive?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
   export type RefreshTokenCountOrderByAggregateInput = {
     id?: SortOrder
     tokenHash?: SortOrder
@@ -22422,6 +25698,20 @@ export namespace Prisma {
     expiresAt?: SortOrder
     revokedAt?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
   export type JsonFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -22510,21 +25800,6 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntFilter<$PrismaModel> | number
-  }
-
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type StringNullableListFilter<$PrismaModel = never> = {
@@ -22751,24 +26026,6 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -23438,6 +26695,224 @@ export namespace Prisma {
     _max?: NestedEnumExtractionFlagNullableFilter<$PrismaModel>
   }
 
+  export type TenantPlanListRelationFilter = {
+    every?: TenantPlanWhereInput
+    some?: TenantPlanWhereInput
+    none?: TenantPlanWhereInput
+  }
+
+  export type TenantPlanOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PlanCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    isActive?: SortOrder
+    displayOrder?: SortOrder
+    onboardingFee?: SortOrder
+    perMinuteRate?: SortOrder
+    billingMinimumSec?: SortOrder
+    billingIncrementSec?: SortOrder
+    maxActiveCampaigns?: SortOrder
+    maxLeadsPerBatch?: SortOrder
+    retryAutomation?: SortOrder
+    industryPackLimit?: SortOrder
+    features?: SortOrder
+    includedBalance?: SortOrder
+    bonusValidityDays?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PlanAvgOrderByAggregateInput = {
+    displayOrder?: SortOrder
+    onboardingFee?: SortOrder
+    perMinuteRate?: SortOrder
+    billingMinimumSec?: SortOrder
+    billingIncrementSec?: SortOrder
+    maxActiveCampaigns?: SortOrder
+    maxLeadsPerBatch?: SortOrder
+    industryPackLimit?: SortOrder
+    includedBalance?: SortOrder
+    bonusValidityDays?: SortOrder
+  }
+
+  export type PlanMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    isActive?: SortOrder
+    displayOrder?: SortOrder
+    onboardingFee?: SortOrder
+    perMinuteRate?: SortOrder
+    billingMinimumSec?: SortOrder
+    billingIncrementSec?: SortOrder
+    maxActiveCampaigns?: SortOrder
+    maxLeadsPerBatch?: SortOrder
+    retryAutomation?: SortOrder
+    industryPackLimit?: SortOrder
+    includedBalance?: SortOrder
+    bonusValidityDays?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PlanMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    isActive?: SortOrder
+    displayOrder?: SortOrder
+    onboardingFee?: SortOrder
+    perMinuteRate?: SortOrder
+    billingMinimumSec?: SortOrder
+    billingIncrementSec?: SortOrder
+    maxActiveCampaigns?: SortOrder
+    maxLeadsPerBatch?: SortOrder
+    retryAutomation?: SortOrder
+    industryPackLimit?: SortOrder
+    includedBalance?: SortOrder
+    bonusValidityDays?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PlanSumOrderByAggregateInput = {
+    displayOrder?: SortOrder
+    onboardingFee?: SortOrder
+    perMinuteRate?: SortOrder
+    billingMinimumSec?: SortOrder
+    billingIncrementSec?: SortOrder
+    maxActiveCampaigns?: SortOrder
+    maxLeadsPerBatch?: SortOrder
+    industryPackLimit?: SortOrder
+    includedBalance?: SortOrder
+    bonusValidityDays?: SortOrder
+  }
+
+  export type EnumPlanStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.PlanStatus | EnumPlanStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PlanStatus[] | ListEnumPlanStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PlanStatus[] | ListEnumPlanStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPlanStatusFilter<$PrismaModel> | $Enums.PlanStatus
+  }
+
+  export type PlanScalarRelationFilter = {
+    is?: PlanWhereInput
+    isNot?: PlanWhereInput
+  }
+
+  export type TenantPlanCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    planId?: SortOrder
+    status?: SortOrder
+    activatedAt?: SortOrder
+    bonusExpiresAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TenantPlanMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    planId?: SortOrder
+    status?: SortOrder
+    activatedAt?: SortOrder
+    bonusExpiresAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TenantPlanMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    planId?: SortOrder
+    status?: SortOrder
+    activatedAt?: SortOrder
+    bonusExpiresAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumPlanStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PlanStatus | EnumPlanStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PlanStatus[] | ListEnumPlanStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PlanStatus[] | ListEnumPlanStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPlanStatusWithAggregatesFilter<$PrismaModel> | $Enums.PlanStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPlanStatusFilter<$PrismaModel>
+    _max?: NestedEnumPlanStatusFilter<$PrismaModel>
+  }
+
+  export type EnumBolnaApiKeyTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.BolnaApiKeyType | EnumBolnaApiKeyTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BolnaApiKeyType[] | ListEnumBolnaApiKeyTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BolnaApiKeyType[] | ListEnumBolnaApiKeyTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBolnaApiKeyTypeFilter<$PrismaModel> | $Enums.BolnaApiKeyType
+  }
+
+  export type TenantListRelationFilter = {
+    every?: TenantWhereInput
+    some?: TenantWhereInput
+    none?: TenantWhereInput
+  }
+
+  export type TenantOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BolnaApiKeyCountOrderByAggregateInput = {
+    id?: SortOrder
+    keyIdentifier?: SortOrder
+    encryptedKey?: SortOrder
+    type?: SortOrder
+    isPlatformDefault?: SortOrder
+    isActive?: SortOrder
+    createdBy?: SortOrder
+    lastAccessedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BolnaApiKeyMaxOrderByAggregateInput = {
+    id?: SortOrder
+    keyIdentifier?: SortOrder
+    encryptedKey?: SortOrder
+    type?: SortOrder
+    isPlatformDefault?: SortOrder
+    isActive?: SortOrder
+    createdBy?: SortOrder
+    lastAccessedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BolnaApiKeyMinOrderByAggregateInput = {
+    id?: SortOrder
+    keyIdentifier?: SortOrder
+    encryptedKey?: SortOrder
+    type?: SortOrder
+    isPlatformDefault?: SortOrder
+    isActive?: SortOrder
+    createdBy?: SortOrder
+    lastAccessedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumBolnaApiKeyTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BolnaApiKeyType | EnumBolnaApiKeyTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BolnaApiKeyType[] | ListEnumBolnaApiKeyTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BolnaApiKeyType[] | ListEnumBolnaApiKeyTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBolnaApiKeyTypeWithAggregatesFilter<$PrismaModel> | $Enums.BolnaApiKeyType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBolnaApiKeyTypeFilter<$PrismaModel>
+    _max?: NestedEnumBolnaApiKeyTypeFilter<$PrismaModel>
+  }
+
   export type TenantUserCreateNestedManyWithoutTenantInput = {
     create?: XOR<TenantUserCreateWithoutTenantInput, TenantUserUncheckedCreateWithoutTenantInput> | TenantUserCreateWithoutTenantInput[] | TenantUserUncheckedCreateWithoutTenantInput[]
     connectOrCreate?: TenantUserCreateOrConnectWithoutTenantInput | TenantUserCreateOrConnectWithoutTenantInput[]
@@ -23445,11 +26920,16 @@ export namespace Prisma {
     connect?: TenantUserWhereUniqueInput | TenantUserWhereUniqueInput[]
   }
 
-  export type ApiKeyCreateNestedManyWithoutTenantInput = {
-    create?: XOR<ApiKeyCreateWithoutTenantInput, ApiKeyUncheckedCreateWithoutTenantInput> | ApiKeyCreateWithoutTenantInput[] | ApiKeyUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: ApiKeyCreateOrConnectWithoutTenantInput | ApiKeyCreateOrConnectWithoutTenantInput[]
-    createMany?: ApiKeyCreateManyTenantInputEnvelope
-    connect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+  export type BolnaApiKeyCreateNestedOneWithoutTenantsInput = {
+    create?: XOR<BolnaApiKeyCreateWithoutTenantsInput, BolnaApiKeyUncheckedCreateWithoutTenantsInput>
+    connectOrCreate?: BolnaApiKeyCreateOrConnectWithoutTenantsInput
+    connect?: BolnaApiKeyWhereUniqueInput
+  }
+
+  export type TenantPlanCreateNestedOneWithoutTenantInput = {
+    create?: XOR<TenantPlanCreateWithoutTenantInput, TenantPlanUncheckedCreateWithoutTenantInput>
+    connectOrCreate?: TenantPlanCreateOrConnectWithoutTenantInput
+    connect?: TenantPlanWhereUniqueInput
   }
 
   export type CampaignCreateNestedManyWithoutTenantInput = {
@@ -23508,11 +26988,10 @@ export namespace Prisma {
     connect?: TenantUserWhereUniqueInput | TenantUserWhereUniqueInput[]
   }
 
-  export type ApiKeyUncheckedCreateNestedManyWithoutTenantInput = {
-    create?: XOR<ApiKeyCreateWithoutTenantInput, ApiKeyUncheckedCreateWithoutTenantInput> | ApiKeyCreateWithoutTenantInput[] | ApiKeyUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: ApiKeyCreateOrConnectWithoutTenantInput | ApiKeyCreateOrConnectWithoutTenantInput[]
-    createMany?: ApiKeyCreateManyTenantInputEnvelope
-    connect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+  export type TenantPlanUncheckedCreateNestedOneWithoutTenantInput = {
+    create?: XOR<TenantPlanCreateWithoutTenantInput, TenantPlanUncheckedCreateWithoutTenantInput>
+    connectOrCreate?: TenantPlanCreateOrConnectWithoutTenantInput
+    connect?: TenantPlanWhereUniqueInput
   }
 
   export type CampaignUncheckedCreateNestedManyWithoutTenantInput = {
@@ -23590,18 +27069,24 @@ export namespace Prisma {
     deleteMany?: TenantUserScalarWhereInput | TenantUserScalarWhereInput[]
   }
 
-  export type ApiKeyUpdateManyWithoutTenantNestedInput = {
-    create?: XOR<ApiKeyCreateWithoutTenantInput, ApiKeyUncheckedCreateWithoutTenantInput> | ApiKeyCreateWithoutTenantInput[] | ApiKeyUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: ApiKeyCreateOrConnectWithoutTenantInput | ApiKeyCreateOrConnectWithoutTenantInput[]
-    upsert?: ApiKeyUpsertWithWhereUniqueWithoutTenantInput | ApiKeyUpsertWithWhereUniqueWithoutTenantInput[]
-    createMany?: ApiKeyCreateManyTenantInputEnvelope
-    set?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
-    disconnect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
-    delete?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
-    connect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
-    update?: ApiKeyUpdateWithWhereUniqueWithoutTenantInput | ApiKeyUpdateWithWhereUniqueWithoutTenantInput[]
-    updateMany?: ApiKeyUpdateManyWithWhereWithoutTenantInput | ApiKeyUpdateManyWithWhereWithoutTenantInput[]
-    deleteMany?: ApiKeyScalarWhereInput | ApiKeyScalarWhereInput[]
+  export type BolnaApiKeyUpdateOneWithoutTenantsNestedInput = {
+    create?: XOR<BolnaApiKeyCreateWithoutTenantsInput, BolnaApiKeyUncheckedCreateWithoutTenantsInput>
+    connectOrCreate?: BolnaApiKeyCreateOrConnectWithoutTenantsInput
+    upsert?: BolnaApiKeyUpsertWithoutTenantsInput
+    disconnect?: BolnaApiKeyWhereInput | boolean
+    delete?: BolnaApiKeyWhereInput | boolean
+    connect?: BolnaApiKeyWhereUniqueInput
+    update?: XOR<XOR<BolnaApiKeyUpdateToOneWithWhereWithoutTenantsInput, BolnaApiKeyUpdateWithoutTenantsInput>, BolnaApiKeyUncheckedUpdateWithoutTenantsInput>
+  }
+
+  export type TenantPlanUpdateOneWithoutTenantNestedInput = {
+    create?: XOR<TenantPlanCreateWithoutTenantInput, TenantPlanUncheckedCreateWithoutTenantInput>
+    connectOrCreate?: TenantPlanCreateOrConnectWithoutTenantInput
+    upsert?: TenantPlanUpsertWithoutTenantInput
+    disconnect?: TenantPlanWhereInput | boolean
+    delete?: TenantPlanWhereInput | boolean
+    connect?: TenantPlanWhereUniqueInput
+    update?: XOR<XOR<TenantPlanUpdateToOneWithWhereWithoutTenantInput, TenantPlanUpdateWithoutTenantInput>, TenantPlanUncheckedUpdateWithoutTenantInput>
   }
 
   export type CampaignUpdateManyWithoutTenantNestedInput = {
@@ -23702,6 +27187,10 @@ export namespace Prisma {
     deleteMany?: CallAnalysisScalarWhereInput | CallAnalysisScalarWhereInput[]
   }
 
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
   export type TenantUserUncheckedUpdateManyWithoutTenantNestedInput = {
     create?: XOR<TenantUserCreateWithoutTenantInput, TenantUserUncheckedCreateWithoutTenantInput> | TenantUserCreateWithoutTenantInput[] | TenantUserUncheckedCreateWithoutTenantInput[]
     connectOrCreate?: TenantUserCreateOrConnectWithoutTenantInput | TenantUserCreateOrConnectWithoutTenantInput[]
@@ -23716,18 +27205,14 @@ export namespace Prisma {
     deleteMany?: TenantUserScalarWhereInput | TenantUserScalarWhereInput[]
   }
 
-  export type ApiKeyUncheckedUpdateManyWithoutTenantNestedInput = {
-    create?: XOR<ApiKeyCreateWithoutTenantInput, ApiKeyUncheckedCreateWithoutTenantInput> | ApiKeyCreateWithoutTenantInput[] | ApiKeyUncheckedCreateWithoutTenantInput[]
-    connectOrCreate?: ApiKeyCreateOrConnectWithoutTenantInput | ApiKeyCreateOrConnectWithoutTenantInput[]
-    upsert?: ApiKeyUpsertWithWhereUniqueWithoutTenantInput | ApiKeyUpsertWithWhereUniqueWithoutTenantInput[]
-    createMany?: ApiKeyCreateManyTenantInputEnvelope
-    set?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
-    disconnect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
-    delete?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
-    connect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
-    update?: ApiKeyUpdateWithWhereUniqueWithoutTenantInput | ApiKeyUpdateWithWhereUniqueWithoutTenantInput[]
-    updateMany?: ApiKeyUpdateManyWithWhereWithoutTenantInput | ApiKeyUpdateManyWithWhereWithoutTenantInput[]
-    deleteMany?: ApiKeyScalarWhereInput | ApiKeyScalarWhereInput[]
+  export type TenantPlanUncheckedUpdateOneWithoutTenantNestedInput = {
+    create?: XOR<TenantPlanCreateWithoutTenantInput, TenantPlanUncheckedCreateWithoutTenantInput>
+    connectOrCreate?: TenantPlanCreateOrConnectWithoutTenantInput
+    upsert?: TenantPlanUpsertWithoutTenantInput
+    disconnect?: TenantPlanWhereInput | boolean
+    delete?: TenantPlanWhereInput | boolean
+    connect?: TenantPlanWhereUniqueInput
+    update?: XOR<XOR<TenantPlanUpdateToOneWithWhereWithoutTenantInput, TenantPlanUpdateWithoutTenantInput>, TenantPlanUncheckedUpdateWithoutTenantInput>
   }
 
   export type CampaignUncheckedUpdateManyWithoutTenantNestedInput = {
@@ -23990,28 +27475,14 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPlatformAdminInput, UserUpdateWithoutPlatformAdminInput>, UserUncheckedUpdateWithoutPlatformAdminInput>
   }
 
-  export type TenantCreateNestedOneWithoutApiKeysInput = {
-    create?: XOR<TenantCreateWithoutApiKeysInput, TenantUncheckedCreateWithoutApiKeysInput>
-    connectOrCreate?: TenantCreateOrConnectWithoutApiKeysInput
-    connect?: TenantWhereUniqueInput
-  }
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
-  }
-
-  export type TenantUpdateOneRequiredWithoutApiKeysNestedInput = {
-    create?: XOR<TenantCreateWithoutApiKeysInput, TenantUncheckedCreateWithoutApiKeysInput>
-    connectOrCreate?: TenantCreateOrConnectWithoutApiKeysInput
-    upsert?: TenantUpsertWithoutApiKeysInput
-    connect?: TenantWhereUniqueInput
-    update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutApiKeysInput, TenantUpdateWithoutApiKeysInput>, TenantUncheckedUpdateWithoutApiKeysInput>
-  }
-
   export type UserCreateNestedOneWithoutRefreshTokensInput = {
     create?: XOR<UserCreateWithoutRefreshTokensInput, UserUncheckedCreateWithoutRefreshTokensInput>
     connectOrCreate?: UserCreateOrConnectWithoutRefreshTokensInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type UserUpdateOneRequiredWithoutRefreshTokensNestedInput = {
@@ -24148,10 +27619,6 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
-  }
-
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
   }
 
   export type BrochureUpdatepropertyTypesInput = {
@@ -24803,6 +28270,126 @@ export namespace Prisma {
     update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutCallAnalysesInput, TenantUpdateWithoutCallAnalysesInput>, TenantUncheckedUpdateWithoutCallAnalysesInput>
   }
 
+  export type TenantPlanCreateNestedManyWithoutPlanInput = {
+    create?: XOR<TenantPlanCreateWithoutPlanInput, TenantPlanUncheckedCreateWithoutPlanInput> | TenantPlanCreateWithoutPlanInput[] | TenantPlanUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: TenantPlanCreateOrConnectWithoutPlanInput | TenantPlanCreateOrConnectWithoutPlanInput[]
+    createMany?: TenantPlanCreateManyPlanInputEnvelope
+    connect?: TenantPlanWhereUniqueInput | TenantPlanWhereUniqueInput[]
+  }
+
+  export type TenantPlanUncheckedCreateNestedManyWithoutPlanInput = {
+    create?: XOR<TenantPlanCreateWithoutPlanInput, TenantPlanUncheckedCreateWithoutPlanInput> | TenantPlanCreateWithoutPlanInput[] | TenantPlanUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: TenantPlanCreateOrConnectWithoutPlanInput | TenantPlanCreateOrConnectWithoutPlanInput[]
+    createMany?: TenantPlanCreateManyPlanInputEnvelope
+    connect?: TenantPlanWhereUniqueInput | TenantPlanWhereUniqueInput[]
+  }
+
+  export type TenantPlanUpdateManyWithoutPlanNestedInput = {
+    create?: XOR<TenantPlanCreateWithoutPlanInput, TenantPlanUncheckedCreateWithoutPlanInput> | TenantPlanCreateWithoutPlanInput[] | TenantPlanUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: TenantPlanCreateOrConnectWithoutPlanInput | TenantPlanCreateOrConnectWithoutPlanInput[]
+    upsert?: TenantPlanUpsertWithWhereUniqueWithoutPlanInput | TenantPlanUpsertWithWhereUniqueWithoutPlanInput[]
+    createMany?: TenantPlanCreateManyPlanInputEnvelope
+    set?: TenantPlanWhereUniqueInput | TenantPlanWhereUniqueInput[]
+    disconnect?: TenantPlanWhereUniqueInput | TenantPlanWhereUniqueInput[]
+    delete?: TenantPlanWhereUniqueInput | TenantPlanWhereUniqueInput[]
+    connect?: TenantPlanWhereUniqueInput | TenantPlanWhereUniqueInput[]
+    update?: TenantPlanUpdateWithWhereUniqueWithoutPlanInput | TenantPlanUpdateWithWhereUniqueWithoutPlanInput[]
+    updateMany?: TenantPlanUpdateManyWithWhereWithoutPlanInput | TenantPlanUpdateManyWithWhereWithoutPlanInput[]
+    deleteMany?: TenantPlanScalarWhereInput | TenantPlanScalarWhereInput[]
+  }
+
+  export type TenantPlanUncheckedUpdateManyWithoutPlanNestedInput = {
+    create?: XOR<TenantPlanCreateWithoutPlanInput, TenantPlanUncheckedCreateWithoutPlanInput> | TenantPlanCreateWithoutPlanInput[] | TenantPlanUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: TenantPlanCreateOrConnectWithoutPlanInput | TenantPlanCreateOrConnectWithoutPlanInput[]
+    upsert?: TenantPlanUpsertWithWhereUniqueWithoutPlanInput | TenantPlanUpsertWithWhereUniqueWithoutPlanInput[]
+    createMany?: TenantPlanCreateManyPlanInputEnvelope
+    set?: TenantPlanWhereUniqueInput | TenantPlanWhereUniqueInput[]
+    disconnect?: TenantPlanWhereUniqueInput | TenantPlanWhereUniqueInput[]
+    delete?: TenantPlanWhereUniqueInput | TenantPlanWhereUniqueInput[]
+    connect?: TenantPlanWhereUniqueInput | TenantPlanWhereUniqueInput[]
+    update?: TenantPlanUpdateWithWhereUniqueWithoutPlanInput | TenantPlanUpdateWithWhereUniqueWithoutPlanInput[]
+    updateMany?: TenantPlanUpdateManyWithWhereWithoutPlanInput | TenantPlanUpdateManyWithWhereWithoutPlanInput[]
+    deleteMany?: TenantPlanScalarWhereInput | TenantPlanScalarWhereInput[]
+  }
+
+  export type TenantCreateNestedOneWithoutTenantPlanInput = {
+    create?: XOR<TenantCreateWithoutTenantPlanInput, TenantUncheckedCreateWithoutTenantPlanInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutTenantPlanInput
+    connect?: TenantWhereUniqueInput
+  }
+
+  export type PlanCreateNestedOneWithoutTenantPlansInput = {
+    create?: XOR<PlanCreateWithoutTenantPlansInput, PlanUncheckedCreateWithoutTenantPlansInput>
+    connectOrCreate?: PlanCreateOrConnectWithoutTenantPlansInput
+    connect?: PlanWhereUniqueInput
+  }
+
+  export type EnumPlanStatusFieldUpdateOperationsInput = {
+    set?: $Enums.PlanStatus
+  }
+
+  export type TenantUpdateOneRequiredWithoutTenantPlanNestedInput = {
+    create?: XOR<TenantCreateWithoutTenantPlanInput, TenantUncheckedCreateWithoutTenantPlanInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutTenantPlanInput
+    upsert?: TenantUpsertWithoutTenantPlanInput
+    connect?: TenantWhereUniqueInput
+    update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutTenantPlanInput, TenantUpdateWithoutTenantPlanInput>, TenantUncheckedUpdateWithoutTenantPlanInput>
+  }
+
+  export type PlanUpdateOneRequiredWithoutTenantPlansNestedInput = {
+    create?: XOR<PlanCreateWithoutTenantPlansInput, PlanUncheckedCreateWithoutTenantPlansInput>
+    connectOrCreate?: PlanCreateOrConnectWithoutTenantPlansInput
+    upsert?: PlanUpsertWithoutTenantPlansInput
+    connect?: PlanWhereUniqueInput
+    update?: XOR<XOR<PlanUpdateToOneWithWhereWithoutTenantPlansInput, PlanUpdateWithoutTenantPlansInput>, PlanUncheckedUpdateWithoutTenantPlansInput>
+  }
+
+  export type TenantCreateNestedManyWithoutBolnaApiKeyInput = {
+    create?: XOR<TenantCreateWithoutBolnaApiKeyInput, TenantUncheckedCreateWithoutBolnaApiKeyInput> | TenantCreateWithoutBolnaApiKeyInput[] | TenantUncheckedCreateWithoutBolnaApiKeyInput[]
+    connectOrCreate?: TenantCreateOrConnectWithoutBolnaApiKeyInput | TenantCreateOrConnectWithoutBolnaApiKeyInput[]
+    createMany?: TenantCreateManyBolnaApiKeyInputEnvelope
+    connect?: TenantWhereUniqueInput | TenantWhereUniqueInput[]
+  }
+
+  export type TenantUncheckedCreateNestedManyWithoutBolnaApiKeyInput = {
+    create?: XOR<TenantCreateWithoutBolnaApiKeyInput, TenantUncheckedCreateWithoutBolnaApiKeyInput> | TenantCreateWithoutBolnaApiKeyInput[] | TenantUncheckedCreateWithoutBolnaApiKeyInput[]
+    connectOrCreate?: TenantCreateOrConnectWithoutBolnaApiKeyInput | TenantCreateOrConnectWithoutBolnaApiKeyInput[]
+    createMany?: TenantCreateManyBolnaApiKeyInputEnvelope
+    connect?: TenantWhereUniqueInput | TenantWhereUniqueInput[]
+  }
+
+  export type EnumBolnaApiKeyTypeFieldUpdateOperationsInput = {
+    set?: $Enums.BolnaApiKeyType
+  }
+
+  export type TenantUpdateManyWithoutBolnaApiKeyNestedInput = {
+    create?: XOR<TenantCreateWithoutBolnaApiKeyInput, TenantUncheckedCreateWithoutBolnaApiKeyInput> | TenantCreateWithoutBolnaApiKeyInput[] | TenantUncheckedCreateWithoutBolnaApiKeyInput[]
+    connectOrCreate?: TenantCreateOrConnectWithoutBolnaApiKeyInput | TenantCreateOrConnectWithoutBolnaApiKeyInput[]
+    upsert?: TenantUpsertWithWhereUniqueWithoutBolnaApiKeyInput | TenantUpsertWithWhereUniqueWithoutBolnaApiKeyInput[]
+    createMany?: TenantCreateManyBolnaApiKeyInputEnvelope
+    set?: TenantWhereUniqueInput | TenantWhereUniqueInput[]
+    disconnect?: TenantWhereUniqueInput | TenantWhereUniqueInput[]
+    delete?: TenantWhereUniqueInput | TenantWhereUniqueInput[]
+    connect?: TenantWhereUniqueInput | TenantWhereUniqueInput[]
+    update?: TenantUpdateWithWhereUniqueWithoutBolnaApiKeyInput | TenantUpdateWithWhereUniqueWithoutBolnaApiKeyInput[]
+    updateMany?: TenantUpdateManyWithWhereWithoutBolnaApiKeyInput | TenantUpdateManyWithWhereWithoutBolnaApiKeyInput[]
+    deleteMany?: TenantScalarWhereInput | TenantScalarWhereInput[]
+  }
+
+  export type TenantUncheckedUpdateManyWithoutBolnaApiKeyNestedInput = {
+    create?: XOR<TenantCreateWithoutBolnaApiKeyInput, TenantUncheckedCreateWithoutBolnaApiKeyInput> | TenantCreateWithoutBolnaApiKeyInput[] | TenantUncheckedCreateWithoutBolnaApiKeyInput[]
+    connectOrCreate?: TenantCreateOrConnectWithoutBolnaApiKeyInput | TenantCreateOrConnectWithoutBolnaApiKeyInput[]
+    upsert?: TenantUpsertWithWhereUniqueWithoutBolnaApiKeyInput | TenantUpsertWithWhereUniqueWithoutBolnaApiKeyInput[]
+    createMany?: TenantCreateManyBolnaApiKeyInputEnvelope
+    set?: TenantWhereUniqueInput | TenantWhereUniqueInput[]
+    disconnect?: TenantWhereUniqueInput | TenantWhereUniqueInput[]
+    delete?: TenantWhereUniqueInput | TenantWhereUniqueInput[]
+    connect?: TenantWhereUniqueInput | TenantWhereUniqueInput[]
+    update?: TenantUpdateWithWhereUniqueWithoutBolnaApiKeyInput | TenantUpdateWithWhereUniqueWithoutBolnaApiKeyInput[]
+    updateMany?: TenantUpdateManyWithWhereWithoutBolnaApiKeyInput | TenantUpdateManyWithWhereWithoutBolnaApiKeyInput[]
+    deleteMany?: TenantScalarWhereInput | TenantScalarWhereInput[]
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -24831,6 +28418,20 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -24883,6 +28484,34 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedEnumTenantRoleFilter<$PrismaModel = never> = {
     equals?: $Enums.TenantRole | EnumTenantRoleFieldRefInput<$PrismaModel>
     in?: $Enums.TenantRole[] | ListEnumTenantRoleFieldRefInput<$PrismaModel>
@@ -24924,17 +28553,6 @@ export namespace Prisma {
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
   export type NestedJsonFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
@@ -24957,20 +28575,6 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type NestedFloatNullableFilter<$PrismaModel = never> = {
@@ -25009,23 +28613,6 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -25303,6 +28890,40 @@ export namespace Prisma {
     _max?: NestedEnumExtractionFlagNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumPlanStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.PlanStatus | EnumPlanStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PlanStatus[] | ListEnumPlanStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PlanStatus[] | ListEnumPlanStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPlanStatusFilter<$PrismaModel> | $Enums.PlanStatus
+  }
+
+  export type NestedEnumPlanStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PlanStatus | EnumPlanStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PlanStatus[] | ListEnumPlanStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PlanStatus[] | ListEnumPlanStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPlanStatusWithAggregatesFilter<$PrismaModel> | $Enums.PlanStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPlanStatusFilter<$PrismaModel>
+    _max?: NestedEnumPlanStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumBolnaApiKeyTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.BolnaApiKeyType | EnumBolnaApiKeyTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BolnaApiKeyType[] | ListEnumBolnaApiKeyTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BolnaApiKeyType[] | ListEnumBolnaApiKeyTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBolnaApiKeyTypeFilter<$PrismaModel> | $Enums.BolnaApiKeyType
+  }
+
+  export type NestedEnumBolnaApiKeyTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BolnaApiKeyType | EnumBolnaApiKeyTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BolnaApiKeyType[] | ListEnumBolnaApiKeyTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BolnaApiKeyType[] | ListEnumBolnaApiKeyTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBolnaApiKeyTypeWithAggregatesFilter<$PrismaModel> | $Enums.BolnaApiKeyType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBolnaApiKeyTypeFilter<$PrismaModel>
+    _max?: NestedEnumBolnaApiKeyTypeFilter<$PrismaModel>
+  }
+
   export type TenantUserCreateWithoutTenantInput = {
     id?: string
     role?: $Enums.TenantRole
@@ -25327,34 +28948,60 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ApiKeyCreateWithoutTenantInput = {
+  export type BolnaApiKeyCreateWithoutTenantsInput = {
     id?: string
-    name: string
-    keyHash: string
-    lastUsedAt?: Date | string | null
-    expiresAt?: Date | string | null
+    keyIdentifier: string
+    encryptedKey: string
+    type?: $Enums.BolnaApiKeyType
+    isPlatformDefault?: boolean
     isActive?: boolean
+    createdBy: string
+    lastAccessedAt?: Date | string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type ApiKeyUncheckedCreateWithoutTenantInput = {
+  export type BolnaApiKeyUncheckedCreateWithoutTenantsInput = {
     id?: string
-    name: string
-    keyHash: string
-    lastUsedAt?: Date | string | null
-    expiresAt?: Date | string | null
+    keyIdentifier: string
+    encryptedKey: string
+    type?: $Enums.BolnaApiKeyType
+    isPlatformDefault?: boolean
     isActive?: boolean
+    createdBy: string
+    lastAccessedAt?: Date | string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type ApiKeyCreateOrConnectWithoutTenantInput = {
-    where: ApiKeyWhereUniqueInput
-    create: XOR<ApiKeyCreateWithoutTenantInput, ApiKeyUncheckedCreateWithoutTenantInput>
+  export type BolnaApiKeyCreateOrConnectWithoutTenantsInput = {
+    where: BolnaApiKeyWhereUniqueInput
+    create: XOR<BolnaApiKeyCreateWithoutTenantsInput, BolnaApiKeyUncheckedCreateWithoutTenantsInput>
   }
 
-  export type ApiKeyCreateManyTenantInputEnvelope = {
-    data: ApiKeyCreateManyTenantInput | ApiKeyCreateManyTenantInput[]
-    skipDuplicates?: boolean
+  export type TenantPlanCreateWithoutTenantInput = {
+    id?: string
+    status?: $Enums.PlanStatus
+    activatedAt?: Date | string | null
+    bonusExpiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    plan: PlanCreateNestedOneWithoutTenantPlansInput
+  }
+
+  export type TenantPlanUncheckedCreateWithoutTenantInput = {
+    id?: string
+    planId: string
+    status?: $Enums.PlanStatus
+    activatedAt?: Date | string | null
+    bonusExpiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TenantPlanCreateOrConnectWithoutTenantInput = {
+    where: TenantPlanWhereUniqueInput
+    create: XOR<TenantPlanCreateWithoutTenantInput, TenantPlanUncheckedCreateWithoutTenantInput>
   }
 
   export type CampaignCreateWithoutTenantInput = {
@@ -25784,34 +29431,72 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"TenantUser"> | Date | string
   }
 
-  export type ApiKeyUpsertWithWhereUniqueWithoutTenantInput = {
-    where: ApiKeyWhereUniqueInput
-    update: XOR<ApiKeyUpdateWithoutTenantInput, ApiKeyUncheckedUpdateWithoutTenantInput>
-    create: XOR<ApiKeyCreateWithoutTenantInput, ApiKeyUncheckedCreateWithoutTenantInput>
+  export type BolnaApiKeyUpsertWithoutTenantsInput = {
+    update: XOR<BolnaApiKeyUpdateWithoutTenantsInput, BolnaApiKeyUncheckedUpdateWithoutTenantsInput>
+    create: XOR<BolnaApiKeyCreateWithoutTenantsInput, BolnaApiKeyUncheckedCreateWithoutTenantsInput>
+    where?: BolnaApiKeyWhereInput
   }
 
-  export type ApiKeyUpdateWithWhereUniqueWithoutTenantInput = {
-    where: ApiKeyWhereUniqueInput
-    data: XOR<ApiKeyUpdateWithoutTenantInput, ApiKeyUncheckedUpdateWithoutTenantInput>
+  export type BolnaApiKeyUpdateToOneWithWhereWithoutTenantsInput = {
+    where?: BolnaApiKeyWhereInput
+    data: XOR<BolnaApiKeyUpdateWithoutTenantsInput, BolnaApiKeyUncheckedUpdateWithoutTenantsInput>
   }
 
-  export type ApiKeyUpdateManyWithWhereWithoutTenantInput = {
-    where: ApiKeyScalarWhereInput
-    data: XOR<ApiKeyUpdateManyMutationInput, ApiKeyUncheckedUpdateManyWithoutTenantInput>
+  export type BolnaApiKeyUpdateWithoutTenantsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keyIdentifier?: StringFieldUpdateOperationsInput | string
+    encryptedKey?: StringFieldUpdateOperationsInput | string
+    type?: EnumBolnaApiKeyTypeFieldUpdateOperationsInput | $Enums.BolnaApiKeyType
+    isPlatformDefault?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdBy?: StringFieldUpdateOperationsInput | string
+    lastAccessedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ApiKeyScalarWhereInput = {
-    AND?: ApiKeyScalarWhereInput | ApiKeyScalarWhereInput[]
-    OR?: ApiKeyScalarWhereInput[]
-    NOT?: ApiKeyScalarWhereInput | ApiKeyScalarWhereInput[]
-    id?: StringFilter<"ApiKey"> | string
-    tenantId?: StringFilter<"ApiKey"> | string
-    name?: StringFilter<"ApiKey"> | string
-    keyHash?: StringFilter<"ApiKey"> | string
-    lastUsedAt?: DateTimeNullableFilter<"ApiKey"> | Date | string | null
-    expiresAt?: DateTimeNullableFilter<"ApiKey"> | Date | string | null
-    isActive?: BoolFilter<"ApiKey"> | boolean
-    createdAt?: DateTimeFilter<"ApiKey"> | Date | string
+  export type BolnaApiKeyUncheckedUpdateWithoutTenantsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keyIdentifier?: StringFieldUpdateOperationsInput | string
+    encryptedKey?: StringFieldUpdateOperationsInput | string
+    type?: EnumBolnaApiKeyTypeFieldUpdateOperationsInput | $Enums.BolnaApiKeyType
+    isPlatformDefault?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdBy?: StringFieldUpdateOperationsInput | string
+    lastAccessedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TenantPlanUpsertWithoutTenantInput = {
+    update: XOR<TenantPlanUpdateWithoutTenantInput, TenantPlanUncheckedUpdateWithoutTenantInput>
+    create: XOR<TenantPlanCreateWithoutTenantInput, TenantPlanUncheckedCreateWithoutTenantInput>
+    where?: TenantPlanWhereInput
+  }
+
+  export type TenantPlanUpdateToOneWithWhereWithoutTenantInput = {
+    where?: TenantPlanWhereInput
+    data: XOR<TenantPlanUpdateWithoutTenantInput, TenantPlanUncheckedUpdateWithoutTenantInput>
+  }
+
+  export type TenantPlanUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumPlanStatusFieldUpdateOperationsInput | $Enums.PlanStatus
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bonusExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    plan?: PlanUpdateOneRequiredWithoutTenantPlansNestedInput
+  }
+
+  export type TenantPlanUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    planId?: StringFieldUpdateOperationsInput | string
+    status?: EnumPlanStatusFieldUpdateOperationsInput | $Enums.PlanStatus
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bonusExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CampaignUpsertWithWhereUniqueWithoutTenantInput = {
@@ -26274,7 +29959,8 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    apiKeys?: ApiKeyCreateNestedManyWithoutTenantInput
+    bolnaApiKey?: BolnaApiKeyCreateNestedOneWithoutTenantsInput
+    tenantPlan?: TenantPlanCreateNestedOneWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
     batches?: LeadBatchCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
@@ -26291,7 +29977,8 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutTenantInput
+    bolnaApiKeyId?: string | null
+    tenantPlan?: TenantPlanUncheckedCreateNestedOneWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
     batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
@@ -26357,7 +30044,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    apiKeys?: ApiKeyUpdateManyWithoutTenantNestedInput
+    bolnaApiKey?: BolnaApiKeyUpdateOneWithoutTenantsNestedInput
+    tenantPlan?: TenantPlanUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
@@ -26374,7 +30062,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    apiKeys?: ApiKeyUncheckedUpdateManyWithoutTenantNestedInput
+    bolnaApiKeyId?: NullableStringFieldUpdateOperationsInput | string | null
+    tenantPlan?: TenantPlanUncheckedUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
@@ -26442,90 +30131,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUncheckedUpdateManyWithoutUserNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type TenantCreateWithoutApiKeysInput = {
-    id?: string
-    name: string
-    email: string
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    memberships?: TenantUserCreateNestedManyWithoutTenantInput
-    campaigns?: CampaignCreateNestedManyWithoutTenantInput
-    batches?: LeadBatchCreateNestedManyWithoutTenantInput
-    leads?: LeadCreateNestedManyWithoutTenantInput
-    calls?: CallCreateNestedManyWithoutTenantInput
-    assistants?: AssistantCreateNestedManyWithoutTenantInput
-    brochures?: BrochureCreateNestedManyWithoutTenantInput
-    callAnalyses?: CallAnalysisCreateNestedManyWithoutTenantInput
-  }
-
-  export type TenantUncheckedCreateWithoutApiKeysInput = {
-    id?: string
-    name: string
-    email: string
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    memberships?: TenantUserUncheckedCreateNestedManyWithoutTenantInput
-    campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
-    batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
-    leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
-    calls?: CallUncheckedCreateNestedManyWithoutTenantInput
-    assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
-    brochures?: BrochureUncheckedCreateNestedManyWithoutTenantInput
-    callAnalyses?: CallAnalysisUncheckedCreateNestedManyWithoutTenantInput
-  }
-
-  export type TenantCreateOrConnectWithoutApiKeysInput = {
-    where: TenantWhereUniqueInput
-    create: XOR<TenantCreateWithoutApiKeysInput, TenantUncheckedCreateWithoutApiKeysInput>
-  }
-
-  export type TenantUpsertWithoutApiKeysInput = {
-    update: XOR<TenantUpdateWithoutApiKeysInput, TenantUncheckedUpdateWithoutApiKeysInput>
-    create: XOR<TenantCreateWithoutApiKeysInput, TenantUncheckedCreateWithoutApiKeysInput>
-    where?: TenantWhereInput
-  }
-
-  export type TenantUpdateToOneWithWhereWithoutApiKeysInput = {
-    where?: TenantWhereInput
-    data: XOR<TenantUpdateWithoutApiKeysInput, TenantUncheckedUpdateWithoutApiKeysInput>
-  }
-
-  export type TenantUpdateWithoutApiKeysInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    memberships?: TenantUserUpdateManyWithoutTenantNestedInput
-    campaigns?: CampaignUpdateManyWithoutTenantNestedInput
-    batches?: LeadBatchUpdateManyWithoutTenantNestedInput
-    leads?: LeadUpdateManyWithoutTenantNestedInput
-    calls?: CallUpdateManyWithoutTenantNestedInput
-    assistants?: AssistantUpdateManyWithoutTenantNestedInput
-    brochures?: BrochureUpdateManyWithoutTenantNestedInput
-    callAnalyses?: CallAnalysisUpdateManyWithoutTenantNestedInput
-  }
-
-  export type TenantUncheckedUpdateWithoutApiKeysInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    memberships?: TenantUserUncheckedUpdateManyWithoutTenantNestedInput
-    campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
-    batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
-    leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
-    calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
-    assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
-    brochures?: BrochureUncheckedUpdateManyWithoutTenantNestedInput
-    callAnalyses?: CallAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type UserCreateWithoutRefreshTokensInput = {
@@ -26596,7 +30201,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: TenantUserCreateNestedManyWithoutTenantInput
-    apiKeys?: ApiKeyCreateNestedManyWithoutTenantInput
+    bolnaApiKey?: BolnaApiKeyCreateNestedOneWithoutTenantsInput
+    tenantPlan?: TenantPlanCreateNestedOneWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
     batches?: LeadBatchCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
@@ -26612,8 +30218,9 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    bolnaApiKeyId?: string | null
     memberships?: TenantUserUncheckedCreateNestedManyWithoutTenantInput
-    apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutTenantInput
+    tenantPlan?: TenantPlanUncheckedCreateNestedOneWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
     batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
@@ -26700,7 +30307,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUpdateManyWithoutTenantNestedInput
-    apiKeys?: ApiKeyUpdateManyWithoutTenantNestedInput
+    bolnaApiKey?: BolnaApiKeyUpdateOneWithoutTenantsNestedInput
+    tenantPlan?: TenantPlanUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
@@ -26716,8 +30324,9 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bolnaApiKeyId?: NullableStringFieldUpdateOperationsInput | string | null
     memberships?: TenantUserUncheckedUpdateManyWithoutTenantNestedInput
-    apiKeys?: ApiKeyUncheckedUpdateManyWithoutTenantNestedInput
+    tenantPlan?: TenantPlanUncheckedUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
@@ -26750,7 +30359,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: TenantUserCreateNestedManyWithoutTenantInput
-    apiKeys?: ApiKeyCreateNestedManyWithoutTenantInput
+    bolnaApiKey?: BolnaApiKeyCreateNestedOneWithoutTenantsInput
+    tenantPlan?: TenantPlanCreateNestedOneWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
     batches?: LeadBatchCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
@@ -26766,8 +30376,9 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    bolnaApiKeyId?: string | null
     memberships?: TenantUserUncheckedCreateNestedManyWithoutTenantInput
-    apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutTenantInput
+    tenantPlan?: TenantPlanUncheckedCreateNestedOneWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
     batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
@@ -26854,7 +30465,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUpdateManyWithoutTenantNestedInput
-    apiKeys?: ApiKeyUpdateManyWithoutTenantNestedInput
+    bolnaApiKey?: BolnaApiKeyUpdateOneWithoutTenantsNestedInput
+    tenantPlan?: TenantPlanUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
@@ -26870,8 +30482,9 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bolnaApiKeyId?: NullableStringFieldUpdateOperationsInput | string | null
     memberships?: TenantUserUncheckedUpdateManyWithoutTenantNestedInput
-    apiKeys?: ApiKeyUncheckedUpdateManyWithoutTenantNestedInput
+    tenantPlan?: TenantPlanUncheckedUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
@@ -26904,7 +30517,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: TenantUserCreateNestedManyWithoutTenantInput
-    apiKeys?: ApiKeyCreateNestedManyWithoutTenantInput
+    bolnaApiKey?: BolnaApiKeyCreateNestedOneWithoutTenantsInput
+    tenantPlan?: TenantPlanCreateNestedOneWithoutTenantInput
     batches?: LeadBatchCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
     calls?: CallCreateNestedManyWithoutTenantInput
@@ -26920,8 +30534,9 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    bolnaApiKeyId?: string | null
     memberships?: TenantUserUncheckedCreateNestedManyWithoutTenantInput
-    apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutTenantInput
+    tenantPlan?: TenantPlanUncheckedCreateNestedOneWithoutTenantInput
     batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
@@ -27240,7 +30855,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUpdateManyWithoutTenantNestedInput
-    apiKeys?: ApiKeyUpdateManyWithoutTenantNestedInput
+    bolnaApiKey?: BolnaApiKeyUpdateOneWithoutTenantsNestedInput
+    tenantPlan?: TenantPlanUpdateOneWithoutTenantNestedInput
     batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
     calls?: CallUpdateManyWithoutTenantNestedInput
@@ -27256,8 +30872,9 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bolnaApiKeyId?: NullableStringFieldUpdateOperationsInput | string | null
     memberships?: TenantUserUncheckedUpdateManyWithoutTenantNestedInput
-    apiKeys?: ApiKeyUncheckedUpdateManyWithoutTenantNestedInput
+    tenantPlan?: TenantPlanUncheckedUpdateOneWithoutTenantNestedInput
     batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
@@ -27470,7 +31087,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: TenantUserCreateNestedManyWithoutTenantInput
-    apiKeys?: ApiKeyCreateNestedManyWithoutTenantInput
+    bolnaApiKey?: BolnaApiKeyCreateNestedOneWithoutTenantsInput
+    tenantPlan?: TenantPlanCreateNestedOneWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
     calls?: CallCreateNestedManyWithoutTenantInput
@@ -27486,8 +31104,9 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    bolnaApiKeyId?: string | null
     memberships?: TenantUserUncheckedCreateNestedManyWithoutTenantInput
-    apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutTenantInput
+    tenantPlan?: TenantPlanUncheckedCreateNestedOneWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
@@ -27663,7 +31282,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUpdateManyWithoutTenantNestedInput
-    apiKeys?: ApiKeyUpdateManyWithoutTenantNestedInput
+    bolnaApiKey?: BolnaApiKeyUpdateOneWithoutTenantsNestedInput
+    tenantPlan?: TenantPlanUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
     calls?: CallUpdateManyWithoutTenantNestedInput
@@ -27679,8 +31299,9 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bolnaApiKeyId?: NullableStringFieldUpdateOperationsInput | string | null
     memberships?: TenantUserUncheckedUpdateManyWithoutTenantNestedInput
-    apiKeys?: ApiKeyUncheckedUpdateManyWithoutTenantNestedInput
+    tenantPlan?: TenantPlanUncheckedUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
@@ -27784,7 +31405,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: TenantUserCreateNestedManyWithoutTenantInput
-    apiKeys?: ApiKeyCreateNestedManyWithoutTenantInput
+    bolnaApiKey?: BolnaApiKeyCreateNestedOneWithoutTenantsInput
+    tenantPlan?: TenantPlanCreateNestedOneWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
     batches?: LeadBatchCreateNestedManyWithoutTenantInput
     calls?: CallCreateNestedManyWithoutTenantInput
@@ -27800,8 +31422,9 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    bolnaApiKeyId?: string | null
     memberships?: TenantUserUncheckedCreateNestedManyWithoutTenantInput
-    apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutTenantInput
+    tenantPlan?: TenantPlanUncheckedCreateNestedOneWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
     batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
@@ -27986,7 +31609,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUpdateManyWithoutTenantNestedInput
-    apiKeys?: ApiKeyUpdateManyWithoutTenantNestedInput
+    bolnaApiKey?: BolnaApiKeyUpdateOneWithoutTenantsNestedInput
+    tenantPlan?: TenantPlanUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     calls?: CallUpdateManyWithoutTenantNestedInput
@@ -28002,8 +31626,9 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bolnaApiKeyId?: NullableStringFieldUpdateOperationsInput | string | null
     memberships?: TenantUserUncheckedUpdateManyWithoutTenantNestedInput
-    apiKeys?: ApiKeyUncheckedUpdateManyWithoutTenantNestedInput
+    tenantPlan?: TenantPlanUncheckedUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
@@ -28148,7 +31773,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: TenantUserCreateNestedManyWithoutTenantInput
-    apiKeys?: ApiKeyCreateNestedManyWithoutTenantInput
+    bolnaApiKey?: BolnaApiKeyCreateNestedOneWithoutTenantsInput
+    tenantPlan?: TenantPlanCreateNestedOneWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
     batches?: LeadBatchCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
@@ -28164,8 +31790,9 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    bolnaApiKeyId?: string | null
     memberships?: TenantUserUncheckedCreateNestedManyWithoutTenantInput
-    apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutTenantInput
+    tenantPlan?: TenantPlanUncheckedCreateNestedOneWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
     batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
@@ -28380,7 +32007,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUpdateManyWithoutTenantNestedInput
-    apiKeys?: ApiKeyUpdateManyWithoutTenantNestedInput
+    bolnaApiKey?: BolnaApiKeyUpdateOneWithoutTenantsNestedInput
+    tenantPlan?: TenantPlanUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
@@ -28396,8 +32024,9 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bolnaApiKeyId?: NullableStringFieldUpdateOperationsInput | string | null
     memberships?: TenantUserUncheckedUpdateManyWithoutTenantNestedInput
-    apiKeys?: ApiKeyUncheckedUpdateManyWithoutTenantNestedInput
+    tenantPlan?: TenantPlanUncheckedUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
@@ -28667,7 +32296,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: TenantUserCreateNestedManyWithoutTenantInput
-    apiKeys?: ApiKeyCreateNestedManyWithoutTenantInput
+    bolnaApiKey?: BolnaApiKeyCreateNestedOneWithoutTenantsInput
+    tenantPlan?: TenantPlanCreateNestedOneWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
     batches?: LeadBatchCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
@@ -28683,8 +32313,9 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    bolnaApiKeyId?: string | null
     memberships?: TenantUserUncheckedCreateNestedManyWithoutTenantInput
-    apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutTenantInput
+    tenantPlan?: TenantPlanUncheckedCreateNestedOneWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
     batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
@@ -28770,7 +32401,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUpdateManyWithoutTenantNestedInput
-    apiKeys?: ApiKeyUpdateManyWithoutTenantNestedInput
+    bolnaApiKey?: BolnaApiKeyUpdateOneWithoutTenantsNestedInput
+    tenantPlan?: TenantPlanUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
@@ -28786,8 +32418,9 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bolnaApiKeyId?: NullableStringFieldUpdateOperationsInput | string | null
     memberships?: TenantUserUncheckedUpdateManyWithoutTenantNestedInput
-    apiKeys?: ApiKeyUncheckedUpdateManyWithoutTenantNestedInput
+    tenantPlan?: TenantPlanUncheckedUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
@@ -28796,20 +32429,333 @@ export namespace Prisma {
     brochures?: BrochureUncheckedUpdateManyWithoutTenantNestedInput
   }
 
+  export type TenantPlanCreateWithoutPlanInput = {
+    id?: string
+    status?: $Enums.PlanStatus
+    activatedAt?: Date | string | null
+    bonusExpiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutTenantPlanInput
+  }
+
+  export type TenantPlanUncheckedCreateWithoutPlanInput = {
+    id?: string
+    tenantId: string
+    status?: $Enums.PlanStatus
+    activatedAt?: Date | string | null
+    bonusExpiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TenantPlanCreateOrConnectWithoutPlanInput = {
+    where: TenantPlanWhereUniqueInput
+    create: XOR<TenantPlanCreateWithoutPlanInput, TenantPlanUncheckedCreateWithoutPlanInput>
+  }
+
+  export type TenantPlanCreateManyPlanInputEnvelope = {
+    data: TenantPlanCreateManyPlanInput | TenantPlanCreateManyPlanInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TenantPlanUpsertWithWhereUniqueWithoutPlanInput = {
+    where: TenantPlanWhereUniqueInput
+    update: XOR<TenantPlanUpdateWithoutPlanInput, TenantPlanUncheckedUpdateWithoutPlanInput>
+    create: XOR<TenantPlanCreateWithoutPlanInput, TenantPlanUncheckedCreateWithoutPlanInput>
+  }
+
+  export type TenantPlanUpdateWithWhereUniqueWithoutPlanInput = {
+    where: TenantPlanWhereUniqueInput
+    data: XOR<TenantPlanUpdateWithoutPlanInput, TenantPlanUncheckedUpdateWithoutPlanInput>
+  }
+
+  export type TenantPlanUpdateManyWithWhereWithoutPlanInput = {
+    where: TenantPlanScalarWhereInput
+    data: XOR<TenantPlanUpdateManyMutationInput, TenantPlanUncheckedUpdateManyWithoutPlanInput>
+  }
+
+  export type TenantPlanScalarWhereInput = {
+    AND?: TenantPlanScalarWhereInput | TenantPlanScalarWhereInput[]
+    OR?: TenantPlanScalarWhereInput[]
+    NOT?: TenantPlanScalarWhereInput | TenantPlanScalarWhereInput[]
+    id?: StringFilter<"TenantPlan"> | string
+    tenantId?: StringFilter<"TenantPlan"> | string
+    planId?: StringFilter<"TenantPlan"> | string
+    status?: EnumPlanStatusFilter<"TenantPlan"> | $Enums.PlanStatus
+    activatedAt?: DateTimeNullableFilter<"TenantPlan"> | Date | string | null
+    bonusExpiresAt?: DateTimeNullableFilter<"TenantPlan"> | Date | string | null
+    createdAt?: DateTimeFilter<"TenantPlan"> | Date | string
+    updatedAt?: DateTimeFilter<"TenantPlan"> | Date | string
+  }
+
+  export type TenantCreateWithoutTenantPlanInput = {
+    id?: string
+    name: string
+    email: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: TenantUserCreateNestedManyWithoutTenantInput
+    bolnaApiKey?: BolnaApiKeyCreateNestedOneWithoutTenantsInput
+    campaigns?: CampaignCreateNestedManyWithoutTenantInput
+    batches?: LeadBatchCreateNestedManyWithoutTenantInput
+    leads?: LeadCreateNestedManyWithoutTenantInput
+    calls?: CallCreateNestedManyWithoutTenantInput
+    assistants?: AssistantCreateNestedManyWithoutTenantInput
+    brochures?: BrochureCreateNestedManyWithoutTenantInput
+    callAnalyses?: CallAnalysisCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutTenantPlanInput = {
+    id?: string
+    name: string
+    email: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    bolnaApiKeyId?: string | null
+    memberships?: TenantUserUncheckedCreateNestedManyWithoutTenantInput
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
+    batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
+    leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
+    calls?: CallUncheckedCreateNestedManyWithoutTenantInput
+    assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
+    brochures?: BrochureUncheckedCreateNestedManyWithoutTenantInput
+    callAnalyses?: CallAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutTenantPlanInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutTenantPlanInput, TenantUncheckedCreateWithoutTenantPlanInput>
+  }
+
+  export type PlanCreateWithoutTenantPlansInput = {
+    id?: string
+    name: string
+    slug: string
+    isActive?: boolean
+    displayOrder?: number
+    onboardingFee: number
+    perMinuteRate: number
+    billingMinimumSec?: number
+    billingIncrementSec?: number
+    maxActiveCampaigns?: number | null
+    maxLeadsPerBatch?: number | null
+    retryAutomation?: boolean
+    industryPackLimit?: number | null
+    features: JsonNullValueInput | InputJsonValue
+    includedBalance?: number
+    bonusValidityDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PlanUncheckedCreateWithoutTenantPlansInput = {
+    id?: string
+    name: string
+    slug: string
+    isActive?: boolean
+    displayOrder?: number
+    onboardingFee: number
+    perMinuteRate: number
+    billingMinimumSec?: number
+    billingIncrementSec?: number
+    maxActiveCampaigns?: number | null
+    maxLeadsPerBatch?: number | null
+    retryAutomation?: boolean
+    industryPackLimit?: number | null
+    features: JsonNullValueInput | InputJsonValue
+    includedBalance?: number
+    bonusValidityDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PlanCreateOrConnectWithoutTenantPlansInput = {
+    where: PlanWhereUniqueInput
+    create: XOR<PlanCreateWithoutTenantPlansInput, PlanUncheckedCreateWithoutTenantPlansInput>
+  }
+
+  export type TenantUpsertWithoutTenantPlanInput = {
+    update: XOR<TenantUpdateWithoutTenantPlanInput, TenantUncheckedUpdateWithoutTenantPlanInput>
+    create: XOR<TenantCreateWithoutTenantPlanInput, TenantUncheckedCreateWithoutTenantPlanInput>
+    where?: TenantWhereInput
+  }
+
+  export type TenantUpdateToOneWithWhereWithoutTenantPlanInput = {
+    where?: TenantWhereInput
+    data: XOR<TenantUpdateWithoutTenantPlanInput, TenantUncheckedUpdateWithoutTenantPlanInput>
+  }
+
+  export type TenantUpdateWithoutTenantPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: TenantUserUpdateManyWithoutTenantNestedInput
+    bolnaApiKey?: BolnaApiKeyUpdateOneWithoutTenantsNestedInput
+    campaigns?: CampaignUpdateManyWithoutTenantNestedInput
+    batches?: LeadBatchUpdateManyWithoutTenantNestedInput
+    leads?: LeadUpdateManyWithoutTenantNestedInput
+    calls?: CallUpdateManyWithoutTenantNestedInput
+    assistants?: AssistantUpdateManyWithoutTenantNestedInput
+    brochures?: BrochureUpdateManyWithoutTenantNestedInput
+    callAnalyses?: CallAnalysisUpdateManyWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutTenantPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bolnaApiKeyId?: NullableStringFieldUpdateOperationsInput | string | null
+    memberships?: TenantUserUncheckedUpdateManyWithoutTenantNestedInput
+    campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
+    batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
+    calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
+    assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
+    brochures?: BrochureUncheckedUpdateManyWithoutTenantNestedInput
+    callAnalyses?: CallAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  }
+
+  export type PlanUpsertWithoutTenantPlansInput = {
+    update: XOR<PlanUpdateWithoutTenantPlansInput, PlanUncheckedUpdateWithoutTenantPlansInput>
+    create: XOR<PlanCreateWithoutTenantPlansInput, PlanUncheckedCreateWithoutTenantPlansInput>
+    where?: PlanWhereInput
+  }
+
+  export type PlanUpdateToOneWithWhereWithoutTenantPlansInput = {
+    where?: PlanWhereInput
+    data: XOR<PlanUpdateWithoutTenantPlansInput, PlanUncheckedUpdateWithoutTenantPlansInput>
+  }
+
+  export type PlanUpdateWithoutTenantPlansInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    onboardingFee?: IntFieldUpdateOperationsInput | number
+    perMinuteRate?: IntFieldUpdateOperationsInput | number
+    billingMinimumSec?: IntFieldUpdateOperationsInput | number
+    billingIncrementSec?: IntFieldUpdateOperationsInput | number
+    maxActiveCampaigns?: NullableIntFieldUpdateOperationsInput | number | null
+    maxLeadsPerBatch?: NullableIntFieldUpdateOperationsInput | number | null
+    retryAutomation?: BoolFieldUpdateOperationsInput | boolean
+    industryPackLimit?: NullableIntFieldUpdateOperationsInput | number | null
+    features?: JsonNullValueInput | InputJsonValue
+    includedBalance?: IntFieldUpdateOperationsInput | number
+    bonusValidityDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlanUncheckedUpdateWithoutTenantPlansInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    onboardingFee?: IntFieldUpdateOperationsInput | number
+    perMinuteRate?: IntFieldUpdateOperationsInput | number
+    billingMinimumSec?: IntFieldUpdateOperationsInput | number
+    billingIncrementSec?: IntFieldUpdateOperationsInput | number
+    maxActiveCampaigns?: NullableIntFieldUpdateOperationsInput | number | null
+    maxLeadsPerBatch?: NullableIntFieldUpdateOperationsInput | number | null
+    retryAutomation?: BoolFieldUpdateOperationsInput | boolean
+    industryPackLimit?: NullableIntFieldUpdateOperationsInput | number | null
+    features?: JsonNullValueInput | InputJsonValue
+    includedBalance?: IntFieldUpdateOperationsInput | number
+    bonusValidityDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TenantCreateWithoutBolnaApiKeyInput = {
+    id?: string
+    name: string
+    email: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: TenantUserCreateNestedManyWithoutTenantInput
+    tenantPlan?: TenantPlanCreateNestedOneWithoutTenantInput
+    campaigns?: CampaignCreateNestedManyWithoutTenantInput
+    batches?: LeadBatchCreateNestedManyWithoutTenantInput
+    leads?: LeadCreateNestedManyWithoutTenantInput
+    calls?: CallCreateNestedManyWithoutTenantInput
+    assistants?: AssistantCreateNestedManyWithoutTenantInput
+    brochures?: BrochureCreateNestedManyWithoutTenantInput
+    callAnalyses?: CallAnalysisCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutBolnaApiKeyInput = {
+    id?: string
+    name: string
+    email: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: TenantUserUncheckedCreateNestedManyWithoutTenantInput
+    tenantPlan?: TenantPlanUncheckedCreateNestedOneWithoutTenantInput
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
+    batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
+    leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
+    calls?: CallUncheckedCreateNestedManyWithoutTenantInput
+    assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
+    brochures?: BrochureUncheckedCreateNestedManyWithoutTenantInput
+    callAnalyses?: CallAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutBolnaApiKeyInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutBolnaApiKeyInput, TenantUncheckedCreateWithoutBolnaApiKeyInput>
+  }
+
+  export type TenantCreateManyBolnaApiKeyInputEnvelope = {
+    data: TenantCreateManyBolnaApiKeyInput | TenantCreateManyBolnaApiKeyInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TenantUpsertWithWhereUniqueWithoutBolnaApiKeyInput = {
+    where: TenantWhereUniqueInput
+    update: XOR<TenantUpdateWithoutBolnaApiKeyInput, TenantUncheckedUpdateWithoutBolnaApiKeyInput>
+    create: XOR<TenantCreateWithoutBolnaApiKeyInput, TenantUncheckedCreateWithoutBolnaApiKeyInput>
+  }
+
+  export type TenantUpdateWithWhereUniqueWithoutBolnaApiKeyInput = {
+    where: TenantWhereUniqueInput
+    data: XOR<TenantUpdateWithoutBolnaApiKeyInput, TenantUncheckedUpdateWithoutBolnaApiKeyInput>
+  }
+
+  export type TenantUpdateManyWithWhereWithoutBolnaApiKeyInput = {
+    where: TenantScalarWhereInput
+    data: XOR<TenantUpdateManyMutationInput, TenantUncheckedUpdateManyWithoutBolnaApiKeyInput>
+  }
+
+  export type TenantScalarWhereInput = {
+    AND?: TenantScalarWhereInput | TenantScalarWhereInput[]
+    OR?: TenantScalarWhereInput[]
+    NOT?: TenantScalarWhereInput | TenantScalarWhereInput[]
+    id?: StringFilter<"Tenant"> | string
+    name?: StringFilter<"Tenant"> | string
+    email?: StringFilter<"Tenant"> | string
+    isActive?: BoolFilter<"Tenant"> | boolean
+    createdAt?: DateTimeFilter<"Tenant"> | Date | string
+    updatedAt?: DateTimeFilter<"Tenant"> | Date | string
+    bolnaApiKeyId?: StringNullableFilter<"Tenant"> | string | null
+  }
+
   export type TenantUserCreateManyTenantInput = {
     id?: string
     userId: string
     role?: $Enums.TenantRole
-    createdAt?: Date | string
-  }
-
-  export type ApiKeyCreateManyTenantInput = {
-    id?: string
-    name: string
-    keyHash: string
-    lastUsedAt?: Date | string | null
-    expiresAt?: Date | string | null
-    isActive?: boolean
     createdAt?: Date | string
   }
 
@@ -28987,36 +32933,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     role?: EnumTenantRoleFieldUpdateOperationsInput | $Enums.TenantRole
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ApiKeyUpdateWithoutTenantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    keyHash?: StringFieldUpdateOperationsInput | string
-    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ApiKeyUncheckedUpdateWithoutTenantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    keyHash?: StringFieldUpdateOperationsInput | string
-    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ApiKeyUncheckedUpdateManyWithoutTenantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    keyHash?: StringFieldUpdateOperationsInput | string
-    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -30184,6 +34100,100 @@ export namespace Prisma {
     callHistory?: NullableJsonNullValueInput | InputJsonValue
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TenantPlanCreateManyPlanInput = {
+    id?: string
+    tenantId: string
+    status?: $Enums.PlanStatus
+    activatedAt?: Date | string | null
+    bonusExpiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TenantPlanUpdateWithoutPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumPlanStatusFieldUpdateOperationsInput | $Enums.PlanStatus
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bonusExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutTenantPlanNestedInput
+  }
+
+  export type TenantPlanUncheckedUpdateWithoutPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    status?: EnumPlanStatusFieldUpdateOperationsInput | $Enums.PlanStatus
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bonusExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TenantPlanUncheckedUpdateManyWithoutPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    status?: EnumPlanStatusFieldUpdateOperationsInput | $Enums.PlanStatus
+    activatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bonusExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TenantCreateManyBolnaApiKeyInput = {
+    id?: string
+    name: string
+    email: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TenantUpdateWithoutBolnaApiKeyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: TenantUserUpdateManyWithoutTenantNestedInput
+    tenantPlan?: TenantPlanUpdateOneWithoutTenantNestedInput
+    campaigns?: CampaignUpdateManyWithoutTenantNestedInput
+    batches?: LeadBatchUpdateManyWithoutTenantNestedInput
+    leads?: LeadUpdateManyWithoutTenantNestedInput
+    calls?: CallUpdateManyWithoutTenantNestedInput
+    assistants?: AssistantUpdateManyWithoutTenantNestedInput
+    brochures?: BrochureUpdateManyWithoutTenantNestedInput
+    callAnalyses?: CallAnalysisUpdateManyWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutBolnaApiKeyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: TenantUserUncheckedUpdateManyWithoutTenantNestedInput
+    tenantPlan?: TenantPlanUncheckedUpdateOneWithoutTenantNestedInput
+    campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
+    batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
+    calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
+    assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
+    brochures?: BrochureUncheckedUpdateManyWithoutTenantNestedInput
+    callAnalyses?: CallAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateManyWithoutBolnaApiKeyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -140,14 +140,14 @@ export class CreateBatchUseCase {
       : undefined;
 
     try {
-      const result = await this.bolnaProvider.create({
+      const result = await this.bolnaProvider.createBatch(input.tenantId, {
         agentId: campaign.assistant.bolnaId,
         csvBuffer: transformedBuffer,
         fileName: `bolna-${batch.id}.csv`,
         retryConfig: retryConfig as CreateBatchInput["retryConfig"],
         webhookUrl,
       });
-      bolnaBatchId = result.batchId;
+      bolnaBatchId = result.batch_id;
     } catch (err) {
       await this.batchRepo.update(batch.id, { status: "FAILED" });
       throw new BolnaBatchCreationError(

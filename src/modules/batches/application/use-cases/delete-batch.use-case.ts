@@ -23,7 +23,7 @@ export class DeleteBatchUseCase {
 
     if (batchData.bolnaBatchId) {
       try {
-        await this.bolnaProvider.delete(batchData.bolnaBatchId);
+        await this.bolnaProvider.deleteBatch(tenantId, batchData.bolnaBatchId);
       } catch (err) {
         console.warn("[DeleteBatch] Bolna delete error:", err);
       }

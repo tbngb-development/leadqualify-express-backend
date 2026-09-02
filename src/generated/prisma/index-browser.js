@@ -127,7 +127,8 @@ exports.Prisma.TenantScalarFieldEnum = {
   email: 'email',
   isActive: 'isActive',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  bolnaApiKeyId: 'bolnaApiKeyId'
 };
 
 exports.Prisma.UserScalarFieldEnum = {
@@ -150,17 +151,6 @@ exports.Prisma.TenantUserScalarFieldEnum = {
 exports.Prisma.PlatformAdminScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  createdAt: 'createdAt'
-};
-
-exports.Prisma.ApiKeyScalarFieldEnum = {
-  id: 'id',
-  tenantId: 'tenantId',
-  name: 'name',
-  keyHash: 'keyHash',
-  lastUsedAt: 'lastUsedAt',
-  expiresAt: 'expiresAt',
-  isActive: 'isActive',
   createdAt: 'createdAt'
 };
 
@@ -336,6 +326,51 @@ exports.Prisma.CallAnalysisScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PlanScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  isActive: 'isActive',
+  displayOrder: 'displayOrder',
+  onboardingFee: 'onboardingFee',
+  perMinuteRate: 'perMinuteRate',
+  billingMinimumSec: 'billingMinimumSec',
+  billingIncrementSec: 'billingIncrementSec',
+  maxActiveCampaigns: 'maxActiveCampaigns',
+  maxLeadsPerBatch: 'maxLeadsPerBatch',
+  retryAutomation: 'retryAutomation',
+  industryPackLimit: 'industryPackLimit',
+  features: 'features',
+  includedBalance: 'includedBalance',
+  bonusValidityDays: 'bonusValidityDays',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TenantPlanScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  planId: 'planId',
+  status: 'status',
+  activatedAt: 'activatedAt',
+  bonusExpiresAt: 'bonusExpiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.BolnaApiKeyScalarFieldEnum = {
+  id: 'id',
+  keyIdentifier: 'keyIdentifier',
+  encryptedKey: 'encryptedKey',
+  type: 'type',
+  isPlatformDefault: 'isPlatformDefault',
+  isActive: 'isActive',
+  createdBy: 'createdBy',
+  lastAccessedAt: 'lastAccessedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -474,12 +509,23 @@ exports.ExtractionFlag = exports.$Enums.ExtractionFlag = {
   NO: 'NO'
 };
 
+exports.PlanStatus = exports.$Enums.PlanStatus = {
+  PENDING_PAYMENT: 'PENDING_PAYMENT',
+  ACTIVE: 'ACTIVE',
+  EXPIRED: 'EXPIRED',
+  CANCELLED: 'CANCELLED'
+};
+
+exports.BolnaApiKeyType = exports.$Enums.BolnaApiKeyType = {
+  GENERAL: 'GENERAL',
+  CUSTOM: 'CUSTOM'
+};
+
 exports.Prisma.ModelName = {
   Tenant: 'Tenant',
   User: 'User',
   TenantUser: 'TenantUser',
   PlatformAdmin: 'PlatformAdmin',
-  ApiKey: 'ApiKey',
   RefreshToken: 'RefreshToken',
   Assistant: 'Assistant',
   Brochure: 'Brochure',
@@ -487,7 +533,10 @@ exports.Prisma.ModelName = {
   LeadBatch: 'LeadBatch',
   Lead: 'Lead',
   Call: 'Call',
-  CallAnalysis: 'CallAnalysis'
+  CallAnalysis: 'CallAnalysis',
+  Plan: 'Plan',
+  TenantPlan: 'TenantPlan',
+  BolnaApiKey: 'BolnaApiKey'
 };
 
 /**

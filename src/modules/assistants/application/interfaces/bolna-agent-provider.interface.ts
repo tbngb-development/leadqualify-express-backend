@@ -1,6 +1,6 @@
-import { type BolnaAgentResponse } from "../../../../shared/types/bolna.types";
+import type { BolnaAgentResponse } from "../../../../shared/types/bolna.types";
 
 export interface BolnaAgentProvider {
-  verifyAgent(bolnaId: string): Promise<BolnaAgentResponse>;
-  listAgents(): Promise<BolnaAgentResponse[]>;
+  verifyAgent(tenantId: string, agentId: string): Promise<BolnaAgentResponse>;
+  listAgents(tenantId: string): Promise<BolnaAgentResponse[]>;
 }

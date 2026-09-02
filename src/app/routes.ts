@@ -19,6 +19,9 @@ import { buildAdminBrochureRoutes } from "../modules/brochure/presentation/admin
 import { buildTenantUserRoutes } from "../modules/users/presentation/tenant-user.routes";
 import { buildWebhookRoutes } from "../modules/webhooks/presentation/webhook.routes";
 import { buildAdminBatchRoutes } from "../modules/batches/presentation/admin-batch.routes";
+import { buildAdminPlanRoutes } from "../modules/plans/presentation/admin-plan.routes";
+import { buildTenantPlanRoutes } from "../modules/plans/presentation/tenant-plan.routes";
+import { buildAdminBolnaApiKeyRoutes } from "../modules/bolna-api-keys/presentation/admin-bolna-api-key.routes";
 
 export function buildRoutes(c: AppContainer): Router {
   const router = Router();
@@ -90,6 +93,11 @@ export function buildRoutes(c: AppContainer): Router {
     ),
   );
 
+  router.use(
+    "/v1/plans",
+    buildTenantPlanRoutes(c.plans.tenantController, c.authenticate),
+  );
+
   // ── Admin API v1 (Cross-tenant platform overrides) ──────────────────────
   router.use("/v1/admin/auth", buildAdminAuthRoutes(c.auth.adminController));
   router.use(
@@ -144,6 +152,19 @@ export function buildRoutes(c: AppContainer): Router {
     "/v1/admin/brochures",
     buildAdminBrochureRoutes(
       c.brochures.adminController,
+      c.authenticate,
+      c.authorize,
+    ),
+  );
+
+  router.use(
+    "/v1/admin/plans",
+    buildAdminPlanRoutes(c.plans.adminController, c.authenticate, c.authorize),
+  );
+  router.use(
+    "/v1/admin/bolna-keys",
+    buildAdminBolnaApiKeyRoutes(
+      c.bolnaApiKeys.adminController,
       c.authenticate,
       c.authorize,
     ),

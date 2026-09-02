@@ -1,43 +1,41 @@
-import { bolnaClient } from "../../../shared/config/external/bolna/bolna.client";
-import type {
-  BolnaBatchCreateParams,
-  BolnaBatchCreateResult,
-  BolnaBatchProvider,
-  BolnaBatchScheduleResult,
-} from "./bolna-batch-provider.interface";
+import type { BolnaBatchProvider } from "./bolna-batch-provider.interface";
+import type { IBolnaClientFactory } from "../../../shared/config/external/bolna/bolna-client.factory";
+import type { CreateBatchParams } from "../../../shared/config/external/bolna/bolna.client";
 
 export class BolnaBatchProviderImpl implements BolnaBatchProvider {
-  async create(
-    params: BolnaBatchCreateParams,
-  ): Promise<BolnaBatchCreateResult> {
-    const response = await bolnaClient.batches.create({
-      agentId: params.agentId,
-      csvBuffer: params.csvBuffer,
-      fileName: params.fileName,
-      retryConfig: params.retryConfig,
-      webhookUrl: params.webhookUrl,
-    });
+  constructor(private readonly bolnaFactory: IBolnaClientFactory) {}
 
-    return { batchId: response.batch_id };
+  async createBatch(tenantId: string, params: CreateBatchParams) {
+    const bolnaClient = await this.bolnaFactory.forTenant(tenantId);
+    return bolnaClient.batches.create(params);
   }
 
-  async schedule(
+  async scheduleBatch(
+    tenantId: string,
     bolnaBatchId: string,
     scheduledAt: string,
-  ): Promise<BolnaBatchScheduleResult> {
-    const response = await bolnaClient.batches.schedule(
-      bolnaBatchId,
-      scheduledAt,
-    );
-
-    return { message: response.message, state: response.state };
+  ) {
+    const bolnaClient = await this.bolnaFactory.forTenant(tenantId);
+    return bolnaClient.batches.schedule(bolnaBatchId, scheduledAt);
   }
 
-  async stop(bolnaBatchId: string): Promise<void> {
-    await bolnaClient.batches.stop(bolnaBatchId);
+  async stopBatch(tenantId: string, bolnaBatchId: string) {
+    const bolnaClient = await this.bolnaFactory.forTenant(tenantId);
+    return bolnaClient.batches.stop(bolnaBatchId);
   }
 
-  async delete(bolnaBatchId: string): Promise<void> {
-    await bolnaClient.batches.delete(bolnaBatchId);
+  async getBatchStatus(tenantId: string, bolnaBatchId: string) {
+    const bolnaClient = await this.bolnaFactory.forTenant(tenantId);
+    return bolnaClient.batches.get(bolnaBatchId);
+  }
+
+  async getBatchExecutions(tenantId: string, bolnaBatchId: string) {
+    const bolnaClient = await this.bolnaFactory.forTenant(tenantId);
+    return bolnaClient.batches.getExecutions(bolnaBatchId);
+  }
+
+  async deleteBatch(tenantId: string, bolnaBatchId: string) {
+    const bolnaClient = await this.bolnaFactory.forTenant(tenantId);
+    return bolnaClient.batches.delete(bolnaBatchId);
   }
 }

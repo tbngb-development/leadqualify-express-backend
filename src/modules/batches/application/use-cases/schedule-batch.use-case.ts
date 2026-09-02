@@ -50,7 +50,8 @@ export class ScheduleBatchUseCase {
     }
 
     const isoString = toBolnaISO(targetDate);
-    const bolnaResult = await this.bolnaProvider.schedule(
+    const bolnaResult = await this.bolnaProvider.scheduleBatch(
+      tenantId,
       batchData.bolnaBatchId,
       isoString,
     );
