@@ -6,7 +6,7 @@ import { GetCallStatsUseCase } from "./application/use-cases/get-call-stats.use-
 import { TenantCallController } from "./presentation/tenant-call.controller";
 import { AdminCallController } from "./presentation/admin-call.controller";
 import type { IBolnaClientFactory } from "../../shared/config/external/bolna/bolna-client.factory";
-import { BolnaCallProviderImpl } from "../plans/infrastructure/repositories/bolna-call.provider";
+import { BolnaCallProviderImpl } from "./infrastructure/repositories/bolna-call.provider";
 
 export interface CallModuleDeps {
   bolnaClientFactory: IBolnaClientFactory;

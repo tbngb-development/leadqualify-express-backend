@@ -22,6 +22,13 @@ import { buildAdminBatchRoutes } from "../modules/batches/presentation/admin-bat
 import { buildAdminPlanRoutes } from "../modules/plans/presentation/admin-plan.routes";
 import { buildTenantPlanRoutes } from "../modules/plans/presentation/tenant-plan.routes";
 import { buildAdminBolnaApiKeyRoutes } from "../modules/bolna-api-keys/presentation/admin-bolna-api-key.routes";
+import { buildRazorpayWebhookRoutes } from "../modules/payments/presentation/razorpay-webhook.routes";
+import { buildTenantPaymentRoutes } from "../modules/payments/presentation/tenant-payment.routes";
+import { buildTenantWalletRoutes } from "../modules/wallet/presentation/tenant-wallet.routes";
+import {
+  buildAdminInviteRoutes,
+  buildPublicInviteRoutes,
+} from "../modules/invites/presentation/invite.routes";
 
 export function buildRoutes(c: AppContainer): Router {
   const router = Router();
@@ -38,11 +45,22 @@ export function buildRoutes(c: AppContainer): Router {
   // ── Public Webhooks ─────────────────────────────────────────────────────
   router.use("/webhooks", buildWebhookRoutes(c.webhooks.controller));
 
+  router.use(
+    "/webhooks/razorpay",
+    buildRazorpayWebhookRoutes(c.payments.webhookController),
+  );
+
   // ── Tenant API v1 (Scoped workspace actions) ─────────────────────────────
   router.use(
     "/v1/auth",
     buildTenantAuthRoutes(c.auth.tenantController, c.authenticate, c.authorize),
   );
+
+  router.use(
+    "/v1/auth/owner-invites",
+    buildPublicInviteRoutes(c.invites.publicController),
+  );
+
   router.use(
     "/v1/assistants",
     buildTenantAssistantRoutes(c.assistants.tenantController, c.authenticate),
@@ -98,8 +116,30 @@ export function buildRoutes(c: AppContainer): Router {
     buildTenantPlanRoutes(c.plans.tenantController, c.authenticate),
   );
 
+  router.use(
+    "/v1/wallet",
+    buildTenantWalletRoutes(
+      c.wallet.tenantController,
+      c.authenticate,
+      c.authorize,
+    ),
+  );
+
+  router.use(
+    "/v1/payments",
+    buildTenantPaymentRoutes(c.payments.tenantController, c.authenticate),
+  );
+
   // ── Admin API v1 (Cross-tenant platform overrides) ──────────────────────
   router.use("/v1/admin/auth", buildAdminAuthRoutes(c.auth.adminController));
+  router.use(
+    "/v1/admin/invites",
+    buildAdminInviteRoutes(
+      c.invites.adminController,
+      c.authenticate,
+      c.authorize,
+    ),
+  );
   router.use(
     "/v1/admin/tenants",
     buildAdminTenantRoutes(

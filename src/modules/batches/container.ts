@@ -13,15 +13,17 @@ import { DeleteBatchUseCase } from "./application/use-cases/delete-batch.use-cas
 import { GetBatchStatsUseCase } from "./application/use-cases/get-batch-stats.use-case";
 import { TenantBatchController } from "./presentation/tenant-batch.controller";
 import { AdminBatchController } from "./presentation/admin-batch.controller";
-import { type IBolnaClientFactory } from "../../shared/config/external/bolna/bolna-client.factory";
+import type { IBolnaClientFactory } from "../../shared/config/external/bolna/bolna-client.factory";
+import type { CheckBalanceForBatchUseCase } from "../wallet/application/use-cases/check-balance-for-batch.use-case";
 
 export interface BatchModuleDeps {
   bolnaClientFactory: IBolnaClientFactory;
+  checkBalanceForBatch?: CheckBalanceForBatchUseCase;
 }
 
 export interface BatchModule {
-  adminController: AdminBatchController;
   tenantController: TenantBatchController;
+  adminController: AdminBatchController;
 }
 
 export function buildBatchModule(deps: BatchModuleDeps): BatchModule {
@@ -39,8 +41,18 @@ export function buildBatchModule(deps: BatchModuleDeps): BatchModule {
       listBatches,
       getBatch,
       new CreateBatchUseCase(batchRepo, campaignRepo, storage, bolnaProvider),
-      new RunBatchUseCase(batchRepo, campaignRepo, bolnaProvider),
-      new ScheduleBatchUseCase(batchRepo, campaignRepo, bolnaProvider),
+      new RunBatchUseCase(
+        batchRepo,
+        campaignRepo,
+        bolnaProvider,
+        deps.checkBalanceForBatch,
+      ),
+      new ScheduleBatchUseCase(
+        batchRepo,
+        campaignRepo,
+        bolnaProvider,
+        deps.checkBalanceForBatch,
+      ),
       new StopBatchUseCase(batchRepo, campaignRepo, bolnaProvider),
       new ResumeBatchUseCase(batchRepo, campaignRepo, storage, bolnaProvider),
       new DeleteBatchUseCase(batchRepo, bolnaProvider),

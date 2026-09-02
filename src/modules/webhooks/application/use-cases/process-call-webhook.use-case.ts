@@ -19,9 +19,13 @@ import type {
   CallHistoryItem,
   ParsedCallAnalysis,
 } from "../../../../shared/types/bolna.types";
+import type { DebitWalletForCallUseCase } from "../../../wallet/application/use-cases/debit-wallet.use-case";
 
 export class ProcessCallWebhookUseCase {
-  constructor(private readonly webhookRepo: WebhookRepository) {}
+  constructor(
+    private readonly webhookRepo: WebhookRepository,
+    private readonly debitWalletForCall?: DebitWalletForCallUseCase,
+  ) {}
 
   async execute(payload: WebhookCallPayload): Promise<void> {
     const callId = payload.id ?? payload.execution_id ?? payload.run_id;
@@ -35,7 +39,6 @@ export class ProcessCallWebhookUseCase {
       case "queued":
       case "scheduled":
       case "rescheduled":
-        // Statelessly ignore scheduling events
         break;
 
       case "initiated":
@@ -72,7 +75,7 @@ export class ProcessCallWebhookUseCase {
         const resolved = await this.resolveCallRecord(callId, payload);
         if (!resolved) break;
 
-        await this.handleCallCompleted(resolved, payload);
+        await this.handleCallCompleted(resolved, payload, callId);
         break;
       }
 
@@ -115,11 +118,9 @@ export class ProcessCallWebhookUseCase {
     bolnaCallId: string,
     payload: WebhookCallPayload,
   ): Promise<ResolvedCallContext | null> {
-    // 1. Resolve by direct remote ID
     const call = await this.webhookRepo.findCallByBolnaCallId(bolnaCallId);
     if (call) return call;
 
-    // 2. Resolve via batch context
     const bolnaBatchId = payload.batch_id;
     const phone =
       payload.telephony_data?.to_number ??
@@ -147,7 +148,6 @@ export class ProcessCallWebhookUseCase {
     );
 
     if (existingCall && retried > 0) {
-      // Rotate execution details, snapshot previous history JSON
       const history = (existingCall.callHistory as CallHistoryItem[]) ?? [];
       history.push({
         attempt: retried,
@@ -170,7 +170,6 @@ export class ProcessCallWebhookUseCase {
       return existingCall;
     }
 
-    // Fresh execution creation
     const newCall = await this.webhookRepo.createCall({
       bolnaCallId,
       tenantId: batch.tenantId,
@@ -191,6 +190,7 @@ export class ProcessCallWebhookUseCase {
   private async handleCallCompleted(
     call: ResolvedCallContext,
     payload: WebhookCallPayload,
+    bolnaCallId: string,
   ): Promise<void> {
     const messages = (payload.messages ?? []).map((m) => ({
       role: m.role === "agent" ? "assistant" : "user",
@@ -239,6 +239,22 @@ export class ProcessCallWebhookUseCase {
       call.batchId,
       "COMPLETED",
     );
+
+    // Charge only when lead was reached and duration > 0
+    if (this.debitWalletForCall && duration && duration > 0) {
+      try {
+        await this.debitWalletForCall.execute({
+          tenantId: call.tenantId,
+          callId: call.id,
+          bolnaCallId: String(bolnaCallId),
+          durationSec: duration,
+        });
+      } catch (err) {
+        // Never fail webhook resolution on billing errors
+        console.error("[Webhook] wallet debit failed:", err);
+      }
+    }
+
     await this.checkBatchCompletion(call);
   }
 

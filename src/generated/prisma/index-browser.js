@@ -371,6 +371,66 @@ exports.Prisma.BolnaApiKeyScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.TenantInviteScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  tenantName: 'tenantName',
+  token: 'token',
+  status: 'status',
+  planId: 'planId',
+  invitedBy: 'invitedBy',
+  expiresAt: 'expiresAt',
+  acceptedAt: 'acceptedAt',
+  resendCount: 'resendCount',
+  lastResentAt: 'lastResentAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WalletScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  balance: 'balance',
+  bonusBalance: 'bonusBalance',
+  bonusExpiresAt: 'bonusExpiresAt',
+  isActive: 'isActive',
+  lowBalanceThreshold: 'lowBalanceThreshold',
+  lowBalanceAlertSent: 'lowBalanceAlertSent',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WalletTransactionScalarFieldEnum = {
+  id: 'id',
+  walletId: 'walletId',
+  tenantId: 'tenantId',
+  type: 'type',
+  amount: 'amount',
+  balanceAfter: 'balanceAfter',
+  bonusBalanceAfter: 'bonusBalanceAfter',
+  description: 'description',
+  referenceType: 'referenceType',
+  referenceId: 'referenceId',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.RechargeScalarFieldEnum = {
+  id: 'id',
+  walletId: 'walletId',
+  tenantId: 'tenantId',
+  amount: 'amount',
+  purpose: 'purpose',
+  status: 'status',
+  razorpayOrderId: 'razorpayOrderId',
+  razorpayPaymentId: 'razorpayPaymentId',
+  razorpaySignature: 'razorpaySignature',
+  failureReason: 'failureReason',
+  planId: 'planId',
+  createdAt: 'createdAt',
+  completedAt: 'completedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -521,6 +581,33 @@ exports.BolnaApiKeyType = exports.$Enums.BolnaApiKeyType = {
   CUSTOM: 'CUSTOM'
 };
 
+exports.InviteStatus = exports.$Enums.InviteStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  EXPIRED: 'EXPIRED',
+  REVOKED: 'REVOKED'
+};
+
+exports.WalletTxType = exports.$Enums.WalletTxType = {
+  CREDIT: 'CREDIT',
+  DEBIT: 'DEBIT',
+  REFUND: 'REFUND',
+  BONUS: 'BONUS',
+  ADJUSTMENT: 'ADJUSTMENT'
+};
+
+exports.RechargePurpose = exports.$Enums.RechargePurpose = {
+  ONBOARDING: 'ONBOARDING',
+  WALLET_TOPUP: 'WALLET_TOPUP'
+};
+
+exports.RechargeStatus = exports.$Enums.RechargeStatus = {
+  INITIATED: 'INITIATED',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED',
+  REFUNDED: 'REFUNDED'
+};
+
 exports.Prisma.ModelName = {
   Tenant: 'Tenant',
   User: 'User',
@@ -536,7 +623,11 @@ exports.Prisma.ModelName = {
   CallAnalysis: 'CallAnalysis',
   Plan: 'Plan',
   TenantPlan: 'TenantPlan',
-  BolnaApiKey: 'BolnaApiKey'
+  BolnaApiKey: 'BolnaApiKey',
+  TenantInvite: 'TenantInvite',
+  Wallet: 'Wallet',
+  WalletTransaction: 'WalletTransaction',
+  Recharge: 'Recharge'
 };
 
 /**
