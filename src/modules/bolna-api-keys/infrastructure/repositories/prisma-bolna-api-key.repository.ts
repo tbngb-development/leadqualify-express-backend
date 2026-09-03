@@ -3,19 +3,35 @@ import prisma from "../../../../shared/config/database/prisma";
 import type {
   BolnaApiKeyRepository,
   CreateBolnaApiKeyData,
-  BolnaApiKeyWithCount
+  BolnaApiKeyWithCount,
 } from "../../application/interfaces/bolna-api-key-repository.interface";
 import { NoAvailableApiKeyError } from "../../domain/errors/bolna-api-key.errors";
 
 export class PrismaBolnaApiKeyRepository implements BolnaApiKeyRepository {
   // ── Runtime resolution ─────────────────────────────────────────
 
-  async findKeyForTenant(tenantId: string): Promise<BolnaApiKey | null> {
+  async findKeyForTenant(tenantId?: string | null): Promise<BolnaApiKey | null> {
+    // 1. If called in Admin scope or without a tenantId, use the platform default key
+    if (!tenantId) {
+      return prisma.bolnaApiKey.findFirst({
+        where: { isPlatformDefault: true, isActive: true },
+      });
+    }
+
+    // 2. Fetch assigned key for tenant
     const tenant = await prisma.tenant.findUnique({
       where: { id: tenantId },
       select: { bolnaApiKey: true },
     });
-    return tenant?.bolnaApiKey ?? null;
+
+    if (tenant?.bolnaApiKey && tenant.bolnaApiKey.isActive) {
+      return tenant.bolnaApiKey;
+    }
+
+    // 3. Fallback to platform default key if tenant has no key assigned yet
+    return prisma.bolnaApiKey.findFirst({
+      where: { isPlatformDefault: true, isActive: true },
+    });
   }
 
   async updateLastAccessed(keyId: string): Promise<void> {
@@ -28,7 +44,6 @@ export class PrismaBolnaApiKeyRepository implements BolnaApiKeyRepository {
   // ── Assignment ────────────────────────────────────────────────
 
   async assignLeastLoadedKeyToTenant(tenantId: string): Promise<BolnaApiKey> {
-    // Native DB-level least-loaded selection using relational count sort
     const leastLoadedKey = await prisma.bolnaApiKey.findFirst({
       where: { type: "GENERAL", isActive: true },
       orderBy: { tenants: { _count: "asc" } },
@@ -86,7 +101,6 @@ export class PrismaBolnaApiKeyRepository implements BolnaApiKeyRepository {
   // ── Lifecycle ─────────────────────────────────────────────────
 
   async reassignTenantsFromKey(keyId: string): Promise<number> {
-    // Get all tenants currently using this key
     const affectedTenants = await prisma.tenant.findMany({
       where: { bolnaApiKeyId: keyId },
       select: { id: true },
@@ -94,14 +108,13 @@ export class PrismaBolnaApiKeyRepository implements BolnaApiKeyRepository {
 
     if (affectedTenants.length === 0) return 0;
 
-    // Reassign each to the next least-loaded GENERAL key
     let reassignedCount = 0;
     for (const tenant of affectedTenants) {
       try {
         await this.assignLeastLoadedKeyToTenant(tenant.id);
         reassignedCount++;
       } catch {
-        // Silently skip if no pool key available; caller can inspect
+        // Skip if no other pool key available
       }
     }
 
