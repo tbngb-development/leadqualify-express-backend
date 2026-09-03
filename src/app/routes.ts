@@ -29,6 +29,9 @@ import {
   buildAdminInviteRoutes,
   buildPublicInviteRoutes,
 } from "../modules/invites/presentation/invite.routes";
+import { buildAdminWalletRoutes } from "../modules/wallet/presentation/admin-wallet.routes";
+import { buildAdminPaymentRoutes } from "../modules/payments/presentation/admin-payment.routes";
+import { buildAdminUserRoutes } from "../modules/users/presentation/admin-user.routes";
 
 export function buildRoutes(c: AppContainer): Router {
   const router = Router();
@@ -208,6 +211,29 @@ export function buildRoutes(c: AppContainer): Router {
       c.authenticate,
       c.authorize,
     ),
+  );
+
+  router.use(
+    "/v1/admin/wallet",
+    buildAdminWalletRoutes(
+      c.wallet.adminController,
+      c.authenticate,
+      c.authorize,
+    ),
+  );
+
+  router.use(
+    "/v1/admin/payments",
+    buildAdminPaymentRoutes(
+      c.payments.adminController,
+      c.authenticate,
+      c.authorize,
+    ),
+  );
+
+  router.use(
+    "/v1/admin/users",
+    buildAdminUserRoutes(c.users.adminController, c.authenticate, c.authorize),
   );
 
   return router;

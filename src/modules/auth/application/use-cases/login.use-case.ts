@@ -4,6 +4,7 @@ import { type AuthRepository } from "../interfaces/auth-repository.interface";
 import { type PasswordService } from "../interfaces/password-service.interface";
 import { type TokenService } from "../interfaces/token-service.interface";
 import { InvalidCredentialsError } from "../../domain/errors/auth.errors";
+import { ForbiddenError } from "../../../../shared/errors";
 
 export class LoginUseCase {
   constructor(
@@ -17,6 +18,12 @@ export class LoginUseCase {
     const user = await this.authRepository.findUserByEmail(input.email);
     if (!user) {
       throw new InvalidCredentialsError();
+    }
+
+    if (!user.isActive) {
+      throw new ForbiddenError(
+        "Your account has been deactivated by an administrator.",
+      );
     }
 
     // 2. Verify password

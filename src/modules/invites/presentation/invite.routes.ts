@@ -27,5 +27,7 @@ export function buildPublicInviteRoutes(
   const router = Router();
   router.get("/:token", controller.get);
   router.post("/accept", validate(acceptOwnerInviteSchema), controller.accept);
+  router.post("/:id/resend", controller.resend);
+  router.post("/:id/revoke", controller.revoke);
   return router;
 }

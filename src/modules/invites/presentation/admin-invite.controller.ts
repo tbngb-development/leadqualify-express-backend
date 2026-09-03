@@ -3,6 +3,7 @@ import { sendSuccess } from "../../../shared/utils/response";
 import { HttpStatus } from "../../../shared/constants/http-status";
 import type { AuthRequest } from "../../../shared/types";
 import type { CreateOwnerInviteUseCase } from "../application/use-cases/create-owner-invite.use-case";
+import { param } from "../../../shared/utils/paramHelper";
 
 export class AdminInviteController {
   constructor(private readonly createInvite: CreateOwnerInviteUseCase) {}
@@ -19,6 +20,32 @@ export class AdminInviteController {
         invitedBy: userId,
       });
       sendSuccess(res, result, HttpStatus.CREATED);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  resend = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const result = await this.resendInvite.execute(param(req, "id"));
+      sendSuccess(res, result);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  revoke = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const result = await this.revokeInvite.execute(param(req, "id"));
+      sendSuccess(res, result);
     } catch (err) {
       next(err);
     }

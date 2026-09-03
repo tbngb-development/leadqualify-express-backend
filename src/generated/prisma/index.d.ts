@@ -4601,6 +4601,7 @@ export namespace Prisma {
     email: string | null
     password: string | null
     name: string | null
+    isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4610,6 +4611,7 @@ export namespace Prisma {
     email: string | null
     password: string | null
     name: string | null
+    isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4619,6 +4621,7 @@ export namespace Prisma {
     email: number
     password: number
     name: number
+    isActive: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -4630,6 +4633,7 @@ export namespace Prisma {
     email?: true
     password?: true
     name?: true
+    isActive?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4639,6 +4643,7 @@ export namespace Prisma {
     email?: true
     password?: true
     name?: true
+    isActive?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4648,6 +4653,7 @@ export namespace Prisma {
     email?: true
     password?: true
     name?: true
+    isActive?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -4730,6 +4736,7 @@ export namespace Prisma {
     email: string
     password: string
     name: string
+    isActive: boolean
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -4756,6 +4763,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     name?: boolean
+    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     memberships?: boolean | User$membershipsArgs<ExtArgs>
@@ -4769,6 +4777,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     name?: boolean
+    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -4778,6 +4787,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     name?: boolean
+    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -4787,11 +4797,12 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     name?: boolean
+    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password" | "name" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     memberships?: boolean | User$membershipsArgs<ExtArgs>
     platformAdmin?: boolean | User$platformAdminArgs<ExtArgs>
@@ -4813,6 +4824,7 @@ export namespace Prisma {
       email: string
       password: string
       name: string
+      isActive: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -5245,6 +5257,7 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
     readonly name: FieldRef<"User", 'String'>
+    readonly isActive: FieldRef<"User", 'Boolean'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -26623,6 +26636,7 @@ export namespace Prisma {
     email: 'email',
     password: 'password',
     name: 'name',
+    isActive: 'isActive',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -27474,6 +27488,7 @@ export namespace Prisma {
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     name?: StringFilter<"User"> | string
+    isActive?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     memberships?: TenantUserListRelationFilter
@@ -27486,6 +27501,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     name?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     memberships?: TenantUserOrderByRelationAggregateInput
@@ -27501,6 +27517,7 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     password?: StringFilter<"User"> | string
     name?: StringFilter<"User"> | string
+    isActive?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     memberships?: TenantUserListRelationFilter
@@ -27513,6 +27530,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     name?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -27528,6 +27546,7 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
     name?: StringWithAggregatesFilter<"User"> | string
+    isActive?: BoolWithAggregatesFilter<"User"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
@@ -29446,6 +29465,7 @@ export namespace Prisma {
     email: string
     password: string
     name: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: TenantUserCreateNestedManyWithoutUserInput
@@ -29458,6 +29478,7 @@ export namespace Prisma {
     email: string
     password: string
     name: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: TenantUserUncheckedCreateNestedManyWithoutUserInput
@@ -29470,6 +29491,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUpdateManyWithoutUserNestedInput
@@ -29482,6 +29504,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUncheckedUpdateManyWithoutUserNestedInput
@@ -29494,6 +29517,7 @@ export namespace Prisma {
     email: string
     password: string
     name: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -29503,6 +29527,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -29512,6 +29537,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -31837,6 +31863,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     name?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -31846,6 +31873,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     name?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -31855,6 +31883,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     name?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -36899,6 +36928,7 @@ export namespace Prisma {
     email: string
     password: string
     name: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     platformAdmin?: PlatformAdminCreateNestedOneWithoutUserInput
@@ -36910,6 +36940,7 @@ export namespace Prisma {
     email: string
     password: string
     name: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     platformAdmin?: PlatformAdminUncheckedCreateNestedOneWithoutUserInput
@@ -36980,6 +37011,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     platformAdmin?: PlatformAdminUpdateOneWithoutUserNestedInput
@@ -36991,6 +37023,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     platformAdmin?: PlatformAdminUncheckedUpdateOneWithoutUserNestedInput
@@ -37051,6 +37084,7 @@ export namespace Prisma {
     email: string
     password: string
     name: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: TenantUserCreateNestedManyWithoutUserInput
@@ -37062,6 +37096,7 @@ export namespace Prisma {
     email: string
     password: string
     name: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: TenantUserUncheckedCreateNestedManyWithoutUserInput
@@ -37089,6 +37124,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUpdateManyWithoutUserNestedInput
@@ -37100,6 +37136,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUncheckedUpdateManyWithoutUserNestedInput
@@ -37111,6 +37148,7 @@ export namespace Prisma {
     email: string
     password: string
     name: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: TenantUserCreateNestedManyWithoutUserInput
@@ -37122,6 +37160,7 @@ export namespace Prisma {
     email: string
     password: string
     name: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: TenantUserUncheckedCreateNestedManyWithoutUserInput
@@ -37149,6 +37188,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUpdateManyWithoutUserNestedInput
@@ -37160,6 +37200,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUncheckedUpdateManyWithoutUserNestedInput

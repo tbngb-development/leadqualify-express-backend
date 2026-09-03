@@ -5,9 +5,11 @@ import { CreateUserUseCase } from "./application/use-cases/create-user.use-case"
 import { UpdateUserUseCase } from "./application/use-cases/update-user.use-case";
 import { DeleteUserUseCase } from "./application/use-cases/delete-user.use-case";
 import { TenantUserController } from "./presentation/tenant-user.controller";
+import { type AdminUserController } from "./presentation/admin-user.controller";
 
 export interface UserModule {
   tenantController: TenantUserController;
+  adminController: AdminUserController;
 }
 
 export interface UserModuleDeps {
