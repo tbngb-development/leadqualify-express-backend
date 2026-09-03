@@ -37,7 +37,7 @@ export class CreateOwnerInviteUseCase {
       expiresAt,
     });
 
-    const inviteUrl = `${env.frontendUrl}/register?ownerInvite=${token}`;
+    const inviteUrl = `${env.frontendUrl}/invite-url/${token}`;
 
     await this.email.send({
       to: input.email,
