@@ -213,6 +213,7 @@ export class ProcessCallWebhookUseCase {
     const parsed = this.parseExtractionData(payload.extracted_data);
     const summary = parsed?.callSummary ?? null;
 
+    // ── Step 1: Persist terminal state (Bolna cost in `cost` field) ──
     await this.webhookRepo.updateCallTerminalState(call.id, {
       status: "COMPLETED",
       summary,
@@ -221,7 +222,7 @@ export class ProcessCallWebhookUseCase {
       duration,
       recording:
         payload.telephony_data?.recording_url ?? payload.recording_url ?? null,
-      cost: payload.total_cost ?? null,
+      cost: payload.total_cost ?? null, // Bolna cost in USD cents
       endedAt: new Date(),
     });
 
@@ -240,20 +241,29 @@ export class ProcessCallWebhookUseCase {
       "COMPLETED",
     );
 
-    // Charge only when lead was reached and duration > 0
+    // ── Step 2: Debit wallet + persist our cost breakdown ──────────
     if (this.debitWalletForCall && duration && duration > 0) {
       try {
-        await this.debitWalletForCall.execute({
+        const debitResult = await this.debitWalletForCall.execute({
           tenantId: call.tenantId,
           callId: call.id,
           bolnaCallId: String(bolnaCallId),
           durationSec: duration,
         });
+
+        // Only record our cost if debit actually succeeded
+        if (debitResult) {
+          await this.webhookRepo.updateCallCostBreakdown(call.id, {
+            platformCost: debitResult.amountPaisa,
+            billableSeconds: debitResult.billableSeconds,
+          });
+        }
       } catch (err) {
         // Never fail webhook resolution on billing errors
         console.error("[Webhook] wallet debit failed:", err);
       }
     }
+    // ───────────────────────────────────────────────────────────────
 
     await this.checkBatchCompletion(call);
   }

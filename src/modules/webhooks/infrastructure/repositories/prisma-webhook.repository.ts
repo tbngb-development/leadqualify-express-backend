@@ -286,6 +286,19 @@ export class PrismaWebhookRepository implements WebhookRepository {
     });
   }
 
+  async updateCallCostBreakdown(
+    callId: string,
+    data: { platformCost: number; billableSeconds: number },
+  ): Promise<void> {
+    await prisma.call.update({
+      where: { id: callId },
+      data: {
+        platformCost: data.platformCost,
+        billableSeconds: data.billableSeconds,
+      },
+    });
+  }
+
   private toMapContext(c: {
     id: string;
     bolnaCallId: string | null;

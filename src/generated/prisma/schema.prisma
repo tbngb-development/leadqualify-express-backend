@@ -319,6 +319,8 @@ model Call {
   status             CallStatus @default(PENDING)
   duration           Int?
   cost               Float?
+  platformCost       Int?
+  billableSeconds    Int? // NEW: Rounded seconds used for billing
   recording          String?
   transcript         String?
   transcriptMessages Json?

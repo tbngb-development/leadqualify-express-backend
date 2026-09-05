@@ -295,6 +295,8 @@ exports.Prisma.CallScalarFieldEnum = {
   status: 'status',
   duration: 'duration',
   cost: 'cost',
+  platformCost: 'platformCost',
+  billableSeconds: 'billableSeconds',
   recording: 'recording',
   transcript: 'transcript',
   transcriptMessages: 'transcriptMessages',

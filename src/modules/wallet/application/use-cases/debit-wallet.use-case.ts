@@ -12,6 +12,13 @@ export interface DebitCallInput {
   durationSec: number;
 }
 
+// ── NEW ──────────────────────────────────────────────────────────
+export interface DebitCallResult {
+  amountPaisa: number;
+  billableSeconds: number;
+}
+// ─────────────────────────────────────────────────────────────────
+
 export class DebitWalletForCallUseCase {
   constructor(
     private readonly walletRepo: WalletRepository,
@@ -20,32 +27,36 @@ export class DebitWalletForCallUseCase {
     private readonly stopBatches: StopBatchesOnInsufficientBalanceUseCase,
   ) {}
 
-  async execute(input: DebitCallInput): Promise<void> {
-    if (input.durationSec <= 0) return;
+  async execute(input: DebitCallInput): Promise<DebitCallResult | null> {
+    if (input.durationSec <= 0) return null;
 
     const plan = await this.planRepo.getActivePlanForTenant(input.tenantId);
     if (!plan || plan.status !== "ACTIVE") {
       throw new TenantPlanNotFoundError(input.tenantId);
     }
 
-    const amount = calculateCallCost({
+    // ── CHANGED: capture full breakdown ──────────────────────────
+    const { billableSeconds, costPaisa } = calculateCallCost({
       durationSec: input.durationSec,
       perMinuteRate: plan.perMinuteRate,
       billingMinimumSec: plan.billingMinimumSec,
       billingIncrementSec: plan.billingIncrementSec,
     });
 
-    if (amount <= 0) return;
+    if (costPaisa <= 0) return null;
 
     await this.walletRepo.debit({
       tenantId: input.tenantId,
-      amount,
-      description: `Call ${input.callId} (${input.durationSec}s)`,
+      amount: costPaisa,
+      description: `Call ${input.callId} (${billableSeconds}s billable)`,
       referenceType: "CALL",
       referenceId: `${input.callId}:${input.bolnaCallId}`,
     });
 
     await this.checkLowBalance.execute({ tenantId: input.tenantId });
     await this.stopBatches.execute({ tenantId: input.tenantId });
+
+    return { amountPaisa: costPaisa, billableSeconds };
+    // ─────────────────────────────────────────────────────────────
   }
 }

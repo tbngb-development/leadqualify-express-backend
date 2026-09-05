@@ -1,6 +1,11 @@
 import { type Prisma } from "../../../../generated/prisma";
 import prisma from "../../../../shared/config/database/prisma";
-import { type CallStatus, type Disposition, type LeadTemperature, type LocationMatch } from "../../../../generated/prisma";
+import {
+  type CallStatus,
+  type Disposition,
+  type LeadTemperature,
+  type LocationMatch,
+} from "../../../../generated/prisma";
 import type {
   CallRepository,
   ListCallsFilters,
@@ -19,7 +24,10 @@ const QUALIFYING_DISPOSITIONS: Disposition[] = [
 ];
 
 export class PrismaCallRepository implements CallRepository {
-  async list(tenantId: string, filters: ListCallsFilters): Promise<PaginatedCallsResult> {
+  async list(
+    tenantId: string,
+    filters: ListCallsFilters,
+  ): Promise<PaginatedCallsResult> {
     const {
       campaignId,
       leadId,
@@ -67,7 +75,8 @@ export class PrismaCallRepository implements CallRepository {
         .split(",")
         .map((d) => d.trim() as Disposition)
         .filter(Boolean);
-      callAnalysisWhere.disposition = disps.length > 1 ? { in: disps } : disps[0];
+      callAnalysisWhere.disposition =
+        disps.length > 1 ? { in: disps } : disps[0];
     }
 
     if (leadTemperature) {
@@ -75,7 +84,8 @@ export class PrismaCallRepository implements CallRepository {
         .split(",")
         .map((t) => t.trim() as LeadTemperature)
         .filter(Boolean);
-      callAnalysisWhere.leadTemperature = temps.length > 1 ? { in: temps } : temps[0];
+      callAnalysisWhere.leadTemperature =
+        temps.length > 1 ? { in: temps } : temps[0];
     }
 
     if (locationMatch) {
@@ -83,7 +93,8 @@ export class PrismaCallRepository implements CallRepository {
         .split(",")
         .map((m) => m.trim() as LocationMatch)
         .filter(Boolean);
-      callAnalysisWhere.locationMatch = matches.length > 1 ? { in: matches } : matches[0];
+      callAnalysisWhere.locationMatch =
+        matches.length > 1 ? { in: matches } : matches[0];
     }
 
     if (Object.keys(callAnalysisWhere).length > 0) {
@@ -138,6 +149,8 @@ export class PrismaCallRepository implements CallRepository {
         status: c.status as CallStatus,
         duration: c.duration,
         cost: c.cost,
+        platformCost: c.platformCost,
+        billableSeconds: c.billableSeconds,
         recording: c.recording,
         transcript: c.transcript,
         transcriptMessages: c.transcriptMessages,
@@ -153,10 +166,13 @@ export class PrismaCallRepository implements CallRepository {
           ? {
               id: c.callAnalysis.id,
               disposition: c.callAnalysis.disposition as Disposition | null,
-              leadTemperature: c.callAnalysis.leadTemperature as LeadTemperature | null,
+              leadTemperature: c.callAnalysis
+                .leadTemperature as LeadTemperature | null,
               preferredConfiguration: c.callAnalysis.preferredConfiguration,
               budgetRange: c.callAnalysis.budgetRange,
-              purchaseTimeline: c.callAnalysis.purchaseTimeline ? String(c.callAnalysis.purchaseTimeline) : null,
+              purchaseTimeline: c.callAnalysis.purchaseTimeline
+                ? String(c.callAnalysis.purchaseTimeline)
+                : null,
             }
           : null,
       })),
@@ -169,7 +185,10 @@ export class PrismaCallRepository implements CallRepository {
     };
   }
 
-  async findById(tenantId: string, id: string): Promise<DetailedCallResult | null> {
+  async findById(
+    tenantId: string,
+    id: string,
+  ): Promise<DetailedCallResult | null> {
     const call = await prisma.call.findFirst({
       where: { id, tenantId },
       include: {
@@ -205,6 +224,8 @@ export class PrismaCallRepository implements CallRepository {
       status: call.status as CallStatus,
       duration: call.duration,
       cost: call.cost,
+      platformCost: call.platformCost,
+      billableSeconds: call.billableSeconds,
       recording: call.recording,
       transcript: call.transcript,
       transcriptMessages: call.transcriptMessages,
@@ -220,24 +241,41 @@ export class PrismaCallRepository implements CallRepository {
         ? {
             id: call.callAnalysis.id,
             disposition: call.callAnalysis.disposition as Disposition | null,
-            leadTemperature: call.callAnalysis.leadTemperature as LeadTemperature | null,
+            leadTemperature: call.callAnalysis
+              .leadTemperature as LeadTemperature | null,
             preferredConfiguration: call.callAnalysis.preferredConfiguration,
             budgetRange: call.callAnalysis.budgetRange,
-            purchaseTimeline: call.callAnalysis.purchaseTimeline ? String(call.callAnalysis.purchaseTimeline) : null,
-            purchasePurpose: call.callAnalysis.purchasePurpose ? String(call.callAnalysis.purchasePurpose) : null,
-            locationMatch: call.callAnalysis.locationMatch as LocationMatch | null,
+            purchaseTimeline: call.callAnalysis.purchaseTimeline
+              ? String(call.callAnalysis.purchaseTimeline)
+              : null,
+            purchasePurpose: call.callAnalysis.purchasePurpose
+              ? String(call.callAnalysis.purchasePurpose)
+              : null,
+            locationMatch: call.callAnalysis
+              .locationMatch as LocationMatch | null,
             customerLocationPref: call.callAnalysis.customerLocationPref,
-            preferredNextAction: call.callAnalysis.preferredNextAction ? String(call.callAnalysis.preferredNextAction) : null,
-            preferredContactChannel: call.callAnalysis.preferredContactChannel ? String(call.callAnalysis.preferredContactChannel) : null,
+            preferredNextAction: call.callAnalysis.preferredNextAction
+              ? String(call.callAnalysis.preferredNextAction)
+              : null,
+            preferredContactChannel: call.callAnalysis.preferredContactChannel
+              ? String(call.callAnalysis.preferredContactChannel)
+              : null,
             followupSchedule: call.callAnalysis.followupSchedule,
-            doNotCall: call.callAnalysis.doNotCall ? String(call.callAnalysis.doNotCall) : null,
-            languageSupportRequired: call.callAnalysis.languageSupportRequired ? String(call.callAnalysis.languageSupportRequired) : null,
+            doNotCall: call.callAnalysis.doNotCall
+              ? String(call.callAnalysis.doNotCall)
+              : null,
+            languageSupportRequired: call.callAnalysis.languageSupportRequired
+              ? String(call.callAnalysis.languageSupportRequired)
+              : null,
           }
         : null,
     };
   }
 
-  async findTranscriptById(tenantId: string, id: string): Promise<CallTranscriptResult | null> {
+  async findTranscriptById(
+    tenantId: string,
+    id: string,
+  ): Promise<CallTranscriptResult | null> {
     const call = await prisma.call.findFirst({
       where: { id, tenantId },
       select: {
@@ -268,13 +306,17 @@ export class PrismaCallRepository implements CallRepository {
         ? {
             id: call.callAnalysis.id,
             disposition: call.callAnalysis.disposition as Disposition | null,
-            leadTemperature: call.callAnalysis.leadTemperature as LeadTemperature | null,
+            leadTemperature: call.callAnalysis
+              .leadTemperature as LeadTemperature | null,
           }
         : null,
     };
   }
 
-  async getStats(tenantId: string, filters: CallStatsFilters): Promise<CallStatsResult> {
+  async getStats(
+    tenantId: string,
+    filters: CallStatsFilters,
+  ): Promise<CallStatsResult> {
     const { campaignId, leadId } = filters;
 
     const where: Prisma.CallWhereInput = {
