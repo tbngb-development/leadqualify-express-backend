@@ -35,9 +35,7 @@ export interface WebhookRepository {
     leadId: string,
     batchId: string,
   ): Promise<ResolvedCallContext | null>;
-  findBatchIdByBolnaBatchId(
-    bolnaBatchId: string,
-  ): Promise<{
+  findBatchIdByBolnaBatchId(bolnaBatchId: string): Promise<{
     id: string;
     tenantId: string;
     campaignId: string;
@@ -118,5 +116,11 @@ export interface WebhookRepository {
     campaignId: string,
     status: CampaignStatus,
     completedAt?: Date,
+  ): Promise<void>;
+
+  /** Persist the calculated cost breakdown after a successful wallet debit. */
+  updateCallCostBreakdown(
+    callId: string,
+    data: { platformCost: number; billableSeconds: number },
   ): Promise<void>;
 }

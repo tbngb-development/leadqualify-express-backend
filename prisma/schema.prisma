@@ -24,7 +24,7 @@ model Tenant {
   bolnaApiKeyId String?
   bolnaApiKey   BolnaApiKey?   @relation(fields: [bolnaApiKeyId], references: [id])
   tenantPlan    TenantPlan?
-  // wallet        Wallet? // Uncomment in Sprint 2
+  wallet        Wallet?
   campaigns     Campaign[]
   batches       LeadBatch[]
   leads         Lead[]
@@ -41,6 +41,7 @@ model User {
   email     String   @unique
   password  String
   name      String
+  isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -318,6 +319,8 @@ model Call {
   status             CallStatus @default(PENDING)
   duration           Int?
   cost               Float?
+  platformCost       Int?
+  billableSeconds    Int? // NEW: Rounded seconds used for billing
   recording          String?
   transcript         String?
   transcriptMessages Json?
@@ -486,7 +489,7 @@ model Plan {
   updatedAt DateTime @updatedAt
 
   tenantPlans TenantPlan[]
-  // invites             TenantInvite[] // Uncomment in Sprint 2
+  invites     TenantInvite[]
 }
 
 model TenantPlan {
@@ -533,4 +536,111 @@ model BolnaApiKey {
 enum BolnaApiKeyType {
   GENERAL
   CUSTOM
+}
+
+model TenantInvite {
+  id           String       @id @default(uuid())
+  email        String
+  tenantName   String
+  token        String       @unique
+  status       InviteStatus @default(PENDING)
+  planId       String
+  invitedBy    String
+  expiresAt    DateTime
+  acceptedAt   DateTime?
+  resendCount  Int          @default(0)
+  lastResentAt DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  plan Plan @relation(fields: [planId], references: [id])
+
+  @@index([token])
+  @@index([email])
+  @@index([status])
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
+  REVOKED
+}
+
+model Wallet {
+  id                  String    @id @default(uuid())
+  tenantId            String    @unique
+  balance             Int       @default(0)
+  bonusBalance        Int       @default(0)
+  bonusExpiresAt      DateTime?
+  isActive            Boolean   @default(true)
+  lowBalanceThreshold Int?      @default(10000)
+  lowBalanceAlertSent Boolean   @default(false)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  tenant       Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  transactions WalletTransaction[]
+  recharges    Recharge[]
+}
+
+model WalletTransaction {
+  id                String       @id @default(uuid())
+  walletId          String
+  tenantId          String
+  type              WalletTxType
+  amount            Int
+  balanceAfter      Int
+  bonusBalanceAfter Int
+  description       String
+  referenceType     String?
+  referenceId       String?
+  createdAt         DateTime     @default(now())
+  createdBy         String?
+
+  wallet Wallet @relation(fields: [walletId], references: [id])
+
+  @@unique([referenceType, referenceId])
+  @@index([tenantId, createdAt])
+  @@index([walletId, createdAt])
+}
+
+model Recharge {
+  id                String          @id @default(uuid())
+  walletId          String
+  tenantId          String
+  amount            Int
+  purpose           RechargePurpose @default(WALLET_TOPUP)
+  status            RechargeStatus
+  razorpayOrderId   String?         @unique
+  razorpayPaymentId String?         @unique
+  razorpaySignature String?
+  failureReason     String?
+  planId            String?
+  createdAt         DateTime        @default(now())
+  completedAt       DateTime?
+
+  wallet Wallet @relation(fields: [walletId], references: [id])
+
+  @@index([tenantId, status])
+}
+
+enum WalletTxType {
+  CREDIT
+  DEBIT
+  REFUND
+  BONUS
+  ADJUSTMENT
+}
+
+enum RechargeStatus {
+  INITIATED
+  SUCCESS
+  FAILED
+  REFUNDED
+}
+
+enum RechargePurpose {
+  ONBOARDING
+  WALLET_TOPUP
 }

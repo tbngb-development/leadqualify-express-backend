@@ -125,6 +125,24 @@ export class PrismaPlanRepository implements PlanRepository {
     };
   }
 
+  async selectPlan(tenantId: string, planId: string): Promise<TenantPlan> {
+    return prisma.tenantPlan.upsert({
+      where: { tenantId },
+      create: {
+        tenantId,
+        planId,
+        status: "PENDING_PAYMENT",
+      },
+      update: {
+        planId,
+        status: "PENDING_PAYMENT",
+        // Reset activation fields in case user switches plans mid-onboarding
+        activatedAt: null,
+        bonusExpiresAt: null,
+      },
+    });
+  }
+
   async activatePlan(
     tenantId: string,
     planId: string,

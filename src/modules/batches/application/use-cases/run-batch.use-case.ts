@@ -1,6 +1,7 @@
 import type { BatchRepository } from "../interfaces/batch-repository.interface";
 import type { CampaignRepository } from "../../../campaigns/application/interfaces/campaign-repository.interface";
 import type { BolnaBatchProvider } from "../../infrastructure/bolna-batch-provider.interface";
+import type { CheckBalanceForBatchUseCase } from "../../../wallet/application/use-cases/check-balance-for-batch.use-case";
 import {
   BatchNotFoundError,
   BatchOperationError,
@@ -16,6 +17,7 @@ export class RunBatchUseCase {
     private readonly batchRepo: BatchRepository,
     private readonly campaignRepo: CampaignRepository,
     private readonly bolnaProvider: BolnaBatchProvider,
+    private readonly checkBalanceForBatch?: CheckBalanceForBatchUseCase,
   ) {}
 
   async execute(tenantId: string, campaignId: string, batchId: string) {
@@ -31,6 +33,23 @@ export class RunBatchUseCase {
       );
     }
     if (!batchData.bolnaBatchId) throw new BatchNoBolnaIdError();
+
+    let balanceWarning: { balance: number; estimatedCost: number } | null =
+      null;
+
+    if (this.checkBalanceForBatch) {
+      const check = await this.checkBalanceForBatch.execute({
+        tenantId,
+        leadCount: batchData.totalLeads,
+      });
+      // Hard block (< 50% estimate) throws InsufficientBalanceError inside use case
+      if (check.warning) {
+        balanceWarning = {
+          balance: check.balance,
+          estimatedCost: check.estimatedCost,
+        };
+      }
+    }
 
     const scheduledAt = new Date(Date.now() + 2 * 60 * 1000);
     const isoString = toBolnaISO(scheduledAt);
@@ -49,7 +68,6 @@ export class RunBatchUseCase {
       bolnaScheduledAt,
     });
 
-    // Transition campaign to RUNNING if DRAFT
     const campaign = await this.campaignRepo.findById(tenantId, campaignId);
     if (campaign && campaign.status === "DRAFT") {
       await this.campaignRepo.updateStatus(campaignId, "RUNNING", {
@@ -60,6 +78,7 @@ export class RunBatchUseCase {
     return {
       batch: updatedBatch,
       message: `Batch scheduled. Bolna will start at ${bolnaScheduledAt ?? isoString}`,
+      ...(balanceWarning && { balanceWarning }),
     };
   }
 }

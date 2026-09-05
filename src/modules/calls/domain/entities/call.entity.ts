@@ -10,6 +10,8 @@ export interface CallEntityData {
   status: CallStatus;
   duration: number | null;
   cost: number | null;
+  platformCost: number | null;
+  billableSeconds: number | null;
   recording: string | null;
   transcript: string | null;
   transcriptMessages: unknown | null;
@@ -47,6 +49,13 @@ export class CallEntity {
   }
   get cost(): number | null {
     return this.data.cost;
+  }
+
+  get ourCostPaisa(): number | null {
+    return this.data.platformCost;
+  }
+  get billableSeconds(): number | null {
+    return this.data.billableSeconds;
   }
 
   toPrimitives(): CallEntityData {

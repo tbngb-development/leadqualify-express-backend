@@ -5,9 +5,15 @@ import { CreateUserUseCase } from "./application/use-cases/create-user.use-case"
 import { UpdateUserUseCase } from "./application/use-cases/update-user.use-case";
 import { DeleteUserUseCase } from "./application/use-cases/delete-user.use-case";
 import { TenantUserController } from "./presentation/tenant-user.controller";
+import { AdminUserController } from "./presentation/admin-user.controller";
+import {
+  DeactivateUserUseCase,
+  ListAdminUsersUseCase,
+} from "./application/use-cases/admin-users.use-cases";
 
 export interface UserModule {
   tenantController: TenantUserController;
+  adminController: AdminUserController;
 }
 
 export interface UserModuleDeps {
@@ -23,6 +29,10 @@ export function buildUserModule(deps: UserModuleDeps): UserModule {
       new CreateUserUseCase(repo, deps.passwordService),
       new UpdateUserUseCase(repo),
       new DeleteUserUseCase(repo),
+    ),
+    adminController: new AdminUserController(
+      new ListAdminUsersUseCase(),
+      new DeactivateUserUseCase(),
     ),
   };
 }

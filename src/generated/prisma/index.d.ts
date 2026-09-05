@@ -88,6 +88,26 @@ export type TenantPlan = $Result.DefaultSelection<Prisma.$TenantPlanPayload>
  * 
  */
 export type BolnaApiKey = $Result.DefaultSelection<Prisma.$BolnaApiKeyPayload>
+/**
+ * Model TenantInvite
+ * 
+ */
+export type TenantInvite = $Result.DefaultSelection<Prisma.$TenantInvitePayload>
+/**
+ * Model Wallet
+ * 
+ */
+export type Wallet = $Result.DefaultSelection<Prisma.$WalletPayload>
+/**
+ * Model WalletTransaction
+ * 
+ */
+export type WalletTransaction = $Result.DefaultSelection<Prisma.$WalletTransactionPayload>
+/**
+ * Model Recharge
+ * 
+ */
+export type Recharge = $Result.DefaultSelection<Prisma.$RechargePayload>
 
 /**
  * Enums
@@ -258,6 +278,45 @@ export const BolnaApiKeyType: {
 
 export type BolnaApiKeyType = (typeof BolnaApiKeyType)[keyof typeof BolnaApiKeyType]
 
+
+export const InviteStatus: {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  EXPIRED: 'EXPIRED',
+  REVOKED: 'REVOKED'
+};
+
+export type InviteStatus = (typeof InviteStatus)[keyof typeof InviteStatus]
+
+
+export const WalletTxType: {
+  CREDIT: 'CREDIT',
+  DEBIT: 'DEBIT',
+  REFUND: 'REFUND',
+  BONUS: 'BONUS',
+  ADJUSTMENT: 'ADJUSTMENT'
+};
+
+export type WalletTxType = (typeof WalletTxType)[keyof typeof WalletTxType]
+
+
+export const RechargeStatus: {
+  INITIATED: 'INITIATED',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED',
+  REFUNDED: 'REFUNDED'
+};
+
+export type RechargeStatus = (typeof RechargeStatus)[keyof typeof RechargeStatus]
+
+
+export const RechargePurpose: {
+  ONBOARDING: 'ONBOARDING',
+  WALLET_TOPUP: 'WALLET_TOPUP'
+};
+
+export type RechargePurpose = (typeof RechargePurpose)[keyof typeof RechargePurpose]
+
 }
 
 export type TenantRole = $Enums.TenantRole
@@ -319,6 +378,22 @@ export const PlanStatus: typeof $Enums.PlanStatus
 export type BolnaApiKeyType = $Enums.BolnaApiKeyType
 
 export const BolnaApiKeyType: typeof $Enums.BolnaApiKeyType
+
+export type InviteStatus = $Enums.InviteStatus
+
+export const InviteStatus: typeof $Enums.InviteStatus
+
+export type WalletTxType = $Enums.WalletTxType
+
+export const WalletTxType: typeof $Enums.WalletTxType
+
+export type RechargeStatus = $Enums.RechargeStatus
+
+export const RechargeStatus: typeof $Enums.RechargeStatus
+
+export type RechargePurpose = $Enums.RechargePurpose
+
+export const RechargePurpose: typeof $Enums.RechargePurpose
 
 /**
  * ##  Prisma Client ʲˢ
@@ -587,6 +662,46 @@ export class PrismaClient<
     * ```
     */
   get bolnaApiKey(): Prisma.BolnaApiKeyDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.tenantInvite`: Exposes CRUD operations for the **TenantInvite** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TenantInvites
+    * const tenantInvites = await prisma.tenantInvite.findMany()
+    * ```
+    */
+  get tenantInvite(): Prisma.TenantInviteDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.wallet`: Exposes CRUD operations for the **Wallet** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Wallets
+    * const wallets = await prisma.wallet.findMany()
+    * ```
+    */
+  get wallet(): Prisma.WalletDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.walletTransaction`: Exposes CRUD operations for the **WalletTransaction** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WalletTransactions
+    * const walletTransactions = await prisma.walletTransaction.findMany()
+    * ```
+    */
+  get walletTransaction(): Prisma.WalletTransactionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.recharge`: Exposes CRUD operations for the **Recharge** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Recharges
+    * const recharges = await prisma.recharge.findMany()
+    * ```
+    */
+  get recharge(): Prisma.RechargeDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1042,7 +1157,11 @@ export namespace Prisma {
     CallAnalysis: 'CallAnalysis',
     Plan: 'Plan',
     TenantPlan: 'TenantPlan',
-    BolnaApiKey: 'BolnaApiKey'
+    BolnaApiKey: 'BolnaApiKey',
+    TenantInvite: 'TenantInvite',
+    Wallet: 'Wallet',
+    WalletTransaction: 'WalletTransaction',
+    Recharge: 'Recharge'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1061,7 +1180,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "tenant" | "user" | "tenantUser" | "platformAdmin" | "refreshToken" | "assistant" | "brochure" | "campaign" | "leadBatch" | "lead" | "call" | "callAnalysis" | "plan" | "tenantPlan" | "bolnaApiKey"
+      modelProps: "tenant" | "user" | "tenantUser" | "platformAdmin" | "refreshToken" | "assistant" | "brochure" | "campaign" | "leadBatch" | "lead" | "call" | "callAnalysis" | "plan" | "tenantPlan" | "bolnaApiKey" | "tenantInvite" | "wallet" | "walletTransaction" | "recharge"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2175,6 +2294,302 @@ export namespace Prisma {
           }
         }
       }
+      TenantInvite: {
+        payload: Prisma.$TenantInvitePayload<ExtArgs>
+        fields: Prisma.TenantInviteFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TenantInviteFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantInvitePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TenantInviteFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantInvitePayload>
+          }
+          findFirst: {
+            args: Prisma.TenantInviteFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantInvitePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TenantInviteFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantInvitePayload>
+          }
+          findMany: {
+            args: Prisma.TenantInviteFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantInvitePayload>[]
+          }
+          create: {
+            args: Prisma.TenantInviteCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantInvitePayload>
+          }
+          createMany: {
+            args: Prisma.TenantInviteCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TenantInviteCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantInvitePayload>[]
+          }
+          delete: {
+            args: Prisma.TenantInviteDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantInvitePayload>
+          }
+          update: {
+            args: Prisma.TenantInviteUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantInvitePayload>
+          }
+          deleteMany: {
+            args: Prisma.TenantInviteDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TenantInviteUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TenantInviteUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantInvitePayload>[]
+          }
+          upsert: {
+            args: Prisma.TenantInviteUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantInvitePayload>
+          }
+          aggregate: {
+            args: Prisma.TenantInviteAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTenantInvite>
+          }
+          groupBy: {
+            args: Prisma.TenantInviteGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TenantInviteGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TenantInviteCountArgs<ExtArgs>
+            result: $Utils.Optional<TenantInviteCountAggregateOutputType> | number
+          }
+        }
+      }
+      Wallet: {
+        payload: Prisma.$WalletPayload<ExtArgs>
+        fields: Prisma.WalletFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WalletFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WalletPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WalletFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WalletPayload>
+          }
+          findFirst: {
+            args: Prisma.WalletFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WalletPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WalletFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WalletPayload>
+          }
+          findMany: {
+            args: Prisma.WalletFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WalletPayload>[]
+          }
+          create: {
+            args: Prisma.WalletCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WalletPayload>
+          }
+          createMany: {
+            args: Prisma.WalletCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WalletCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WalletPayload>[]
+          }
+          delete: {
+            args: Prisma.WalletDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WalletPayload>
+          }
+          update: {
+            args: Prisma.WalletUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WalletPayload>
+          }
+          deleteMany: {
+            args: Prisma.WalletDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WalletUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WalletUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WalletPayload>[]
+          }
+          upsert: {
+            args: Prisma.WalletUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WalletPayload>
+          }
+          aggregate: {
+            args: Prisma.WalletAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWallet>
+          }
+          groupBy: {
+            args: Prisma.WalletGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WalletGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WalletCountArgs<ExtArgs>
+            result: $Utils.Optional<WalletCountAggregateOutputType> | number
+          }
+        }
+      }
+      WalletTransaction: {
+        payload: Prisma.$WalletTransactionPayload<ExtArgs>
+        fields: Prisma.WalletTransactionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WalletTransactionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WalletTransactionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WalletTransactionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WalletTransactionPayload>
+          }
+          findFirst: {
+            args: Prisma.WalletTransactionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WalletTransactionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WalletTransactionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WalletTransactionPayload>
+          }
+          findMany: {
+            args: Prisma.WalletTransactionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WalletTransactionPayload>[]
+          }
+          create: {
+            args: Prisma.WalletTransactionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WalletTransactionPayload>
+          }
+          createMany: {
+            args: Prisma.WalletTransactionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WalletTransactionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WalletTransactionPayload>[]
+          }
+          delete: {
+            args: Prisma.WalletTransactionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WalletTransactionPayload>
+          }
+          update: {
+            args: Prisma.WalletTransactionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WalletTransactionPayload>
+          }
+          deleteMany: {
+            args: Prisma.WalletTransactionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WalletTransactionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WalletTransactionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WalletTransactionPayload>[]
+          }
+          upsert: {
+            args: Prisma.WalletTransactionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WalletTransactionPayload>
+          }
+          aggregate: {
+            args: Prisma.WalletTransactionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWalletTransaction>
+          }
+          groupBy: {
+            args: Prisma.WalletTransactionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WalletTransactionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WalletTransactionCountArgs<ExtArgs>
+            result: $Utils.Optional<WalletTransactionCountAggregateOutputType> | number
+          }
+        }
+      }
+      Recharge: {
+        payload: Prisma.$RechargePayload<ExtArgs>
+        fields: Prisma.RechargeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RechargeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RechargePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RechargeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RechargePayload>
+          }
+          findFirst: {
+            args: Prisma.RechargeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RechargePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RechargeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RechargePayload>
+          }
+          findMany: {
+            args: Prisma.RechargeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RechargePayload>[]
+          }
+          create: {
+            args: Prisma.RechargeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RechargePayload>
+          }
+          createMany: {
+            args: Prisma.RechargeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RechargeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RechargePayload>[]
+          }
+          delete: {
+            args: Prisma.RechargeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RechargePayload>
+          }
+          update: {
+            args: Prisma.RechargeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RechargePayload>
+          }
+          deleteMany: {
+            args: Prisma.RechargeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RechargeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RechargeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RechargePayload>[]
+          }
+          upsert: {
+            args: Prisma.RechargeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RechargePayload>
+          }
+          aggregate: {
+            args: Prisma.RechargeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRecharge>
+          }
+          groupBy: {
+            args: Prisma.RechargeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RechargeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RechargeCountArgs<ExtArgs>
+            result: $Utils.Optional<RechargeCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2286,6 +2701,10 @@ export namespace Prisma {
     plan?: PlanOmit
     tenantPlan?: TenantPlanOmit
     bolnaApiKey?: BolnaApiKeyOmit
+    tenantInvite?: TenantInviteOmit
+    wallet?: WalletOmit
+    walletTransaction?: WalletTransactionOmit
+    recharge?: RechargeOmit
   }
 
   /* Types for Logging */
@@ -2683,10 +3102,12 @@ export namespace Prisma {
 
   export type PlanCountOutputType = {
     tenantPlans: number
+    invites: number
   }
 
   export type PlanCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenantPlans?: boolean | PlanCountOutputTypeCountTenantPlansArgs
+    invites?: boolean | PlanCountOutputTypeCountInvitesArgs
   }
 
   // Custom InputTypes
@@ -2705,6 +3126,13 @@ export namespace Prisma {
    */
   export type PlanCountOutputTypeCountTenantPlansArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TenantPlanWhereInput
+  }
+
+  /**
+   * PlanCountOutputType without action
+   */
+  export type PlanCountOutputTypeCountInvitesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TenantInviteWhereInput
   }
 
 
@@ -2736,6 +3164,46 @@ export namespace Prisma {
    */
   export type BolnaApiKeyCountOutputTypeCountTenantsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TenantWhereInput
+  }
+
+
+  /**
+   * Count Type WalletCountOutputType
+   */
+
+  export type WalletCountOutputType = {
+    transactions: number
+    recharges: number
+  }
+
+  export type WalletCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    transactions?: boolean | WalletCountOutputTypeCountTransactionsArgs
+    recharges?: boolean | WalletCountOutputTypeCountRechargesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * WalletCountOutputType without action
+   */
+  export type WalletCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletCountOutputType
+     */
+    select?: WalletCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * WalletCountOutputType without action
+   */
+  export type WalletCountOutputTypeCountTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WalletTransactionWhereInput
+  }
+
+  /**
+   * WalletCountOutputType without action
+   */
+  export type WalletCountOutputTypeCountRechargesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RechargeWhereInput
   }
 
 
@@ -2926,6 +3394,7 @@ export namespace Prisma {
     memberships?: boolean | Tenant$membershipsArgs<ExtArgs>
     bolnaApiKey?: boolean | Tenant$bolnaApiKeyArgs<ExtArgs>
     tenantPlan?: boolean | Tenant$tenantPlanArgs<ExtArgs>
+    wallet?: boolean | Tenant$walletArgs<ExtArgs>
     campaigns?: boolean | Tenant$campaignsArgs<ExtArgs>
     batches?: boolean | Tenant$batchesArgs<ExtArgs>
     leads?: boolean | Tenant$leadsArgs<ExtArgs>
@@ -2973,6 +3442,7 @@ export namespace Prisma {
     memberships?: boolean | Tenant$membershipsArgs<ExtArgs>
     bolnaApiKey?: boolean | Tenant$bolnaApiKeyArgs<ExtArgs>
     tenantPlan?: boolean | Tenant$tenantPlanArgs<ExtArgs>
+    wallet?: boolean | Tenant$walletArgs<ExtArgs>
     campaigns?: boolean | Tenant$campaignsArgs<ExtArgs>
     batches?: boolean | Tenant$batchesArgs<ExtArgs>
     leads?: boolean | Tenant$leadsArgs<ExtArgs>
@@ -2995,6 +3465,7 @@ export namespace Prisma {
       memberships: Prisma.$TenantUserPayload<ExtArgs>[]
       bolnaApiKey: Prisma.$BolnaApiKeyPayload<ExtArgs> | null
       tenantPlan: Prisma.$TenantPlanPayload<ExtArgs> | null
+      wallet: Prisma.$WalletPayload<ExtArgs> | null
       campaigns: Prisma.$CampaignPayload<ExtArgs>[]
       batches: Prisma.$LeadBatchPayload<ExtArgs>[]
       leads: Prisma.$LeadPayload<ExtArgs>[]
@@ -3408,6 +3879,7 @@ export namespace Prisma {
     memberships<T extends Tenant$membershipsArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$membershipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     bolnaApiKey<T extends Tenant$bolnaApiKeyArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$bolnaApiKeyArgs<ExtArgs>>): Prisma__BolnaApiKeyClient<$Result.GetResult<Prisma.$BolnaApiKeyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     tenantPlan<T extends Tenant$tenantPlanArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$tenantPlanArgs<ExtArgs>>): Prisma__TenantPlanClient<$Result.GetResult<Prisma.$TenantPlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    wallet<T extends Tenant$walletArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$walletArgs<ExtArgs>>): Prisma__WalletClient<$Result.GetResult<Prisma.$WalletPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     campaigns<T extends Tenant$campaignsArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$campaignsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     batches<T extends Tenant$batchesArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$batchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadBatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     leads<T extends Tenant$leadsArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$leadsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3909,6 +4381,25 @@ export namespace Prisma {
   }
 
   /**
+   * Tenant.wallet
+   */
+  export type Tenant$walletArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Wallet
+     */
+    select?: WalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Wallet
+     */
+    omit?: WalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletInclude<ExtArgs> | null
+    where?: WalletWhereInput
+  }
+
+  /**
    * Tenant.campaigns
    */
   export type Tenant$campaignsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4110,6 +4601,7 @@ export namespace Prisma {
     email: string | null
     password: string | null
     name: string | null
+    isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4119,6 +4611,7 @@ export namespace Prisma {
     email: string | null
     password: string | null
     name: string | null
+    isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4128,6 +4621,7 @@ export namespace Prisma {
     email: number
     password: number
     name: number
+    isActive: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -4139,6 +4633,7 @@ export namespace Prisma {
     email?: true
     password?: true
     name?: true
+    isActive?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4148,6 +4643,7 @@ export namespace Prisma {
     email?: true
     password?: true
     name?: true
+    isActive?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4157,6 +4653,7 @@ export namespace Prisma {
     email?: true
     password?: true
     name?: true
+    isActive?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -4239,6 +4736,7 @@ export namespace Prisma {
     email: string
     password: string
     name: string
+    isActive: boolean
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -4265,6 +4763,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     name?: boolean
+    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     memberships?: boolean | User$membershipsArgs<ExtArgs>
@@ -4278,6 +4777,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     name?: boolean
+    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -4287,6 +4787,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     name?: boolean
+    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -4296,11 +4797,12 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     name?: boolean
+    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password" | "name" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     memberships?: boolean | User$membershipsArgs<ExtArgs>
     platformAdmin?: boolean | User$platformAdminArgs<ExtArgs>
@@ -4322,6 +4824,7 @@ export namespace Prisma {
       email: string
       password: string
       name: string
+      isActive: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -4754,6 +5257,7 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
     readonly name: FieldRef<"User", 'String'>
+    readonly isActive: FieldRef<"User", 'Boolean'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -15178,11 +15682,15 @@ export namespace Prisma {
   export type CallAvgAggregateOutputType = {
     duration: number | null
     cost: number | null
+    platformCost: number | null
+    billableSeconds: number | null
   }
 
   export type CallSumAggregateOutputType = {
     duration: number | null
     cost: number | null
+    platformCost: number | null
+    billableSeconds: number | null
   }
 
   export type CallMinAggregateOutputType = {
@@ -15195,6 +15703,8 @@ export namespace Prisma {
     status: $Enums.CallStatus | null
     duration: number | null
     cost: number | null
+    platformCost: number | null
+    billableSeconds: number | null
     recording: string | null
     transcript: string | null
     summary: string | null
@@ -15214,6 +15724,8 @@ export namespace Prisma {
     status: $Enums.CallStatus | null
     duration: number | null
     cost: number | null
+    platformCost: number | null
+    billableSeconds: number | null
     recording: string | null
     transcript: string | null
     summary: string | null
@@ -15233,6 +15745,8 @@ export namespace Prisma {
     status: number
     duration: number
     cost: number
+    platformCost: number
+    billableSeconds: number
     recording: number
     transcript: number
     transcriptMessages: number
@@ -15249,11 +15763,15 @@ export namespace Prisma {
   export type CallAvgAggregateInputType = {
     duration?: true
     cost?: true
+    platformCost?: true
+    billableSeconds?: true
   }
 
   export type CallSumAggregateInputType = {
     duration?: true
     cost?: true
+    platformCost?: true
+    billableSeconds?: true
   }
 
   export type CallMinAggregateInputType = {
@@ -15266,6 +15784,8 @@ export namespace Prisma {
     status?: true
     duration?: true
     cost?: true
+    platformCost?: true
+    billableSeconds?: true
     recording?: true
     transcript?: true
     summary?: true
@@ -15285,6 +15805,8 @@ export namespace Prisma {
     status?: true
     duration?: true
     cost?: true
+    platformCost?: true
+    billableSeconds?: true
     recording?: true
     transcript?: true
     summary?: true
@@ -15304,6 +15826,8 @@ export namespace Prisma {
     status?: true
     duration?: true
     cost?: true
+    platformCost?: true
+    billableSeconds?: true
     recording?: true
     transcript?: true
     transcriptMessages?: true
@@ -15412,6 +15936,8 @@ export namespace Prisma {
     status: $Enums.CallStatus
     duration: number | null
     cost: number | null
+    platformCost: number | null
+    billableSeconds: number | null
     recording: string | null
     transcript: string | null
     transcriptMessages: JsonValue | null
@@ -15452,6 +15978,8 @@ export namespace Prisma {
     status?: boolean
     duration?: boolean
     cost?: boolean
+    platformCost?: boolean
+    billableSeconds?: boolean
     recording?: boolean
     transcript?: boolean
     transcriptMessages?: boolean
@@ -15478,6 +16006,8 @@ export namespace Prisma {
     status?: boolean
     duration?: boolean
     cost?: boolean
+    platformCost?: boolean
+    billableSeconds?: boolean
     recording?: boolean
     transcript?: boolean
     transcriptMessages?: boolean
@@ -15503,6 +16033,8 @@ export namespace Prisma {
     status?: boolean
     duration?: boolean
     cost?: boolean
+    platformCost?: boolean
+    billableSeconds?: boolean
     recording?: boolean
     transcript?: boolean
     transcriptMessages?: boolean
@@ -15528,6 +16060,8 @@ export namespace Prisma {
     status?: boolean
     duration?: boolean
     cost?: boolean
+    platformCost?: boolean
+    billableSeconds?: boolean
     recording?: boolean
     transcript?: boolean
     transcriptMessages?: boolean
@@ -15539,7 +16073,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type CallOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bolnaCallId" | "tenantId" | "campaignId" | "leadId" | "batchId" | "status" | "duration" | "cost" | "recording" | "transcript" | "transcriptMessages" | "summary" | "callHistory" | "startedAt" | "endedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["call"]>
+  export type CallOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bolnaCallId" | "tenantId" | "campaignId" | "leadId" | "batchId" | "status" | "duration" | "cost" | "platformCost" | "billableSeconds" | "recording" | "transcript" | "transcriptMessages" | "summary" | "callHistory" | "startedAt" | "endedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["call"]>
   export type CallInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
@@ -15579,6 +16113,8 @@ export namespace Prisma {
       status: $Enums.CallStatus
       duration: number | null
       cost: number | null
+      platformCost: number | null
+      billableSeconds: number | null
       recording: string | null
       transcript: string | null
       transcriptMessages: Prisma.JsonValue | null
@@ -16025,6 +16561,8 @@ export namespace Prisma {
     readonly status: FieldRef<"Call", 'CallStatus'>
     readonly duration: FieldRef<"Call", 'Int'>
     readonly cost: FieldRef<"Call", 'Float'>
+    readonly platformCost: FieldRef<"Call", 'Int'>
+    readonly billableSeconds: FieldRef<"Call", 'Int'>
     readonly recording: FieldRef<"Call", 'String'>
     readonly transcript: FieldRef<"Call", 'String'>
     readonly transcriptMessages: FieldRef<"Call", 'Json'>
@@ -18056,6 +18594,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     tenantPlans?: boolean | Plan$tenantPlansArgs<ExtArgs>
+    invites?: boolean | Plan$invitesArgs<ExtArgs>
     _count?: boolean | PlanCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["plan"]>
 
@@ -18125,6 +18664,7 @@ export namespace Prisma {
   export type PlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "isActive" | "displayOrder" | "onboardingFee" | "perMinuteRate" | "billingMinimumSec" | "billingIncrementSec" | "maxActiveCampaigns" | "maxLeadsPerBatch" | "retryAutomation" | "industryPackLimit" | "features" | "includedBalance" | "bonusValidityDays" | "createdAt" | "updatedAt", ExtArgs["result"]["plan"]>
   export type PlanInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tenantPlans?: boolean | Plan$tenantPlansArgs<ExtArgs>
+    invites?: boolean | Plan$invitesArgs<ExtArgs>
     _count?: boolean | PlanCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PlanIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -18134,6 +18674,7 @@ export namespace Prisma {
     name: "Plan"
     objects: {
       tenantPlans: Prisma.$TenantPlanPayload<ExtArgs>[]
+      invites: Prisma.$TenantInvitePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -18549,6 +19090,7 @@ export namespace Prisma {
   export interface Prisma__PlanClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     tenantPlans<T extends Plan$tenantPlansArgs<ExtArgs> = {}>(args?: Subset<T, Plan$tenantPlansArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    invites<T extends Plan$invitesArgs<ExtArgs> = {}>(args?: Subset<T, Plan$invitesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -19005,6 +19547,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: TenantPlanScalarFieldEnum | TenantPlanScalarFieldEnum[]
+  }
+
+  /**
+   * Plan.invites
+   */
+  export type Plan$invitesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantInvite
+     */
+    select?: TenantInviteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantInvite
+     */
+    omit?: TenantInviteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInviteInclude<ExtArgs> | null
+    where?: TenantInviteWhereInput
+    orderBy?: TenantInviteOrderByWithRelationInput | TenantInviteOrderByWithRelationInput[]
+    cursor?: TenantInviteWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TenantInviteScalarFieldEnum | TenantInviteScalarFieldEnum[]
   }
 
   /**
@@ -21267,6 +21833,4812 @@ export namespace Prisma {
 
 
   /**
+   * Model TenantInvite
+   */
+
+  export type AggregateTenantInvite = {
+    _count: TenantInviteCountAggregateOutputType | null
+    _avg: TenantInviteAvgAggregateOutputType | null
+    _sum: TenantInviteSumAggregateOutputType | null
+    _min: TenantInviteMinAggregateOutputType | null
+    _max: TenantInviteMaxAggregateOutputType | null
+  }
+
+  export type TenantInviteAvgAggregateOutputType = {
+    resendCount: number | null
+  }
+
+  export type TenantInviteSumAggregateOutputType = {
+    resendCount: number | null
+  }
+
+  export type TenantInviteMinAggregateOutputType = {
+    id: string | null
+    email: string | null
+    tenantName: string | null
+    token: string | null
+    status: $Enums.InviteStatus | null
+    planId: string | null
+    invitedBy: string | null
+    expiresAt: Date | null
+    acceptedAt: Date | null
+    resendCount: number | null
+    lastResentAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TenantInviteMaxAggregateOutputType = {
+    id: string | null
+    email: string | null
+    tenantName: string | null
+    token: string | null
+    status: $Enums.InviteStatus | null
+    planId: string | null
+    invitedBy: string | null
+    expiresAt: Date | null
+    acceptedAt: Date | null
+    resendCount: number | null
+    lastResentAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TenantInviteCountAggregateOutputType = {
+    id: number
+    email: number
+    tenantName: number
+    token: number
+    status: number
+    planId: number
+    invitedBy: number
+    expiresAt: number
+    acceptedAt: number
+    resendCount: number
+    lastResentAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type TenantInviteAvgAggregateInputType = {
+    resendCount?: true
+  }
+
+  export type TenantInviteSumAggregateInputType = {
+    resendCount?: true
+  }
+
+  export type TenantInviteMinAggregateInputType = {
+    id?: true
+    email?: true
+    tenantName?: true
+    token?: true
+    status?: true
+    planId?: true
+    invitedBy?: true
+    expiresAt?: true
+    acceptedAt?: true
+    resendCount?: true
+    lastResentAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TenantInviteMaxAggregateInputType = {
+    id?: true
+    email?: true
+    tenantName?: true
+    token?: true
+    status?: true
+    planId?: true
+    invitedBy?: true
+    expiresAt?: true
+    acceptedAt?: true
+    resendCount?: true
+    lastResentAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TenantInviteCountAggregateInputType = {
+    id?: true
+    email?: true
+    tenantName?: true
+    token?: true
+    status?: true
+    planId?: true
+    invitedBy?: true
+    expiresAt?: true
+    acceptedAt?: true
+    resendCount?: true
+    lastResentAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TenantInviteAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TenantInvite to aggregate.
+     */
+    where?: TenantInviteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TenantInvites to fetch.
+     */
+    orderBy?: TenantInviteOrderByWithRelationInput | TenantInviteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TenantInviteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TenantInvites from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TenantInvites.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TenantInvites
+    **/
+    _count?: true | TenantInviteCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TenantInviteAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TenantInviteSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TenantInviteMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TenantInviteMaxAggregateInputType
+  }
+
+  export type GetTenantInviteAggregateType<T extends TenantInviteAggregateArgs> = {
+        [P in keyof T & keyof AggregateTenantInvite]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTenantInvite[P]>
+      : GetScalarType<T[P], AggregateTenantInvite[P]>
+  }
+
+
+
+
+  export type TenantInviteGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TenantInviteWhereInput
+    orderBy?: TenantInviteOrderByWithAggregationInput | TenantInviteOrderByWithAggregationInput[]
+    by: TenantInviteScalarFieldEnum[] | TenantInviteScalarFieldEnum
+    having?: TenantInviteScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TenantInviteCountAggregateInputType | true
+    _avg?: TenantInviteAvgAggregateInputType
+    _sum?: TenantInviteSumAggregateInputType
+    _min?: TenantInviteMinAggregateInputType
+    _max?: TenantInviteMaxAggregateInputType
+  }
+
+  export type TenantInviteGroupByOutputType = {
+    id: string
+    email: string
+    tenantName: string
+    token: string
+    status: $Enums.InviteStatus
+    planId: string
+    invitedBy: string
+    expiresAt: Date
+    acceptedAt: Date | null
+    resendCount: number
+    lastResentAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: TenantInviteCountAggregateOutputType | null
+    _avg: TenantInviteAvgAggregateOutputType | null
+    _sum: TenantInviteSumAggregateOutputType | null
+    _min: TenantInviteMinAggregateOutputType | null
+    _max: TenantInviteMaxAggregateOutputType | null
+  }
+
+  type GetTenantInviteGroupByPayload<T extends TenantInviteGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TenantInviteGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TenantInviteGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TenantInviteGroupByOutputType[P]>
+            : GetScalarType<T[P], TenantInviteGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TenantInviteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    email?: boolean
+    tenantName?: boolean
+    token?: boolean
+    status?: boolean
+    planId?: boolean
+    invitedBy?: boolean
+    expiresAt?: boolean
+    acceptedAt?: boolean
+    resendCount?: boolean
+    lastResentAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    plan?: boolean | PlanDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tenantInvite"]>
+
+  export type TenantInviteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    email?: boolean
+    tenantName?: boolean
+    token?: boolean
+    status?: boolean
+    planId?: boolean
+    invitedBy?: boolean
+    expiresAt?: boolean
+    acceptedAt?: boolean
+    resendCount?: boolean
+    lastResentAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    plan?: boolean | PlanDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tenantInvite"]>
+
+  export type TenantInviteSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    email?: boolean
+    tenantName?: boolean
+    token?: boolean
+    status?: boolean
+    planId?: boolean
+    invitedBy?: boolean
+    expiresAt?: boolean
+    acceptedAt?: boolean
+    resendCount?: boolean
+    lastResentAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    plan?: boolean | PlanDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tenantInvite"]>
+
+  export type TenantInviteSelectScalar = {
+    id?: boolean
+    email?: boolean
+    tenantName?: boolean
+    token?: boolean
+    status?: boolean
+    planId?: boolean
+    invitedBy?: boolean
+    expiresAt?: boolean
+    acceptedAt?: boolean
+    resendCount?: boolean
+    lastResentAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TenantInviteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "tenantName" | "token" | "status" | "planId" | "invitedBy" | "expiresAt" | "acceptedAt" | "resendCount" | "lastResentAt" | "createdAt" | "updatedAt", ExtArgs["result"]["tenantInvite"]>
+  export type TenantInviteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    plan?: boolean | PlanDefaultArgs<ExtArgs>
+  }
+  export type TenantInviteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    plan?: boolean | PlanDefaultArgs<ExtArgs>
+  }
+  export type TenantInviteIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    plan?: boolean | PlanDefaultArgs<ExtArgs>
+  }
+
+  export type $TenantInvitePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TenantInvite"
+    objects: {
+      plan: Prisma.$PlanPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      email: string
+      tenantName: string
+      token: string
+      status: $Enums.InviteStatus
+      planId: string
+      invitedBy: string
+      expiresAt: Date
+      acceptedAt: Date | null
+      resendCount: number
+      lastResentAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["tenantInvite"]>
+    composites: {}
+  }
+
+  type TenantInviteGetPayload<S extends boolean | null | undefined | TenantInviteDefaultArgs> = $Result.GetResult<Prisma.$TenantInvitePayload, S>
+
+  type TenantInviteCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TenantInviteFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TenantInviteCountAggregateInputType | true
+    }
+
+  export interface TenantInviteDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TenantInvite'], meta: { name: 'TenantInvite' } }
+    /**
+     * Find zero or one TenantInvite that matches the filter.
+     * @param {TenantInviteFindUniqueArgs} args - Arguments to find a TenantInvite
+     * @example
+     * // Get one TenantInvite
+     * const tenantInvite = await prisma.tenantInvite.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TenantInviteFindUniqueArgs>(args: SelectSubset<T, TenantInviteFindUniqueArgs<ExtArgs>>): Prisma__TenantInviteClient<$Result.GetResult<Prisma.$TenantInvitePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one TenantInvite that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TenantInviteFindUniqueOrThrowArgs} args - Arguments to find a TenantInvite
+     * @example
+     * // Get one TenantInvite
+     * const tenantInvite = await prisma.tenantInvite.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TenantInviteFindUniqueOrThrowArgs>(args: SelectSubset<T, TenantInviteFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TenantInviteClient<$Result.GetResult<Prisma.$TenantInvitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TenantInvite that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantInviteFindFirstArgs} args - Arguments to find a TenantInvite
+     * @example
+     * // Get one TenantInvite
+     * const tenantInvite = await prisma.tenantInvite.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TenantInviteFindFirstArgs>(args?: SelectSubset<T, TenantInviteFindFirstArgs<ExtArgs>>): Prisma__TenantInviteClient<$Result.GetResult<Prisma.$TenantInvitePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TenantInvite that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantInviteFindFirstOrThrowArgs} args - Arguments to find a TenantInvite
+     * @example
+     * // Get one TenantInvite
+     * const tenantInvite = await prisma.tenantInvite.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TenantInviteFindFirstOrThrowArgs>(args?: SelectSubset<T, TenantInviteFindFirstOrThrowArgs<ExtArgs>>): Prisma__TenantInviteClient<$Result.GetResult<Prisma.$TenantInvitePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more TenantInvites that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantInviteFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TenantInvites
+     * const tenantInvites = await prisma.tenantInvite.findMany()
+     * 
+     * // Get first 10 TenantInvites
+     * const tenantInvites = await prisma.tenantInvite.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const tenantInviteWithIdOnly = await prisma.tenantInvite.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TenantInviteFindManyArgs>(args?: SelectSubset<T, TenantInviteFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a TenantInvite.
+     * @param {TenantInviteCreateArgs} args - Arguments to create a TenantInvite.
+     * @example
+     * // Create one TenantInvite
+     * const TenantInvite = await prisma.tenantInvite.create({
+     *   data: {
+     *     // ... data to create a TenantInvite
+     *   }
+     * })
+     * 
+     */
+    create<T extends TenantInviteCreateArgs>(args: SelectSubset<T, TenantInviteCreateArgs<ExtArgs>>): Prisma__TenantInviteClient<$Result.GetResult<Prisma.$TenantInvitePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many TenantInvites.
+     * @param {TenantInviteCreateManyArgs} args - Arguments to create many TenantInvites.
+     * @example
+     * // Create many TenantInvites
+     * const tenantInvite = await prisma.tenantInvite.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TenantInviteCreateManyArgs>(args?: SelectSubset<T, TenantInviteCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TenantInvites and returns the data saved in the database.
+     * @param {TenantInviteCreateManyAndReturnArgs} args - Arguments to create many TenantInvites.
+     * @example
+     * // Create many TenantInvites
+     * const tenantInvite = await prisma.tenantInvite.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TenantInvites and only return the `id`
+     * const tenantInviteWithIdOnly = await prisma.tenantInvite.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TenantInviteCreateManyAndReturnArgs>(args?: SelectSubset<T, TenantInviteCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantInvitePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a TenantInvite.
+     * @param {TenantInviteDeleteArgs} args - Arguments to delete one TenantInvite.
+     * @example
+     * // Delete one TenantInvite
+     * const TenantInvite = await prisma.tenantInvite.delete({
+     *   where: {
+     *     // ... filter to delete one TenantInvite
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TenantInviteDeleteArgs>(args: SelectSubset<T, TenantInviteDeleteArgs<ExtArgs>>): Prisma__TenantInviteClient<$Result.GetResult<Prisma.$TenantInvitePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one TenantInvite.
+     * @param {TenantInviteUpdateArgs} args - Arguments to update one TenantInvite.
+     * @example
+     * // Update one TenantInvite
+     * const tenantInvite = await prisma.tenantInvite.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TenantInviteUpdateArgs>(args: SelectSubset<T, TenantInviteUpdateArgs<ExtArgs>>): Prisma__TenantInviteClient<$Result.GetResult<Prisma.$TenantInvitePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more TenantInvites.
+     * @param {TenantInviteDeleteManyArgs} args - Arguments to filter TenantInvites to delete.
+     * @example
+     * // Delete a few TenantInvites
+     * const { count } = await prisma.tenantInvite.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TenantInviteDeleteManyArgs>(args?: SelectSubset<T, TenantInviteDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TenantInvites.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantInviteUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TenantInvites
+     * const tenantInvite = await prisma.tenantInvite.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TenantInviteUpdateManyArgs>(args: SelectSubset<T, TenantInviteUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TenantInvites and returns the data updated in the database.
+     * @param {TenantInviteUpdateManyAndReturnArgs} args - Arguments to update many TenantInvites.
+     * @example
+     * // Update many TenantInvites
+     * const tenantInvite = await prisma.tenantInvite.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more TenantInvites and only return the `id`
+     * const tenantInviteWithIdOnly = await prisma.tenantInvite.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TenantInviteUpdateManyAndReturnArgs>(args: SelectSubset<T, TenantInviteUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantInvitePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one TenantInvite.
+     * @param {TenantInviteUpsertArgs} args - Arguments to update or create a TenantInvite.
+     * @example
+     * // Update or create a TenantInvite
+     * const tenantInvite = await prisma.tenantInvite.upsert({
+     *   create: {
+     *     // ... data to create a TenantInvite
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TenantInvite we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TenantInviteUpsertArgs>(args: SelectSubset<T, TenantInviteUpsertArgs<ExtArgs>>): Prisma__TenantInviteClient<$Result.GetResult<Prisma.$TenantInvitePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of TenantInvites.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantInviteCountArgs} args - Arguments to filter TenantInvites to count.
+     * @example
+     * // Count the number of TenantInvites
+     * const count = await prisma.tenantInvite.count({
+     *   where: {
+     *     // ... the filter for the TenantInvites we want to count
+     *   }
+     * })
+    **/
+    count<T extends TenantInviteCountArgs>(
+      args?: Subset<T, TenantInviteCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TenantInviteCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TenantInvite.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantInviteAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TenantInviteAggregateArgs>(args: Subset<T, TenantInviteAggregateArgs>): Prisma.PrismaPromise<GetTenantInviteAggregateType<T>>
+
+    /**
+     * Group by TenantInvite.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantInviteGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TenantInviteGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TenantInviteGroupByArgs['orderBy'] }
+        : { orderBy?: TenantInviteGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TenantInviteGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTenantInviteGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TenantInvite model
+   */
+  readonly fields: TenantInviteFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TenantInvite.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TenantInviteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    plan<T extends PlanDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PlanDefaultArgs<ExtArgs>>): Prisma__PlanClient<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TenantInvite model
+   */
+  interface TenantInviteFieldRefs {
+    readonly id: FieldRef<"TenantInvite", 'String'>
+    readonly email: FieldRef<"TenantInvite", 'String'>
+    readonly tenantName: FieldRef<"TenantInvite", 'String'>
+    readonly token: FieldRef<"TenantInvite", 'String'>
+    readonly status: FieldRef<"TenantInvite", 'InviteStatus'>
+    readonly planId: FieldRef<"TenantInvite", 'String'>
+    readonly invitedBy: FieldRef<"TenantInvite", 'String'>
+    readonly expiresAt: FieldRef<"TenantInvite", 'DateTime'>
+    readonly acceptedAt: FieldRef<"TenantInvite", 'DateTime'>
+    readonly resendCount: FieldRef<"TenantInvite", 'Int'>
+    readonly lastResentAt: FieldRef<"TenantInvite", 'DateTime'>
+    readonly createdAt: FieldRef<"TenantInvite", 'DateTime'>
+    readonly updatedAt: FieldRef<"TenantInvite", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TenantInvite findUnique
+   */
+  export type TenantInviteFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantInvite
+     */
+    select?: TenantInviteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantInvite
+     */
+    omit?: TenantInviteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInviteInclude<ExtArgs> | null
+    /**
+     * Filter, which TenantInvite to fetch.
+     */
+    where: TenantInviteWhereUniqueInput
+  }
+
+  /**
+   * TenantInvite findUniqueOrThrow
+   */
+  export type TenantInviteFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantInvite
+     */
+    select?: TenantInviteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantInvite
+     */
+    omit?: TenantInviteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInviteInclude<ExtArgs> | null
+    /**
+     * Filter, which TenantInvite to fetch.
+     */
+    where: TenantInviteWhereUniqueInput
+  }
+
+  /**
+   * TenantInvite findFirst
+   */
+  export type TenantInviteFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantInvite
+     */
+    select?: TenantInviteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantInvite
+     */
+    omit?: TenantInviteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInviteInclude<ExtArgs> | null
+    /**
+     * Filter, which TenantInvite to fetch.
+     */
+    where?: TenantInviteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TenantInvites to fetch.
+     */
+    orderBy?: TenantInviteOrderByWithRelationInput | TenantInviteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TenantInvites.
+     */
+    cursor?: TenantInviteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TenantInvites from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TenantInvites.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TenantInvites.
+     */
+    distinct?: TenantInviteScalarFieldEnum | TenantInviteScalarFieldEnum[]
+  }
+
+  /**
+   * TenantInvite findFirstOrThrow
+   */
+  export type TenantInviteFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantInvite
+     */
+    select?: TenantInviteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantInvite
+     */
+    omit?: TenantInviteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInviteInclude<ExtArgs> | null
+    /**
+     * Filter, which TenantInvite to fetch.
+     */
+    where?: TenantInviteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TenantInvites to fetch.
+     */
+    orderBy?: TenantInviteOrderByWithRelationInput | TenantInviteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TenantInvites.
+     */
+    cursor?: TenantInviteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TenantInvites from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TenantInvites.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TenantInvites.
+     */
+    distinct?: TenantInviteScalarFieldEnum | TenantInviteScalarFieldEnum[]
+  }
+
+  /**
+   * TenantInvite findMany
+   */
+  export type TenantInviteFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantInvite
+     */
+    select?: TenantInviteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantInvite
+     */
+    omit?: TenantInviteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInviteInclude<ExtArgs> | null
+    /**
+     * Filter, which TenantInvites to fetch.
+     */
+    where?: TenantInviteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TenantInvites to fetch.
+     */
+    orderBy?: TenantInviteOrderByWithRelationInput | TenantInviteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TenantInvites.
+     */
+    cursor?: TenantInviteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TenantInvites from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TenantInvites.
+     */
+    skip?: number
+    distinct?: TenantInviteScalarFieldEnum | TenantInviteScalarFieldEnum[]
+  }
+
+  /**
+   * TenantInvite create
+   */
+  export type TenantInviteCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantInvite
+     */
+    select?: TenantInviteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantInvite
+     */
+    omit?: TenantInviteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInviteInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TenantInvite.
+     */
+    data: XOR<TenantInviteCreateInput, TenantInviteUncheckedCreateInput>
+  }
+
+  /**
+   * TenantInvite createMany
+   */
+  export type TenantInviteCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TenantInvites.
+     */
+    data: TenantInviteCreateManyInput | TenantInviteCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TenantInvite createManyAndReturn
+   */
+  export type TenantInviteCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantInvite
+     */
+    select?: TenantInviteSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantInvite
+     */
+    omit?: TenantInviteOmit<ExtArgs> | null
+    /**
+     * The data used to create many TenantInvites.
+     */
+    data: TenantInviteCreateManyInput | TenantInviteCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInviteIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TenantInvite update
+   */
+  export type TenantInviteUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantInvite
+     */
+    select?: TenantInviteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantInvite
+     */
+    omit?: TenantInviteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInviteInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TenantInvite.
+     */
+    data: XOR<TenantInviteUpdateInput, TenantInviteUncheckedUpdateInput>
+    /**
+     * Choose, which TenantInvite to update.
+     */
+    where: TenantInviteWhereUniqueInput
+  }
+
+  /**
+   * TenantInvite updateMany
+   */
+  export type TenantInviteUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TenantInvites.
+     */
+    data: XOR<TenantInviteUpdateManyMutationInput, TenantInviteUncheckedUpdateManyInput>
+    /**
+     * Filter which TenantInvites to update
+     */
+    where?: TenantInviteWhereInput
+    /**
+     * Limit how many TenantInvites to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TenantInvite updateManyAndReturn
+   */
+  export type TenantInviteUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantInvite
+     */
+    select?: TenantInviteSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantInvite
+     */
+    omit?: TenantInviteOmit<ExtArgs> | null
+    /**
+     * The data used to update TenantInvites.
+     */
+    data: XOR<TenantInviteUpdateManyMutationInput, TenantInviteUncheckedUpdateManyInput>
+    /**
+     * Filter which TenantInvites to update
+     */
+    where?: TenantInviteWhereInput
+    /**
+     * Limit how many TenantInvites to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInviteIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TenantInvite upsert
+   */
+  export type TenantInviteUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantInvite
+     */
+    select?: TenantInviteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantInvite
+     */
+    omit?: TenantInviteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInviteInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TenantInvite to update in case it exists.
+     */
+    where: TenantInviteWhereUniqueInput
+    /**
+     * In case the TenantInvite found by the `where` argument doesn't exist, create a new TenantInvite with this data.
+     */
+    create: XOR<TenantInviteCreateInput, TenantInviteUncheckedCreateInput>
+    /**
+     * In case the TenantInvite was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TenantInviteUpdateInput, TenantInviteUncheckedUpdateInput>
+  }
+
+  /**
+   * TenantInvite delete
+   */
+  export type TenantInviteDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantInvite
+     */
+    select?: TenantInviteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantInvite
+     */
+    omit?: TenantInviteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInviteInclude<ExtArgs> | null
+    /**
+     * Filter which TenantInvite to delete.
+     */
+    where: TenantInviteWhereUniqueInput
+  }
+
+  /**
+   * TenantInvite deleteMany
+   */
+  export type TenantInviteDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TenantInvites to delete
+     */
+    where?: TenantInviteWhereInput
+    /**
+     * Limit how many TenantInvites to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TenantInvite without action
+   */
+  export type TenantInviteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantInvite
+     */
+    select?: TenantInviteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TenantInvite
+     */
+    omit?: TenantInviteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInviteInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Wallet
+   */
+
+  export type AggregateWallet = {
+    _count: WalletCountAggregateOutputType | null
+    _avg: WalletAvgAggregateOutputType | null
+    _sum: WalletSumAggregateOutputType | null
+    _min: WalletMinAggregateOutputType | null
+    _max: WalletMaxAggregateOutputType | null
+  }
+
+  export type WalletAvgAggregateOutputType = {
+    balance: number | null
+    bonusBalance: number | null
+    lowBalanceThreshold: number | null
+  }
+
+  export type WalletSumAggregateOutputType = {
+    balance: number | null
+    bonusBalance: number | null
+    lowBalanceThreshold: number | null
+  }
+
+  export type WalletMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    balance: number | null
+    bonusBalance: number | null
+    bonusExpiresAt: Date | null
+    isActive: boolean | null
+    lowBalanceThreshold: number | null
+    lowBalanceAlertSent: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WalletMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    balance: number | null
+    bonusBalance: number | null
+    bonusExpiresAt: Date | null
+    isActive: boolean | null
+    lowBalanceThreshold: number | null
+    lowBalanceAlertSent: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WalletCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    balance: number
+    bonusBalance: number
+    bonusExpiresAt: number
+    isActive: number
+    lowBalanceThreshold: number
+    lowBalanceAlertSent: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type WalletAvgAggregateInputType = {
+    balance?: true
+    bonusBalance?: true
+    lowBalanceThreshold?: true
+  }
+
+  export type WalletSumAggregateInputType = {
+    balance?: true
+    bonusBalance?: true
+    lowBalanceThreshold?: true
+  }
+
+  export type WalletMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    balance?: true
+    bonusBalance?: true
+    bonusExpiresAt?: true
+    isActive?: true
+    lowBalanceThreshold?: true
+    lowBalanceAlertSent?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WalletMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    balance?: true
+    bonusBalance?: true
+    bonusExpiresAt?: true
+    isActive?: true
+    lowBalanceThreshold?: true
+    lowBalanceAlertSent?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WalletCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    balance?: true
+    bonusBalance?: true
+    bonusExpiresAt?: true
+    isActive?: true
+    lowBalanceThreshold?: true
+    lowBalanceAlertSent?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type WalletAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Wallet to aggregate.
+     */
+    where?: WalletWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Wallets to fetch.
+     */
+    orderBy?: WalletOrderByWithRelationInput | WalletOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WalletWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Wallets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Wallets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Wallets
+    **/
+    _count?: true | WalletCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: WalletAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: WalletSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WalletMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WalletMaxAggregateInputType
+  }
+
+  export type GetWalletAggregateType<T extends WalletAggregateArgs> = {
+        [P in keyof T & keyof AggregateWallet]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWallet[P]>
+      : GetScalarType<T[P], AggregateWallet[P]>
+  }
+
+
+
+
+  export type WalletGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WalletWhereInput
+    orderBy?: WalletOrderByWithAggregationInput | WalletOrderByWithAggregationInput[]
+    by: WalletScalarFieldEnum[] | WalletScalarFieldEnum
+    having?: WalletScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WalletCountAggregateInputType | true
+    _avg?: WalletAvgAggregateInputType
+    _sum?: WalletSumAggregateInputType
+    _min?: WalletMinAggregateInputType
+    _max?: WalletMaxAggregateInputType
+  }
+
+  export type WalletGroupByOutputType = {
+    id: string
+    tenantId: string
+    balance: number
+    bonusBalance: number
+    bonusExpiresAt: Date | null
+    isActive: boolean
+    lowBalanceThreshold: number | null
+    lowBalanceAlertSent: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: WalletCountAggregateOutputType | null
+    _avg: WalletAvgAggregateOutputType | null
+    _sum: WalletSumAggregateOutputType | null
+    _min: WalletMinAggregateOutputType | null
+    _max: WalletMaxAggregateOutputType | null
+  }
+
+  type GetWalletGroupByPayload<T extends WalletGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WalletGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WalletGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WalletGroupByOutputType[P]>
+            : GetScalarType<T[P], WalletGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WalletSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    balance?: boolean
+    bonusBalance?: boolean
+    bonusExpiresAt?: boolean
+    isActive?: boolean
+    lowBalanceThreshold?: boolean
+    lowBalanceAlertSent?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    transactions?: boolean | Wallet$transactionsArgs<ExtArgs>
+    recharges?: boolean | Wallet$rechargesArgs<ExtArgs>
+    _count?: boolean | WalletCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["wallet"]>
+
+  export type WalletSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    balance?: boolean
+    bonusBalance?: boolean
+    bonusExpiresAt?: boolean
+    isActive?: boolean
+    lowBalanceThreshold?: boolean
+    lowBalanceAlertSent?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["wallet"]>
+
+  export type WalletSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    balance?: boolean
+    bonusBalance?: boolean
+    bonusExpiresAt?: boolean
+    isActive?: boolean
+    lowBalanceThreshold?: boolean
+    lowBalanceAlertSent?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["wallet"]>
+
+  export type WalletSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    balance?: boolean
+    bonusBalance?: boolean
+    bonusExpiresAt?: boolean
+    isActive?: boolean
+    lowBalanceThreshold?: boolean
+    lowBalanceAlertSent?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type WalletOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "balance" | "bonusBalance" | "bonusExpiresAt" | "isActive" | "lowBalanceThreshold" | "lowBalanceAlertSent" | "createdAt" | "updatedAt", ExtArgs["result"]["wallet"]>
+  export type WalletInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+    transactions?: boolean | Wallet$transactionsArgs<ExtArgs>
+    recharges?: boolean | Wallet$rechargesArgs<ExtArgs>
+    _count?: boolean | WalletCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type WalletIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+  }
+  export type WalletIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+  }
+
+  export type $WalletPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Wallet"
+    objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>
+      transactions: Prisma.$WalletTransactionPayload<ExtArgs>[]
+      recharges: Prisma.$RechargePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      balance: number
+      bonusBalance: number
+      bonusExpiresAt: Date | null
+      isActive: boolean
+      lowBalanceThreshold: number | null
+      lowBalanceAlertSent: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["wallet"]>
+    composites: {}
+  }
+
+  type WalletGetPayload<S extends boolean | null | undefined | WalletDefaultArgs> = $Result.GetResult<Prisma.$WalletPayload, S>
+
+  type WalletCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WalletFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WalletCountAggregateInputType | true
+    }
+
+  export interface WalletDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Wallet'], meta: { name: 'Wallet' } }
+    /**
+     * Find zero or one Wallet that matches the filter.
+     * @param {WalletFindUniqueArgs} args - Arguments to find a Wallet
+     * @example
+     * // Get one Wallet
+     * const wallet = await prisma.wallet.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WalletFindUniqueArgs>(args: SelectSubset<T, WalletFindUniqueArgs<ExtArgs>>): Prisma__WalletClient<$Result.GetResult<Prisma.$WalletPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Wallet that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WalletFindUniqueOrThrowArgs} args - Arguments to find a Wallet
+     * @example
+     * // Get one Wallet
+     * const wallet = await prisma.wallet.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WalletFindUniqueOrThrowArgs>(args: SelectSubset<T, WalletFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WalletClient<$Result.GetResult<Prisma.$WalletPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Wallet that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WalletFindFirstArgs} args - Arguments to find a Wallet
+     * @example
+     * // Get one Wallet
+     * const wallet = await prisma.wallet.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WalletFindFirstArgs>(args?: SelectSubset<T, WalletFindFirstArgs<ExtArgs>>): Prisma__WalletClient<$Result.GetResult<Prisma.$WalletPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Wallet that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WalletFindFirstOrThrowArgs} args - Arguments to find a Wallet
+     * @example
+     * // Get one Wallet
+     * const wallet = await prisma.wallet.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WalletFindFirstOrThrowArgs>(args?: SelectSubset<T, WalletFindFirstOrThrowArgs<ExtArgs>>): Prisma__WalletClient<$Result.GetResult<Prisma.$WalletPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Wallets that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WalletFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Wallets
+     * const wallets = await prisma.wallet.findMany()
+     * 
+     * // Get first 10 Wallets
+     * const wallets = await prisma.wallet.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const walletWithIdOnly = await prisma.wallet.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WalletFindManyArgs>(args?: SelectSubset<T, WalletFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WalletPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Wallet.
+     * @param {WalletCreateArgs} args - Arguments to create a Wallet.
+     * @example
+     * // Create one Wallet
+     * const Wallet = await prisma.wallet.create({
+     *   data: {
+     *     // ... data to create a Wallet
+     *   }
+     * })
+     * 
+     */
+    create<T extends WalletCreateArgs>(args: SelectSubset<T, WalletCreateArgs<ExtArgs>>): Prisma__WalletClient<$Result.GetResult<Prisma.$WalletPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Wallets.
+     * @param {WalletCreateManyArgs} args - Arguments to create many Wallets.
+     * @example
+     * // Create many Wallets
+     * const wallet = await prisma.wallet.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WalletCreateManyArgs>(args?: SelectSubset<T, WalletCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Wallets and returns the data saved in the database.
+     * @param {WalletCreateManyAndReturnArgs} args - Arguments to create many Wallets.
+     * @example
+     * // Create many Wallets
+     * const wallet = await prisma.wallet.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Wallets and only return the `id`
+     * const walletWithIdOnly = await prisma.wallet.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WalletCreateManyAndReturnArgs>(args?: SelectSubset<T, WalletCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WalletPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Wallet.
+     * @param {WalletDeleteArgs} args - Arguments to delete one Wallet.
+     * @example
+     * // Delete one Wallet
+     * const Wallet = await prisma.wallet.delete({
+     *   where: {
+     *     // ... filter to delete one Wallet
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WalletDeleteArgs>(args: SelectSubset<T, WalletDeleteArgs<ExtArgs>>): Prisma__WalletClient<$Result.GetResult<Prisma.$WalletPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Wallet.
+     * @param {WalletUpdateArgs} args - Arguments to update one Wallet.
+     * @example
+     * // Update one Wallet
+     * const wallet = await prisma.wallet.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WalletUpdateArgs>(args: SelectSubset<T, WalletUpdateArgs<ExtArgs>>): Prisma__WalletClient<$Result.GetResult<Prisma.$WalletPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Wallets.
+     * @param {WalletDeleteManyArgs} args - Arguments to filter Wallets to delete.
+     * @example
+     * // Delete a few Wallets
+     * const { count } = await prisma.wallet.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WalletDeleteManyArgs>(args?: SelectSubset<T, WalletDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Wallets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WalletUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Wallets
+     * const wallet = await prisma.wallet.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WalletUpdateManyArgs>(args: SelectSubset<T, WalletUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Wallets and returns the data updated in the database.
+     * @param {WalletUpdateManyAndReturnArgs} args - Arguments to update many Wallets.
+     * @example
+     * // Update many Wallets
+     * const wallet = await prisma.wallet.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Wallets and only return the `id`
+     * const walletWithIdOnly = await prisma.wallet.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WalletUpdateManyAndReturnArgs>(args: SelectSubset<T, WalletUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WalletPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Wallet.
+     * @param {WalletUpsertArgs} args - Arguments to update or create a Wallet.
+     * @example
+     * // Update or create a Wallet
+     * const wallet = await prisma.wallet.upsert({
+     *   create: {
+     *     // ... data to create a Wallet
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Wallet we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WalletUpsertArgs>(args: SelectSubset<T, WalletUpsertArgs<ExtArgs>>): Prisma__WalletClient<$Result.GetResult<Prisma.$WalletPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Wallets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WalletCountArgs} args - Arguments to filter Wallets to count.
+     * @example
+     * // Count the number of Wallets
+     * const count = await prisma.wallet.count({
+     *   where: {
+     *     // ... the filter for the Wallets we want to count
+     *   }
+     * })
+    **/
+    count<T extends WalletCountArgs>(
+      args?: Subset<T, WalletCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WalletCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Wallet.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WalletAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WalletAggregateArgs>(args: Subset<T, WalletAggregateArgs>): Prisma.PrismaPromise<GetWalletAggregateType<T>>
+
+    /**
+     * Group by Wallet.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WalletGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WalletGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WalletGroupByArgs['orderBy'] }
+        : { orderBy?: WalletGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WalletGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWalletGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Wallet model
+   */
+  readonly fields: WalletFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Wallet.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WalletClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    transactions<T extends Wallet$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, Wallet$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WalletTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    recharges<T extends Wallet$rechargesArgs<ExtArgs> = {}>(args?: Subset<T, Wallet$rechargesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RechargePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Wallet model
+   */
+  interface WalletFieldRefs {
+    readonly id: FieldRef<"Wallet", 'String'>
+    readonly tenantId: FieldRef<"Wallet", 'String'>
+    readonly balance: FieldRef<"Wallet", 'Int'>
+    readonly bonusBalance: FieldRef<"Wallet", 'Int'>
+    readonly bonusExpiresAt: FieldRef<"Wallet", 'DateTime'>
+    readonly isActive: FieldRef<"Wallet", 'Boolean'>
+    readonly lowBalanceThreshold: FieldRef<"Wallet", 'Int'>
+    readonly lowBalanceAlertSent: FieldRef<"Wallet", 'Boolean'>
+    readonly createdAt: FieldRef<"Wallet", 'DateTime'>
+    readonly updatedAt: FieldRef<"Wallet", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Wallet findUnique
+   */
+  export type WalletFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Wallet
+     */
+    select?: WalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Wallet
+     */
+    omit?: WalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletInclude<ExtArgs> | null
+    /**
+     * Filter, which Wallet to fetch.
+     */
+    where: WalletWhereUniqueInput
+  }
+
+  /**
+   * Wallet findUniqueOrThrow
+   */
+  export type WalletFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Wallet
+     */
+    select?: WalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Wallet
+     */
+    omit?: WalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletInclude<ExtArgs> | null
+    /**
+     * Filter, which Wallet to fetch.
+     */
+    where: WalletWhereUniqueInput
+  }
+
+  /**
+   * Wallet findFirst
+   */
+  export type WalletFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Wallet
+     */
+    select?: WalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Wallet
+     */
+    omit?: WalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletInclude<ExtArgs> | null
+    /**
+     * Filter, which Wallet to fetch.
+     */
+    where?: WalletWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Wallets to fetch.
+     */
+    orderBy?: WalletOrderByWithRelationInput | WalletOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Wallets.
+     */
+    cursor?: WalletWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Wallets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Wallets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Wallets.
+     */
+    distinct?: WalletScalarFieldEnum | WalletScalarFieldEnum[]
+  }
+
+  /**
+   * Wallet findFirstOrThrow
+   */
+  export type WalletFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Wallet
+     */
+    select?: WalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Wallet
+     */
+    omit?: WalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletInclude<ExtArgs> | null
+    /**
+     * Filter, which Wallet to fetch.
+     */
+    where?: WalletWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Wallets to fetch.
+     */
+    orderBy?: WalletOrderByWithRelationInput | WalletOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Wallets.
+     */
+    cursor?: WalletWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Wallets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Wallets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Wallets.
+     */
+    distinct?: WalletScalarFieldEnum | WalletScalarFieldEnum[]
+  }
+
+  /**
+   * Wallet findMany
+   */
+  export type WalletFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Wallet
+     */
+    select?: WalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Wallet
+     */
+    omit?: WalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletInclude<ExtArgs> | null
+    /**
+     * Filter, which Wallets to fetch.
+     */
+    where?: WalletWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Wallets to fetch.
+     */
+    orderBy?: WalletOrderByWithRelationInput | WalletOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Wallets.
+     */
+    cursor?: WalletWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Wallets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Wallets.
+     */
+    skip?: number
+    distinct?: WalletScalarFieldEnum | WalletScalarFieldEnum[]
+  }
+
+  /**
+   * Wallet create
+   */
+  export type WalletCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Wallet
+     */
+    select?: WalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Wallet
+     */
+    omit?: WalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Wallet.
+     */
+    data: XOR<WalletCreateInput, WalletUncheckedCreateInput>
+  }
+
+  /**
+   * Wallet createMany
+   */
+  export type WalletCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Wallets.
+     */
+    data: WalletCreateManyInput | WalletCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Wallet createManyAndReturn
+   */
+  export type WalletCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Wallet
+     */
+    select?: WalletSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Wallet
+     */
+    omit?: WalletOmit<ExtArgs> | null
+    /**
+     * The data used to create many Wallets.
+     */
+    data: WalletCreateManyInput | WalletCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Wallet update
+   */
+  export type WalletUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Wallet
+     */
+    select?: WalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Wallet
+     */
+    omit?: WalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Wallet.
+     */
+    data: XOR<WalletUpdateInput, WalletUncheckedUpdateInput>
+    /**
+     * Choose, which Wallet to update.
+     */
+    where: WalletWhereUniqueInput
+  }
+
+  /**
+   * Wallet updateMany
+   */
+  export type WalletUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Wallets.
+     */
+    data: XOR<WalletUpdateManyMutationInput, WalletUncheckedUpdateManyInput>
+    /**
+     * Filter which Wallets to update
+     */
+    where?: WalletWhereInput
+    /**
+     * Limit how many Wallets to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Wallet updateManyAndReturn
+   */
+  export type WalletUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Wallet
+     */
+    select?: WalletSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Wallet
+     */
+    omit?: WalletOmit<ExtArgs> | null
+    /**
+     * The data used to update Wallets.
+     */
+    data: XOR<WalletUpdateManyMutationInput, WalletUncheckedUpdateManyInput>
+    /**
+     * Filter which Wallets to update
+     */
+    where?: WalletWhereInput
+    /**
+     * Limit how many Wallets to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Wallet upsert
+   */
+  export type WalletUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Wallet
+     */
+    select?: WalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Wallet
+     */
+    omit?: WalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Wallet to update in case it exists.
+     */
+    where: WalletWhereUniqueInput
+    /**
+     * In case the Wallet found by the `where` argument doesn't exist, create a new Wallet with this data.
+     */
+    create: XOR<WalletCreateInput, WalletUncheckedCreateInput>
+    /**
+     * In case the Wallet was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WalletUpdateInput, WalletUncheckedUpdateInput>
+  }
+
+  /**
+   * Wallet delete
+   */
+  export type WalletDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Wallet
+     */
+    select?: WalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Wallet
+     */
+    omit?: WalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletInclude<ExtArgs> | null
+    /**
+     * Filter which Wallet to delete.
+     */
+    where: WalletWhereUniqueInput
+  }
+
+  /**
+   * Wallet deleteMany
+   */
+  export type WalletDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Wallets to delete
+     */
+    where?: WalletWhereInput
+    /**
+     * Limit how many Wallets to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Wallet.transactions
+   */
+  export type Wallet$transactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletTransaction
+     */
+    select?: WalletTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WalletTransaction
+     */
+    omit?: WalletTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletTransactionInclude<ExtArgs> | null
+    where?: WalletTransactionWhereInput
+    orderBy?: WalletTransactionOrderByWithRelationInput | WalletTransactionOrderByWithRelationInput[]
+    cursor?: WalletTransactionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WalletTransactionScalarFieldEnum | WalletTransactionScalarFieldEnum[]
+  }
+
+  /**
+   * Wallet.recharges
+   */
+  export type Wallet$rechargesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recharge
+     */
+    select?: RechargeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recharge
+     */
+    omit?: RechargeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RechargeInclude<ExtArgs> | null
+    where?: RechargeWhereInput
+    orderBy?: RechargeOrderByWithRelationInput | RechargeOrderByWithRelationInput[]
+    cursor?: RechargeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RechargeScalarFieldEnum | RechargeScalarFieldEnum[]
+  }
+
+  /**
+   * Wallet without action
+   */
+  export type WalletDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Wallet
+     */
+    select?: WalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Wallet
+     */
+    omit?: WalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model WalletTransaction
+   */
+
+  export type AggregateWalletTransaction = {
+    _count: WalletTransactionCountAggregateOutputType | null
+    _avg: WalletTransactionAvgAggregateOutputType | null
+    _sum: WalletTransactionSumAggregateOutputType | null
+    _min: WalletTransactionMinAggregateOutputType | null
+    _max: WalletTransactionMaxAggregateOutputType | null
+  }
+
+  export type WalletTransactionAvgAggregateOutputType = {
+    amount: number | null
+    balanceAfter: number | null
+    bonusBalanceAfter: number | null
+  }
+
+  export type WalletTransactionSumAggregateOutputType = {
+    amount: number | null
+    balanceAfter: number | null
+    bonusBalanceAfter: number | null
+  }
+
+  export type WalletTransactionMinAggregateOutputType = {
+    id: string | null
+    walletId: string | null
+    tenantId: string | null
+    type: $Enums.WalletTxType | null
+    amount: number | null
+    balanceAfter: number | null
+    bonusBalanceAfter: number | null
+    description: string | null
+    referenceType: string | null
+    referenceId: string | null
+    createdAt: Date | null
+    createdBy: string | null
+  }
+
+  export type WalletTransactionMaxAggregateOutputType = {
+    id: string | null
+    walletId: string | null
+    tenantId: string | null
+    type: $Enums.WalletTxType | null
+    amount: number | null
+    balanceAfter: number | null
+    bonusBalanceAfter: number | null
+    description: string | null
+    referenceType: string | null
+    referenceId: string | null
+    createdAt: Date | null
+    createdBy: string | null
+  }
+
+  export type WalletTransactionCountAggregateOutputType = {
+    id: number
+    walletId: number
+    tenantId: number
+    type: number
+    amount: number
+    balanceAfter: number
+    bonusBalanceAfter: number
+    description: number
+    referenceType: number
+    referenceId: number
+    createdAt: number
+    createdBy: number
+    _all: number
+  }
+
+
+  export type WalletTransactionAvgAggregateInputType = {
+    amount?: true
+    balanceAfter?: true
+    bonusBalanceAfter?: true
+  }
+
+  export type WalletTransactionSumAggregateInputType = {
+    amount?: true
+    balanceAfter?: true
+    bonusBalanceAfter?: true
+  }
+
+  export type WalletTransactionMinAggregateInputType = {
+    id?: true
+    walletId?: true
+    tenantId?: true
+    type?: true
+    amount?: true
+    balanceAfter?: true
+    bonusBalanceAfter?: true
+    description?: true
+    referenceType?: true
+    referenceId?: true
+    createdAt?: true
+    createdBy?: true
+  }
+
+  export type WalletTransactionMaxAggregateInputType = {
+    id?: true
+    walletId?: true
+    tenantId?: true
+    type?: true
+    amount?: true
+    balanceAfter?: true
+    bonusBalanceAfter?: true
+    description?: true
+    referenceType?: true
+    referenceId?: true
+    createdAt?: true
+    createdBy?: true
+  }
+
+  export type WalletTransactionCountAggregateInputType = {
+    id?: true
+    walletId?: true
+    tenantId?: true
+    type?: true
+    amount?: true
+    balanceAfter?: true
+    bonusBalanceAfter?: true
+    description?: true
+    referenceType?: true
+    referenceId?: true
+    createdAt?: true
+    createdBy?: true
+    _all?: true
+  }
+
+  export type WalletTransactionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WalletTransaction to aggregate.
+     */
+    where?: WalletTransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WalletTransactions to fetch.
+     */
+    orderBy?: WalletTransactionOrderByWithRelationInput | WalletTransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WalletTransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WalletTransactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WalletTransactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WalletTransactions
+    **/
+    _count?: true | WalletTransactionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: WalletTransactionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: WalletTransactionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WalletTransactionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WalletTransactionMaxAggregateInputType
+  }
+
+  export type GetWalletTransactionAggregateType<T extends WalletTransactionAggregateArgs> = {
+        [P in keyof T & keyof AggregateWalletTransaction]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWalletTransaction[P]>
+      : GetScalarType<T[P], AggregateWalletTransaction[P]>
+  }
+
+
+
+
+  export type WalletTransactionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WalletTransactionWhereInput
+    orderBy?: WalletTransactionOrderByWithAggregationInput | WalletTransactionOrderByWithAggregationInput[]
+    by: WalletTransactionScalarFieldEnum[] | WalletTransactionScalarFieldEnum
+    having?: WalletTransactionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WalletTransactionCountAggregateInputType | true
+    _avg?: WalletTransactionAvgAggregateInputType
+    _sum?: WalletTransactionSumAggregateInputType
+    _min?: WalletTransactionMinAggregateInputType
+    _max?: WalletTransactionMaxAggregateInputType
+  }
+
+  export type WalletTransactionGroupByOutputType = {
+    id: string
+    walletId: string
+    tenantId: string
+    type: $Enums.WalletTxType
+    amount: number
+    balanceAfter: number
+    bonusBalanceAfter: number
+    description: string
+    referenceType: string | null
+    referenceId: string | null
+    createdAt: Date
+    createdBy: string | null
+    _count: WalletTransactionCountAggregateOutputType | null
+    _avg: WalletTransactionAvgAggregateOutputType | null
+    _sum: WalletTransactionSumAggregateOutputType | null
+    _min: WalletTransactionMinAggregateOutputType | null
+    _max: WalletTransactionMaxAggregateOutputType | null
+  }
+
+  type GetWalletTransactionGroupByPayload<T extends WalletTransactionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WalletTransactionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WalletTransactionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WalletTransactionGroupByOutputType[P]>
+            : GetScalarType<T[P], WalletTransactionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WalletTransactionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    walletId?: boolean
+    tenantId?: boolean
+    type?: boolean
+    amount?: boolean
+    balanceAfter?: boolean
+    bonusBalanceAfter?: boolean
+    description?: boolean
+    referenceType?: boolean
+    referenceId?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["walletTransaction"]>
+
+  export type WalletTransactionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    walletId?: boolean
+    tenantId?: boolean
+    type?: boolean
+    amount?: boolean
+    balanceAfter?: boolean
+    bonusBalanceAfter?: boolean
+    description?: boolean
+    referenceType?: boolean
+    referenceId?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["walletTransaction"]>
+
+  export type WalletTransactionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    walletId?: boolean
+    tenantId?: boolean
+    type?: boolean
+    amount?: boolean
+    balanceAfter?: boolean
+    bonusBalanceAfter?: boolean
+    description?: boolean
+    referenceType?: boolean
+    referenceId?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["walletTransaction"]>
+
+  export type WalletTransactionSelectScalar = {
+    id?: boolean
+    walletId?: boolean
+    tenantId?: boolean
+    type?: boolean
+    amount?: boolean
+    balanceAfter?: boolean
+    bonusBalanceAfter?: boolean
+    description?: boolean
+    referenceType?: boolean
+    referenceId?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+  }
+
+  export type WalletTransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "walletId" | "tenantId" | "type" | "amount" | "balanceAfter" | "bonusBalanceAfter" | "description" | "referenceType" | "referenceId" | "createdAt" | "createdBy", ExtArgs["result"]["walletTransaction"]>
+  export type WalletTransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+  }
+  export type WalletTransactionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+  }
+  export type WalletTransactionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+  }
+
+  export type $WalletTransactionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WalletTransaction"
+    objects: {
+      wallet: Prisma.$WalletPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      walletId: string
+      tenantId: string
+      type: $Enums.WalletTxType
+      amount: number
+      balanceAfter: number
+      bonusBalanceAfter: number
+      description: string
+      referenceType: string | null
+      referenceId: string | null
+      createdAt: Date
+      createdBy: string | null
+    }, ExtArgs["result"]["walletTransaction"]>
+    composites: {}
+  }
+
+  type WalletTransactionGetPayload<S extends boolean | null | undefined | WalletTransactionDefaultArgs> = $Result.GetResult<Prisma.$WalletTransactionPayload, S>
+
+  type WalletTransactionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WalletTransactionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WalletTransactionCountAggregateInputType | true
+    }
+
+  export interface WalletTransactionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WalletTransaction'], meta: { name: 'WalletTransaction' } }
+    /**
+     * Find zero or one WalletTransaction that matches the filter.
+     * @param {WalletTransactionFindUniqueArgs} args - Arguments to find a WalletTransaction
+     * @example
+     * // Get one WalletTransaction
+     * const walletTransaction = await prisma.walletTransaction.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WalletTransactionFindUniqueArgs>(args: SelectSubset<T, WalletTransactionFindUniqueArgs<ExtArgs>>): Prisma__WalletTransactionClient<$Result.GetResult<Prisma.$WalletTransactionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WalletTransaction that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WalletTransactionFindUniqueOrThrowArgs} args - Arguments to find a WalletTransaction
+     * @example
+     * // Get one WalletTransaction
+     * const walletTransaction = await prisma.walletTransaction.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WalletTransactionFindUniqueOrThrowArgs>(args: SelectSubset<T, WalletTransactionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WalletTransactionClient<$Result.GetResult<Prisma.$WalletTransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WalletTransaction that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WalletTransactionFindFirstArgs} args - Arguments to find a WalletTransaction
+     * @example
+     * // Get one WalletTransaction
+     * const walletTransaction = await prisma.walletTransaction.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WalletTransactionFindFirstArgs>(args?: SelectSubset<T, WalletTransactionFindFirstArgs<ExtArgs>>): Prisma__WalletTransactionClient<$Result.GetResult<Prisma.$WalletTransactionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WalletTransaction that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WalletTransactionFindFirstOrThrowArgs} args - Arguments to find a WalletTransaction
+     * @example
+     * // Get one WalletTransaction
+     * const walletTransaction = await prisma.walletTransaction.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WalletTransactionFindFirstOrThrowArgs>(args?: SelectSubset<T, WalletTransactionFindFirstOrThrowArgs<ExtArgs>>): Prisma__WalletTransactionClient<$Result.GetResult<Prisma.$WalletTransactionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WalletTransactions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WalletTransactionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WalletTransactions
+     * const walletTransactions = await prisma.walletTransaction.findMany()
+     * 
+     * // Get first 10 WalletTransactions
+     * const walletTransactions = await prisma.walletTransaction.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const walletTransactionWithIdOnly = await prisma.walletTransaction.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WalletTransactionFindManyArgs>(args?: SelectSubset<T, WalletTransactionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WalletTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WalletTransaction.
+     * @param {WalletTransactionCreateArgs} args - Arguments to create a WalletTransaction.
+     * @example
+     * // Create one WalletTransaction
+     * const WalletTransaction = await prisma.walletTransaction.create({
+     *   data: {
+     *     // ... data to create a WalletTransaction
+     *   }
+     * })
+     * 
+     */
+    create<T extends WalletTransactionCreateArgs>(args: SelectSubset<T, WalletTransactionCreateArgs<ExtArgs>>): Prisma__WalletTransactionClient<$Result.GetResult<Prisma.$WalletTransactionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WalletTransactions.
+     * @param {WalletTransactionCreateManyArgs} args - Arguments to create many WalletTransactions.
+     * @example
+     * // Create many WalletTransactions
+     * const walletTransaction = await prisma.walletTransaction.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WalletTransactionCreateManyArgs>(args?: SelectSubset<T, WalletTransactionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WalletTransactions and returns the data saved in the database.
+     * @param {WalletTransactionCreateManyAndReturnArgs} args - Arguments to create many WalletTransactions.
+     * @example
+     * // Create many WalletTransactions
+     * const walletTransaction = await prisma.walletTransaction.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WalletTransactions and only return the `id`
+     * const walletTransactionWithIdOnly = await prisma.walletTransaction.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WalletTransactionCreateManyAndReturnArgs>(args?: SelectSubset<T, WalletTransactionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WalletTransactionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a WalletTransaction.
+     * @param {WalletTransactionDeleteArgs} args - Arguments to delete one WalletTransaction.
+     * @example
+     * // Delete one WalletTransaction
+     * const WalletTransaction = await prisma.walletTransaction.delete({
+     *   where: {
+     *     // ... filter to delete one WalletTransaction
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WalletTransactionDeleteArgs>(args: SelectSubset<T, WalletTransactionDeleteArgs<ExtArgs>>): Prisma__WalletTransactionClient<$Result.GetResult<Prisma.$WalletTransactionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WalletTransaction.
+     * @param {WalletTransactionUpdateArgs} args - Arguments to update one WalletTransaction.
+     * @example
+     * // Update one WalletTransaction
+     * const walletTransaction = await prisma.walletTransaction.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WalletTransactionUpdateArgs>(args: SelectSubset<T, WalletTransactionUpdateArgs<ExtArgs>>): Prisma__WalletTransactionClient<$Result.GetResult<Prisma.$WalletTransactionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WalletTransactions.
+     * @param {WalletTransactionDeleteManyArgs} args - Arguments to filter WalletTransactions to delete.
+     * @example
+     * // Delete a few WalletTransactions
+     * const { count } = await prisma.walletTransaction.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WalletTransactionDeleteManyArgs>(args?: SelectSubset<T, WalletTransactionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WalletTransactions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WalletTransactionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WalletTransactions
+     * const walletTransaction = await prisma.walletTransaction.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WalletTransactionUpdateManyArgs>(args: SelectSubset<T, WalletTransactionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WalletTransactions and returns the data updated in the database.
+     * @param {WalletTransactionUpdateManyAndReturnArgs} args - Arguments to update many WalletTransactions.
+     * @example
+     * // Update many WalletTransactions
+     * const walletTransaction = await prisma.walletTransaction.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more WalletTransactions and only return the `id`
+     * const walletTransactionWithIdOnly = await prisma.walletTransaction.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WalletTransactionUpdateManyAndReturnArgs>(args: SelectSubset<T, WalletTransactionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WalletTransactionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one WalletTransaction.
+     * @param {WalletTransactionUpsertArgs} args - Arguments to update or create a WalletTransaction.
+     * @example
+     * // Update or create a WalletTransaction
+     * const walletTransaction = await prisma.walletTransaction.upsert({
+     *   create: {
+     *     // ... data to create a WalletTransaction
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WalletTransaction we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WalletTransactionUpsertArgs>(args: SelectSubset<T, WalletTransactionUpsertArgs<ExtArgs>>): Prisma__WalletTransactionClient<$Result.GetResult<Prisma.$WalletTransactionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of WalletTransactions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WalletTransactionCountArgs} args - Arguments to filter WalletTransactions to count.
+     * @example
+     * // Count the number of WalletTransactions
+     * const count = await prisma.walletTransaction.count({
+     *   where: {
+     *     // ... the filter for the WalletTransactions we want to count
+     *   }
+     * })
+    **/
+    count<T extends WalletTransactionCountArgs>(
+      args?: Subset<T, WalletTransactionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WalletTransactionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WalletTransaction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WalletTransactionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WalletTransactionAggregateArgs>(args: Subset<T, WalletTransactionAggregateArgs>): Prisma.PrismaPromise<GetWalletTransactionAggregateType<T>>
+
+    /**
+     * Group by WalletTransaction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WalletTransactionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WalletTransactionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WalletTransactionGroupByArgs['orderBy'] }
+        : { orderBy?: WalletTransactionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WalletTransactionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWalletTransactionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WalletTransaction model
+   */
+  readonly fields: WalletTransactionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WalletTransaction.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WalletTransactionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    wallet<T extends WalletDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WalletDefaultArgs<ExtArgs>>): Prisma__WalletClient<$Result.GetResult<Prisma.$WalletPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WalletTransaction model
+   */
+  interface WalletTransactionFieldRefs {
+    readonly id: FieldRef<"WalletTransaction", 'String'>
+    readonly walletId: FieldRef<"WalletTransaction", 'String'>
+    readonly tenantId: FieldRef<"WalletTransaction", 'String'>
+    readonly type: FieldRef<"WalletTransaction", 'WalletTxType'>
+    readonly amount: FieldRef<"WalletTransaction", 'Int'>
+    readonly balanceAfter: FieldRef<"WalletTransaction", 'Int'>
+    readonly bonusBalanceAfter: FieldRef<"WalletTransaction", 'Int'>
+    readonly description: FieldRef<"WalletTransaction", 'String'>
+    readonly referenceType: FieldRef<"WalletTransaction", 'String'>
+    readonly referenceId: FieldRef<"WalletTransaction", 'String'>
+    readonly createdAt: FieldRef<"WalletTransaction", 'DateTime'>
+    readonly createdBy: FieldRef<"WalletTransaction", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WalletTransaction findUnique
+   */
+  export type WalletTransactionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletTransaction
+     */
+    select?: WalletTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WalletTransaction
+     */
+    omit?: WalletTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletTransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which WalletTransaction to fetch.
+     */
+    where: WalletTransactionWhereUniqueInput
+  }
+
+  /**
+   * WalletTransaction findUniqueOrThrow
+   */
+  export type WalletTransactionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletTransaction
+     */
+    select?: WalletTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WalletTransaction
+     */
+    omit?: WalletTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletTransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which WalletTransaction to fetch.
+     */
+    where: WalletTransactionWhereUniqueInput
+  }
+
+  /**
+   * WalletTransaction findFirst
+   */
+  export type WalletTransactionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletTransaction
+     */
+    select?: WalletTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WalletTransaction
+     */
+    omit?: WalletTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletTransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which WalletTransaction to fetch.
+     */
+    where?: WalletTransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WalletTransactions to fetch.
+     */
+    orderBy?: WalletTransactionOrderByWithRelationInput | WalletTransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WalletTransactions.
+     */
+    cursor?: WalletTransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WalletTransactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WalletTransactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WalletTransactions.
+     */
+    distinct?: WalletTransactionScalarFieldEnum | WalletTransactionScalarFieldEnum[]
+  }
+
+  /**
+   * WalletTransaction findFirstOrThrow
+   */
+  export type WalletTransactionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletTransaction
+     */
+    select?: WalletTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WalletTransaction
+     */
+    omit?: WalletTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletTransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which WalletTransaction to fetch.
+     */
+    where?: WalletTransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WalletTransactions to fetch.
+     */
+    orderBy?: WalletTransactionOrderByWithRelationInput | WalletTransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WalletTransactions.
+     */
+    cursor?: WalletTransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WalletTransactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WalletTransactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WalletTransactions.
+     */
+    distinct?: WalletTransactionScalarFieldEnum | WalletTransactionScalarFieldEnum[]
+  }
+
+  /**
+   * WalletTransaction findMany
+   */
+  export type WalletTransactionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletTransaction
+     */
+    select?: WalletTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WalletTransaction
+     */
+    omit?: WalletTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletTransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which WalletTransactions to fetch.
+     */
+    where?: WalletTransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WalletTransactions to fetch.
+     */
+    orderBy?: WalletTransactionOrderByWithRelationInput | WalletTransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WalletTransactions.
+     */
+    cursor?: WalletTransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WalletTransactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WalletTransactions.
+     */
+    skip?: number
+    distinct?: WalletTransactionScalarFieldEnum | WalletTransactionScalarFieldEnum[]
+  }
+
+  /**
+   * WalletTransaction create
+   */
+  export type WalletTransactionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletTransaction
+     */
+    select?: WalletTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WalletTransaction
+     */
+    omit?: WalletTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletTransactionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a WalletTransaction.
+     */
+    data: XOR<WalletTransactionCreateInput, WalletTransactionUncheckedCreateInput>
+  }
+
+  /**
+   * WalletTransaction createMany
+   */
+  export type WalletTransactionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WalletTransactions.
+     */
+    data: WalletTransactionCreateManyInput | WalletTransactionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WalletTransaction createManyAndReturn
+   */
+  export type WalletTransactionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletTransaction
+     */
+    select?: WalletTransactionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WalletTransaction
+     */
+    omit?: WalletTransactionOmit<ExtArgs> | null
+    /**
+     * The data used to create many WalletTransactions.
+     */
+    data: WalletTransactionCreateManyInput | WalletTransactionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletTransactionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WalletTransaction update
+   */
+  export type WalletTransactionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletTransaction
+     */
+    select?: WalletTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WalletTransaction
+     */
+    omit?: WalletTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletTransactionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a WalletTransaction.
+     */
+    data: XOR<WalletTransactionUpdateInput, WalletTransactionUncheckedUpdateInput>
+    /**
+     * Choose, which WalletTransaction to update.
+     */
+    where: WalletTransactionWhereUniqueInput
+  }
+
+  /**
+   * WalletTransaction updateMany
+   */
+  export type WalletTransactionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WalletTransactions.
+     */
+    data: XOR<WalletTransactionUpdateManyMutationInput, WalletTransactionUncheckedUpdateManyInput>
+    /**
+     * Filter which WalletTransactions to update
+     */
+    where?: WalletTransactionWhereInput
+    /**
+     * Limit how many WalletTransactions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WalletTransaction updateManyAndReturn
+   */
+  export type WalletTransactionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletTransaction
+     */
+    select?: WalletTransactionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WalletTransaction
+     */
+    omit?: WalletTransactionOmit<ExtArgs> | null
+    /**
+     * The data used to update WalletTransactions.
+     */
+    data: XOR<WalletTransactionUpdateManyMutationInput, WalletTransactionUncheckedUpdateManyInput>
+    /**
+     * Filter which WalletTransactions to update
+     */
+    where?: WalletTransactionWhereInput
+    /**
+     * Limit how many WalletTransactions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletTransactionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WalletTransaction upsert
+   */
+  export type WalletTransactionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletTransaction
+     */
+    select?: WalletTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WalletTransaction
+     */
+    omit?: WalletTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletTransactionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the WalletTransaction to update in case it exists.
+     */
+    where: WalletTransactionWhereUniqueInput
+    /**
+     * In case the WalletTransaction found by the `where` argument doesn't exist, create a new WalletTransaction with this data.
+     */
+    create: XOR<WalletTransactionCreateInput, WalletTransactionUncheckedCreateInput>
+    /**
+     * In case the WalletTransaction was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WalletTransactionUpdateInput, WalletTransactionUncheckedUpdateInput>
+  }
+
+  /**
+   * WalletTransaction delete
+   */
+  export type WalletTransactionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletTransaction
+     */
+    select?: WalletTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WalletTransaction
+     */
+    omit?: WalletTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletTransactionInclude<ExtArgs> | null
+    /**
+     * Filter which WalletTransaction to delete.
+     */
+    where: WalletTransactionWhereUniqueInput
+  }
+
+  /**
+   * WalletTransaction deleteMany
+   */
+  export type WalletTransactionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WalletTransactions to delete
+     */
+    where?: WalletTransactionWhereInput
+    /**
+     * Limit how many WalletTransactions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WalletTransaction without action
+   */
+  export type WalletTransactionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletTransaction
+     */
+    select?: WalletTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WalletTransaction
+     */
+    omit?: WalletTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WalletTransactionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Recharge
+   */
+
+  export type AggregateRecharge = {
+    _count: RechargeCountAggregateOutputType | null
+    _avg: RechargeAvgAggregateOutputType | null
+    _sum: RechargeSumAggregateOutputType | null
+    _min: RechargeMinAggregateOutputType | null
+    _max: RechargeMaxAggregateOutputType | null
+  }
+
+  export type RechargeAvgAggregateOutputType = {
+    amount: number | null
+  }
+
+  export type RechargeSumAggregateOutputType = {
+    amount: number | null
+  }
+
+  export type RechargeMinAggregateOutputType = {
+    id: string | null
+    walletId: string | null
+    tenantId: string | null
+    amount: number | null
+    purpose: $Enums.RechargePurpose | null
+    status: $Enums.RechargeStatus | null
+    razorpayOrderId: string | null
+    razorpayPaymentId: string | null
+    razorpaySignature: string | null
+    failureReason: string | null
+    planId: string | null
+    createdAt: Date | null
+    completedAt: Date | null
+  }
+
+  export type RechargeMaxAggregateOutputType = {
+    id: string | null
+    walletId: string | null
+    tenantId: string | null
+    amount: number | null
+    purpose: $Enums.RechargePurpose | null
+    status: $Enums.RechargeStatus | null
+    razorpayOrderId: string | null
+    razorpayPaymentId: string | null
+    razorpaySignature: string | null
+    failureReason: string | null
+    planId: string | null
+    createdAt: Date | null
+    completedAt: Date | null
+  }
+
+  export type RechargeCountAggregateOutputType = {
+    id: number
+    walletId: number
+    tenantId: number
+    amount: number
+    purpose: number
+    status: number
+    razorpayOrderId: number
+    razorpayPaymentId: number
+    razorpaySignature: number
+    failureReason: number
+    planId: number
+    createdAt: number
+    completedAt: number
+    _all: number
+  }
+
+
+  export type RechargeAvgAggregateInputType = {
+    amount?: true
+  }
+
+  export type RechargeSumAggregateInputType = {
+    amount?: true
+  }
+
+  export type RechargeMinAggregateInputType = {
+    id?: true
+    walletId?: true
+    tenantId?: true
+    amount?: true
+    purpose?: true
+    status?: true
+    razorpayOrderId?: true
+    razorpayPaymentId?: true
+    razorpaySignature?: true
+    failureReason?: true
+    planId?: true
+    createdAt?: true
+    completedAt?: true
+  }
+
+  export type RechargeMaxAggregateInputType = {
+    id?: true
+    walletId?: true
+    tenantId?: true
+    amount?: true
+    purpose?: true
+    status?: true
+    razorpayOrderId?: true
+    razorpayPaymentId?: true
+    razorpaySignature?: true
+    failureReason?: true
+    planId?: true
+    createdAt?: true
+    completedAt?: true
+  }
+
+  export type RechargeCountAggregateInputType = {
+    id?: true
+    walletId?: true
+    tenantId?: true
+    amount?: true
+    purpose?: true
+    status?: true
+    razorpayOrderId?: true
+    razorpayPaymentId?: true
+    razorpaySignature?: true
+    failureReason?: true
+    planId?: true
+    createdAt?: true
+    completedAt?: true
+    _all?: true
+  }
+
+  export type RechargeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Recharge to aggregate.
+     */
+    where?: RechargeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Recharges to fetch.
+     */
+    orderBy?: RechargeOrderByWithRelationInput | RechargeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RechargeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Recharges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Recharges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Recharges
+    **/
+    _count?: true | RechargeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RechargeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RechargeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RechargeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RechargeMaxAggregateInputType
+  }
+
+  export type GetRechargeAggregateType<T extends RechargeAggregateArgs> = {
+        [P in keyof T & keyof AggregateRecharge]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRecharge[P]>
+      : GetScalarType<T[P], AggregateRecharge[P]>
+  }
+
+
+
+
+  export type RechargeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RechargeWhereInput
+    orderBy?: RechargeOrderByWithAggregationInput | RechargeOrderByWithAggregationInput[]
+    by: RechargeScalarFieldEnum[] | RechargeScalarFieldEnum
+    having?: RechargeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RechargeCountAggregateInputType | true
+    _avg?: RechargeAvgAggregateInputType
+    _sum?: RechargeSumAggregateInputType
+    _min?: RechargeMinAggregateInputType
+    _max?: RechargeMaxAggregateInputType
+  }
+
+  export type RechargeGroupByOutputType = {
+    id: string
+    walletId: string
+    tenantId: string
+    amount: number
+    purpose: $Enums.RechargePurpose
+    status: $Enums.RechargeStatus
+    razorpayOrderId: string | null
+    razorpayPaymentId: string | null
+    razorpaySignature: string | null
+    failureReason: string | null
+    planId: string | null
+    createdAt: Date
+    completedAt: Date | null
+    _count: RechargeCountAggregateOutputType | null
+    _avg: RechargeAvgAggregateOutputType | null
+    _sum: RechargeSumAggregateOutputType | null
+    _min: RechargeMinAggregateOutputType | null
+    _max: RechargeMaxAggregateOutputType | null
+  }
+
+  type GetRechargeGroupByPayload<T extends RechargeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RechargeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RechargeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RechargeGroupByOutputType[P]>
+            : GetScalarType<T[P], RechargeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RechargeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    walletId?: boolean
+    tenantId?: boolean
+    amount?: boolean
+    purpose?: boolean
+    status?: boolean
+    razorpayOrderId?: boolean
+    razorpayPaymentId?: boolean
+    razorpaySignature?: boolean
+    failureReason?: boolean
+    planId?: boolean
+    createdAt?: boolean
+    completedAt?: boolean
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["recharge"]>
+
+  export type RechargeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    walletId?: boolean
+    tenantId?: boolean
+    amount?: boolean
+    purpose?: boolean
+    status?: boolean
+    razorpayOrderId?: boolean
+    razorpayPaymentId?: boolean
+    razorpaySignature?: boolean
+    failureReason?: boolean
+    planId?: boolean
+    createdAt?: boolean
+    completedAt?: boolean
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["recharge"]>
+
+  export type RechargeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    walletId?: boolean
+    tenantId?: boolean
+    amount?: boolean
+    purpose?: boolean
+    status?: boolean
+    razorpayOrderId?: boolean
+    razorpayPaymentId?: boolean
+    razorpaySignature?: boolean
+    failureReason?: boolean
+    planId?: boolean
+    createdAt?: boolean
+    completedAt?: boolean
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["recharge"]>
+
+  export type RechargeSelectScalar = {
+    id?: boolean
+    walletId?: boolean
+    tenantId?: boolean
+    amount?: boolean
+    purpose?: boolean
+    status?: boolean
+    razorpayOrderId?: boolean
+    razorpayPaymentId?: boolean
+    razorpaySignature?: boolean
+    failureReason?: boolean
+    planId?: boolean
+    createdAt?: boolean
+    completedAt?: boolean
+  }
+
+  export type RechargeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "walletId" | "tenantId" | "amount" | "purpose" | "status" | "razorpayOrderId" | "razorpayPaymentId" | "razorpaySignature" | "failureReason" | "planId" | "createdAt" | "completedAt", ExtArgs["result"]["recharge"]>
+  export type RechargeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+  }
+  export type RechargeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+  }
+  export type RechargeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+  }
+
+  export type $RechargePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Recharge"
+    objects: {
+      wallet: Prisma.$WalletPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      walletId: string
+      tenantId: string
+      amount: number
+      purpose: $Enums.RechargePurpose
+      status: $Enums.RechargeStatus
+      razorpayOrderId: string | null
+      razorpayPaymentId: string | null
+      razorpaySignature: string | null
+      failureReason: string | null
+      planId: string | null
+      createdAt: Date
+      completedAt: Date | null
+    }, ExtArgs["result"]["recharge"]>
+    composites: {}
+  }
+
+  type RechargeGetPayload<S extends boolean | null | undefined | RechargeDefaultArgs> = $Result.GetResult<Prisma.$RechargePayload, S>
+
+  type RechargeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RechargeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RechargeCountAggregateInputType | true
+    }
+
+  export interface RechargeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Recharge'], meta: { name: 'Recharge' } }
+    /**
+     * Find zero or one Recharge that matches the filter.
+     * @param {RechargeFindUniqueArgs} args - Arguments to find a Recharge
+     * @example
+     * // Get one Recharge
+     * const recharge = await prisma.recharge.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RechargeFindUniqueArgs>(args: SelectSubset<T, RechargeFindUniqueArgs<ExtArgs>>): Prisma__RechargeClient<$Result.GetResult<Prisma.$RechargePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Recharge that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RechargeFindUniqueOrThrowArgs} args - Arguments to find a Recharge
+     * @example
+     * // Get one Recharge
+     * const recharge = await prisma.recharge.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RechargeFindUniqueOrThrowArgs>(args: SelectSubset<T, RechargeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RechargeClient<$Result.GetResult<Prisma.$RechargePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Recharge that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RechargeFindFirstArgs} args - Arguments to find a Recharge
+     * @example
+     * // Get one Recharge
+     * const recharge = await prisma.recharge.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RechargeFindFirstArgs>(args?: SelectSubset<T, RechargeFindFirstArgs<ExtArgs>>): Prisma__RechargeClient<$Result.GetResult<Prisma.$RechargePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Recharge that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RechargeFindFirstOrThrowArgs} args - Arguments to find a Recharge
+     * @example
+     * // Get one Recharge
+     * const recharge = await prisma.recharge.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RechargeFindFirstOrThrowArgs>(args?: SelectSubset<T, RechargeFindFirstOrThrowArgs<ExtArgs>>): Prisma__RechargeClient<$Result.GetResult<Prisma.$RechargePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Recharges that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RechargeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Recharges
+     * const recharges = await prisma.recharge.findMany()
+     * 
+     * // Get first 10 Recharges
+     * const recharges = await prisma.recharge.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const rechargeWithIdOnly = await prisma.recharge.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RechargeFindManyArgs>(args?: SelectSubset<T, RechargeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RechargePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Recharge.
+     * @param {RechargeCreateArgs} args - Arguments to create a Recharge.
+     * @example
+     * // Create one Recharge
+     * const Recharge = await prisma.recharge.create({
+     *   data: {
+     *     // ... data to create a Recharge
+     *   }
+     * })
+     * 
+     */
+    create<T extends RechargeCreateArgs>(args: SelectSubset<T, RechargeCreateArgs<ExtArgs>>): Prisma__RechargeClient<$Result.GetResult<Prisma.$RechargePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Recharges.
+     * @param {RechargeCreateManyArgs} args - Arguments to create many Recharges.
+     * @example
+     * // Create many Recharges
+     * const recharge = await prisma.recharge.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RechargeCreateManyArgs>(args?: SelectSubset<T, RechargeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Recharges and returns the data saved in the database.
+     * @param {RechargeCreateManyAndReturnArgs} args - Arguments to create many Recharges.
+     * @example
+     * // Create many Recharges
+     * const recharge = await prisma.recharge.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Recharges and only return the `id`
+     * const rechargeWithIdOnly = await prisma.recharge.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RechargeCreateManyAndReturnArgs>(args?: SelectSubset<T, RechargeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RechargePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Recharge.
+     * @param {RechargeDeleteArgs} args - Arguments to delete one Recharge.
+     * @example
+     * // Delete one Recharge
+     * const Recharge = await prisma.recharge.delete({
+     *   where: {
+     *     // ... filter to delete one Recharge
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RechargeDeleteArgs>(args: SelectSubset<T, RechargeDeleteArgs<ExtArgs>>): Prisma__RechargeClient<$Result.GetResult<Prisma.$RechargePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Recharge.
+     * @param {RechargeUpdateArgs} args - Arguments to update one Recharge.
+     * @example
+     * // Update one Recharge
+     * const recharge = await prisma.recharge.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RechargeUpdateArgs>(args: SelectSubset<T, RechargeUpdateArgs<ExtArgs>>): Prisma__RechargeClient<$Result.GetResult<Prisma.$RechargePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Recharges.
+     * @param {RechargeDeleteManyArgs} args - Arguments to filter Recharges to delete.
+     * @example
+     * // Delete a few Recharges
+     * const { count } = await prisma.recharge.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RechargeDeleteManyArgs>(args?: SelectSubset<T, RechargeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Recharges.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RechargeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Recharges
+     * const recharge = await prisma.recharge.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RechargeUpdateManyArgs>(args: SelectSubset<T, RechargeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Recharges and returns the data updated in the database.
+     * @param {RechargeUpdateManyAndReturnArgs} args - Arguments to update many Recharges.
+     * @example
+     * // Update many Recharges
+     * const recharge = await prisma.recharge.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Recharges and only return the `id`
+     * const rechargeWithIdOnly = await prisma.recharge.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RechargeUpdateManyAndReturnArgs>(args: SelectSubset<T, RechargeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RechargePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Recharge.
+     * @param {RechargeUpsertArgs} args - Arguments to update or create a Recharge.
+     * @example
+     * // Update or create a Recharge
+     * const recharge = await prisma.recharge.upsert({
+     *   create: {
+     *     // ... data to create a Recharge
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Recharge we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RechargeUpsertArgs>(args: SelectSubset<T, RechargeUpsertArgs<ExtArgs>>): Prisma__RechargeClient<$Result.GetResult<Prisma.$RechargePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Recharges.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RechargeCountArgs} args - Arguments to filter Recharges to count.
+     * @example
+     * // Count the number of Recharges
+     * const count = await prisma.recharge.count({
+     *   where: {
+     *     // ... the filter for the Recharges we want to count
+     *   }
+     * })
+    **/
+    count<T extends RechargeCountArgs>(
+      args?: Subset<T, RechargeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RechargeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Recharge.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RechargeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RechargeAggregateArgs>(args: Subset<T, RechargeAggregateArgs>): Prisma.PrismaPromise<GetRechargeAggregateType<T>>
+
+    /**
+     * Group by Recharge.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RechargeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RechargeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RechargeGroupByArgs['orderBy'] }
+        : { orderBy?: RechargeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RechargeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRechargeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Recharge model
+   */
+  readonly fields: RechargeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Recharge.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RechargeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    wallet<T extends WalletDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WalletDefaultArgs<ExtArgs>>): Prisma__WalletClient<$Result.GetResult<Prisma.$WalletPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Recharge model
+   */
+  interface RechargeFieldRefs {
+    readonly id: FieldRef<"Recharge", 'String'>
+    readonly walletId: FieldRef<"Recharge", 'String'>
+    readonly tenantId: FieldRef<"Recharge", 'String'>
+    readonly amount: FieldRef<"Recharge", 'Int'>
+    readonly purpose: FieldRef<"Recharge", 'RechargePurpose'>
+    readonly status: FieldRef<"Recharge", 'RechargeStatus'>
+    readonly razorpayOrderId: FieldRef<"Recharge", 'String'>
+    readonly razorpayPaymentId: FieldRef<"Recharge", 'String'>
+    readonly razorpaySignature: FieldRef<"Recharge", 'String'>
+    readonly failureReason: FieldRef<"Recharge", 'String'>
+    readonly planId: FieldRef<"Recharge", 'String'>
+    readonly createdAt: FieldRef<"Recharge", 'DateTime'>
+    readonly completedAt: FieldRef<"Recharge", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Recharge findUnique
+   */
+  export type RechargeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recharge
+     */
+    select?: RechargeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recharge
+     */
+    omit?: RechargeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RechargeInclude<ExtArgs> | null
+    /**
+     * Filter, which Recharge to fetch.
+     */
+    where: RechargeWhereUniqueInput
+  }
+
+  /**
+   * Recharge findUniqueOrThrow
+   */
+  export type RechargeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recharge
+     */
+    select?: RechargeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recharge
+     */
+    omit?: RechargeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RechargeInclude<ExtArgs> | null
+    /**
+     * Filter, which Recharge to fetch.
+     */
+    where: RechargeWhereUniqueInput
+  }
+
+  /**
+   * Recharge findFirst
+   */
+  export type RechargeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recharge
+     */
+    select?: RechargeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recharge
+     */
+    omit?: RechargeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RechargeInclude<ExtArgs> | null
+    /**
+     * Filter, which Recharge to fetch.
+     */
+    where?: RechargeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Recharges to fetch.
+     */
+    orderBy?: RechargeOrderByWithRelationInput | RechargeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Recharges.
+     */
+    cursor?: RechargeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Recharges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Recharges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Recharges.
+     */
+    distinct?: RechargeScalarFieldEnum | RechargeScalarFieldEnum[]
+  }
+
+  /**
+   * Recharge findFirstOrThrow
+   */
+  export type RechargeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recharge
+     */
+    select?: RechargeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recharge
+     */
+    omit?: RechargeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RechargeInclude<ExtArgs> | null
+    /**
+     * Filter, which Recharge to fetch.
+     */
+    where?: RechargeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Recharges to fetch.
+     */
+    orderBy?: RechargeOrderByWithRelationInput | RechargeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Recharges.
+     */
+    cursor?: RechargeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Recharges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Recharges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Recharges.
+     */
+    distinct?: RechargeScalarFieldEnum | RechargeScalarFieldEnum[]
+  }
+
+  /**
+   * Recharge findMany
+   */
+  export type RechargeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recharge
+     */
+    select?: RechargeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recharge
+     */
+    omit?: RechargeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RechargeInclude<ExtArgs> | null
+    /**
+     * Filter, which Recharges to fetch.
+     */
+    where?: RechargeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Recharges to fetch.
+     */
+    orderBy?: RechargeOrderByWithRelationInput | RechargeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Recharges.
+     */
+    cursor?: RechargeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Recharges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Recharges.
+     */
+    skip?: number
+    distinct?: RechargeScalarFieldEnum | RechargeScalarFieldEnum[]
+  }
+
+  /**
+   * Recharge create
+   */
+  export type RechargeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recharge
+     */
+    select?: RechargeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recharge
+     */
+    omit?: RechargeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RechargeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Recharge.
+     */
+    data: XOR<RechargeCreateInput, RechargeUncheckedCreateInput>
+  }
+
+  /**
+   * Recharge createMany
+   */
+  export type RechargeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Recharges.
+     */
+    data: RechargeCreateManyInput | RechargeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Recharge createManyAndReturn
+   */
+  export type RechargeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recharge
+     */
+    select?: RechargeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recharge
+     */
+    omit?: RechargeOmit<ExtArgs> | null
+    /**
+     * The data used to create many Recharges.
+     */
+    data: RechargeCreateManyInput | RechargeCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RechargeIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Recharge update
+   */
+  export type RechargeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recharge
+     */
+    select?: RechargeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recharge
+     */
+    omit?: RechargeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RechargeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Recharge.
+     */
+    data: XOR<RechargeUpdateInput, RechargeUncheckedUpdateInput>
+    /**
+     * Choose, which Recharge to update.
+     */
+    where: RechargeWhereUniqueInput
+  }
+
+  /**
+   * Recharge updateMany
+   */
+  export type RechargeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Recharges.
+     */
+    data: XOR<RechargeUpdateManyMutationInput, RechargeUncheckedUpdateManyInput>
+    /**
+     * Filter which Recharges to update
+     */
+    where?: RechargeWhereInput
+    /**
+     * Limit how many Recharges to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Recharge updateManyAndReturn
+   */
+  export type RechargeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recharge
+     */
+    select?: RechargeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recharge
+     */
+    omit?: RechargeOmit<ExtArgs> | null
+    /**
+     * The data used to update Recharges.
+     */
+    data: XOR<RechargeUpdateManyMutationInput, RechargeUncheckedUpdateManyInput>
+    /**
+     * Filter which Recharges to update
+     */
+    where?: RechargeWhereInput
+    /**
+     * Limit how many Recharges to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RechargeIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Recharge upsert
+   */
+  export type RechargeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recharge
+     */
+    select?: RechargeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recharge
+     */
+    omit?: RechargeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RechargeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Recharge to update in case it exists.
+     */
+    where: RechargeWhereUniqueInput
+    /**
+     * In case the Recharge found by the `where` argument doesn't exist, create a new Recharge with this data.
+     */
+    create: XOR<RechargeCreateInput, RechargeUncheckedCreateInput>
+    /**
+     * In case the Recharge was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RechargeUpdateInput, RechargeUncheckedUpdateInput>
+  }
+
+  /**
+   * Recharge delete
+   */
+  export type RechargeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recharge
+     */
+    select?: RechargeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recharge
+     */
+    omit?: RechargeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RechargeInclude<ExtArgs> | null
+    /**
+     * Filter which Recharge to delete.
+     */
+    where: RechargeWhereUniqueInput
+  }
+
+  /**
+   * Recharge deleteMany
+   */
+  export type RechargeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Recharges to delete
+     */
+    where?: RechargeWhereInput
+    /**
+     * Limit how many Recharges to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Recharge without action
+   */
+  export type RechargeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recharge
+     */
+    select?: RechargeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recharge
+     */
+    omit?: RechargeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RechargeInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -21298,6 +26670,7 @@ export namespace Prisma {
     email: 'email',
     password: 'password',
     name: 'name',
+    isActive: 'isActive',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -21483,6 +26856,8 @@ export namespace Prisma {
     status: 'status',
     duration: 'duration',
     cost: 'cost',
+    platformCost: 'platformCost',
+    billableSeconds: 'billableSeconds',
     recording: 'recording',
     transcript: 'transcript',
     transcriptMessages: 'transcriptMessages',
@@ -21573,6 +26948,78 @@ export namespace Prisma {
   };
 
   export type BolnaApiKeyScalarFieldEnum = (typeof BolnaApiKeyScalarFieldEnum)[keyof typeof BolnaApiKeyScalarFieldEnum]
+
+
+  export const TenantInviteScalarFieldEnum: {
+    id: 'id',
+    email: 'email',
+    tenantName: 'tenantName',
+    token: 'token',
+    status: 'status',
+    planId: 'planId',
+    invitedBy: 'invitedBy',
+    expiresAt: 'expiresAt',
+    acceptedAt: 'acceptedAt',
+    resendCount: 'resendCount',
+    lastResentAt: 'lastResentAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type TenantInviteScalarFieldEnum = (typeof TenantInviteScalarFieldEnum)[keyof typeof TenantInviteScalarFieldEnum]
+
+
+  export const WalletScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    balance: 'balance',
+    bonusBalance: 'bonusBalance',
+    bonusExpiresAt: 'bonusExpiresAt',
+    isActive: 'isActive',
+    lowBalanceThreshold: 'lowBalanceThreshold',
+    lowBalanceAlertSent: 'lowBalanceAlertSent',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type WalletScalarFieldEnum = (typeof WalletScalarFieldEnum)[keyof typeof WalletScalarFieldEnum]
+
+
+  export const WalletTransactionScalarFieldEnum: {
+    id: 'id',
+    walletId: 'walletId',
+    tenantId: 'tenantId',
+    type: 'type',
+    amount: 'amount',
+    balanceAfter: 'balanceAfter',
+    bonusBalanceAfter: 'bonusBalanceAfter',
+    description: 'description',
+    referenceType: 'referenceType',
+    referenceId: 'referenceId',
+    createdAt: 'createdAt',
+    createdBy: 'createdBy'
+  };
+
+  export type WalletTransactionScalarFieldEnum = (typeof WalletTransactionScalarFieldEnum)[keyof typeof WalletTransactionScalarFieldEnum]
+
+
+  export const RechargeScalarFieldEnum: {
+    id: 'id',
+    walletId: 'walletId',
+    tenantId: 'tenantId',
+    amount: 'amount',
+    purpose: 'purpose',
+    status: 'status',
+    razorpayOrderId: 'razorpayOrderId',
+    razorpayPaymentId: 'razorpayPaymentId',
+    razorpaySignature: 'razorpaySignature',
+    failureReason: 'failureReason',
+    planId: 'planId',
+    createdAt: 'createdAt',
+    completedAt: 'completedAt'
+  };
+
+  export type RechargeScalarFieldEnum = (typeof RechargeScalarFieldEnum)[keyof typeof RechargeScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -21913,6 +27360,62 @@ export namespace Prisma {
    */
   export type ListEnumBolnaApiKeyTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BolnaApiKeyType[]'>
     
+
+
+  /**
+   * Reference to a field of type 'InviteStatus'
+   */
+  export type EnumInviteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InviteStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'InviteStatus[]'
+   */
+  export type ListEnumInviteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InviteStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'WalletTxType'
+   */
+  export type EnumWalletTxTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WalletTxType'>
+    
+
+
+  /**
+   * Reference to a field of type 'WalletTxType[]'
+   */
+  export type ListEnumWalletTxTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WalletTxType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'RechargePurpose'
+   */
+  export type EnumRechargePurposeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RechargePurpose'>
+    
+
+
+  /**
+   * Reference to a field of type 'RechargePurpose[]'
+   */
+  export type ListEnumRechargePurposeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RechargePurpose[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'RechargeStatus'
+   */
+  export type EnumRechargeStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RechargeStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'RechargeStatus[]'
+   */
+  export type ListEnumRechargeStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RechargeStatus[]'>
+    
   /**
    * Deep Input Types
    */
@@ -21932,6 +27435,7 @@ export namespace Prisma {
     memberships?: TenantUserListRelationFilter
     bolnaApiKey?: XOR<BolnaApiKeyNullableScalarRelationFilter, BolnaApiKeyWhereInput> | null
     tenantPlan?: XOR<TenantPlanNullableScalarRelationFilter, TenantPlanWhereInput> | null
+    wallet?: XOR<WalletNullableScalarRelationFilter, WalletWhereInput> | null
     campaigns?: CampaignListRelationFilter
     batches?: LeadBatchListRelationFilter
     leads?: LeadListRelationFilter
@@ -21952,6 +27456,7 @@ export namespace Prisma {
     memberships?: TenantUserOrderByRelationAggregateInput
     bolnaApiKey?: BolnaApiKeyOrderByWithRelationInput
     tenantPlan?: TenantPlanOrderByWithRelationInput
+    wallet?: WalletOrderByWithRelationInput
     campaigns?: CampaignOrderByRelationAggregateInput
     batches?: LeadBatchOrderByRelationAggregateInput
     leads?: LeadOrderByRelationAggregateInput
@@ -21975,6 +27480,7 @@ export namespace Prisma {
     memberships?: TenantUserListRelationFilter
     bolnaApiKey?: XOR<BolnaApiKeyNullableScalarRelationFilter, BolnaApiKeyWhereInput> | null
     tenantPlan?: XOR<TenantPlanNullableScalarRelationFilter, TenantPlanWhereInput> | null
+    wallet?: XOR<WalletNullableScalarRelationFilter, WalletWhereInput> | null
     campaigns?: CampaignListRelationFilter
     batches?: LeadBatchListRelationFilter
     leads?: LeadListRelationFilter
@@ -22018,6 +27524,7 @@ export namespace Prisma {
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     name?: StringFilter<"User"> | string
+    isActive?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     memberships?: TenantUserListRelationFilter
@@ -22030,6 +27537,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     name?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     memberships?: TenantUserOrderByRelationAggregateInput
@@ -22045,6 +27553,7 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     password?: StringFilter<"User"> | string
     name?: StringFilter<"User"> | string
+    isActive?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     memberships?: TenantUserListRelationFilter
@@ -22057,6 +27566,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     name?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -22072,6 +27582,7 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
     name?: StringWithAggregatesFilter<"User"> | string
+    isActive?: BoolWithAggregatesFilter<"User"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
@@ -22979,6 +28490,8 @@ export namespace Prisma {
     status?: EnumCallStatusFilter<"Call"> | $Enums.CallStatus
     duration?: IntNullableFilter<"Call"> | number | null
     cost?: FloatNullableFilter<"Call"> | number | null
+    platformCost?: IntNullableFilter<"Call"> | number | null
+    billableSeconds?: IntNullableFilter<"Call"> | number | null
     recording?: StringNullableFilter<"Call"> | string | null
     transcript?: StringNullableFilter<"Call"> | string | null
     transcriptMessages?: JsonNullableFilter<"Call">
@@ -23005,6 +28518,8 @@ export namespace Prisma {
     status?: SortOrder
     duration?: SortOrderInput | SortOrder
     cost?: SortOrderInput | SortOrder
+    platformCost?: SortOrderInput | SortOrder
+    billableSeconds?: SortOrderInput | SortOrder
     recording?: SortOrderInput | SortOrder
     transcript?: SortOrderInput | SortOrder
     transcriptMessages?: SortOrderInput | SortOrder
@@ -23034,6 +28549,8 @@ export namespace Prisma {
     status?: EnumCallStatusFilter<"Call"> | $Enums.CallStatus
     duration?: IntNullableFilter<"Call"> | number | null
     cost?: FloatNullableFilter<"Call"> | number | null
+    platformCost?: IntNullableFilter<"Call"> | number | null
+    billableSeconds?: IntNullableFilter<"Call"> | number | null
     recording?: StringNullableFilter<"Call"> | string | null
     transcript?: StringNullableFilter<"Call"> | string | null
     transcriptMessages?: JsonNullableFilter<"Call">
@@ -23060,6 +28577,8 @@ export namespace Prisma {
     status?: SortOrder
     duration?: SortOrderInput | SortOrder
     cost?: SortOrderInput | SortOrder
+    platformCost?: SortOrderInput | SortOrder
+    billableSeconds?: SortOrderInput | SortOrder
     recording?: SortOrderInput | SortOrder
     transcript?: SortOrderInput | SortOrder
     transcriptMessages?: SortOrderInput | SortOrder
@@ -23089,6 +28608,8 @@ export namespace Prisma {
     status?: EnumCallStatusWithAggregatesFilter<"Call"> | $Enums.CallStatus
     duration?: IntNullableWithAggregatesFilter<"Call"> | number | null
     cost?: FloatNullableWithAggregatesFilter<"Call"> | number | null
+    platformCost?: IntNullableWithAggregatesFilter<"Call"> | number | null
+    billableSeconds?: IntNullableWithAggregatesFilter<"Call"> | number | null
     recording?: StringNullableWithAggregatesFilter<"Call"> | string | null
     transcript?: StringNullableWithAggregatesFilter<"Call"> | string | null
     transcriptMessages?: JsonNullableWithAggregatesFilter<"Call">
@@ -23246,6 +28767,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Plan"> | Date | string
     updatedAt?: DateTimeFilter<"Plan"> | Date | string
     tenantPlans?: TenantPlanListRelationFilter
+    invites?: TenantInviteListRelationFilter
   }
 
   export type PlanOrderByWithRelationInput = {
@@ -23268,6 +28790,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     tenantPlans?: TenantPlanOrderByRelationAggregateInput
+    invites?: TenantInviteOrderByRelationAggregateInput
   }
 
   export type PlanWhereUniqueInput = Prisma.AtLeast<{
@@ -23293,6 +28816,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Plan"> | Date | string
     updatedAt?: DateTimeFilter<"Plan"> | Date | string
     tenantPlans?: TenantPlanListRelationFilter
+    invites?: TenantInviteListRelationFilter
   }, "id" | "slug">
 
   export type PlanOrderByWithAggregationInput = {
@@ -23498,6 +29022,381 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"BolnaApiKey"> | Date | string
   }
 
+  export type TenantInviteWhereInput = {
+    AND?: TenantInviteWhereInput | TenantInviteWhereInput[]
+    OR?: TenantInviteWhereInput[]
+    NOT?: TenantInviteWhereInput | TenantInviteWhereInput[]
+    id?: StringFilter<"TenantInvite"> | string
+    email?: StringFilter<"TenantInvite"> | string
+    tenantName?: StringFilter<"TenantInvite"> | string
+    token?: StringFilter<"TenantInvite"> | string
+    status?: EnumInviteStatusFilter<"TenantInvite"> | $Enums.InviteStatus
+    planId?: StringFilter<"TenantInvite"> | string
+    invitedBy?: StringFilter<"TenantInvite"> | string
+    expiresAt?: DateTimeFilter<"TenantInvite"> | Date | string
+    acceptedAt?: DateTimeNullableFilter<"TenantInvite"> | Date | string | null
+    resendCount?: IntFilter<"TenantInvite"> | number
+    lastResentAt?: DateTimeNullableFilter<"TenantInvite"> | Date | string | null
+    createdAt?: DateTimeFilter<"TenantInvite"> | Date | string
+    updatedAt?: DateTimeFilter<"TenantInvite"> | Date | string
+    plan?: XOR<PlanScalarRelationFilter, PlanWhereInput>
+  }
+
+  export type TenantInviteOrderByWithRelationInput = {
+    id?: SortOrder
+    email?: SortOrder
+    tenantName?: SortOrder
+    token?: SortOrder
+    status?: SortOrder
+    planId?: SortOrder
+    invitedBy?: SortOrder
+    expiresAt?: SortOrder
+    acceptedAt?: SortOrderInput | SortOrder
+    resendCount?: SortOrder
+    lastResentAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    plan?: PlanOrderByWithRelationInput
+  }
+
+  export type TenantInviteWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    token?: string
+    AND?: TenantInviteWhereInput | TenantInviteWhereInput[]
+    OR?: TenantInviteWhereInput[]
+    NOT?: TenantInviteWhereInput | TenantInviteWhereInput[]
+    email?: StringFilter<"TenantInvite"> | string
+    tenantName?: StringFilter<"TenantInvite"> | string
+    status?: EnumInviteStatusFilter<"TenantInvite"> | $Enums.InviteStatus
+    planId?: StringFilter<"TenantInvite"> | string
+    invitedBy?: StringFilter<"TenantInvite"> | string
+    expiresAt?: DateTimeFilter<"TenantInvite"> | Date | string
+    acceptedAt?: DateTimeNullableFilter<"TenantInvite"> | Date | string | null
+    resendCount?: IntFilter<"TenantInvite"> | number
+    lastResentAt?: DateTimeNullableFilter<"TenantInvite"> | Date | string | null
+    createdAt?: DateTimeFilter<"TenantInvite"> | Date | string
+    updatedAt?: DateTimeFilter<"TenantInvite"> | Date | string
+    plan?: XOR<PlanScalarRelationFilter, PlanWhereInput>
+  }, "id" | "token">
+
+  export type TenantInviteOrderByWithAggregationInput = {
+    id?: SortOrder
+    email?: SortOrder
+    tenantName?: SortOrder
+    token?: SortOrder
+    status?: SortOrder
+    planId?: SortOrder
+    invitedBy?: SortOrder
+    expiresAt?: SortOrder
+    acceptedAt?: SortOrderInput | SortOrder
+    resendCount?: SortOrder
+    lastResentAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TenantInviteCountOrderByAggregateInput
+    _avg?: TenantInviteAvgOrderByAggregateInput
+    _max?: TenantInviteMaxOrderByAggregateInput
+    _min?: TenantInviteMinOrderByAggregateInput
+    _sum?: TenantInviteSumOrderByAggregateInput
+  }
+
+  export type TenantInviteScalarWhereWithAggregatesInput = {
+    AND?: TenantInviteScalarWhereWithAggregatesInput | TenantInviteScalarWhereWithAggregatesInput[]
+    OR?: TenantInviteScalarWhereWithAggregatesInput[]
+    NOT?: TenantInviteScalarWhereWithAggregatesInput | TenantInviteScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TenantInvite"> | string
+    email?: StringWithAggregatesFilter<"TenantInvite"> | string
+    tenantName?: StringWithAggregatesFilter<"TenantInvite"> | string
+    token?: StringWithAggregatesFilter<"TenantInvite"> | string
+    status?: EnumInviteStatusWithAggregatesFilter<"TenantInvite"> | $Enums.InviteStatus
+    planId?: StringWithAggregatesFilter<"TenantInvite"> | string
+    invitedBy?: StringWithAggregatesFilter<"TenantInvite"> | string
+    expiresAt?: DateTimeWithAggregatesFilter<"TenantInvite"> | Date | string
+    acceptedAt?: DateTimeNullableWithAggregatesFilter<"TenantInvite"> | Date | string | null
+    resendCount?: IntWithAggregatesFilter<"TenantInvite"> | number
+    lastResentAt?: DateTimeNullableWithAggregatesFilter<"TenantInvite"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"TenantInvite"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"TenantInvite"> | Date | string
+  }
+
+  export type WalletWhereInput = {
+    AND?: WalletWhereInput | WalletWhereInput[]
+    OR?: WalletWhereInput[]
+    NOT?: WalletWhereInput | WalletWhereInput[]
+    id?: StringFilter<"Wallet"> | string
+    tenantId?: StringFilter<"Wallet"> | string
+    balance?: IntFilter<"Wallet"> | number
+    bonusBalance?: IntFilter<"Wallet"> | number
+    bonusExpiresAt?: DateTimeNullableFilter<"Wallet"> | Date | string | null
+    isActive?: BoolFilter<"Wallet"> | boolean
+    lowBalanceThreshold?: IntNullableFilter<"Wallet"> | number | null
+    lowBalanceAlertSent?: BoolFilter<"Wallet"> | boolean
+    createdAt?: DateTimeFilter<"Wallet"> | Date | string
+    updatedAt?: DateTimeFilter<"Wallet"> | Date | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
+    transactions?: WalletTransactionListRelationFilter
+    recharges?: RechargeListRelationFilter
+  }
+
+  export type WalletOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    balance?: SortOrder
+    bonusBalance?: SortOrder
+    bonusExpiresAt?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    lowBalanceThreshold?: SortOrderInput | SortOrder
+    lowBalanceAlertSent?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    tenant?: TenantOrderByWithRelationInput
+    transactions?: WalletTransactionOrderByRelationAggregateInput
+    recharges?: RechargeOrderByRelationAggregateInput
+  }
+
+  export type WalletWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId?: string
+    AND?: WalletWhereInput | WalletWhereInput[]
+    OR?: WalletWhereInput[]
+    NOT?: WalletWhereInput | WalletWhereInput[]
+    balance?: IntFilter<"Wallet"> | number
+    bonusBalance?: IntFilter<"Wallet"> | number
+    bonusExpiresAt?: DateTimeNullableFilter<"Wallet"> | Date | string | null
+    isActive?: BoolFilter<"Wallet"> | boolean
+    lowBalanceThreshold?: IntNullableFilter<"Wallet"> | number | null
+    lowBalanceAlertSent?: BoolFilter<"Wallet"> | boolean
+    createdAt?: DateTimeFilter<"Wallet"> | Date | string
+    updatedAt?: DateTimeFilter<"Wallet"> | Date | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
+    transactions?: WalletTransactionListRelationFilter
+    recharges?: RechargeListRelationFilter
+  }, "id" | "tenantId">
+
+  export type WalletOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    balance?: SortOrder
+    bonusBalance?: SortOrder
+    bonusExpiresAt?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    lowBalanceThreshold?: SortOrderInput | SortOrder
+    lowBalanceAlertSent?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: WalletCountOrderByAggregateInput
+    _avg?: WalletAvgOrderByAggregateInput
+    _max?: WalletMaxOrderByAggregateInput
+    _min?: WalletMinOrderByAggregateInput
+    _sum?: WalletSumOrderByAggregateInput
+  }
+
+  export type WalletScalarWhereWithAggregatesInput = {
+    AND?: WalletScalarWhereWithAggregatesInput | WalletScalarWhereWithAggregatesInput[]
+    OR?: WalletScalarWhereWithAggregatesInput[]
+    NOT?: WalletScalarWhereWithAggregatesInput | WalletScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Wallet"> | string
+    tenantId?: StringWithAggregatesFilter<"Wallet"> | string
+    balance?: IntWithAggregatesFilter<"Wallet"> | number
+    bonusBalance?: IntWithAggregatesFilter<"Wallet"> | number
+    bonusExpiresAt?: DateTimeNullableWithAggregatesFilter<"Wallet"> | Date | string | null
+    isActive?: BoolWithAggregatesFilter<"Wallet"> | boolean
+    lowBalanceThreshold?: IntNullableWithAggregatesFilter<"Wallet"> | number | null
+    lowBalanceAlertSent?: BoolWithAggregatesFilter<"Wallet"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Wallet"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Wallet"> | Date | string
+  }
+
+  export type WalletTransactionWhereInput = {
+    AND?: WalletTransactionWhereInput | WalletTransactionWhereInput[]
+    OR?: WalletTransactionWhereInput[]
+    NOT?: WalletTransactionWhereInput | WalletTransactionWhereInput[]
+    id?: StringFilter<"WalletTransaction"> | string
+    walletId?: StringFilter<"WalletTransaction"> | string
+    tenantId?: StringFilter<"WalletTransaction"> | string
+    type?: EnumWalletTxTypeFilter<"WalletTransaction"> | $Enums.WalletTxType
+    amount?: IntFilter<"WalletTransaction"> | number
+    balanceAfter?: IntFilter<"WalletTransaction"> | number
+    bonusBalanceAfter?: IntFilter<"WalletTransaction"> | number
+    description?: StringFilter<"WalletTransaction"> | string
+    referenceType?: StringNullableFilter<"WalletTransaction"> | string | null
+    referenceId?: StringNullableFilter<"WalletTransaction"> | string | null
+    createdAt?: DateTimeFilter<"WalletTransaction"> | Date | string
+    createdBy?: StringNullableFilter<"WalletTransaction"> | string | null
+    wallet?: XOR<WalletScalarRelationFilter, WalletWhereInput>
+  }
+
+  export type WalletTransactionOrderByWithRelationInput = {
+    id?: SortOrder
+    walletId?: SortOrder
+    tenantId?: SortOrder
+    type?: SortOrder
+    amount?: SortOrder
+    balanceAfter?: SortOrder
+    bonusBalanceAfter?: SortOrder
+    description?: SortOrder
+    referenceType?: SortOrderInput | SortOrder
+    referenceId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    wallet?: WalletOrderByWithRelationInput
+  }
+
+  export type WalletTransactionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    referenceType_referenceId?: WalletTransactionReferenceTypeReferenceIdCompoundUniqueInput
+    AND?: WalletTransactionWhereInput | WalletTransactionWhereInput[]
+    OR?: WalletTransactionWhereInput[]
+    NOT?: WalletTransactionWhereInput | WalletTransactionWhereInput[]
+    walletId?: StringFilter<"WalletTransaction"> | string
+    tenantId?: StringFilter<"WalletTransaction"> | string
+    type?: EnumWalletTxTypeFilter<"WalletTransaction"> | $Enums.WalletTxType
+    amount?: IntFilter<"WalletTransaction"> | number
+    balanceAfter?: IntFilter<"WalletTransaction"> | number
+    bonusBalanceAfter?: IntFilter<"WalletTransaction"> | number
+    description?: StringFilter<"WalletTransaction"> | string
+    referenceType?: StringNullableFilter<"WalletTransaction"> | string | null
+    referenceId?: StringNullableFilter<"WalletTransaction"> | string | null
+    createdAt?: DateTimeFilter<"WalletTransaction"> | Date | string
+    createdBy?: StringNullableFilter<"WalletTransaction"> | string | null
+    wallet?: XOR<WalletScalarRelationFilter, WalletWhereInput>
+  }, "id" | "referenceType_referenceId">
+
+  export type WalletTransactionOrderByWithAggregationInput = {
+    id?: SortOrder
+    walletId?: SortOrder
+    tenantId?: SortOrder
+    type?: SortOrder
+    amount?: SortOrder
+    balanceAfter?: SortOrder
+    bonusBalanceAfter?: SortOrder
+    description?: SortOrder
+    referenceType?: SortOrderInput | SortOrder
+    referenceId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    _count?: WalletTransactionCountOrderByAggregateInput
+    _avg?: WalletTransactionAvgOrderByAggregateInput
+    _max?: WalletTransactionMaxOrderByAggregateInput
+    _min?: WalletTransactionMinOrderByAggregateInput
+    _sum?: WalletTransactionSumOrderByAggregateInput
+  }
+
+  export type WalletTransactionScalarWhereWithAggregatesInput = {
+    AND?: WalletTransactionScalarWhereWithAggregatesInput | WalletTransactionScalarWhereWithAggregatesInput[]
+    OR?: WalletTransactionScalarWhereWithAggregatesInput[]
+    NOT?: WalletTransactionScalarWhereWithAggregatesInput | WalletTransactionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WalletTransaction"> | string
+    walletId?: StringWithAggregatesFilter<"WalletTransaction"> | string
+    tenantId?: StringWithAggregatesFilter<"WalletTransaction"> | string
+    type?: EnumWalletTxTypeWithAggregatesFilter<"WalletTransaction"> | $Enums.WalletTxType
+    amount?: IntWithAggregatesFilter<"WalletTransaction"> | number
+    balanceAfter?: IntWithAggregatesFilter<"WalletTransaction"> | number
+    bonusBalanceAfter?: IntWithAggregatesFilter<"WalletTransaction"> | number
+    description?: StringWithAggregatesFilter<"WalletTransaction"> | string
+    referenceType?: StringNullableWithAggregatesFilter<"WalletTransaction"> | string | null
+    referenceId?: StringNullableWithAggregatesFilter<"WalletTransaction"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"WalletTransaction"> | Date | string
+    createdBy?: StringNullableWithAggregatesFilter<"WalletTransaction"> | string | null
+  }
+
+  export type RechargeWhereInput = {
+    AND?: RechargeWhereInput | RechargeWhereInput[]
+    OR?: RechargeWhereInput[]
+    NOT?: RechargeWhereInput | RechargeWhereInput[]
+    id?: StringFilter<"Recharge"> | string
+    walletId?: StringFilter<"Recharge"> | string
+    tenantId?: StringFilter<"Recharge"> | string
+    amount?: IntFilter<"Recharge"> | number
+    purpose?: EnumRechargePurposeFilter<"Recharge"> | $Enums.RechargePurpose
+    status?: EnumRechargeStatusFilter<"Recharge"> | $Enums.RechargeStatus
+    razorpayOrderId?: StringNullableFilter<"Recharge"> | string | null
+    razorpayPaymentId?: StringNullableFilter<"Recharge"> | string | null
+    razorpaySignature?: StringNullableFilter<"Recharge"> | string | null
+    failureReason?: StringNullableFilter<"Recharge"> | string | null
+    planId?: StringNullableFilter<"Recharge"> | string | null
+    createdAt?: DateTimeFilter<"Recharge"> | Date | string
+    completedAt?: DateTimeNullableFilter<"Recharge"> | Date | string | null
+    wallet?: XOR<WalletScalarRelationFilter, WalletWhereInput>
+  }
+
+  export type RechargeOrderByWithRelationInput = {
+    id?: SortOrder
+    walletId?: SortOrder
+    tenantId?: SortOrder
+    amount?: SortOrder
+    purpose?: SortOrder
+    status?: SortOrder
+    razorpayOrderId?: SortOrderInput | SortOrder
+    razorpayPaymentId?: SortOrderInput | SortOrder
+    razorpaySignature?: SortOrderInput | SortOrder
+    failureReason?: SortOrderInput | SortOrder
+    planId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    wallet?: WalletOrderByWithRelationInput
+  }
+
+  export type RechargeWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    razorpayOrderId?: string
+    razorpayPaymentId?: string
+    AND?: RechargeWhereInput | RechargeWhereInput[]
+    OR?: RechargeWhereInput[]
+    NOT?: RechargeWhereInput | RechargeWhereInput[]
+    walletId?: StringFilter<"Recharge"> | string
+    tenantId?: StringFilter<"Recharge"> | string
+    amount?: IntFilter<"Recharge"> | number
+    purpose?: EnumRechargePurposeFilter<"Recharge"> | $Enums.RechargePurpose
+    status?: EnumRechargeStatusFilter<"Recharge"> | $Enums.RechargeStatus
+    razorpaySignature?: StringNullableFilter<"Recharge"> | string | null
+    failureReason?: StringNullableFilter<"Recharge"> | string | null
+    planId?: StringNullableFilter<"Recharge"> | string | null
+    createdAt?: DateTimeFilter<"Recharge"> | Date | string
+    completedAt?: DateTimeNullableFilter<"Recharge"> | Date | string | null
+    wallet?: XOR<WalletScalarRelationFilter, WalletWhereInput>
+  }, "id" | "razorpayOrderId" | "razorpayPaymentId">
+
+  export type RechargeOrderByWithAggregationInput = {
+    id?: SortOrder
+    walletId?: SortOrder
+    tenantId?: SortOrder
+    amount?: SortOrder
+    purpose?: SortOrder
+    status?: SortOrder
+    razorpayOrderId?: SortOrderInput | SortOrder
+    razorpayPaymentId?: SortOrderInput | SortOrder
+    razorpaySignature?: SortOrderInput | SortOrder
+    failureReason?: SortOrderInput | SortOrder
+    planId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    _count?: RechargeCountOrderByAggregateInput
+    _avg?: RechargeAvgOrderByAggregateInput
+    _max?: RechargeMaxOrderByAggregateInput
+    _min?: RechargeMinOrderByAggregateInput
+    _sum?: RechargeSumOrderByAggregateInput
+  }
+
+  export type RechargeScalarWhereWithAggregatesInput = {
+    AND?: RechargeScalarWhereWithAggregatesInput | RechargeScalarWhereWithAggregatesInput[]
+    OR?: RechargeScalarWhereWithAggregatesInput[]
+    NOT?: RechargeScalarWhereWithAggregatesInput | RechargeScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Recharge"> | string
+    walletId?: StringWithAggregatesFilter<"Recharge"> | string
+    tenantId?: StringWithAggregatesFilter<"Recharge"> | string
+    amount?: IntWithAggregatesFilter<"Recharge"> | number
+    purpose?: EnumRechargePurposeWithAggregatesFilter<"Recharge"> | $Enums.RechargePurpose
+    status?: EnumRechargeStatusWithAggregatesFilter<"Recharge"> | $Enums.RechargeStatus
+    razorpayOrderId?: StringNullableWithAggregatesFilter<"Recharge"> | string | null
+    razorpayPaymentId?: StringNullableWithAggregatesFilter<"Recharge"> | string | null
+    razorpaySignature?: StringNullableWithAggregatesFilter<"Recharge"> | string | null
+    failureReason?: StringNullableWithAggregatesFilter<"Recharge"> | string | null
+    planId?: StringNullableWithAggregatesFilter<"Recharge"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Recharge"> | Date | string
+    completedAt?: DateTimeNullableWithAggregatesFilter<"Recharge"> | Date | string | null
+  }
+
   export type TenantCreateInput = {
     id?: string
     name: string
@@ -23508,6 +29407,7 @@ export namespace Prisma {
     memberships?: TenantUserCreateNestedManyWithoutTenantInput
     bolnaApiKey?: BolnaApiKeyCreateNestedOneWithoutTenantsInput
     tenantPlan?: TenantPlanCreateNestedOneWithoutTenantInput
+    wallet?: WalletCreateNestedOneWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
     batches?: LeadBatchCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
@@ -23527,6 +29427,7 @@ export namespace Prisma {
     bolnaApiKeyId?: string | null
     memberships?: TenantUserUncheckedCreateNestedManyWithoutTenantInput
     tenantPlan?: TenantPlanUncheckedCreateNestedOneWithoutTenantInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
     batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
@@ -23546,6 +29447,7 @@ export namespace Prisma {
     memberships?: TenantUserUpdateManyWithoutTenantNestedInput
     bolnaApiKey?: BolnaApiKeyUpdateOneWithoutTenantsNestedInput
     tenantPlan?: TenantPlanUpdateOneWithoutTenantNestedInput
+    wallet?: WalletUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
@@ -23565,6 +29467,7 @@ export namespace Prisma {
     bolnaApiKeyId?: NullableStringFieldUpdateOperationsInput | string | null
     memberships?: TenantUserUncheckedUpdateManyWithoutTenantNestedInput
     tenantPlan?: TenantPlanUncheckedUpdateOneWithoutTenantNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
@@ -23608,6 +29511,7 @@ export namespace Prisma {
     email: string
     password: string
     name: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: TenantUserCreateNestedManyWithoutUserInput
@@ -23620,6 +29524,7 @@ export namespace Prisma {
     email: string
     password: string
     name: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: TenantUserUncheckedCreateNestedManyWithoutUserInput
@@ -23632,6 +29537,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUpdateManyWithoutUserNestedInput
@@ -23644,6 +29550,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUncheckedUpdateManyWithoutUserNestedInput
@@ -23656,6 +29563,7 @@ export namespace Prisma {
     email: string
     password: string
     name: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -23665,6 +29573,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -23674,6 +29583,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -24710,6 +30620,8 @@ export namespace Prisma {
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
+    platformCost?: number | null
+    billableSeconds?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -24736,6 +30648,8 @@ export namespace Prisma {
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
+    platformCost?: number | null
+    billableSeconds?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -24754,6 +30668,8 @@ export namespace Prisma {
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    platformCost?: NullableIntFieldUpdateOperationsInput | number | null
+    billableSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -24780,6 +30696,8 @@ export namespace Prisma {
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    platformCost?: NullableIntFieldUpdateOperationsInput | number | null
+    billableSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -24802,6 +30720,8 @@ export namespace Prisma {
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
+    platformCost?: number | null
+    billableSeconds?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -24819,6 +30739,8 @@ export namespace Prisma {
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    platformCost?: NullableIntFieldUpdateOperationsInput | number | null
+    billableSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -24840,6 +30762,8 @@ export namespace Prisma {
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    platformCost?: NullableIntFieldUpdateOperationsInput | number | null
+    billableSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -25016,6 +30940,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     tenantPlans?: TenantPlanCreateNestedManyWithoutPlanInput
+    invites?: TenantInviteCreateNestedManyWithoutPlanInput
   }
 
   export type PlanUncheckedCreateInput = {
@@ -25038,6 +30963,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     tenantPlans?: TenantPlanUncheckedCreateNestedManyWithoutPlanInput
+    invites?: TenantInviteUncheckedCreateNestedManyWithoutPlanInput
   }
 
   export type PlanUpdateInput = {
@@ -25060,6 +30986,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tenantPlans?: TenantPlanUpdateManyWithoutPlanNestedInput
+    invites?: TenantInviteUpdateManyWithoutPlanNestedInput
   }
 
   export type PlanUncheckedUpdateInput = {
@@ -25082,6 +31009,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tenantPlans?: TenantPlanUncheckedUpdateManyWithoutPlanNestedInput
+    invites?: TenantInviteUncheckedUpdateManyWithoutPlanNestedInput
   }
 
   export type PlanCreateManyInput = {
@@ -25317,6 +31245,430 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type TenantInviteCreateInput = {
+    id?: string
+    email: string
+    tenantName: string
+    token: string
+    status?: $Enums.InviteStatus
+    invitedBy: string
+    expiresAt: Date | string
+    acceptedAt?: Date | string | null
+    resendCount?: number
+    lastResentAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    plan: PlanCreateNestedOneWithoutInvitesInput
+  }
+
+  export type TenantInviteUncheckedCreateInput = {
+    id?: string
+    email: string
+    tenantName: string
+    token: string
+    status?: $Enums.InviteStatus
+    planId: string
+    invitedBy: string
+    expiresAt: Date | string
+    acceptedAt?: Date | string | null
+    resendCount?: number
+    lastResentAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TenantInviteUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    tenantName?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    status?: EnumInviteStatusFieldUpdateOperationsInput | $Enums.InviteStatus
+    invitedBy?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resendCount?: IntFieldUpdateOperationsInput | number
+    lastResentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    plan?: PlanUpdateOneRequiredWithoutInvitesNestedInput
+  }
+
+  export type TenantInviteUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    tenantName?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    status?: EnumInviteStatusFieldUpdateOperationsInput | $Enums.InviteStatus
+    planId?: StringFieldUpdateOperationsInput | string
+    invitedBy?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resendCount?: IntFieldUpdateOperationsInput | number
+    lastResentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TenantInviteCreateManyInput = {
+    id?: string
+    email: string
+    tenantName: string
+    token: string
+    status?: $Enums.InviteStatus
+    planId: string
+    invitedBy: string
+    expiresAt: Date | string
+    acceptedAt?: Date | string | null
+    resendCount?: number
+    lastResentAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TenantInviteUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    tenantName?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    status?: EnumInviteStatusFieldUpdateOperationsInput | $Enums.InviteStatus
+    invitedBy?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resendCount?: IntFieldUpdateOperationsInput | number
+    lastResentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TenantInviteUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    tenantName?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    status?: EnumInviteStatusFieldUpdateOperationsInput | $Enums.InviteStatus
+    planId?: StringFieldUpdateOperationsInput | string
+    invitedBy?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resendCount?: IntFieldUpdateOperationsInput | number
+    lastResentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WalletCreateInput = {
+    id?: string
+    balance?: number
+    bonusBalance?: number
+    bonusExpiresAt?: Date | string | null
+    isActive?: boolean
+    lowBalanceThreshold?: number | null
+    lowBalanceAlertSent?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutWalletInput
+    transactions?: WalletTransactionCreateNestedManyWithoutWalletInput
+    recharges?: RechargeCreateNestedManyWithoutWalletInput
+  }
+
+  export type WalletUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    balance?: number
+    bonusBalance?: number
+    bonusExpiresAt?: Date | string | null
+    isActive?: boolean
+    lowBalanceThreshold?: number | null
+    lowBalanceAlertSent?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    transactions?: WalletTransactionUncheckedCreateNestedManyWithoutWalletInput
+    recharges?: RechargeUncheckedCreateNestedManyWithoutWalletInput
+  }
+
+  export type WalletUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    balance?: IntFieldUpdateOperationsInput | number
+    bonusBalance?: IntFieldUpdateOperationsInput | number
+    bonusExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lowBalanceThreshold?: NullableIntFieldUpdateOperationsInput | number | null
+    lowBalanceAlertSent?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutWalletNestedInput
+    transactions?: WalletTransactionUpdateManyWithoutWalletNestedInput
+    recharges?: RechargeUpdateManyWithoutWalletNestedInput
+  }
+
+  export type WalletUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    balance?: IntFieldUpdateOperationsInput | number
+    bonusBalance?: IntFieldUpdateOperationsInput | number
+    bonusExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lowBalanceThreshold?: NullableIntFieldUpdateOperationsInput | number | null
+    lowBalanceAlertSent?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transactions?: WalletTransactionUncheckedUpdateManyWithoutWalletNestedInput
+    recharges?: RechargeUncheckedUpdateManyWithoutWalletNestedInput
+  }
+
+  export type WalletCreateManyInput = {
+    id?: string
+    tenantId: string
+    balance?: number
+    bonusBalance?: number
+    bonusExpiresAt?: Date | string | null
+    isActive?: boolean
+    lowBalanceThreshold?: number | null
+    lowBalanceAlertSent?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WalletUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    balance?: IntFieldUpdateOperationsInput | number
+    bonusBalance?: IntFieldUpdateOperationsInput | number
+    bonusExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lowBalanceThreshold?: NullableIntFieldUpdateOperationsInput | number | null
+    lowBalanceAlertSent?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WalletUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    balance?: IntFieldUpdateOperationsInput | number
+    bonusBalance?: IntFieldUpdateOperationsInput | number
+    bonusExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lowBalanceThreshold?: NullableIntFieldUpdateOperationsInput | number | null
+    lowBalanceAlertSent?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WalletTransactionCreateInput = {
+    id?: string
+    tenantId: string
+    type: $Enums.WalletTxType
+    amount: number
+    balanceAfter: number
+    bonusBalanceAfter: number
+    description: string
+    referenceType?: string | null
+    referenceId?: string | null
+    createdAt?: Date | string
+    createdBy?: string | null
+    wallet: WalletCreateNestedOneWithoutTransactionsInput
+  }
+
+  export type WalletTransactionUncheckedCreateInput = {
+    id?: string
+    walletId: string
+    tenantId: string
+    type: $Enums.WalletTxType
+    amount: number
+    balanceAfter: number
+    bonusBalanceAfter: number
+    description: string
+    referenceType?: string | null
+    referenceId?: string | null
+    createdAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type WalletTransactionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    type?: EnumWalletTxTypeFieldUpdateOperationsInput | $Enums.WalletTxType
+    amount?: IntFieldUpdateOperationsInput | number
+    balanceAfter?: IntFieldUpdateOperationsInput | number
+    bonusBalanceAfter?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    referenceType?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    wallet?: WalletUpdateOneRequiredWithoutTransactionsNestedInput
+  }
+
+  export type WalletTransactionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    type?: EnumWalletTxTypeFieldUpdateOperationsInput | $Enums.WalletTxType
+    amount?: IntFieldUpdateOperationsInput | number
+    balanceAfter?: IntFieldUpdateOperationsInput | number
+    bonusBalanceAfter?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    referenceType?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type WalletTransactionCreateManyInput = {
+    id?: string
+    walletId: string
+    tenantId: string
+    type: $Enums.WalletTxType
+    amount: number
+    balanceAfter: number
+    bonusBalanceAfter: number
+    description: string
+    referenceType?: string | null
+    referenceId?: string | null
+    createdAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type WalletTransactionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    type?: EnumWalletTxTypeFieldUpdateOperationsInput | $Enums.WalletTxType
+    amount?: IntFieldUpdateOperationsInput | number
+    balanceAfter?: IntFieldUpdateOperationsInput | number
+    bonusBalanceAfter?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    referenceType?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type WalletTransactionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    type?: EnumWalletTxTypeFieldUpdateOperationsInput | $Enums.WalletTxType
+    amount?: IntFieldUpdateOperationsInput | number
+    balanceAfter?: IntFieldUpdateOperationsInput | number
+    bonusBalanceAfter?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    referenceType?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type RechargeCreateInput = {
+    id?: string
+    tenantId: string
+    amount: number
+    purpose?: $Enums.RechargePurpose
+    status: $Enums.RechargeStatus
+    razorpayOrderId?: string | null
+    razorpayPaymentId?: string | null
+    razorpaySignature?: string | null
+    failureReason?: string | null
+    planId?: string | null
+    createdAt?: Date | string
+    completedAt?: Date | string | null
+    wallet: WalletCreateNestedOneWithoutRechargesInput
+  }
+
+  export type RechargeUncheckedCreateInput = {
+    id?: string
+    walletId: string
+    tenantId: string
+    amount: number
+    purpose?: $Enums.RechargePurpose
+    status: $Enums.RechargeStatus
+    razorpayOrderId?: string | null
+    razorpayPaymentId?: string | null
+    razorpaySignature?: string | null
+    failureReason?: string | null
+    planId?: string | null
+    createdAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type RechargeUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    amount?: IntFieldUpdateOperationsInput | number
+    purpose?: EnumRechargePurposeFieldUpdateOperationsInput | $Enums.RechargePurpose
+    status?: EnumRechargeStatusFieldUpdateOperationsInput | $Enums.RechargeStatus
+    razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    wallet?: WalletUpdateOneRequiredWithoutRechargesNestedInput
+  }
+
+  export type RechargeUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    amount?: IntFieldUpdateOperationsInput | number
+    purpose?: EnumRechargePurposeFieldUpdateOperationsInput | $Enums.RechargePurpose
+    status?: EnumRechargeStatusFieldUpdateOperationsInput | $Enums.RechargeStatus
+    razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type RechargeCreateManyInput = {
+    id?: string
+    walletId: string
+    tenantId: string
+    amount: number
+    purpose?: $Enums.RechargePurpose
+    status: $Enums.RechargeStatus
+    razorpayOrderId?: string | null
+    razorpayPaymentId?: string | null
+    razorpaySignature?: string | null
+    failureReason?: string | null
+    planId?: string | null
+    createdAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type RechargeUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    amount?: IntFieldUpdateOperationsInput | number
+    purpose?: EnumRechargePurposeFieldUpdateOperationsInput | $Enums.RechargePurpose
+    status?: EnumRechargeStatusFieldUpdateOperationsInput | $Enums.RechargeStatus
+    razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type RechargeUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    amount?: IntFieldUpdateOperationsInput | number
+    purpose?: EnumRechargePurposeFieldUpdateOperationsInput | $Enums.RechargePurpose
+    status?: EnumRechargeStatusFieldUpdateOperationsInput | $Enums.RechargeStatus
+    razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -25377,6 +31729,11 @@ export namespace Prisma {
   export type TenantPlanNullableScalarRelationFilter = {
     is?: TenantPlanWhereInput | null
     isNot?: TenantPlanWhereInput | null
+  }
+
+  export type WalletNullableScalarRelationFilter = {
+    is?: WalletWhereInput | null
+    isNot?: WalletWhereInput | null
   }
 
   export type CampaignListRelationFilter = {
@@ -25566,6 +31923,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     name?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -25575,6 +31933,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     name?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -25584,6 +31943,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     name?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -26422,6 +32782,8 @@ export namespace Prisma {
     status?: SortOrder
     duration?: SortOrder
     cost?: SortOrder
+    platformCost?: SortOrder
+    billableSeconds?: SortOrder
     recording?: SortOrder
     transcript?: SortOrder
     transcriptMessages?: SortOrder
@@ -26436,6 +32798,8 @@ export namespace Prisma {
   export type CallAvgOrderByAggregateInput = {
     duration?: SortOrder
     cost?: SortOrder
+    platformCost?: SortOrder
+    billableSeconds?: SortOrder
   }
 
   export type CallMaxOrderByAggregateInput = {
@@ -26448,6 +32812,8 @@ export namespace Prisma {
     status?: SortOrder
     duration?: SortOrder
     cost?: SortOrder
+    platformCost?: SortOrder
+    billableSeconds?: SortOrder
     recording?: SortOrder
     transcript?: SortOrder
     summary?: SortOrder
@@ -26467,6 +32833,8 @@ export namespace Prisma {
     status?: SortOrder
     duration?: SortOrder
     cost?: SortOrder
+    platformCost?: SortOrder
+    billableSeconds?: SortOrder
     recording?: SortOrder
     transcript?: SortOrder
     summary?: SortOrder
@@ -26479,6 +32847,8 @@ export namespace Prisma {
   export type CallSumOrderByAggregateInput = {
     duration?: SortOrder
     cost?: SortOrder
+    platformCost?: SortOrder
+    billableSeconds?: SortOrder
   }
 
   export type EnumCallStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -26701,7 +33071,17 @@ export namespace Prisma {
     none?: TenantPlanWhereInput
   }
 
+  export type TenantInviteListRelationFilter = {
+    every?: TenantInviteWhereInput
+    some?: TenantInviteWhereInput
+    none?: TenantInviteWhereInput
+  }
+
   export type TenantPlanOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TenantInviteOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -26913,6 +33293,324 @@ export namespace Prisma {
     _max?: NestedEnumBolnaApiKeyTypeFilter<$PrismaModel>
   }
 
+  export type EnumInviteStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.InviteStatus | EnumInviteStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InviteStatus[] | ListEnumInviteStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InviteStatus[] | ListEnumInviteStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInviteStatusFilter<$PrismaModel> | $Enums.InviteStatus
+  }
+
+  export type TenantInviteCountOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    tenantName?: SortOrder
+    token?: SortOrder
+    status?: SortOrder
+    planId?: SortOrder
+    invitedBy?: SortOrder
+    expiresAt?: SortOrder
+    acceptedAt?: SortOrder
+    resendCount?: SortOrder
+    lastResentAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TenantInviteAvgOrderByAggregateInput = {
+    resendCount?: SortOrder
+  }
+
+  export type TenantInviteMaxOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    tenantName?: SortOrder
+    token?: SortOrder
+    status?: SortOrder
+    planId?: SortOrder
+    invitedBy?: SortOrder
+    expiresAt?: SortOrder
+    acceptedAt?: SortOrder
+    resendCount?: SortOrder
+    lastResentAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TenantInviteMinOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    tenantName?: SortOrder
+    token?: SortOrder
+    status?: SortOrder
+    planId?: SortOrder
+    invitedBy?: SortOrder
+    expiresAt?: SortOrder
+    acceptedAt?: SortOrder
+    resendCount?: SortOrder
+    lastResentAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TenantInviteSumOrderByAggregateInput = {
+    resendCount?: SortOrder
+  }
+
+  export type EnumInviteStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InviteStatus | EnumInviteStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InviteStatus[] | ListEnumInviteStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InviteStatus[] | ListEnumInviteStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInviteStatusWithAggregatesFilter<$PrismaModel> | $Enums.InviteStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInviteStatusFilter<$PrismaModel>
+    _max?: NestedEnumInviteStatusFilter<$PrismaModel>
+  }
+
+  export type WalletTransactionListRelationFilter = {
+    every?: WalletTransactionWhereInput
+    some?: WalletTransactionWhereInput
+    none?: WalletTransactionWhereInput
+  }
+
+  export type RechargeListRelationFilter = {
+    every?: RechargeWhereInput
+    some?: RechargeWhereInput
+    none?: RechargeWhereInput
+  }
+
+  export type WalletTransactionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type RechargeOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type WalletCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    balance?: SortOrder
+    bonusBalance?: SortOrder
+    bonusExpiresAt?: SortOrder
+    isActive?: SortOrder
+    lowBalanceThreshold?: SortOrder
+    lowBalanceAlertSent?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WalletAvgOrderByAggregateInput = {
+    balance?: SortOrder
+    bonusBalance?: SortOrder
+    lowBalanceThreshold?: SortOrder
+  }
+
+  export type WalletMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    balance?: SortOrder
+    bonusBalance?: SortOrder
+    bonusExpiresAt?: SortOrder
+    isActive?: SortOrder
+    lowBalanceThreshold?: SortOrder
+    lowBalanceAlertSent?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WalletMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    balance?: SortOrder
+    bonusBalance?: SortOrder
+    bonusExpiresAt?: SortOrder
+    isActive?: SortOrder
+    lowBalanceThreshold?: SortOrder
+    lowBalanceAlertSent?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WalletSumOrderByAggregateInput = {
+    balance?: SortOrder
+    bonusBalance?: SortOrder
+    lowBalanceThreshold?: SortOrder
+  }
+
+  export type EnumWalletTxTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.WalletTxType | EnumWalletTxTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.WalletTxType[] | ListEnumWalletTxTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WalletTxType[] | ListEnumWalletTxTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumWalletTxTypeFilter<$PrismaModel> | $Enums.WalletTxType
+  }
+
+  export type WalletScalarRelationFilter = {
+    is?: WalletWhereInput
+    isNot?: WalletWhereInput
+  }
+
+  export type WalletTransactionReferenceTypeReferenceIdCompoundUniqueInput = {
+    referenceType: string
+    referenceId: string
+  }
+
+  export type WalletTransactionCountOrderByAggregateInput = {
+    id?: SortOrder
+    walletId?: SortOrder
+    tenantId?: SortOrder
+    type?: SortOrder
+    amount?: SortOrder
+    balanceAfter?: SortOrder
+    bonusBalanceAfter?: SortOrder
+    description?: SortOrder
+    referenceType?: SortOrder
+    referenceId?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type WalletTransactionAvgOrderByAggregateInput = {
+    amount?: SortOrder
+    balanceAfter?: SortOrder
+    bonusBalanceAfter?: SortOrder
+  }
+
+  export type WalletTransactionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    walletId?: SortOrder
+    tenantId?: SortOrder
+    type?: SortOrder
+    amount?: SortOrder
+    balanceAfter?: SortOrder
+    bonusBalanceAfter?: SortOrder
+    description?: SortOrder
+    referenceType?: SortOrder
+    referenceId?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type WalletTransactionMinOrderByAggregateInput = {
+    id?: SortOrder
+    walletId?: SortOrder
+    tenantId?: SortOrder
+    type?: SortOrder
+    amount?: SortOrder
+    balanceAfter?: SortOrder
+    bonusBalanceAfter?: SortOrder
+    description?: SortOrder
+    referenceType?: SortOrder
+    referenceId?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type WalletTransactionSumOrderByAggregateInput = {
+    amount?: SortOrder
+    balanceAfter?: SortOrder
+    bonusBalanceAfter?: SortOrder
+  }
+
+  export type EnumWalletTxTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.WalletTxType | EnumWalletTxTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.WalletTxType[] | ListEnumWalletTxTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WalletTxType[] | ListEnumWalletTxTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumWalletTxTypeWithAggregatesFilter<$PrismaModel> | $Enums.WalletTxType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumWalletTxTypeFilter<$PrismaModel>
+    _max?: NestedEnumWalletTxTypeFilter<$PrismaModel>
+  }
+
+  export type EnumRechargePurposeFilter<$PrismaModel = never> = {
+    equals?: $Enums.RechargePurpose | EnumRechargePurposeFieldRefInput<$PrismaModel>
+    in?: $Enums.RechargePurpose[] | ListEnumRechargePurposeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RechargePurpose[] | ListEnumRechargePurposeFieldRefInput<$PrismaModel>
+    not?: NestedEnumRechargePurposeFilter<$PrismaModel> | $Enums.RechargePurpose
+  }
+
+  export type EnumRechargeStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.RechargeStatus | EnumRechargeStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RechargeStatus[] | ListEnumRechargeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RechargeStatus[] | ListEnumRechargeStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRechargeStatusFilter<$PrismaModel> | $Enums.RechargeStatus
+  }
+
+  export type RechargeCountOrderByAggregateInput = {
+    id?: SortOrder
+    walletId?: SortOrder
+    tenantId?: SortOrder
+    amount?: SortOrder
+    purpose?: SortOrder
+    status?: SortOrder
+    razorpayOrderId?: SortOrder
+    razorpayPaymentId?: SortOrder
+    razorpaySignature?: SortOrder
+    failureReason?: SortOrder
+    planId?: SortOrder
+    createdAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type RechargeAvgOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type RechargeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    walletId?: SortOrder
+    tenantId?: SortOrder
+    amount?: SortOrder
+    purpose?: SortOrder
+    status?: SortOrder
+    razorpayOrderId?: SortOrder
+    razorpayPaymentId?: SortOrder
+    razorpaySignature?: SortOrder
+    failureReason?: SortOrder
+    planId?: SortOrder
+    createdAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type RechargeMinOrderByAggregateInput = {
+    id?: SortOrder
+    walletId?: SortOrder
+    tenantId?: SortOrder
+    amount?: SortOrder
+    purpose?: SortOrder
+    status?: SortOrder
+    razorpayOrderId?: SortOrder
+    razorpayPaymentId?: SortOrder
+    razorpaySignature?: SortOrder
+    failureReason?: SortOrder
+    planId?: SortOrder
+    createdAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type RechargeSumOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type EnumRechargePurposeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RechargePurpose | EnumRechargePurposeFieldRefInput<$PrismaModel>
+    in?: $Enums.RechargePurpose[] | ListEnumRechargePurposeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RechargePurpose[] | ListEnumRechargePurposeFieldRefInput<$PrismaModel>
+    not?: NestedEnumRechargePurposeWithAggregatesFilter<$PrismaModel> | $Enums.RechargePurpose
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRechargePurposeFilter<$PrismaModel>
+    _max?: NestedEnumRechargePurposeFilter<$PrismaModel>
+  }
+
+  export type EnumRechargeStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RechargeStatus | EnumRechargeStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RechargeStatus[] | ListEnumRechargeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RechargeStatus[] | ListEnumRechargeStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRechargeStatusWithAggregatesFilter<$PrismaModel> | $Enums.RechargeStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRechargeStatusFilter<$PrismaModel>
+    _max?: NestedEnumRechargeStatusFilter<$PrismaModel>
+  }
+
   export type TenantUserCreateNestedManyWithoutTenantInput = {
     create?: XOR<TenantUserCreateWithoutTenantInput, TenantUserUncheckedCreateWithoutTenantInput> | TenantUserCreateWithoutTenantInput[] | TenantUserUncheckedCreateWithoutTenantInput[]
     connectOrCreate?: TenantUserCreateOrConnectWithoutTenantInput | TenantUserCreateOrConnectWithoutTenantInput[]
@@ -26930,6 +33628,12 @@ export namespace Prisma {
     create?: XOR<TenantPlanCreateWithoutTenantInput, TenantPlanUncheckedCreateWithoutTenantInput>
     connectOrCreate?: TenantPlanCreateOrConnectWithoutTenantInput
     connect?: TenantPlanWhereUniqueInput
+  }
+
+  export type WalletCreateNestedOneWithoutTenantInput = {
+    create?: XOR<WalletCreateWithoutTenantInput, WalletUncheckedCreateWithoutTenantInput>
+    connectOrCreate?: WalletCreateOrConnectWithoutTenantInput
+    connect?: WalletWhereUniqueInput
   }
 
   export type CampaignCreateNestedManyWithoutTenantInput = {
@@ -26992,6 +33696,12 @@ export namespace Prisma {
     create?: XOR<TenantPlanCreateWithoutTenantInput, TenantPlanUncheckedCreateWithoutTenantInput>
     connectOrCreate?: TenantPlanCreateOrConnectWithoutTenantInput
     connect?: TenantPlanWhereUniqueInput
+  }
+
+  export type WalletUncheckedCreateNestedOneWithoutTenantInput = {
+    create?: XOR<WalletCreateWithoutTenantInput, WalletUncheckedCreateWithoutTenantInput>
+    connectOrCreate?: WalletCreateOrConnectWithoutTenantInput
+    connect?: WalletWhereUniqueInput
   }
 
   export type CampaignUncheckedCreateNestedManyWithoutTenantInput = {
@@ -27087,6 +33797,16 @@ export namespace Prisma {
     delete?: TenantPlanWhereInput | boolean
     connect?: TenantPlanWhereUniqueInput
     update?: XOR<XOR<TenantPlanUpdateToOneWithWhereWithoutTenantInput, TenantPlanUpdateWithoutTenantInput>, TenantPlanUncheckedUpdateWithoutTenantInput>
+  }
+
+  export type WalletUpdateOneWithoutTenantNestedInput = {
+    create?: XOR<WalletCreateWithoutTenantInput, WalletUncheckedCreateWithoutTenantInput>
+    connectOrCreate?: WalletCreateOrConnectWithoutTenantInput
+    upsert?: WalletUpsertWithoutTenantInput
+    disconnect?: WalletWhereInput | boolean
+    delete?: WalletWhereInput | boolean
+    connect?: WalletWhereUniqueInput
+    update?: XOR<XOR<WalletUpdateToOneWithWhereWithoutTenantInput, WalletUpdateWithoutTenantInput>, WalletUncheckedUpdateWithoutTenantInput>
   }
 
   export type CampaignUpdateManyWithoutTenantNestedInput = {
@@ -27213,6 +33933,16 @@ export namespace Prisma {
     delete?: TenantPlanWhereInput | boolean
     connect?: TenantPlanWhereUniqueInput
     update?: XOR<XOR<TenantPlanUpdateToOneWithWhereWithoutTenantInput, TenantPlanUpdateWithoutTenantInput>, TenantPlanUncheckedUpdateWithoutTenantInput>
+  }
+
+  export type WalletUncheckedUpdateOneWithoutTenantNestedInput = {
+    create?: XOR<WalletCreateWithoutTenantInput, WalletUncheckedCreateWithoutTenantInput>
+    connectOrCreate?: WalletCreateOrConnectWithoutTenantInput
+    upsert?: WalletUpsertWithoutTenantInput
+    disconnect?: WalletWhereInput | boolean
+    delete?: WalletWhereInput | boolean
+    connect?: WalletWhereUniqueInput
+    update?: XOR<XOR<WalletUpdateToOneWithWhereWithoutTenantInput, WalletUpdateWithoutTenantInput>, WalletUncheckedUpdateWithoutTenantInput>
   }
 
   export type CampaignUncheckedUpdateManyWithoutTenantNestedInput = {
@@ -28277,11 +35007,25 @@ export namespace Prisma {
     connect?: TenantPlanWhereUniqueInput | TenantPlanWhereUniqueInput[]
   }
 
+  export type TenantInviteCreateNestedManyWithoutPlanInput = {
+    create?: XOR<TenantInviteCreateWithoutPlanInput, TenantInviteUncheckedCreateWithoutPlanInput> | TenantInviteCreateWithoutPlanInput[] | TenantInviteUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: TenantInviteCreateOrConnectWithoutPlanInput | TenantInviteCreateOrConnectWithoutPlanInput[]
+    createMany?: TenantInviteCreateManyPlanInputEnvelope
+    connect?: TenantInviteWhereUniqueInput | TenantInviteWhereUniqueInput[]
+  }
+
   export type TenantPlanUncheckedCreateNestedManyWithoutPlanInput = {
     create?: XOR<TenantPlanCreateWithoutPlanInput, TenantPlanUncheckedCreateWithoutPlanInput> | TenantPlanCreateWithoutPlanInput[] | TenantPlanUncheckedCreateWithoutPlanInput[]
     connectOrCreate?: TenantPlanCreateOrConnectWithoutPlanInput | TenantPlanCreateOrConnectWithoutPlanInput[]
     createMany?: TenantPlanCreateManyPlanInputEnvelope
     connect?: TenantPlanWhereUniqueInput | TenantPlanWhereUniqueInput[]
+  }
+
+  export type TenantInviteUncheckedCreateNestedManyWithoutPlanInput = {
+    create?: XOR<TenantInviteCreateWithoutPlanInput, TenantInviteUncheckedCreateWithoutPlanInput> | TenantInviteCreateWithoutPlanInput[] | TenantInviteUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: TenantInviteCreateOrConnectWithoutPlanInput | TenantInviteCreateOrConnectWithoutPlanInput[]
+    createMany?: TenantInviteCreateManyPlanInputEnvelope
+    connect?: TenantInviteWhereUniqueInput | TenantInviteWhereUniqueInput[]
   }
 
   export type TenantPlanUpdateManyWithoutPlanNestedInput = {
@@ -28298,6 +35042,20 @@ export namespace Prisma {
     deleteMany?: TenantPlanScalarWhereInput | TenantPlanScalarWhereInput[]
   }
 
+  export type TenantInviteUpdateManyWithoutPlanNestedInput = {
+    create?: XOR<TenantInviteCreateWithoutPlanInput, TenantInviteUncheckedCreateWithoutPlanInput> | TenantInviteCreateWithoutPlanInput[] | TenantInviteUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: TenantInviteCreateOrConnectWithoutPlanInput | TenantInviteCreateOrConnectWithoutPlanInput[]
+    upsert?: TenantInviteUpsertWithWhereUniqueWithoutPlanInput | TenantInviteUpsertWithWhereUniqueWithoutPlanInput[]
+    createMany?: TenantInviteCreateManyPlanInputEnvelope
+    set?: TenantInviteWhereUniqueInput | TenantInviteWhereUniqueInput[]
+    disconnect?: TenantInviteWhereUniqueInput | TenantInviteWhereUniqueInput[]
+    delete?: TenantInviteWhereUniqueInput | TenantInviteWhereUniqueInput[]
+    connect?: TenantInviteWhereUniqueInput | TenantInviteWhereUniqueInput[]
+    update?: TenantInviteUpdateWithWhereUniqueWithoutPlanInput | TenantInviteUpdateWithWhereUniqueWithoutPlanInput[]
+    updateMany?: TenantInviteUpdateManyWithWhereWithoutPlanInput | TenantInviteUpdateManyWithWhereWithoutPlanInput[]
+    deleteMany?: TenantInviteScalarWhereInput | TenantInviteScalarWhereInput[]
+  }
+
   export type TenantPlanUncheckedUpdateManyWithoutPlanNestedInput = {
     create?: XOR<TenantPlanCreateWithoutPlanInput, TenantPlanUncheckedCreateWithoutPlanInput> | TenantPlanCreateWithoutPlanInput[] | TenantPlanUncheckedCreateWithoutPlanInput[]
     connectOrCreate?: TenantPlanCreateOrConnectWithoutPlanInput | TenantPlanCreateOrConnectWithoutPlanInput[]
@@ -28310,6 +35068,20 @@ export namespace Prisma {
     update?: TenantPlanUpdateWithWhereUniqueWithoutPlanInput | TenantPlanUpdateWithWhereUniqueWithoutPlanInput[]
     updateMany?: TenantPlanUpdateManyWithWhereWithoutPlanInput | TenantPlanUpdateManyWithWhereWithoutPlanInput[]
     deleteMany?: TenantPlanScalarWhereInput | TenantPlanScalarWhereInput[]
+  }
+
+  export type TenantInviteUncheckedUpdateManyWithoutPlanNestedInput = {
+    create?: XOR<TenantInviteCreateWithoutPlanInput, TenantInviteUncheckedCreateWithoutPlanInput> | TenantInviteCreateWithoutPlanInput[] | TenantInviteUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: TenantInviteCreateOrConnectWithoutPlanInput | TenantInviteCreateOrConnectWithoutPlanInput[]
+    upsert?: TenantInviteUpsertWithWhereUniqueWithoutPlanInput | TenantInviteUpsertWithWhereUniqueWithoutPlanInput[]
+    createMany?: TenantInviteCreateManyPlanInputEnvelope
+    set?: TenantInviteWhereUniqueInput | TenantInviteWhereUniqueInput[]
+    disconnect?: TenantInviteWhereUniqueInput | TenantInviteWhereUniqueInput[]
+    delete?: TenantInviteWhereUniqueInput | TenantInviteWhereUniqueInput[]
+    connect?: TenantInviteWhereUniqueInput | TenantInviteWhereUniqueInput[]
+    update?: TenantInviteUpdateWithWhereUniqueWithoutPlanInput | TenantInviteUpdateWithWhereUniqueWithoutPlanInput[]
+    updateMany?: TenantInviteUpdateManyWithWhereWithoutPlanInput | TenantInviteUpdateManyWithWhereWithoutPlanInput[]
+    deleteMany?: TenantInviteScalarWhereInput | TenantInviteScalarWhereInput[]
   }
 
   export type TenantCreateNestedOneWithoutTenantPlanInput = {
@@ -28388,6 +35160,162 @@ export namespace Prisma {
     update?: TenantUpdateWithWhereUniqueWithoutBolnaApiKeyInput | TenantUpdateWithWhereUniqueWithoutBolnaApiKeyInput[]
     updateMany?: TenantUpdateManyWithWhereWithoutBolnaApiKeyInput | TenantUpdateManyWithWhereWithoutBolnaApiKeyInput[]
     deleteMany?: TenantScalarWhereInput | TenantScalarWhereInput[]
+  }
+
+  export type PlanCreateNestedOneWithoutInvitesInput = {
+    create?: XOR<PlanCreateWithoutInvitesInput, PlanUncheckedCreateWithoutInvitesInput>
+    connectOrCreate?: PlanCreateOrConnectWithoutInvitesInput
+    connect?: PlanWhereUniqueInput
+  }
+
+  export type EnumInviteStatusFieldUpdateOperationsInput = {
+    set?: $Enums.InviteStatus
+  }
+
+  export type PlanUpdateOneRequiredWithoutInvitesNestedInput = {
+    create?: XOR<PlanCreateWithoutInvitesInput, PlanUncheckedCreateWithoutInvitesInput>
+    connectOrCreate?: PlanCreateOrConnectWithoutInvitesInput
+    upsert?: PlanUpsertWithoutInvitesInput
+    connect?: PlanWhereUniqueInput
+    update?: XOR<XOR<PlanUpdateToOneWithWhereWithoutInvitesInput, PlanUpdateWithoutInvitesInput>, PlanUncheckedUpdateWithoutInvitesInput>
+  }
+
+  export type TenantCreateNestedOneWithoutWalletInput = {
+    create?: XOR<TenantCreateWithoutWalletInput, TenantUncheckedCreateWithoutWalletInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutWalletInput
+    connect?: TenantWhereUniqueInput
+  }
+
+  export type WalletTransactionCreateNestedManyWithoutWalletInput = {
+    create?: XOR<WalletTransactionCreateWithoutWalletInput, WalletTransactionUncheckedCreateWithoutWalletInput> | WalletTransactionCreateWithoutWalletInput[] | WalletTransactionUncheckedCreateWithoutWalletInput[]
+    connectOrCreate?: WalletTransactionCreateOrConnectWithoutWalletInput | WalletTransactionCreateOrConnectWithoutWalletInput[]
+    createMany?: WalletTransactionCreateManyWalletInputEnvelope
+    connect?: WalletTransactionWhereUniqueInput | WalletTransactionWhereUniqueInput[]
+  }
+
+  export type RechargeCreateNestedManyWithoutWalletInput = {
+    create?: XOR<RechargeCreateWithoutWalletInput, RechargeUncheckedCreateWithoutWalletInput> | RechargeCreateWithoutWalletInput[] | RechargeUncheckedCreateWithoutWalletInput[]
+    connectOrCreate?: RechargeCreateOrConnectWithoutWalletInput | RechargeCreateOrConnectWithoutWalletInput[]
+    createMany?: RechargeCreateManyWalletInputEnvelope
+    connect?: RechargeWhereUniqueInput | RechargeWhereUniqueInput[]
+  }
+
+  export type WalletTransactionUncheckedCreateNestedManyWithoutWalletInput = {
+    create?: XOR<WalletTransactionCreateWithoutWalletInput, WalletTransactionUncheckedCreateWithoutWalletInput> | WalletTransactionCreateWithoutWalletInput[] | WalletTransactionUncheckedCreateWithoutWalletInput[]
+    connectOrCreate?: WalletTransactionCreateOrConnectWithoutWalletInput | WalletTransactionCreateOrConnectWithoutWalletInput[]
+    createMany?: WalletTransactionCreateManyWalletInputEnvelope
+    connect?: WalletTransactionWhereUniqueInput | WalletTransactionWhereUniqueInput[]
+  }
+
+  export type RechargeUncheckedCreateNestedManyWithoutWalletInput = {
+    create?: XOR<RechargeCreateWithoutWalletInput, RechargeUncheckedCreateWithoutWalletInput> | RechargeCreateWithoutWalletInput[] | RechargeUncheckedCreateWithoutWalletInput[]
+    connectOrCreate?: RechargeCreateOrConnectWithoutWalletInput | RechargeCreateOrConnectWithoutWalletInput[]
+    createMany?: RechargeCreateManyWalletInputEnvelope
+    connect?: RechargeWhereUniqueInput | RechargeWhereUniqueInput[]
+  }
+
+  export type TenantUpdateOneRequiredWithoutWalletNestedInput = {
+    create?: XOR<TenantCreateWithoutWalletInput, TenantUncheckedCreateWithoutWalletInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutWalletInput
+    upsert?: TenantUpsertWithoutWalletInput
+    connect?: TenantWhereUniqueInput
+    update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutWalletInput, TenantUpdateWithoutWalletInput>, TenantUncheckedUpdateWithoutWalletInput>
+  }
+
+  export type WalletTransactionUpdateManyWithoutWalletNestedInput = {
+    create?: XOR<WalletTransactionCreateWithoutWalletInput, WalletTransactionUncheckedCreateWithoutWalletInput> | WalletTransactionCreateWithoutWalletInput[] | WalletTransactionUncheckedCreateWithoutWalletInput[]
+    connectOrCreate?: WalletTransactionCreateOrConnectWithoutWalletInput | WalletTransactionCreateOrConnectWithoutWalletInput[]
+    upsert?: WalletTransactionUpsertWithWhereUniqueWithoutWalletInput | WalletTransactionUpsertWithWhereUniqueWithoutWalletInput[]
+    createMany?: WalletTransactionCreateManyWalletInputEnvelope
+    set?: WalletTransactionWhereUniqueInput | WalletTransactionWhereUniqueInput[]
+    disconnect?: WalletTransactionWhereUniqueInput | WalletTransactionWhereUniqueInput[]
+    delete?: WalletTransactionWhereUniqueInput | WalletTransactionWhereUniqueInput[]
+    connect?: WalletTransactionWhereUniqueInput | WalletTransactionWhereUniqueInput[]
+    update?: WalletTransactionUpdateWithWhereUniqueWithoutWalletInput | WalletTransactionUpdateWithWhereUniqueWithoutWalletInput[]
+    updateMany?: WalletTransactionUpdateManyWithWhereWithoutWalletInput | WalletTransactionUpdateManyWithWhereWithoutWalletInput[]
+    deleteMany?: WalletTransactionScalarWhereInput | WalletTransactionScalarWhereInput[]
+  }
+
+  export type RechargeUpdateManyWithoutWalletNestedInput = {
+    create?: XOR<RechargeCreateWithoutWalletInput, RechargeUncheckedCreateWithoutWalletInput> | RechargeCreateWithoutWalletInput[] | RechargeUncheckedCreateWithoutWalletInput[]
+    connectOrCreate?: RechargeCreateOrConnectWithoutWalletInput | RechargeCreateOrConnectWithoutWalletInput[]
+    upsert?: RechargeUpsertWithWhereUniqueWithoutWalletInput | RechargeUpsertWithWhereUniqueWithoutWalletInput[]
+    createMany?: RechargeCreateManyWalletInputEnvelope
+    set?: RechargeWhereUniqueInput | RechargeWhereUniqueInput[]
+    disconnect?: RechargeWhereUniqueInput | RechargeWhereUniqueInput[]
+    delete?: RechargeWhereUniqueInput | RechargeWhereUniqueInput[]
+    connect?: RechargeWhereUniqueInput | RechargeWhereUniqueInput[]
+    update?: RechargeUpdateWithWhereUniqueWithoutWalletInput | RechargeUpdateWithWhereUniqueWithoutWalletInput[]
+    updateMany?: RechargeUpdateManyWithWhereWithoutWalletInput | RechargeUpdateManyWithWhereWithoutWalletInput[]
+    deleteMany?: RechargeScalarWhereInput | RechargeScalarWhereInput[]
+  }
+
+  export type WalletTransactionUncheckedUpdateManyWithoutWalletNestedInput = {
+    create?: XOR<WalletTransactionCreateWithoutWalletInput, WalletTransactionUncheckedCreateWithoutWalletInput> | WalletTransactionCreateWithoutWalletInput[] | WalletTransactionUncheckedCreateWithoutWalletInput[]
+    connectOrCreate?: WalletTransactionCreateOrConnectWithoutWalletInput | WalletTransactionCreateOrConnectWithoutWalletInput[]
+    upsert?: WalletTransactionUpsertWithWhereUniqueWithoutWalletInput | WalletTransactionUpsertWithWhereUniqueWithoutWalletInput[]
+    createMany?: WalletTransactionCreateManyWalletInputEnvelope
+    set?: WalletTransactionWhereUniqueInput | WalletTransactionWhereUniqueInput[]
+    disconnect?: WalletTransactionWhereUniqueInput | WalletTransactionWhereUniqueInput[]
+    delete?: WalletTransactionWhereUniqueInput | WalletTransactionWhereUniqueInput[]
+    connect?: WalletTransactionWhereUniqueInput | WalletTransactionWhereUniqueInput[]
+    update?: WalletTransactionUpdateWithWhereUniqueWithoutWalletInput | WalletTransactionUpdateWithWhereUniqueWithoutWalletInput[]
+    updateMany?: WalletTransactionUpdateManyWithWhereWithoutWalletInput | WalletTransactionUpdateManyWithWhereWithoutWalletInput[]
+    deleteMany?: WalletTransactionScalarWhereInput | WalletTransactionScalarWhereInput[]
+  }
+
+  export type RechargeUncheckedUpdateManyWithoutWalletNestedInput = {
+    create?: XOR<RechargeCreateWithoutWalletInput, RechargeUncheckedCreateWithoutWalletInput> | RechargeCreateWithoutWalletInput[] | RechargeUncheckedCreateWithoutWalletInput[]
+    connectOrCreate?: RechargeCreateOrConnectWithoutWalletInput | RechargeCreateOrConnectWithoutWalletInput[]
+    upsert?: RechargeUpsertWithWhereUniqueWithoutWalletInput | RechargeUpsertWithWhereUniqueWithoutWalletInput[]
+    createMany?: RechargeCreateManyWalletInputEnvelope
+    set?: RechargeWhereUniqueInput | RechargeWhereUniqueInput[]
+    disconnect?: RechargeWhereUniqueInput | RechargeWhereUniqueInput[]
+    delete?: RechargeWhereUniqueInput | RechargeWhereUniqueInput[]
+    connect?: RechargeWhereUniqueInput | RechargeWhereUniqueInput[]
+    update?: RechargeUpdateWithWhereUniqueWithoutWalletInput | RechargeUpdateWithWhereUniqueWithoutWalletInput[]
+    updateMany?: RechargeUpdateManyWithWhereWithoutWalletInput | RechargeUpdateManyWithWhereWithoutWalletInput[]
+    deleteMany?: RechargeScalarWhereInput | RechargeScalarWhereInput[]
+  }
+
+  export type WalletCreateNestedOneWithoutTransactionsInput = {
+    create?: XOR<WalletCreateWithoutTransactionsInput, WalletUncheckedCreateWithoutTransactionsInput>
+    connectOrCreate?: WalletCreateOrConnectWithoutTransactionsInput
+    connect?: WalletWhereUniqueInput
+  }
+
+  export type EnumWalletTxTypeFieldUpdateOperationsInput = {
+    set?: $Enums.WalletTxType
+  }
+
+  export type WalletUpdateOneRequiredWithoutTransactionsNestedInput = {
+    create?: XOR<WalletCreateWithoutTransactionsInput, WalletUncheckedCreateWithoutTransactionsInput>
+    connectOrCreate?: WalletCreateOrConnectWithoutTransactionsInput
+    upsert?: WalletUpsertWithoutTransactionsInput
+    connect?: WalletWhereUniqueInput
+    update?: XOR<XOR<WalletUpdateToOneWithWhereWithoutTransactionsInput, WalletUpdateWithoutTransactionsInput>, WalletUncheckedUpdateWithoutTransactionsInput>
+  }
+
+  export type WalletCreateNestedOneWithoutRechargesInput = {
+    create?: XOR<WalletCreateWithoutRechargesInput, WalletUncheckedCreateWithoutRechargesInput>
+    connectOrCreate?: WalletCreateOrConnectWithoutRechargesInput
+    connect?: WalletWhereUniqueInput
+  }
+
+  export type EnumRechargePurposeFieldUpdateOperationsInput = {
+    set?: $Enums.RechargePurpose
+  }
+
+  export type EnumRechargeStatusFieldUpdateOperationsInput = {
+    set?: $Enums.RechargeStatus
+  }
+
+  export type WalletUpdateOneRequiredWithoutRechargesNestedInput = {
+    create?: XOR<WalletCreateWithoutRechargesInput, WalletUncheckedCreateWithoutRechargesInput>
+    connectOrCreate?: WalletCreateOrConnectWithoutRechargesInput
+    upsert?: WalletUpsertWithoutRechargesInput
+    connect?: WalletWhereUniqueInput
+    update?: XOR<XOR<WalletUpdateToOneWithWhereWithoutRechargesInput, WalletUpdateWithoutRechargesInput>, WalletUncheckedUpdateWithoutRechargesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -28924,6 +35852,74 @@ export namespace Prisma {
     _max?: NestedEnumBolnaApiKeyTypeFilter<$PrismaModel>
   }
 
+  export type NestedEnumInviteStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.InviteStatus | EnumInviteStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InviteStatus[] | ListEnumInviteStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InviteStatus[] | ListEnumInviteStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInviteStatusFilter<$PrismaModel> | $Enums.InviteStatus
+  }
+
+  export type NestedEnumInviteStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InviteStatus | EnumInviteStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InviteStatus[] | ListEnumInviteStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InviteStatus[] | ListEnumInviteStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInviteStatusWithAggregatesFilter<$PrismaModel> | $Enums.InviteStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInviteStatusFilter<$PrismaModel>
+    _max?: NestedEnumInviteStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumWalletTxTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.WalletTxType | EnumWalletTxTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.WalletTxType[] | ListEnumWalletTxTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WalletTxType[] | ListEnumWalletTxTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumWalletTxTypeFilter<$PrismaModel> | $Enums.WalletTxType
+  }
+
+  export type NestedEnumWalletTxTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.WalletTxType | EnumWalletTxTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.WalletTxType[] | ListEnumWalletTxTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WalletTxType[] | ListEnumWalletTxTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumWalletTxTypeWithAggregatesFilter<$PrismaModel> | $Enums.WalletTxType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumWalletTxTypeFilter<$PrismaModel>
+    _max?: NestedEnumWalletTxTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumRechargePurposeFilter<$PrismaModel = never> = {
+    equals?: $Enums.RechargePurpose | EnumRechargePurposeFieldRefInput<$PrismaModel>
+    in?: $Enums.RechargePurpose[] | ListEnumRechargePurposeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RechargePurpose[] | ListEnumRechargePurposeFieldRefInput<$PrismaModel>
+    not?: NestedEnumRechargePurposeFilter<$PrismaModel> | $Enums.RechargePurpose
+  }
+
+  export type NestedEnumRechargeStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.RechargeStatus | EnumRechargeStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RechargeStatus[] | ListEnumRechargeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RechargeStatus[] | ListEnumRechargeStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRechargeStatusFilter<$PrismaModel> | $Enums.RechargeStatus
+  }
+
+  export type NestedEnumRechargePurposeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RechargePurpose | EnumRechargePurposeFieldRefInput<$PrismaModel>
+    in?: $Enums.RechargePurpose[] | ListEnumRechargePurposeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RechargePurpose[] | ListEnumRechargePurposeFieldRefInput<$PrismaModel>
+    not?: NestedEnumRechargePurposeWithAggregatesFilter<$PrismaModel> | $Enums.RechargePurpose
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRechargePurposeFilter<$PrismaModel>
+    _max?: NestedEnumRechargePurposeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumRechargeStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RechargeStatus | EnumRechargeStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RechargeStatus[] | ListEnumRechargeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RechargeStatus[] | ListEnumRechargeStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRechargeStatusWithAggregatesFilter<$PrismaModel> | $Enums.RechargeStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRechargeStatusFilter<$PrismaModel>
+    _max?: NestedEnumRechargeStatusFilter<$PrismaModel>
+  }
+
   export type TenantUserCreateWithoutTenantInput = {
     id?: string
     role?: $Enums.TenantRole
@@ -29002,6 +35998,39 @@ export namespace Prisma {
   export type TenantPlanCreateOrConnectWithoutTenantInput = {
     where: TenantPlanWhereUniqueInput
     create: XOR<TenantPlanCreateWithoutTenantInput, TenantPlanUncheckedCreateWithoutTenantInput>
+  }
+
+  export type WalletCreateWithoutTenantInput = {
+    id?: string
+    balance?: number
+    bonusBalance?: number
+    bonusExpiresAt?: Date | string | null
+    isActive?: boolean
+    lowBalanceThreshold?: number | null
+    lowBalanceAlertSent?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    transactions?: WalletTransactionCreateNestedManyWithoutWalletInput
+    recharges?: RechargeCreateNestedManyWithoutWalletInput
+  }
+
+  export type WalletUncheckedCreateWithoutTenantInput = {
+    id?: string
+    balance?: number
+    bonusBalance?: number
+    bonusExpiresAt?: Date | string | null
+    isActive?: boolean
+    lowBalanceThreshold?: number | null
+    lowBalanceAlertSent?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    transactions?: WalletTransactionUncheckedCreateNestedManyWithoutWalletInput
+    recharges?: RechargeUncheckedCreateNestedManyWithoutWalletInput
+  }
+
+  export type WalletCreateOrConnectWithoutTenantInput = {
+    where: WalletWhereUniqueInput
+    create: XOR<WalletCreateWithoutTenantInput, WalletUncheckedCreateWithoutTenantInput>
   }
 
   export type CampaignCreateWithoutTenantInput = {
@@ -29162,6 +36191,8 @@ export namespace Prisma {
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
+    platformCost?: number | null
+    billableSeconds?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -29186,6 +36217,8 @@ export namespace Prisma {
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
+    platformCost?: number | null
+    billableSeconds?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -29499,6 +36532,45 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type WalletUpsertWithoutTenantInput = {
+    update: XOR<WalletUpdateWithoutTenantInput, WalletUncheckedUpdateWithoutTenantInput>
+    create: XOR<WalletCreateWithoutTenantInput, WalletUncheckedCreateWithoutTenantInput>
+    where?: WalletWhereInput
+  }
+
+  export type WalletUpdateToOneWithWhereWithoutTenantInput = {
+    where?: WalletWhereInput
+    data: XOR<WalletUpdateWithoutTenantInput, WalletUncheckedUpdateWithoutTenantInput>
+  }
+
+  export type WalletUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    balance?: IntFieldUpdateOperationsInput | number
+    bonusBalance?: IntFieldUpdateOperationsInput | number
+    bonusExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lowBalanceThreshold?: NullableIntFieldUpdateOperationsInput | number | null
+    lowBalanceAlertSent?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transactions?: WalletTransactionUpdateManyWithoutWalletNestedInput
+    recharges?: RechargeUpdateManyWithoutWalletNestedInput
+  }
+
+  export type WalletUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    balance?: IntFieldUpdateOperationsInput | number
+    bonusBalance?: IntFieldUpdateOperationsInput | number
+    bonusExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lowBalanceThreshold?: NullableIntFieldUpdateOperationsInput | number | null
+    lowBalanceAlertSent?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transactions?: WalletTransactionUncheckedUpdateManyWithoutWalletNestedInput
+    recharges?: RechargeUncheckedUpdateManyWithoutWalletNestedInput
+  }
+
   export type CampaignUpsertWithWhereUniqueWithoutTenantInput = {
     where: CampaignWhereUniqueInput
     update: XOR<CampaignUpdateWithoutTenantInput, CampaignUncheckedUpdateWithoutTenantInput>
@@ -29643,6 +36715,8 @@ export namespace Prisma {
     status?: EnumCallStatusFilter<"Call"> | $Enums.CallStatus
     duration?: IntNullableFilter<"Call"> | number | null
     cost?: FloatNullableFilter<"Call"> | number | null
+    platformCost?: IntNullableFilter<"Call"> | number | null
+    billableSeconds?: IntNullableFilter<"Call"> | number | null
     recording?: StringNullableFilter<"Call"> | string | null
     transcript?: StringNullableFilter<"Call"> | string | null
     transcriptMessages?: JsonNullableFilter<"Call">
@@ -29930,6 +37004,7 @@ export namespace Prisma {
     email: string
     password: string
     name: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     platformAdmin?: PlatformAdminCreateNestedOneWithoutUserInput
@@ -29941,6 +37016,7 @@ export namespace Prisma {
     email: string
     password: string
     name: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     platformAdmin?: PlatformAdminUncheckedCreateNestedOneWithoutUserInput
@@ -29961,6 +37037,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     bolnaApiKey?: BolnaApiKeyCreateNestedOneWithoutTenantsInput
     tenantPlan?: TenantPlanCreateNestedOneWithoutTenantInput
+    wallet?: WalletCreateNestedOneWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
     batches?: LeadBatchCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
@@ -29979,6 +37056,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     bolnaApiKeyId?: string | null
     tenantPlan?: TenantPlanUncheckedCreateNestedOneWithoutTenantInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
     batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
@@ -30009,6 +37087,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     platformAdmin?: PlatformAdminUpdateOneWithoutUserNestedInput
@@ -30020,6 +37099,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     platformAdmin?: PlatformAdminUncheckedUpdateOneWithoutUserNestedInput
@@ -30046,6 +37126,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bolnaApiKey?: BolnaApiKeyUpdateOneWithoutTenantsNestedInput
     tenantPlan?: TenantPlanUpdateOneWithoutTenantNestedInput
+    wallet?: WalletUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
@@ -30064,6 +37145,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bolnaApiKeyId?: NullableStringFieldUpdateOperationsInput | string | null
     tenantPlan?: TenantPlanUncheckedUpdateOneWithoutTenantNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
@@ -30078,6 +37160,7 @@ export namespace Prisma {
     email: string
     password: string
     name: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: TenantUserCreateNestedManyWithoutUserInput
@@ -30089,6 +37172,7 @@ export namespace Prisma {
     email: string
     password: string
     name: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: TenantUserUncheckedCreateNestedManyWithoutUserInput
@@ -30116,6 +37200,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUpdateManyWithoutUserNestedInput
@@ -30127,6 +37212,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUncheckedUpdateManyWithoutUserNestedInput
@@ -30138,6 +37224,7 @@ export namespace Prisma {
     email: string
     password: string
     name: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: TenantUserCreateNestedManyWithoutUserInput
@@ -30149,6 +37236,7 @@ export namespace Prisma {
     email: string
     password: string
     name: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: TenantUserUncheckedCreateNestedManyWithoutUserInput
@@ -30176,6 +37264,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUpdateManyWithoutUserNestedInput
@@ -30187,6 +37276,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUncheckedUpdateManyWithoutUserNestedInput
@@ -30203,6 +37293,7 @@ export namespace Prisma {
     memberships?: TenantUserCreateNestedManyWithoutTenantInput
     bolnaApiKey?: BolnaApiKeyCreateNestedOneWithoutTenantsInput
     tenantPlan?: TenantPlanCreateNestedOneWithoutTenantInput
+    wallet?: WalletCreateNestedOneWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
     batches?: LeadBatchCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
@@ -30221,6 +37312,7 @@ export namespace Prisma {
     bolnaApiKeyId?: string | null
     memberships?: TenantUserUncheckedCreateNestedManyWithoutTenantInput
     tenantPlan?: TenantPlanUncheckedCreateNestedOneWithoutTenantInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
     batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
@@ -30309,6 +37401,7 @@ export namespace Prisma {
     memberships?: TenantUserUpdateManyWithoutTenantNestedInput
     bolnaApiKey?: BolnaApiKeyUpdateOneWithoutTenantsNestedInput
     tenantPlan?: TenantPlanUpdateOneWithoutTenantNestedInput
+    wallet?: WalletUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
@@ -30327,6 +37420,7 @@ export namespace Prisma {
     bolnaApiKeyId?: NullableStringFieldUpdateOperationsInput | string | null
     memberships?: TenantUserUncheckedUpdateManyWithoutTenantNestedInput
     tenantPlan?: TenantPlanUncheckedUpdateOneWithoutTenantNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
@@ -30361,6 +37455,7 @@ export namespace Prisma {
     memberships?: TenantUserCreateNestedManyWithoutTenantInput
     bolnaApiKey?: BolnaApiKeyCreateNestedOneWithoutTenantsInput
     tenantPlan?: TenantPlanCreateNestedOneWithoutTenantInput
+    wallet?: WalletCreateNestedOneWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
     batches?: LeadBatchCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
@@ -30379,6 +37474,7 @@ export namespace Prisma {
     bolnaApiKeyId?: string | null
     memberships?: TenantUserUncheckedCreateNestedManyWithoutTenantInput
     tenantPlan?: TenantPlanUncheckedCreateNestedOneWithoutTenantInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
     batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
@@ -30467,6 +37563,7 @@ export namespace Prisma {
     memberships?: TenantUserUpdateManyWithoutTenantNestedInput
     bolnaApiKey?: BolnaApiKeyUpdateOneWithoutTenantsNestedInput
     tenantPlan?: TenantPlanUpdateOneWithoutTenantNestedInput
+    wallet?: WalletUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
@@ -30485,6 +37582,7 @@ export namespace Prisma {
     bolnaApiKeyId?: NullableStringFieldUpdateOperationsInput | string | null
     memberships?: TenantUserUncheckedUpdateManyWithoutTenantNestedInput
     tenantPlan?: TenantPlanUncheckedUpdateOneWithoutTenantNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
@@ -30519,6 +37617,7 @@ export namespace Prisma {
     memberships?: TenantUserCreateNestedManyWithoutTenantInput
     bolnaApiKey?: BolnaApiKeyCreateNestedOneWithoutTenantsInput
     tenantPlan?: TenantPlanCreateNestedOneWithoutTenantInput
+    wallet?: WalletCreateNestedOneWithoutTenantInput
     batches?: LeadBatchCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
     calls?: CallCreateNestedManyWithoutTenantInput
@@ -30537,6 +37636,7 @@ export namespace Prisma {
     bolnaApiKeyId?: string | null
     memberships?: TenantUserUncheckedCreateNestedManyWithoutTenantInput
     tenantPlan?: TenantPlanUncheckedCreateNestedOneWithoutTenantInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutTenantInput
     batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
@@ -30734,6 +37834,8 @@ export namespace Prisma {
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
+    platformCost?: number | null
+    billableSeconds?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -30758,6 +37860,8 @@ export namespace Prisma {
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
+    platformCost?: number | null
+    billableSeconds?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -30857,6 +37961,7 @@ export namespace Prisma {
     memberships?: TenantUserUpdateManyWithoutTenantNestedInput
     bolnaApiKey?: BolnaApiKeyUpdateOneWithoutTenantsNestedInput
     tenantPlan?: TenantPlanUpdateOneWithoutTenantNestedInput
+    wallet?: WalletUpdateOneWithoutTenantNestedInput
     batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
     calls?: CallUpdateManyWithoutTenantNestedInput
@@ -30875,6 +37980,7 @@ export namespace Prisma {
     bolnaApiKeyId?: NullableStringFieldUpdateOperationsInput | string | null
     memberships?: TenantUserUncheckedUpdateManyWithoutTenantNestedInput
     tenantPlan?: TenantPlanUncheckedUpdateOneWithoutTenantNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutTenantNestedInput
     batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
@@ -31089,6 +38195,7 @@ export namespace Prisma {
     memberships?: TenantUserCreateNestedManyWithoutTenantInput
     bolnaApiKey?: BolnaApiKeyCreateNestedOneWithoutTenantsInput
     tenantPlan?: TenantPlanCreateNestedOneWithoutTenantInput
+    wallet?: WalletCreateNestedOneWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
     calls?: CallCreateNestedManyWithoutTenantInput
@@ -31107,6 +38214,7 @@ export namespace Prisma {
     bolnaApiKeyId?: string | null
     memberships?: TenantUserUncheckedCreateNestedManyWithoutTenantInput
     tenantPlan?: TenantPlanUncheckedCreateNestedOneWithoutTenantInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
@@ -31217,6 +38325,8 @@ export namespace Prisma {
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
+    platformCost?: number | null
+    billableSeconds?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -31241,6 +38351,8 @@ export namespace Prisma {
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
+    platformCost?: number | null
+    billableSeconds?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -31284,6 +38396,7 @@ export namespace Prisma {
     memberships?: TenantUserUpdateManyWithoutTenantNestedInput
     bolnaApiKey?: BolnaApiKeyUpdateOneWithoutTenantsNestedInput
     tenantPlan?: TenantPlanUpdateOneWithoutTenantNestedInput
+    wallet?: WalletUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
     calls?: CallUpdateManyWithoutTenantNestedInput
@@ -31302,6 +38415,7 @@ export namespace Prisma {
     bolnaApiKeyId?: NullableStringFieldUpdateOperationsInput | string | null
     memberships?: TenantUserUncheckedUpdateManyWithoutTenantNestedInput
     tenantPlan?: TenantPlanUncheckedUpdateOneWithoutTenantNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
@@ -31407,6 +38521,7 @@ export namespace Prisma {
     memberships?: TenantUserCreateNestedManyWithoutTenantInput
     bolnaApiKey?: BolnaApiKeyCreateNestedOneWithoutTenantsInput
     tenantPlan?: TenantPlanCreateNestedOneWithoutTenantInput
+    wallet?: WalletCreateNestedOneWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
     batches?: LeadBatchCreateNestedManyWithoutTenantInput
     calls?: CallCreateNestedManyWithoutTenantInput
@@ -31425,6 +38540,7 @@ export namespace Prisma {
     bolnaApiKeyId?: string | null
     memberships?: TenantUserUncheckedCreateNestedManyWithoutTenantInput
     tenantPlan?: TenantPlanUncheckedCreateNestedOneWithoutTenantInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
     batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     calls?: CallUncheckedCreateNestedManyWithoutTenantInput
@@ -31544,6 +38660,8 @@ export namespace Prisma {
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
+    platformCost?: number | null
+    billableSeconds?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -31568,6 +38686,8 @@ export namespace Prisma {
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
+    platformCost?: number | null
+    billableSeconds?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -31611,6 +38731,7 @@ export namespace Prisma {
     memberships?: TenantUserUpdateManyWithoutTenantNestedInput
     bolnaApiKey?: BolnaApiKeyUpdateOneWithoutTenantsNestedInput
     tenantPlan?: TenantPlanUpdateOneWithoutTenantNestedInput
+    wallet?: WalletUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     calls?: CallUpdateManyWithoutTenantNestedInput
@@ -31629,6 +38750,7 @@ export namespace Prisma {
     bolnaApiKeyId?: NullableStringFieldUpdateOperationsInput | string | null
     memberships?: TenantUserUncheckedUpdateManyWithoutTenantNestedInput
     tenantPlan?: TenantPlanUncheckedUpdateOneWithoutTenantNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
@@ -31775,6 +38897,7 @@ export namespace Prisma {
     memberships?: TenantUserCreateNestedManyWithoutTenantInput
     bolnaApiKey?: BolnaApiKeyCreateNestedOneWithoutTenantsInput
     tenantPlan?: TenantPlanCreateNestedOneWithoutTenantInput
+    wallet?: WalletCreateNestedOneWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
     batches?: LeadBatchCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
@@ -31793,6 +38916,7 @@ export namespace Prisma {
     bolnaApiKeyId?: string | null
     memberships?: TenantUserUncheckedCreateNestedManyWithoutTenantInput
     tenantPlan?: TenantPlanUncheckedCreateNestedOneWithoutTenantInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
     batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
@@ -32009,6 +39133,7 @@ export namespace Prisma {
     memberships?: TenantUserUpdateManyWithoutTenantNestedInput
     bolnaApiKey?: BolnaApiKeyUpdateOneWithoutTenantsNestedInput
     tenantPlan?: TenantPlanUpdateOneWithoutTenantNestedInput
+    wallet?: WalletUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
@@ -32027,6 +39152,7 @@ export namespace Prisma {
     bolnaApiKeyId?: NullableStringFieldUpdateOperationsInput | string | null
     memberships?: TenantUserUncheckedUpdateManyWithoutTenantNestedInput
     tenantPlan?: TenantPlanUncheckedUpdateOneWithoutTenantNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
@@ -32247,6 +39373,8 @@ export namespace Prisma {
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
+    platformCost?: number | null
+    billableSeconds?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -32272,6 +39400,8 @@ export namespace Prisma {
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
+    platformCost?: number | null
+    billableSeconds?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -32298,6 +39428,7 @@ export namespace Prisma {
     memberships?: TenantUserCreateNestedManyWithoutTenantInput
     bolnaApiKey?: BolnaApiKeyCreateNestedOneWithoutTenantsInput
     tenantPlan?: TenantPlanCreateNestedOneWithoutTenantInput
+    wallet?: WalletCreateNestedOneWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
     batches?: LeadBatchCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
@@ -32316,6 +39447,7 @@ export namespace Prisma {
     bolnaApiKeyId?: string | null
     memberships?: TenantUserUncheckedCreateNestedManyWithoutTenantInput
     tenantPlan?: TenantPlanUncheckedCreateNestedOneWithoutTenantInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
     batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
@@ -32346,6 +39478,8 @@ export namespace Prisma {
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    platformCost?: NullableIntFieldUpdateOperationsInput | number | null
+    billableSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -32371,6 +39505,8 @@ export namespace Prisma {
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    platformCost?: NullableIntFieldUpdateOperationsInput | number | null
+    billableSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -32403,6 +39539,7 @@ export namespace Prisma {
     memberships?: TenantUserUpdateManyWithoutTenantNestedInput
     bolnaApiKey?: BolnaApiKeyUpdateOneWithoutTenantsNestedInput
     tenantPlan?: TenantPlanUpdateOneWithoutTenantNestedInput
+    wallet?: WalletUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
@@ -32421,6 +39558,7 @@ export namespace Prisma {
     bolnaApiKeyId?: NullableStringFieldUpdateOperationsInput | string | null
     memberships?: TenantUserUncheckedUpdateManyWithoutTenantNestedInput
     tenantPlan?: TenantPlanUncheckedUpdateOneWithoutTenantNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
@@ -32459,6 +39597,46 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TenantInviteCreateWithoutPlanInput = {
+    id?: string
+    email: string
+    tenantName: string
+    token: string
+    status?: $Enums.InviteStatus
+    invitedBy: string
+    expiresAt: Date | string
+    acceptedAt?: Date | string | null
+    resendCount?: number
+    lastResentAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TenantInviteUncheckedCreateWithoutPlanInput = {
+    id?: string
+    email: string
+    tenantName: string
+    token: string
+    status?: $Enums.InviteStatus
+    invitedBy: string
+    expiresAt: Date | string
+    acceptedAt?: Date | string | null
+    resendCount?: number
+    lastResentAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TenantInviteCreateOrConnectWithoutPlanInput = {
+    where: TenantInviteWhereUniqueInput
+    create: XOR<TenantInviteCreateWithoutPlanInput, TenantInviteUncheckedCreateWithoutPlanInput>
+  }
+
+  export type TenantInviteCreateManyPlanInputEnvelope = {
+    data: TenantInviteCreateManyPlanInput | TenantInviteCreateManyPlanInput[]
+    skipDuplicates?: boolean
+  }
+
   export type TenantPlanUpsertWithWhereUniqueWithoutPlanInput = {
     where: TenantPlanWhereUniqueInput
     update: XOR<TenantPlanUpdateWithoutPlanInput, TenantPlanUncheckedUpdateWithoutPlanInput>
@@ -32489,6 +39667,41 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"TenantPlan"> | Date | string
   }
 
+  export type TenantInviteUpsertWithWhereUniqueWithoutPlanInput = {
+    where: TenantInviteWhereUniqueInput
+    update: XOR<TenantInviteUpdateWithoutPlanInput, TenantInviteUncheckedUpdateWithoutPlanInput>
+    create: XOR<TenantInviteCreateWithoutPlanInput, TenantInviteUncheckedCreateWithoutPlanInput>
+  }
+
+  export type TenantInviteUpdateWithWhereUniqueWithoutPlanInput = {
+    where: TenantInviteWhereUniqueInput
+    data: XOR<TenantInviteUpdateWithoutPlanInput, TenantInviteUncheckedUpdateWithoutPlanInput>
+  }
+
+  export type TenantInviteUpdateManyWithWhereWithoutPlanInput = {
+    where: TenantInviteScalarWhereInput
+    data: XOR<TenantInviteUpdateManyMutationInput, TenantInviteUncheckedUpdateManyWithoutPlanInput>
+  }
+
+  export type TenantInviteScalarWhereInput = {
+    AND?: TenantInviteScalarWhereInput | TenantInviteScalarWhereInput[]
+    OR?: TenantInviteScalarWhereInput[]
+    NOT?: TenantInviteScalarWhereInput | TenantInviteScalarWhereInput[]
+    id?: StringFilter<"TenantInvite"> | string
+    email?: StringFilter<"TenantInvite"> | string
+    tenantName?: StringFilter<"TenantInvite"> | string
+    token?: StringFilter<"TenantInvite"> | string
+    status?: EnumInviteStatusFilter<"TenantInvite"> | $Enums.InviteStatus
+    planId?: StringFilter<"TenantInvite"> | string
+    invitedBy?: StringFilter<"TenantInvite"> | string
+    expiresAt?: DateTimeFilter<"TenantInvite"> | Date | string
+    acceptedAt?: DateTimeNullableFilter<"TenantInvite"> | Date | string | null
+    resendCount?: IntFilter<"TenantInvite"> | number
+    lastResentAt?: DateTimeNullableFilter<"TenantInvite"> | Date | string | null
+    createdAt?: DateTimeFilter<"TenantInvite"> | Date | string
+    updatedAt?: DateTimeFilter<"TenantInvite"> | Date | string
+  }
+
   export type TenantCreateWithoutTenantPlanInput = {
     id?: string
     name: string
@@ -32498,6 +39711,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     memberships?: TenantUserCreateNestedManyWithoutTenantInput
     bolnaApiKey?: BolnaApiKeyCreateNestedOneWithoutTenantsInput
+    wallet?: WalletCreateNestedOneWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
     batches?: LeadBatchCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
@@ -32516,6 +39730,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     bolnaApiKeyId?: string | null
     memberships?: TenantUserUncheckedCreateNestedManyWithoutTenantInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
     batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
@@ -32549,6 +39764,7 @@ export namespace Prisma {
     bonusValidityDays?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invites?: TenantInviteCreateNestedManyWithoutPlanInput
   }
 
   export type PlanUncheckedCreateWithoutTenantPlansInput = {
@@ -32570,6 +39786,7 @@ export namespace Prisma {
     bonusValidityDays?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invites?: TenantInviteUncheckedCreateNestedManyWithoutPlanInput
   }
 
   export type PlanCreateOrConnectWithoutTenantPlansInput = {
@@ -32597,6 +39814,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUpdateManyWithoutTenantNestedInput
     bolnaApiKey?: BolnaApiKeyUpdateOneWithoutTenantsNestedInput
+    wallet?: WalletUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
@@ -32615,6 +39833,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bolnaApiKeyId?: NullableStringFieldUpdateOperationsInput | string | null
     memberships?: TenantUserUncheckedUpdateManyWithoutTenantNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
@@ -32654,6 +39873,7 @@ export namespace Prisma {
     bonusValidityDays?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invites?: TenantInviteUpdateManyWithoutPlanNestedInput
   }
 
   export type PlanUncheckedUpdateWithoutTenantPlansInput = {
@@ -32675,6 +39895,7 @@ export namespace Prisma {
     bonusValidityDays?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invites?: TenantInviteUncheckedUpdateManyWithoutPlanNestedInput
   }
 
   export type TenantCreateWithoutBolnaApiKeyInput = {
@@ -32686,6 +39907,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     memberships?: TenantUserCreateNestedManyWithoutTenantInput
     tenantPlan?: TenantPlanCreateNestedOneWithoutTenantInput
+    wallet?: WalletCreateNestedOneWithoutTenantInput
     campaigns?: CampaignCreateNestedManyWithoutTenantInput
     batches?: LeadBatchCreateNestedManyWithoutTenantInput
     leads?: LeadCreateNestedManyWithoutTenantInput
@@ -32704,6 +39926,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     memberships?: TenantUserUncheckedCreateNestedManyWithoutTenantInput
     tenantPlan?: TenantPlanUncheckedCreateNestedOneWithoutTenantInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutTenantInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
     batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
     leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
@@ -32750,6 +39973,493 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Tenant"> | Date | string
     updatedAt?: DateTimeFilter<"Tenant"> | Date | string
     bolnaApiKeyId?: StringNullableFilter<"Tenant"> | string | null
+  }
+
+  export type PlanCreateWithoutInvitesInput = {
+    id?: string
+    name: string
+    slug: string
+    isActive?: boolean
+    displayOrder?: number
+    onboardingFee: number
+    perMinuteRate: number
+    billingMinimumSec?: number
+    billingIncrementSec?: number
+    maxActiveCampaigns?: number | null
+    maxLeadsPerBatch?: number | null
+    retryAutomation?: boolean
+    industryPackLimit?: number | null
+    features: JsonNullValueInput | InputJsonValue
+    includedBalance?: number
+    bonusValidityDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenantPlans?: TenantPlanCreateNestedManyWithoutPlanInput
+  }
+
+  export type PlanUncheckedCreateWithoutInvitesInput = {
+    id?: string
+    name: string
+    slug: string
+    isActive?: boolean
+    displayOrder?: number
+    onboardingFee: number
+    perMinuteRate: number
+    billingMinimumSec?: number
+    billingIncrementSec?: number
+    maxActiveCampaigns?: number | null
+    maxLeadsPerBatch?: number | null
+    retryAutomation?: boolean
+    industryPackLimit?: number | null
+    features: JsonNullValueInput | InputJsonValue
+    includedBalance?: number
+    bonusValidityDays?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenantPlans?: TenantPlanUncheckedCreateNestedManyWithoutPlanInput
+  }
+
+  export type PlanCreateOrConnectWithoutInvitesInput = {
+    where: PlanWhereUniqueInput
+    create: XOR<PlanCreateWithoutInvitesInput, PlanUncheckedCreateWithoutInvitesInput>
+  }
+
+  export type PlanUpsertWithoutInvitesInput = {
+    update: XOR<PlanUpdateWithoutInvitesInput, PlanUncheckedUpdateWithoutInvitesInput>
+    create: XOR<PlanCreateWithoutInvitesInput, PlanUncheckedCreateWithoutInvitesInput>
+    where?: PlanWhereInput
+  }
+
+  export type PlanUpdateToOneWithWhereWithoutInvitesInput = {
+    where?: PlanWhereInput
+    data: XOR<PlanUpdateWithoutInvitesInput, PlanUncheckedUpdateWithoutInvitesInput>
+  }
+
+  export type PlanUpdateWithoutInvitesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    onboardingFee?: IntFieldUpdateOperationsInput | number
+    perMinuteRate?: IntFieldUpdateOperationsInput | number
+    billingMinimumSec?: IntFieldUpdateOperationsInput | number
+    billingIncrementSec?: IntFieldUpdateOperationsInput | number
+    maxActiveCampaigns?: NullableIntFieldUpdateOperationsInput | number | null
+    maxLeadsPerBatch?: NullableIntFieldUpdateOperationsInput | number | null
+    retryAutomation?: BoolFieldUpdateOperationsInput | boolean
+    industryPackLimit?: NullableIntFieldUpdateOperationsInput | number | null
+    features?: JsonNullValueInput | InputJsonValue
+    includedBalance?: IntFieldUpdateOperationsInput | number
+    bonusValidityDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenantPlans?: TenantPlanUpdateManyWithoutPlanNestedInput
+  }
+
+  export type PlanUncheckedUpdateWithoutInvitesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    onboardingFee?: IntFieldUpdateOperationsInput | number
+    perMinuteRate?: IntFieldUpdateOperationsInput | number
+    billingMinimumSec?: IntFieldUpdateOperationsInput | number
+    billingIncrementSec?: IntFieldUpdateOperationsInput | number
+    maxActiveCampaigns?: NullableIntFieldUpdateOperationsInput | number | null
+    maxLeadsPerBatch?: NullableIntFieldUpdateOperationsInput | number | null
+    retryAutomation?: BoolFieldUpdateOperationsInput | boolean
+    industryPackLimit?: NullableIntFieldUpdateOperationsInput | number | null
+    features?: JsonNullValueInput | InputJsonValue
+    includedBalance?: IntFieldUpdateOperationsInput | number
+    bonusValidityDays?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenantPlans?: TenantPlanUncheckedUpdateManyWithoutPlanNestedInput
+  }
+
+  export type TenantCreateWithoutWalletInput = {
+    id?: string
+    name: string
+    email: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: TenantUserCreateNestedManyWithoutTenantInput
+    bolnaApiKey?: BolnaApiKeyCreateNestedOneWithoutTenantsInput
+    tenantPlan?: TenantPlanCreateNestedOneWithoutTenantInput
+    campaigns?: CampaignCreateNestedManyWithoutTenantInput
+    batches?: LeadBatchCreateNestedManyWithoutTenantInput
+    leads?: LeadCreateNestedManyWithoutTenantInput
+    calls?: CallCreateNestedManyWithoutTenantInput
+    assistants?: AssistantCreateNestedManyWithoutTenantInput
+    brochures?: BrochureCreateNestedManyWithoutTenantInput
+    callAnalyses?: CallAnalysisCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutWalletInput = {
+    id?: string
+    name: string
+    email: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    bolnaApiKeyId?: string | null
+    memberships?: TenantUserUncheckedCreateNestedManyWithoutTenantInput
+    tenantPlan?: TenantPlanUncheckedCreateNestedOneWithoutTenantInput
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutTenantInput
+    batches?: LeadBatchUncheckedCreateNestedManyWithoutTenantInput
+    leads?: LeadUncheckedCreateNestedManyWithoutTenantInput
+    calls?: CallUncheckedCreateNestedManyWithoutTenantInput
+    assistants?: AssistantUncheckedCreateNestedManyWithoutTenantInput
+    brochures?: BrochureUncheckedCreateNestedManyWithoutTenantInput
+    callAnalyses?: CallAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutWalletInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutWalletInput, TenantUncheckedCreateWithoutWalletInput>
+  }
+
+  export type WalletTransactionCreateWithoutWalletInput = {
+    id?: string
+    tenantId: string
+    type: $Enums.WalletTxType
+    amount: number
+    balanceAfter: number
+    bonusBalanceAfter: number
+    description: string
+    referenceType?: string | null
+    referenceId?: string | null
+    createdAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type WalletTransactionUncheckedCreateWithoutWalletInput = {
+    id?: string
+    tenantId: string
+    type: $Enums.WalletTxType
+    amount: number
+    balanceAfter: number
+    bonusBalanceAfter: number
+    description: string
+    referenceType?: string | null
+    referenceId?: string | null
+    createdAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type WalletTransactionCreateOrConnectWithoutWalletInput = {
+    where: WalletTransactionWhereUniqueInput
+    create: XOR<WalletTransactionCreateWithoutWalletInput, WalletTransactionUncheckedCreateWithoutWalletInput>
+  }
+
+  export type WalletTransactionCreateManyWalletInputEnvelope = {
+    data: WalletTransactionCreateManyWalletInput | WalletTransactionCreateManyWalletInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type RechargeCreateWithoutWalletInput = {
+    id?: string
+    tenantId: string
+    amount: number
+    purpose?: $Enums.RechargePurpose
+    status: $Enums.RechargeStatus
+    razorpayOrderId?: string | null
+    razorpayPaymentId?: string | null
+    razorpaySignature?: string | null
+    failureReason?: string | null
+    planId?: string | null
+    createdAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type RechargeUncheckedCreateWithoutWalletInput = {
+    id?: string
+    tenantId: string
+    amount: number
+    purpose?: $Enums.RechargePurpose
+    status: $Enums.RechargeStatus
+    razorpayOrderId?: string | null
+    razorpayPaymentId?: string | null
+    razorpaySignature?: string | null
+    failureReason?: string | null
+    planId?: string | null
+    createdAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type RechargeCreateOrConnectWithoutWalletInput = {
+    where: RechargeWhereUniqueInput
+    create: XOR<RechargeCreateWithoutWalletInput, RechargeUncheckedCreateWithoutWalletInput>
+  }
+
+  export type RechargeCreateManyWalletInputEnvelope = {
+    data: RechargeCreateManyWalletInput | RechargeCreateManyWalletInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TenantUpsertWithoutWalletInput = {
+    update: XOR<TenantUpdateWithoutWalletInput, TenantUncheckedUpdateWithoutWalletInput>
+    create: XOR<TenantCreateWithoutWalletInput, TenantUncheckedCreateWithoutWalletInput>
+    where?: TenantWhereInput
+  }
+
+  export type TenantUpdateToOneWithWhereWithoutWalletInput = {
+    where?: TenantWhereInput
+    data: XOR<TenantUpdateWithoutWalletInput, TenantUncheckedUpdateWithoutWalletInput>
+  }
+
+  export type TenantUpdateWithoutWalletInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: TenantUserUpdateManyWithoutTenantNestedInput
+    bolnaApiKey?: BolnaApiKeyUpdateOneWithoutTenantsNestedInput
+    tenantPlan?: TenantPlanUpdateOneWithoutTenantNestedInput
+    campaigns?: CampaignUpdateManyWithoutTenantNestedInput
+    batches?: LeadBatchUpdateManyWithoutTenantNestedInput
+    leads?: LeadUpdateManyWithoutTenantNestedInput
+    calls?: CallUpdateManyWithoutTenantNestedInput
+    assistants?: AssistantUpdateManyWithoutTenantNestedInput
+    brochures?: BrochureUpdateManyWithoutTenantNestedInput
+    callAnalyses?: CallAnalysisUpdateManyWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutWalletInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bolnaApiKeyId?: NullableStringFieldUpdateOperationsInput | string | null
+    memberships?: TenantUserUncheckedUpdateManyWithoutTenantNestedInput
+    tenantPlan?: TenantPlanUncheckedUpdateOneWithoutTenantNestedInput
+    campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
+    batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
+    calls?: CallUncheckedUpdateManyWithoutTenantNestedInput
+    assistants?: AssistantUncheckedUpdateManyWithoutTenantNestedInput
+    brochures?: BrochureUncheckedUpdateManyWithoutTenantNestedInput
+    callAnalyses?: CallAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  }
+
+  export type WalletTransactionUpsertWithWhereUniqueWithoutWalletInput = {
+    where: WalletTransactionWhereUniqueInput
+    update: XOR<WalletTransactionUpdateWithoutWalletInput, WalletTransactionUncheckedUpdateWithoutWalletInput>
+    create: XOR<WalletTransactionCreateWithoutWalletInput, WalletTransactionUncheckedCreateWithoutWalletInput>
+  }
+
+  export type WalletTransactionUpdateWithWhereUniqueWithoutWalletInput = {
+    where: WalletTransactionWhereUniqueInput
+    data: XOR<WalletTransactionUpdateWithoutWalletInput, WalletTransactionUncheckedUpdateWithoutWalletInput>
+  }
+
+  export type WalletTransactionUpdateManyWithWhereWithoutWalletInput = {
+    where: WalletTransactionScalarWhereInput
+    data: XOR<WalletTransactionUpdateManyMutationInput, WalletTransactionUncheckedUpdateManyWithoutWalletInput>
+  }
+
+  export type WalletTransactionScalarWhereInput = {
+    AND?: WalletTransactionScalarWhereInput | WalletTransactionScalarWhereInput[]
+    OR?: WalletTransactionScalarWhereInput[]
+    NOT?: WalletTransactionScalarWhereInput | WalletTransactionScalarWhereInput[]
+    id?: StringFilter<"WalletTransaction"> | string
+    walletId?: StringFilter<"WalletTransaction"> | string
+    tenantId?: StringFilter<"WalletTransaction"> | string
+    type?: EnumWalletTxTypeFilter<"WalletTransaction"> | $Enums.WalletTxType
+    amount?: IntFilter<"WalletTransaction"> | number
+    balanceAfter?: IntFilter<"WalletTransaction"> | number
+    bonusBalanceAfter?: IntFilter<"WalletTransaction"> | number
+    description?: StringFilter<"WalletTransaction"> | string
+    referenceType?: StringNullableFilter<"WalletTransaction"> | string | null
+    referenceId?: StringNullableFilter<"WalletTransaction"> | string | null
+    createdAt?: DateTimeFilter<"WalletTransaction"> | Date | string
+    createdBy?: StringNullableFilter<"WalletTransaction"> | string | null
+  }
+
+  export type RechargeUpsertWithWhereUniqueWithoutWalletInput = {
+    where: RechargeWhereUniqueInput
+    update: XOR<RechargeUpdateWithoutWalletInput, RechargeUncheckedUpdateWithoutWalletInput>
+    create: XOR<RechargeCreateWithoutWalletInput, RechargeUncheckedCreateWithoutWalletInput>
+  }
+
+  export type RechargeUpdateWithWhereUniqueWithoutWalletInput = {
+    where: RechargeWhereUniqueInput
+    data: XOR<RechargeUpdateWithoutWalletInput, RechargeUncheckedUpdateWithoutWalletInput>
+  }
+
+  export type RechargeUpdateManyWithWhereWithoutWalletInput = {
+    where: RechargeScalarWhereInput
+    data: XOR<RechargeUpdateManyMutationInput, RechargeUncheckedUpdateManyWithoutWalletInput>
+  }
+
+  export type RechargeScalarWhereInput = {
+    AND?: RechargeScalarWhereInput | RechargeScalarWhereInput[]
+    OR?: RechargeScalarWhereInput[]
+    NOT?: RechargeScalarWhereInput | RechargeScalarWhereInput[]
+    id?: StringFilter<"Recharge"> | string
+    walletId?: StringFilter<"Recharge"> | string
+    tenantId?: StringFilter<"Recharge"> | string
+    amount?: IntFilter<"Recharge"> | number
+    purpose?: EnumRechargePurposeFilter<"Recharge"> | $Enums.RechargePurpose
+    status?: EnumRechargeStatusFilter<"Recharge"> | $Enums.RechargeStatus
+    razorpayOrderId?: StringNullableFilter<"Recharge"> | string | null
+    razorpayPaymentId?: StringNullableFilter<"Recharge"> | string | null
+    razorpaySignature?: StringNullableFilter<"Recharge"> | string | null
+    failureReason?: StringNullableFilter<"Recharge"> | string | null
+    planId?: StringNullableFilter<"Recharge"> | string | null
+    createdAt?: DateTimeFilter<"Recharge"> | Date | string
+    completedAt?: DateTimeNullableFilter<"Recharge"> | Date | string | null
+  }
+
+  export type WalletCreateWithoutTransactionsInput = {
+    id?: string
+    balance?: number
+    bonusBalance?: number
+    bonusExpiresAt?: Date | string | null
+    isActive?: boolean
+    lowBalanceThreshold?: number | null
+    lowBalanceAlertSent?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutWalletInput
+    recharges?: RechargeCreateNestedManyWithoutWalletInput
+  }
+
+  export type WalletUncheckedCreateWithoutTransactionsInput = {
+    id?: string
+    tenantId: string
+    balance?: number
+    bonusBalance?: number
+    bonusExpiresAt?: Date | string | null
+    isActive?: boolean
+    lowBalanceThreshold?: number | null
+    lowBalanceAlertSent?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    recharges?: RechargeUncheckedCreateNestedManyWithoutWalletInput
+  }
+
+  export type WalletCreateOrConnectWithoutTransactionsInput = {
+    where: WalletWhereUniqueInput
+    create: XOR<WalletCreateWithoutTransactionsInput, WalletUncheckedCreateWithoutTransactionsInput>
+  }
+
+  export type WalletUpsertWithoutTransactionsInput = {
+    update: XOR<WalletUpdateWithoutTransactionsInput, WalletUncheckedUpdateWithoutTransactionsInput>
+    create: XOR<WalletCreateWithoutTransactionsInput, WalletUncheckedCreateWithoutTransactionsInput>
+    where?: WalletWhereInput
+  }
+
+  export type WalletUpdateToOneWithWhereWithoutTransactionsInput = {
+    where?: WalletWhereInput
+    data: XOR<WalletUpdateWithoutTransactionsInput, WalletUncheckedUpdateWithoutTransactionsInput>
+  }
+
+  export type WalletUpdateWithoutTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    balance?: IntFieldUpdateOperationsInput | number
+    bonusBalance?: IntFieldUpdateOperationsInput | number
+    bonusExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lowBalanceThreshold?: NullableIntFieldUpdateOperationsInput | number | null
+    lowBalanceAlertSent?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutWalletNestedInput
+    recharges?: RechargeUpdateManyWithoutWalletNestedInput
+  }
+
+  export type WalletUncheckedUpdateWithoutTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    balance?: IntFieldUpdateOperationsInput | number
+    bonusBalance?: IntFieldUpdateOperationsInput | number
+    bonusExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lowBalanceThreshold?: NullableIntFieldUpdateOperationsInput | number | null
+    lowBalanceAlertSent?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    recharges?: RechargeUncheckedUpdateManyWithoutWalletNestedInput
+  }
+
+  export type WalletCreateWithoutRechargesInput = {
+    id?: string
+    balance?: number
+    bonusBalance?: number
+    bonusExpiresAt?: Date | string | null
+    isActive?: boolean
+    lowBalanceThreshold?: number | null
+    lowBalanceAlertSent?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutWalletInput
+    transactions?: WalletTransactionCreateNestedManyWithoutWalletInput
+  }
+
+  export type WalletUncheckedCreateWithoutRechargesInput = {
+    id?: string
+    tenantId: string
+    balance?: number
+    bonusBalance?: number
+    bonusExpiresAt?: Date | string | null
+    isActive?: boolean
+    lowBalanceThreshold?: number | null
+    lowBalanceAlertSent?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    transactions?: WalletTransactionUncheckedCreateNestedManyWithoutWalletInput
+  }
+
+  export type WalletCreateOrConnectWithoutRechargesInput = {
+    where: WalletWhereUniqueInput
+    create: XOR<WalletCreateWithoutRechargesInput, WalletUncheckedCreateWithoutRechargesInput>
+  }
+
+  export type WalletUpsertWithoutRechargesInput = {
+    update: XOR<WalletUpdateWithoutRechargesInput, WalletUncheckedUpdateWithoutRechargesInput>
+    create: XOR<WalletCreateWithoutRechargesInput, WalletUncheckedCreateWithoutRechargesInput>
+    where?: WalletWhereInput
+  }
+
+  export type WalletUpdateToOneWithWhereWithoutRechargesInput = {
+    where?: WalletWhereInput
+    data: XOR<WalletUpdateWithoutRechargesInput, WalletUncheckedUpdateWithoutRechargesInput>
+  }
+
+  export type WalletUpdateWithoutRechargesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    balance?: IntFieldUpdateOperationsInput | number
+    bonusBalance?: IntFieldUpdateOperationsInput | number
+    bonusExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lowBalanceThreshold?: NullableIntFieldUpdateOperationsInput | number | null
+    lowBalanceAlertSent?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutWalletNestedInput
+    transactions?: WalletTransactionUpdateManyWithoutWalletNestedInput
+  }
+
+  export type WalletUncheckedUpdateWithoutRechargesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    balance?: IntFieldUpdateOperationsInput | number
+    bonusBalance?: IntFieldUpdateOperationsInput | number
+    bonusExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lowBalanceThreshold?: NullableIntFieldUpdateOperationsInput | number | null
+    lowBalanceAlertSent?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transactions?: WalletTransactionUncheckedUpdateManyWithoutWalletNestedInput
   }
 
   export type TenantUserCreateManyTenantInput = {
@@ -32823,6 +40533,8 @@ export namespace Prisma {
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
+    platformCost?: number | null
+    billableSeconds?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -33119,6 +40831,8 @@ export namespace Prisma {
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    platformCost?: NullableIntFieldUpdateOperationsInput | number | null
+    billableSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -33143,6 +40857,8 @@ export namespace Prisma {
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    platformCost?: NullableIntFieldUpdateOperationsInput | number | null
+    billableSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -33164,6 +40880,8 @@ export namespace Prisma {
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    platformCost?: NullableIntFieldUpdateOperationsInput | number | null
+    billableSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -33670,6 +41388,8 @@ export namespace Prisma {
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
+    platformCost?: number | null
+    billableSeconds?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -33755,6 +41475,8 @@ export namespace Prisma {
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    platformCost?: NullableIntFieldUpdateOperationsInput | number | null
+    billableSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -33779,6 +41501,8 @@ export namespace Prisma {
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    platformCost?: NullableIntFieldUpdateOperationsInput | number | null
+    billableSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -33800,6 +41524,8 @@ export namespace Prisma {
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    platformCost?: NullableIntFieldUpdateOperationsInput | number | null
+    billableSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -33902,6 +41628,8 @@ export namespace Prisma {
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
+    platformCost?: number | null
+    billableSeconds?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -33966,6 +41694,8 @@ export namespace Prisma {
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    platformCost?: NullableIntFieldUpdateOperationsInput | number | null
+    billableSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -33990,6 +41720,8 @@ export namespace Prisma {
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    platformCost?: NullableIntFieldUpdateOperationsInput | number | null
+    billableSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -34011,6 +41743,8 @@ export namespace Prisma {
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    platformCost?: NullableIntFieldUpdateOperationsInput | number | null
+    billableSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -34031,6 +41765,8 @@ export namespace Prisma {
     status?: $Enums.CallStatus
     duration?: number | null
     cost?: number | null
+    platformCost?: number | null
+    billableSeconds?: number | null
     recording?: string | null
     transcript?: string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -34048,6 +41784,8 @@ export namespace Prisma {
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    platformCost?: NullableIntFieldUpdateOperationsInput | number | null
+    billableSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -34072,6 +41810,8 @@ export namespace Prisma {
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    platformCost?: NullableIntFieldUpdateOperationsInput | number | null
+    billableSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -34093,6 +41833,8 @@ export namespace Prisma {
     status?: EnumCallStatusFieldUpdateOperationsInput | $Enums.CallStatus
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    platformCost?: NullableIntFieldUpdateOperationsInput | number | null
+    billableSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     recording?: NullableStringFieldUpdateOperationsInput | string | null
     transcript?: NullableStringFieldUpdateOperationsInput | string | null
     transcriptMessages?: NullableJsonNullValueInput | InputJsonValue
@@ -34110,6 +41852,21 @@ export namespace Prisma {
     status?: $Enums.PlanStatus
     activatedAt?: Date | string | null
     bonusExpiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TenantInviteCreateManyPlanInput = {
+    id?: string
+    email: string
+    tenantName: string
+    token: string
+    status?: $Enums.InviteStatus
+    invitedBy: string
+    expiresAt: Date | string
+    acceptedAt?: Date | string | null
+    resendCount?: number
+    lastResentAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -34144,6 +41901,51 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type TenantInviteUpdateWithoutPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    tenantName?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    status?: EnumInviteStatusFieldUpdateOperationsInput | $Enums.InviteStatus
+    invitedBy?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resendCount?: IntFieldUpdateOperationsInput | number
+    lastResentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TenantInviteUncheckedUpdateWithoutPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    tenantName?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    status?: EnumInviteStatusFieldUpdateOperationsInput | $Enums.InviteStatus
+    invitedBy?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resendCount?: IntFieldUpdateOperationsInput | number
+    lastResentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TenantInviteUncheckedUpdateManyWithoutPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    tenantName?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    status?: EnumInviteStatusFieldUpdateOperationsInput | $Enums.InviteStatus
+    invitedBy?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resendCount?: IntFieldUpdateOperationsInput | number
+    lastResentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type TenantCreateManyBolnaApiKeyInput = {
     id?: string
     name: string
@@ -34162,6 +41964,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUpdateManyWithoutTenantNestedInput
     tenantPlan?: TenantPlanUpdateOneWithoutTenantNestedInput
+    wallet?: WalletUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUpdateManyWithoutTenantNestedInput
     leads?: LeadUpdateManyWithoutTenantNestedInput
@@ -34180,6 +41983,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: TenantUserUncheckedUpdateManyWithoutTenantNestedInput
     tenantPlan?: TenantPlanUncheckedUpdateOneWithoutTenantNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutTenantNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutTenantNestedInput
     batches?: LeadBatchUncheckedUpdateManyWithoutTenantNestedInput
     leads?: LeadUncheckedUpdateManyWithoutTenantNestedInput
@@ -34196,6 +42000,122 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WalletTransactionCreateManyWalletInput = {
+    id?: string
+    tenantId: string
+    type: $Enums.WalletTxType
+    amount: number
+    balanceAfter: number
+    bonusBalanceAfter: number
+    description: string
+    referenceType?: string | null
+    referenceId?: string | null
+    createdAt?: Date | string
+    createdBy?: string | null
+  }
+
+  export type RechargeCreateManyWalletInput = {
+    id?: string
+    tenantId: string
+    amount: number
+    purpose?: $Enums.RechargePurpose
+    status: $Enums.RechargeStatus
+    razorpayOrderId?: string | null
+    razorpayPaymentId?: string | null
+    razorpaySignature?: string | null
+    failureReason?: string | null
+    planId?: string | null
+    createdAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type WalletTransactionUpdateWithoutWalletInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    type?: EnumWalletTxTypeFieldUpdateOperationsInput | $Enums.WalletTxType
+    amount?: IntFieldUpdateOperationsInput | number
+    balanceAfter?: IntFieldUpdateOperationsInput | number
+    bonusBalanceAfter?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    referenceType?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type WalletTransactionUncheckedUpdateWithoutWalletInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    type?: EnumWalletTxTypeFieldUpdateOperationsInput | $Enums.WalletTxType
+    amount?: IntFieldUpdateOperationsInput | number
+    balanceAfter?: IntFieldUpdateOperationsInput | number
+    bonusBalanceAfter?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    referenceType?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type WalletTransactionUncheckedUpdateManyWithoutWalletInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    type?: EnumWalletTxTypeFieldUpdateOperationsInput | $Enums.WalletTxType
+    amount?: IntFieldUpdateOperationsInput | number
+    balanceAfter?: IntFieldUpdateOperationsInput | number
+    bonusBalanceAfter?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    referenceType?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type RechargeUpdateWithoutWalletInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    amount?: IntFieldUpdateOperationsInput | number
+    purpose?: EnumRechargePurposeFieldUpdateOperationsInput | $Enums.RechargePurpose
+    status?: EnumRechargeStatusFieldUpdateOperationsInput | $Enums.RechargeStatus
+    razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type RechargeUncheckedUpdateWithoutWalletInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    amount?: IntFieldUpdateOperationsInput | number
+    purpose?: EnumRechargePurposeFieldUpdateOperationsInput | $Enums.RechargePurpose
+    status?: EnumRechargeStatusFieldUpdateOperationsInput | $Enums.RechargeStatus
+    razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type RechargeUncheckedUpdateManyWithoutWalletInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    amount?: IntFieldUpdateOperationsInput | number
+    purpose?: EnumRechargePurposeFieldUpdateOperationsInput | $Enums.RechargePurpose
+    status?: EnumRechargeStatusFieldUpdateOperationsInput | $Enums.RechargeStatus
+    razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
 

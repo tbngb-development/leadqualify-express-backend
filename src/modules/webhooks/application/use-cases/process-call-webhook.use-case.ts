@@ -19,9 +19,13 @@ import type {
   CallHistoryItem,
   ParsedCallAnalysis,
 } from "../../../../shared/types/bolna.types";
+import type { DebitWalletForCallUseCase } from "../../../wallet/application/use-cases/debit-wallet.use-case";
 
 export class ProcessCallWebhookUseCase {
-  constructor(private readonly webhookRepo: WebhookRepository) {}
+  constructor(
+    private readonly webhookRepo: WebhookRepository,
+    private readonly debitWalletForCall?: DebitWalletForCallUseCase,
+  ) {}
 
   async execute(payload: WebhookCallPayload): Promise<void> {
     const callId = payload.id ?? payload.execution_id ?? payload.run_id;
@@ -35,7 +39,6 @@ export class ProcessCallWebhookUseCase {
       case "queued":
       case "scheduled":
       case "rescheduled":
-        // Statelessly ignore scheduling events
         break;
 
       case "initiated":
@@ -72,7 +75,7 @@ export class ProcessCallWebhookUseCase {
         const resolved = await this.resolveCallRecord(callId, payload);
         if (!resolved) break;
 
-        await this.handleCallCompleted(resolved, payload);
+        await this.handleCallCompleted(resolved, payload, callId);
         break;
       }
 
@@ -115,11 +118,9 @@ export class ProcessCallWebhookUseCase {
     bolnaCallId: string,
     payload: WebhookCallPayload,
   ): Promise<ResolvedCallContext | null> {
-    // 1. Resolve by direct remote ID
     const call = await this.webhookRepo.findCallByBolnaCallId(bolnaCallId);
     if (call) return call;
 
-    // 2. Resolve via batch context
     const bolnaBatchId = payload.batch_id;
     const phone =
       payload.telephony_data?.to_number ??
@@ -147,7 +148,6 @@ export class ProcessCallWebhookUseCase {
     );
 
     if (existingCall && retried > 0) {
-      // Rotate execution details, snapshot previous history JSON
       const history = (existingCall.callHistory as CallHistoryItem[]) ?? [];
       history.push({
         attempt: retried,
@@ -170,7 +170,6 @@ export class ProcessCallWebhookUseCase {
       return existingCall;
     }
 
-    // Fresh execution creation
     const newCall = await this.webhookRepo.createCall({
       bolnaCallId,
       tenantId: batch.tenantId,
@@ -191,6 +190,7 @@ export class ProcessCallWebhookUseCase {
   private async handleCallCompleted(
     call: ResolvedCallContext,
     payload: WebhookCallPayload,
+    bolnaCallId: string,
   ): Promise<void> {
     const messages = (payload.messages ?? []).map((m) => ({
       role: m.role === "agent" ? "assistant" : "user",
@@ -213,6 +213,7 @@ export class ProcessCallWebhookUseCase {
     const parsed = this.parseExtractionData(payload.extracted_data);
     const summary = parsed?.callSummary ?? null;
 
+    // ── Step 1: Persist terminal state (Bolna cost in `cost` field) ──
     await this.webhookRepo.updateCallTerminalState(call.id, {
       status: "COMPLETED",
       summary,
@@ -221,7 +222,7 @@ export class ProcessCallWebhookUseCase {
       duration,
       recording:
         payload.telephony_data?.recording_url ?? payload.recording_url ?? null,
-      cost: payload.total_cost ?? null,
+      cost: payload.total_cost ?? null, // Bolna cost in USD cents
       endedAt: new Date(),
     });
 
@@ -239,6 +240,31 @@ export class ProcessCallWebhookUseCase {
       call.batchId,
       "COMPLETED",
     );
+
+    // ── Step 2: Debit wallet + persist our cost breakdown ──────────
+    if (this.debitWalletForCall && duration && duration > 0) {
+      try {
+        const debitResult = await this.debitWalletForCall.execute({
+          tenantId: call.tenantId,
+          callId: call.id,
+          bolnaCallId: String(bolnaCallId),
+          durationSec: duration,
+        });
+
+        // Only record our cost if debit actually succeeded
+        if (debitResult) {
+          await this.webhookRepo.updateCallCostBreakdown(call.id, {
+            platformCost: debitResult.amountPaisa,
+            billableSeconds: debitResult.billableSeconds,
+          });
+        }
+      } catch (err) {
+        // Never fail webhook resolution on billing errors
+        console.error("[Webhook] wallet debit failed:", err);
+      }
+    }
+    // ───────────────────────────────────────────────────────────────
+
     await this.checkBatchCompletion(call);
   }
 

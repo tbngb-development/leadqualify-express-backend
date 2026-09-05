@@ -8,6 +8,7 @@ import {
   BolnaClientFactory,
   type IBolnaClientFactory,
 } from "../shared/config/external/bolna/bolna-client.factory";
+import { ResendEmailService } from "../shared/config/external/email/resend.email";
 
 import { buildAuthModule, type AuthModule } from "../modules/auth/container";
 import {
@@ -46,9 +47,20 @@ import {
   buildBolnaApiKeyModule,
   type BolnaApiKeyModule,
 } from "../modules/bolna-api-keys/container";
+import {
+  buildWalletModule,
+  type WalletModule,
+} from "../modules/wallet/container";
+import {
+  buildPaymentModule,
+  type PaymentModule,
+} from "../modules/payments/container";
+import {
+  buildInviteModule,
+  type InviteModule,
+} from "../modules/invites/container";
 
 export interface AppContainer {
-  // Existing
   auth: AuthModule;
   assistants: AssistantModule;
   tenants: TenantModule;
@@ -61,8 +73,14 @@ export interface AppContainer {
   users: UserModule;
   webhooks: WebhookModule;
 
+  // Sprint 1
   plans: PlanModule;
   bolnaApiKeys: BolnaApiKeyModule;
+
+  // Sprint 2
+  wallet: WalletModule;
+  payments: PaymentModule;
+  invites: InviteModule;
 
   // Middleware
   authenticate: AuthenticateMiddleware;
@@ -74,37 +92,68 @@ export interface AppContainer {
 }
 
 export function buildContainer(): AppContainer {
-  // ── Shared services ─────────────────────────────────────────────────
+  // ── Shared infrastructure ─────────────────────────────────────────────
   const authRepository = new PrismaAuthRepository();
   const tokenService = new JwtTokenService();
   const passwordService = new BcryptPasswordService();
+  const email = new ResendEmailService();
 
-  // ── New Sprint 1 modules ────────────────────────────────────────────
+  // ── Sprint 1 ──────────────────────────────────────────────────────────
   const plans = buildPlanModule();
   const bolnaApiKeys = buildBolnaApiKeyModule();
-
-  // ── Bolna client factory (depends on bolnaApiKeys repo) ─────────────
   const bolnaClientFactory = new BolnaClientFactory(bolnaApiKeys.repository);
-
-  // ── Middleware ──────────────────────────────────────────────────────
   const enforcePlan = new EnforcePlanMiddleware(plans.repository);
 
+  // ── Sprint 2: Wallet (needs plans + bolna + email) ────────────────────
+  const wallet = buildWalletModule({
+    planRepository: plans.repository,
+    bolnaClientFactory,
+    email,
+  });
+
+  // ── Sprint 2: Payments (needs wallet + plans + auto-assign key) ───────
+  const payments = buildPaymentModule({
+    walletRepository: wallet.repository,
+    planRepository: plans.repository,
+    autoAssignKey: bolnaApiKeys.useCases.autoAssignKey,
+    email,
+  });
+
+  // ── Sprint 2: Invites (needs auth + plans + wallet + email) ───────────
+  const invites = buildInviteModule({
+    planRepository: plans.repository,
+    authRepository,
+    walletRepository: wallet.repository,
+    passwordService,
+    tokenService,
+    emailService: email,
+  });
+
+  // ── Domain modules (Bolna factory + wallet hooks) ─────────────────────
   return {
     auth: buildAuthModule({ authRepository, tokenService, passwordService }),
-    assistants: buildAssistantModule({ bolnaClientFactory }), // Note: needs update in assistant container
+    assistants: buildAssistantModule({ bolnaClientFactory }),
     tenants: buildTenantModule(),
     campaigns: buildCampaignModule(),
-    batches: buildBatchModule({ bolnaClientFactory }), // Note: needs update in batch container
+    batches: buildBatchModule({
+      bolnaClientFactory,
+      checkBalanceForBatch: wallet.useCases.checkBalanceForBatch,
+    }),
     leads: buildLeadModule(),
-    calls: buildCallModule({ bolnaClientFactory }), // Note: needs update in call container
+    calls: buildCallModule({ bolnaClientFactory }),
     dashboard: buildDashboardModule(),
     brochures: buildBrochureModule(),
     users: buildUserModule({ passwordService }),
-    webhooks: buildWebhookModule(),
+    webhooks: buildWebhookModule({
+      debitWalletForCall: wallet.useCases.debitWalletForCall,
+    }),
 
-    // Sprint 1 additions
     plans,
     bolnaApiKeys,
+    wallet,
+    payments,
+    invites,
+
     authenticate: new AuthenticateMiddleware(tokenService, authRepository),
     authorize: new AuthorizeMiddleware(),
     enforcePlan,

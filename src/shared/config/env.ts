@@ -42,5 +42,16 @@ export const env = {
     webhookSecret: process.env.WEBHOOK_SECRET || "",
   },
 
+  resend: {
+    apiKey: process.env.RESEND_API_KEY || "",
+    fromEmail: process.env.RESEND_FROM_EMAIL || "noreply@localhost",
+  },
+
+  razorpay: {
+    keyId: process.env.RAZORPAY_KEY_ID || "",
+    keySecret: process.env.RAZORPAY_KEY_SECRET || "",
+    webhookSecret: process.env.RAZORPAY_WEBHOOK_SECRET || "",
+  },
+
   skipCrossBatchDedup: process.env.SKIP_CROSS_BATCH_DEDUP === "true",
 } as const;

@@ -6,6 +6,7 @@ import { GetTenantPlanUseCase } from "./application/use-cases/get-tenant-plan.us
 import { CreatePlanUseCase } from "./application/use-cases/create-plan.use-case";
 import { UpdatePlanUseCase } from "./application/use-cases/update-plan.use-case";
 import { ActivateTenantPlanUseCase } from "./application/use-cases/activate-tenant-plan.use-case";
+import { SelectPlanUseCase } from "./application/use-cases/select-plan.use-case"; // ← NEW
 import { AdminPlanController } from "./presentation/admin-plan.controller";
 import { TenantPlanController } from "./presentation/tenant-plan.controller";
 
@@ -13,6 +14,7 @@ export interface PlanModule {
   repository: PlanRepository;
   useCases: {
     activateTenantPlan: ActivateTenantPlanUseCase;
+    selectPlan: SelectPlanUseCase; // ← NEW
   };
   adminController: AdminPlanController;
   tenantController: TenantPlanController;
@@ -27,16 +29,21 @@ export function buildPlanModule(): PlanModule {
   const createPlan = new CreatePlanUseCase(repository);
   const updatePlan = new UpdatePlanUseCase(repository);
   const activateTenantPlan = new ActivateTenantPlanUseCase(repository);
+  const selectPlan = new SelectPlanUseCase(repository); // ← NEW
 
   return {
     repository,
-    useCases: { activateTenantPlan },
+    useCases: { activateTenantPlan, selectPlan }, // ← NEW
     adminController: new AdminPlanController(
       listPlans,
       getPlan,
       createPlan,
       updatePlan,
     ),
-    tenantController: new TenantPlanController(listPlans, getTenantPlan),
+    tenantController: new TenantPlanController(
+      listPlans,
+      getTenantPlan,
+      selectPlan, // ← NEW
+    ),
   };
 }

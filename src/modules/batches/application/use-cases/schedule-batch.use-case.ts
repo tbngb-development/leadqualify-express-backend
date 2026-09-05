@@ -1,6 +1,7 @@
 import type { BatchRepository } from "../interfaces/batch-repository.interface";
 import type { CampaignRepository } from "../../../campaigns/application/interfaces/campaign-repository.interface";
 import type { BolnaBatchProvider } from "../../infrastructure/bolna-batch-provider.interface";
+import type { CheckBalanceForBatchUseCase } from "../../../wallet/application/use-cases/check-balance-for-batch.use-case";
 import {
   BatchNotFoundError,
   BatchOperationError,
@@ -16,6 +17,7 @@ export class ScheduleBatchUseCase {
     private readonly batchRepo: BatchRepository,
     private readonly campaignRepo: CampaignRepository,
     private readonly bolnaProvider: BolnaBatchProvider,
+    private readonly checkBalanceForBatch?: CheckBalanceForBatchUseCase,
   ) {}
 
   async execute(
@@ -49,6 +51,22 @@ export class ScheduleBatchUseCase {
       );
     }
 
+    let balanceWarning: { balance: number; estimatedCost: number } | null =
+      null;
+
+    if (this.checkBalanceForBatch) {
+      const check = await this.checkBalanceForBatch.execute({
+        tenantId,
+        leadCount: batchData.totalLeads,
+      });
+      if (check.warning) {
+        balanceWarning = {
+          balance: check.balance,
+          estimatedCost: check.estimatedCost,
+        };
+      }
+    }
+
     const isoString = toBolnaISO(targetDate);
     const bolnaResult = await this.bolnaProvider.scheduleBatch(
       tenantId,
@@ -73,6 +91,7 @@ export class ScheduleBatchUseCase {
     return {
       batch: updatedBatch,
       message: `Batch scheduled for ${bolnaScheduledAt ?? isoString}`,
+      ...(balanceWarning && { balanceWarning }),
     };
   }
 }

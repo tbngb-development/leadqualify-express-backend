@@ -51,3 +51,35 @@ export const AdminMessages = {
 export const WebhookMessages = {
   INVALID_SECRET: "Invalid or missing webhook secret",
 } as const;
+
+export const InviteMessages = {
+  CREATED: "Invite created successfully",
+  RESENT: "Invite resent successfully",
+  REVOKED: "Invite revoked",
+  INVALID: "Invalid or expired invite",
+  ALREADY_ACCEPTED: "Invite already accepted",
+  EMAIL_MISMATCH: "Email does not match invite",
+} as const;
+
+export const WalletMessages = {
+  INSUFFICIENT_BALANCE: "Insufficient wallet balance. Please recharge.",
+  LOW_BALANCE: "Wallet balance is below threshold",
+  DEBIT_SUCCESS: "Amount debited",
+  CREDIT_SUCCESS: "Amount credited",
+} as const;
+
+export const PaymentMessages = {
+  ORDER_CREATED: "Payment order created",
+  VERIFIED: "Payment verified successfully",
+  FAILED: "Payment failed",
+  INVALID_SIGNATURE: "Invalid payment signature",
+  INVALID_SLAB: "Invalid recharge amount",
+} as const;
+
+export const RECHARGE_SLABS_PAISA = [
+  100_000, // ₹1,000
+  500_000, // ₹5,000
+  1_000_000, // ₹10,000
+  2_500_000, // ₹25,000
+  10_000_000, // ₹1,00,000
+] as const;
