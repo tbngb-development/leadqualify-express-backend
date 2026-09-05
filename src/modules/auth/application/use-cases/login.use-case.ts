@@ -22,7 +22,7 @@ export class LoginUseCase {
 
     if (!user.isActive) {
       throw new ForbiddenError(
-        "Your account has been deactivated by an administrator.",
+        "Your account has been deactivated by the platform administrator. Please contact the support team for assistance.",
       );
     }
 
