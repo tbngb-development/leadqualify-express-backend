@@ -13,6 +13,9 @@ import { AcceptOwnerInviteUseCase } from "./application/use-cases/accept-owner-i
 
 import { AdminInviteController } from "./presentation/admin-invite.controller";
 import { PublicInviteController } from "./presentation/public-invite.controller";
+import { ResendOwnerInviteUseCase } from "./application/use-cases/resend-owner-invite.use-case";
+import { RevokeOwnerInviteUseCase } from "./application/use-cases/revoke-owner-invite.use-case";
+import { ListOwnerInvitesUseCase } from "./application/use-cases/list-owner-invites.use-case";
 
 export interface InviteModuleDeps {
   planRepository: PlanRepository;
@@ -47,9 +50,22 @@ export function buildInviteModule(deps: InviteModuleDeps): InviteModule {
     deps.walletRepository,
   );
 
+  const resendInvite = new ResendOwnerInviteUseCase(
+    repository,
+    deps.emailService,
+  );
+  const revokeInvite = new RevokeOwnerInviteUseCase(repository);
+
+  const listInvites = new ListOwnerInvitesUseCase(repository);
+
   return {
     repository,
-    adminController: new AdminInviteController(createInvite),
+    adminController: new AdminInviteController(
+      createInvite,
+      resendInvite,
+      revokeInvite,
+      listInvites,
+    ),
     publicController: new PublicInviteController(getInvite, acceptInvite),
   };
 }

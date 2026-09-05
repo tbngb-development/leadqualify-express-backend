@@ -5,7 +5,7 @@ import type { IEmailService } from "../../../../shared/config/external/email/ema
 import { inviteTenantEmailHtml } from "../../../../shared/config/external/email/templates/invite-tenant.template";
 import {
   InviteNotFoundError,
-  InviteInvalidError,
+  InviteAlreadyAcceptedError,
 } from "../../domain/errors/invite.errors";
 import { toOwnerInviteResponse } from "../mappers/invite.mapper";
 
@@ -18,8 +18,7 @@ export class ResendOwnerInviteUseCase {
   async execute(id: string) {
     const invite = await this.inviteRepo.findById(id);
     if (!invite) throw new InviteNotFoundError();
-    if (invite.status === "ACCEPTED")
-      throw new InviteInvalidError("Invite already accepted");
+    if (invite.status === "ACCEPTED") throw new InviteAlreadyAcceptedError();
 
     const newToken = crypto.randomUUID();
     const newExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days

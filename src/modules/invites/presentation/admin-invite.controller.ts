@@ -1,12 +1,35 @@
 import type { Request, Response, NextFunction } from "express";
 import { sendSuccess } from "../../../shared/utils/response";
 import { HttpStatus } from "../../../shared/constants/http-status";
-import type { AuthRequest } from "../../../shared/types";
-import type { CreateOwnerInviteUseCase } from "../application/use-cases/create-owner-invite.use-case";
 import { param } from "../../../shared/utils/paramHelper";
+import type { AuthRequest } from "../../../shared/types";
+import type { InviteStatus } from "../../../generated/prisma";
+import type { CreateOwnerInviteUseCase } from "../application/use-cases/create-owner-invite.use-case";
+import type { ResendOwnerInviteUseCase } from "../application/use-cases/resend-owner-invite.use-case";
+import type { RevokeOwnerInviteUseCase } from "../application/use-cases/revoke-owner-invite.use-case";
+import type { ListOwnerInvitesUseCase } from "../application/use-cases/list-owner-invites.use-case";
 
 export class AdminInviteController {
-  constructor(private readonly createInvite: CreateOwnerInviteUseCase) {}
+  constructor(
+    private readonly createInvite: CreateOwnerInviteUseCase,
+    private readonly resendInvite: ResendOwnerInviteUseCase,
+    private readonly revokeInvite: RevokeOwnerInviteUseCase,
+    private readonly listInvites: ListOwnerInvitesUseCase,
+  ) {}
+
+  list = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const status = req.query.status as InviteStatus | undefined;
+      const result = await this.listInvites.execute(status);
+      sendSuccess(res, result);
+    } catch (err) {
+      next(err);
+    }
+  };
 
   create = async (
     req: Request,

@@ -235,6 +235,7 @@ export class PrismaAuthRepository implements AuthRepository {
     email: string;
     name: string;
     password: string;
+    isActive: boolean; // add this field
     platformAdmin: { id: string } | null;
     memberships: Array<{
       id: string;
@@ -248,6 +249,7 @@ export class PrismaAuthRepository implements AuthRepository {
       email: user.email,
       name: user.name,
       passwordHash: user.password,
+      isActive: user.isActive, // <-- REQUIRED
       isPlatformAdmin: user.platformAdmin !== null,
       memberships: user.memberships.map((m) => ({
         id: m.id,

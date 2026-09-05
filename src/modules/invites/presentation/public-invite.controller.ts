@@ -36,4 +36,5 @@ export class PublicInviteController {
       next(err);
     }
   };
+  
 }
