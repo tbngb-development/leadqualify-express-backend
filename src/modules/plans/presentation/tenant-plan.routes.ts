@@ -18,5 +18,10 @@ export function buildTenantPlanRoutes(
   // My plan — requires active tenant context
   router.get("/mine", authenticate.tenant(), controller.getMine);
 
+  // ── NEW ────────────────────────────────────────────────────────
+  // Self-registration plan selection — requires tenant context
+  router.post("/:planId/select", authenticate.tenant(), controller.selectPlan);
+  // ───────────────────────────────────────────────────────────────
+
   return router;
 }

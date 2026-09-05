@@ -20,6 +20,12 @@ export class PlanNotActiveError extends ForbiddenError {
   }
 }
 
+export class TenantPlanAlreadyActiveError extends ConflictError {
+  constructor() {
+    super("Tenant already has an active plan. Use the upgrade flow instead.");
+  }
+}
+
 export class PlanLimitExceededError extends ForbiddenError {
   constructor(feature: string, limit: number) {
     super(

@@ -22,6 +22,11 @@ export interface PlanRepository {
 
   // ── Tenant Plans ──────────────────────────────────────────────
   getActivePlanForTenant(tenantId: string): Promise<TenantActivePlan | null>;
+
+  /** Upsert a TenantPlan row with PENDING_PAYMENT status. */
+  selectPlan(tenantId: string, planId: string): Promise<TenantPlan>;
+  // ───────────────────────────────────────────────────────────────
+
   activatePlan(
     tenantId: string,
     planId: string,
