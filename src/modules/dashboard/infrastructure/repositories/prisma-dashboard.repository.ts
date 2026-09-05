@@ -123,7 +123,7 @@ export class PrismaDashboardRepository implements DashboardRepository {
         bolnaCallId: c.bolnaCallId,
         status: c.status,
         duration: c.duration,
-        cost: c.cost,
+        platformCost: c.platformCost,
         recording: c.recording,
         startedAt: c.startedAt,
         createdAt: c.createdAt,

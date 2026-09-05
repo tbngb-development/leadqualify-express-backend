@@ -22,7 +22,7 @@ export interface RecentCallData {
   bolnaCallId: string | null;
   status: string;
   duration: number | null;
-  cost: number | null;
+  platformCost: number | null;
   recording: string | null;
   startedAt: Date | null;
   createdAt: Date;

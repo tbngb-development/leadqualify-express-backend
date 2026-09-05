@@ -35,7 +35,7 @@ export class CheckBalanceForBatchUseCase {
       billingMinimumSec: plan.billingMinimumSec,
       billingIncrementSec: plan.billingIncrementSec,
     });
-    const estimatedCost = perCall * Math.max(input.leadCount, 0);
+    const estimatedCost = perCall.costPaisa * Math.max(input.leadCount, 0);
 
     if (wallet.balance < estimatedCost * 0.5) {
       throw new InsufficientBalanceError();

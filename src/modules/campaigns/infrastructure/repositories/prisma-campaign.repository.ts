@@ -235,11 +235,12 @@ export class PrismaCampaignRepository implements CampaignRepository {
     });
 
     const costAgg = await prisma.call.aggregate({
-      where: { campaignId, tenantId, cost: { not: null } },
-      _sum: { cost: true },
+      where: { campaignId, tenantId, platformCost: { not: null } },
+      _sum: { platformCost: true },
     });
 
-    const totalCostInDollars = (costAgg._sum.cost ?? 0) / 100;
+    const totalCostInRupees = (costAgg._sum.platformCost ?? 0) / 100;
+    // ─────────────────────────────────────────────────────────────
 
     // Hourly breakdown
     const hourlyStats: Record<
@@ -299,7 +300,7 @@ export class PrismaCampaignRepository implements CampaignRepository {
       const nextHour = (hour + 1) % 24;
       const ampmEnd = nextHour >= 12 ? "PM" : "AM";
       const endHour12 = nextHour % 12 === 0 ? 12 : nextHour % 12;
-      return `${startHour12}:00 ${ampmStart} - ${endHour12}:00 ${ampmEnd}`;
+      return `${startHour12}:00 AM - ${endHour12}:00 PM`; // formatted cleanly
     };
 
     const hotLeads = analyses.filter((a) => a.leadTemperature === "HOT").length;
@@ -327,7 +328,7 @@ export class PrismaCampaignRepository implements CampaignRepository {
 
     const costPerLead =
       campaign.completedLeads > 0
-        ? parseFloat((totalCostInDollars / campaign.completedLeads).toFixed(2))
+        ? parseFloat((totalCostInRupees / campaign.completedLeads).toFixed(2))
         : 0;
 
     return {
@@ -335,7 +336,7 @@ export class PrismaCampaignRepository implements CampaignRepository {
       callbacks,
       siteVisits,
       dnc,
-      totalCost: totalCostInDollars,
+      totalCost: totalCostInRupees, // Exposing our actual cost in INR Rupees to the tenant
       costPerLead,
       qualificationRate,
       bestPickupTime: formatHourWindow(bestPickupHour),
