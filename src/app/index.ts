@@ -24,7 +24,8 @@ export function buildApp(): Express {
   app.use(cookieParser()); // <-- Added before routes/limiter
   app.use(express.json({ limit: "10mb" }));
   app.use(express.urlencoded({ extended: true, limit: "10mb" }));
-
+  app.set("trust proxy", 1);
+  
   // Simple request logger
   app.use((req, _res, next) => {
     if (env.isDev) {
