@@ -20,9 +20,12 @@ export class LoginUseCase {
       throw new InvalidCredentialsError();
     }
 
+    console.log("admin login user data", user);
+
     if (!user.isActive) {
+      console.log("admin isInactive");
       throw new ForbiddenError(
-        "Your account has been deactivated by the platform administrator. Please contact the support team for assistance.",
+        `Your account has been deactivated by the platform administrator. Please contact the support team for assistance.status: ${user.isActive}`,
       );
     }
 
