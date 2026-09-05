@@ -11,6 +11,7 @@ import { sendError } from "../shared/utils/response";
 
 export function buildApp(): Express {
   const app = express();
+  app.set("trust proxy", 1);
 
   app.use(
     cors({
@@ -24,12 +25,9 @@ export function buildApp(): Express {
   app.use(cookieParser()); // <-- Added before routes/limiter
   app.use(express.json({ limit: "10mb" }));
   app.use(express.urlencoded({ extended: true, limit: "10mb" }));
-  
+
   // Simple request logger
   app.use((req, _res, next) => {
-    if (env.isDev) {
-      console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
-    }
     if (env.isDev) {
       console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
     }
