@@ -8,7 +8,7 @@
     "start": "node dist/server.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "seed:admin": "tsx prisma/seeds/platform-admin.seed.ts",
+    "seed:plans": "tsx src/seeds/plans.seed.ts",
     "postinstall": "prisma generate"
   },
   "prisma": {
