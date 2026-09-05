@@ -1,11 +1,12 @@
-import prisma from "../../../../shared/config/database/prisma";
 import type { PlanRepository } from "../../../plans/application/interfaces/plan-repository.interface";
 import type { AutoAssignKeyUseCase } from "../../../bolna-api-keys/application/use-cases/auto-assign-key.use-case";
 import type { IEmailService } from "../../../../shared/config/external/email/email.interface";
+import type { WalletRepository } from "../../../wallet/application/interfaces/wallet-repository.interface";
+import type { RechargeRepository } from "../interfaces/recharge-repository.interface";
+import type { TenantEmailRepository } from "../interfaces/tenant-email-repository.interface";
 import { paymentSuccessEmailHtml } from "../../../../shared/config/external/email/templates/payment-success.template";
 import { RechargeNotFoundError } from "../../domain/errors/payment.errors";
 import { PlanNotFoundError } from "../../../plans/domain/errors/plan.errors";
-import type { WalletRepository } from "../../../wallet/application/interfaces/wallet-repository.interface";
 
 export interface CompletePaymentInput {
   razorpayOrderId: string;
@@ -20,31 +21,29 @@ export interface CompletePaymentResult {
 
 export class CompletePaymentUseCase {
   constructor(
+    private readonly rechargeRepo: RechargeRepository,
     private readonly walletRepo: WalletRepository,
     private readonly planRepo: PlanRepository,
     private readonly autoAssignKey: AutoAssignKeyUseCase,
     private readonly email: IEmailService,
+    private readonly tenantEmailRepo: TenantEmailRepository,
   ) {}
 
   async execute(input: CompletePaymentInput): Promise<CompletePaymentResult> {
-    const recharge = await prisma.recharge.findUnique({
-      where: { razorpayOrderId: input.razorpayOrderId },
-    });
+    const recharge = await this.rechargeRepo.findByRazorpayOrderId(
+      input.razorpayOrderId,
+    );
     if (!recharge) throw new RechargeNotFoundError();
 
     if (recharge.status === "SUCCESS") {
       return { alreadyProcessed: true, rechargeId: recharge.id };
     }
 
-    await prisma.recharge.update({
-      where: { id: recharge.id },
-      data: {
-        status: "SUCCESS",
-        razorpayPaymentId: input.razorpayPaymentId,
-        razorpaySignature: input.razorpaySignature,
-        completedAt: new Date(),
-      },
-    });
+    await this.rechargeRepo.markSuccess(
+      recharge.id,
+      input.razorpayPaymentId,
+      input.razorpaySignature,
+    );
 
     await this.walletRepo.ensureWallet(recharge.tenantId);
 
@@ -62,6 +61,8 @@ export class CompletePaymentUseCase {
 
     return { alreadyProcessed: false, rechargeId: recharge.id };
   }
+
+  // ── private helpers ───────────────────────────────────────
 
   private async processOnboarding(recharge: {
     id: string;
@@ -118,14 +119,14 @@ export class CompletePaymentUseCase {
   }
 
   private async sendReceipt(tenantId: string, amount: number, purpose: string) {
-    const tenant = await prisma.tenant.findUnique({ where: { id: tenantId } });
-    if (!tenant) return;
+    const email = await this.tenantEmailRepo.getEmailById(tenantId);
+    if (!email) return;
 
     await this.email.send({
-      to: tenant.email,
+      to: email,
       subject: "Payment successful",
       html: paymentSuccessEmailHtml({
-        tenantName: tenant.name,
+        tenantName: email.split("@")[0],
         amountPaisa: amount,
         kind: purpose,
       }),

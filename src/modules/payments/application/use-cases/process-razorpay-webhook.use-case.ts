@@ -25,19 +25,15 @@ export class ProcessRazorpayWebhookUseCase {
       return { handled: false };
     }
 
-    const event = payload?.event;
-    if (event !== "payment.captured") return { handled: false };
+    if (payload?.event !== "payment.captured") return { handled: false };
 
-    const paymentEntity = payload?.payload?.payment?.entity;
-    if (!paymentEntity?.order_id || !paymentEntity?.id)
-      return { handled: false };
+    const entity = payload?.payload?.payment?.entity;
+    if (!entity?.order_id || !entity?.id) return { handled: false };
 
-    // Signature came from webhook secret, not order signature —
-    // pass empty string; CompletePayment is idempotent on Recharge.status.
     await this.completePayment.execute({
-      razorpayOrderId: paymentEntity.order_id,
-      razorpayPaymentId: paymentEntity.id,
-      razorpaySignature: paymentEntity?.acquirer_data?.rrn ?? "webhook",
+      razorpayOrderId: entity.order_id,
+      razorpayPaymentId: entity.id,
+      razorpaySignature: entity?.acquirer_data?.rrn ?? "webhook",
     });
 
     return { handled: true };

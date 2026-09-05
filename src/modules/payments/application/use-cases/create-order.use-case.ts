@@ -1,7 +1,7 @@
-import prisma from "../../../../shared/config/database/prisma";
 import type { IPaymentProvider } from "../../../../shared/config/external/payments/payment-provider.interface";
 import type { PlanRepository } from "../../../plans/application/interfaces/plan-repository.interface";
 import type { WalletRepository } from "../../../wallet/application/interfaces/wallet-repository.interface";
+import type { RechargeRepository } from "../interfaces/recharge-repository.interface";
 import { TenantPlanNotFoundError } from "../../../plans/domain/errors/plan.errors";
 import { RECHARGE_SLABS_PAISA } from "../../../../shared/constants/messages";
 import {
@@ -15,13 +15,14 @@ export class CreateOrderUseCase {
   constructor(
     private readonly planRepo: PlanRepository,
     private readonly walletRepo: WalletRepository,
+    private readonly rechargeRepo: RechargeRepository,
     private readonly payments: IPaymentProvider,
   ) {}
 
   async execute(input: CreateOrderInput): Promise<CreateOrderResponse> {
     const { tenantId, purpose } = input;
 
-    // 1. Resolve amount + planId server-side (never trust client)
+    // 1. Resolve amount + planId server-side
     let amount: number;
     let planId: string | null = null;
 
@@ -44,7 +45,7 @@ export class CreateOrderUseCase {
       amount = requested;
     }
 
-    // 2. Ensure wallet exists for FK on Recharge
+    // 2. Ensure wallet exists
     const wallet = await this.walletRepo.ensureWallet(tenantId);
 
     // 3. Create Razorpay order
@@ -69,16 +70,14 @@ export class CreateOrderUseCase {
     }
 
     // 4. Persist Recharge (INITIATED)
-    const recharge = await prisma.recharge.create({
-      data: {
-        walletId: wallet.id,
-        tenantId,
-        amount,
-        purpose,
-        status: "INITIATED",
-        razorpayOrderId: order.orderId,
-        planId,
-      },
+    const recharge = await this.rechargeRepo.create({
+      walletId: wallet.id,
+      tenantId,
+      amount,
+      purpose,
+      status: "INITIATED",
+      razorpayOrderId: order.orderId,
+      planId,
     });
 
     return {

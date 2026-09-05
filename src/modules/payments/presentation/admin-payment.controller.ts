@@ -1,9 +1,8 @@
 import type { Request, Response, NextFunction } from "express";
 import { sendSuccess } from "../../../shared/utils/response";
-import type {
-  GetPaymentSummaryUseCase,
-  ListAdminPaymentsUseCase,
-} from "../application/use-cases/admin-payments.use-cases";
+import type { GetPaymentSummaryUseCase } from "../application/use-cases/get-payment-summary.use-case";
+import type { ListAdminPaymentsUseCase } from "../application/use-cases/list-admin-payments.use-case";
+import type { RechargeStatus } from "../../../generated/prisma";
 
 export class AdminPaymentController {
   constructor(
@@ -32,10 +31,15 @@ export class AdminPaymentController {
     try {
       const page = Number(req.query.page) || 1;
       const limit = Number(req.query.limit) || 50;
-      const tenantId = req.query.tenantId as string;
-      const status = req.query.status as string;
+      const tenantId = req.query.tenantId as string | undefined;
+      const status = req.query.status as RechargeStatus | undefined;
 
-      const data = await this.listUC.execute({ tenantId, status, page, limit });
+      const data = await this.listUC.execute({
+        tenantId,
+        status,
+        page,
+        limit,
+      });
       sendSuccess(res, data);
     } catch (err) {
       next(err);
