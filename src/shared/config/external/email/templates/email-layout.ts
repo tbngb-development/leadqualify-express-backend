@@ -4,18 +4,20 @@ export interface EmailLayoutOptions {
 }
 
 const COLORS = {
-  primary: "#4F46E5",
-  primaryLight: "#EEF2FF",
-  background: "#F9FAFB",
+  primary: "#16A34A",
+  primaryDark: "#15803D",
+  primaryLight: "#F0FDF4",
+  background: "#FFFFFF",
   card: "#FFFFFF",
+  surface: "#F9FAFB",
   border: "#E5E7EB",
-  textPrimary: "#111827",
-  textSecondary: "#6B7280",
-  textMuted: "#9CA3AF",
-  success: "#059669",
-  successLight: "#ECFDF5",
-  warning: "#D97706",
-  warningLight: "#FFFBEB",
+  textBase: "#000000",
+  textSecondary: "#374151",
+  textMuted: "#6B7280",
+  success: "#16A34A",
+  successLight: "#F0FDF4",
+  warning: "#CA8A04",
+  warningLight: "#FEFCE8",
   danger: "#DC2626",
   dangerLight: "#FEF2F2",
 } as const;
@@ -47,22 +49,21 @@ export function emailLayout(options: EmailLayoutOptions): string {
   <style>body,table,td{font-family:Arial,sans-serif!important}</style>
   <![endif]-->
 </head>
-<body style="margin:0;padding:0;background-color:${COLORS.background};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;-webkit-font-smoothing:antialiased;">
+<body style="margin:0;padding:0;background-color:${COLORS.background};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;-webkit-font-smoothing:antialiased;color:${COLORS.textBase};font-size:16px;line-height:1.6;">
 
   ${previewText ? `<div style="display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:${COLORS.background};">${escapeHtml(previewText)}</div>` : ""}
 
-  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color:${COLORS.background};padding:32px 16px;">
+  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color:${COLORS.background};padding:40px 16px;">
     <tr>
       <td align="center">
 
         <!-- Container -->
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width:560px;">
 
-          <!-- Logo / Brand Header -->
+          <!-- Brand Header -->
           <tr>
-            <td style="padding:0 0 24px 0;text-align:center;">
-              <span style="font-size:22px;font-weight:700;color:${COLORS.primary};letter-spacing:-0.5px;">Bolna</span>
-              <span style="font-size:22px;font-weight:300;color:${COLORS.textSecondary};letter-spacing:-0.5px;"> AI</span>
+            <td style="padding:0 0 32px 0;text-align:center;">
+              <span style="font-size:26px;font-weight:800;color:${COLORS.textBase};letter-spacing:-1px;">Kooi</span>
             </td>
           </tr>
 
@@ -75,11 +76,11 @@ export function emailLayout(options: EmailLayoutOptions): string {
 
           <!-- Footer -->
           <tr>
-            <td style="padding:24px 0 0 0;text-align:center;">
-              <p style="margin:0 0 4px 0;font-size:12px;color:${COLORS.textMuted};">
-                This is an automated message from Bolna AI.
+            <td style="padding:28px 0 0 0;text-align:center;">
+              <p style="margin:0 0 4px 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">
+                This is an automated message from Kooi.
               </p>
-              <p style="margin:0;font-size:12px;color:${COLORS.textMuted};">
+              <p style="margin:0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">
                 If you have questions, reply to this email or contact support.
               </p>
             </td>
@@ -100,30 +101,30 @@ export function emailLayout(options: EmailLayoutOptions): string {
 
 export function sectionPadding(inner: string): string {
   return `<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-    <tr><td style="padding:32px;">${inner}</td></tr>
+    <tr><td style="padding:36px 32px;">${inner}</td></tr>
   </table>`;
 }
 
 export function heading(text: string, subtext?: string): string {
   return `
-    <h1 style="margin:0 0 4px 0;font-size:20px;font-weight:700;color:${COLORS.textPrimary};line-height:1.3;">
+    <h1 style="margin:0 0 8px 0;font-size:22px;font-weight:700;color:${COLORS.textBase};line-height:1.3;">
       ${escapeHtml(text)}
     </h1>
-    ${subtext ? `<p style="margin:0;font-size:14px;color:${COLORS.textSecondary};line-height:1.5;">${escapeHtml(subtext)}</p>` : ""}
+    ${subtext ? `<p style="margin:0;font-size:16px;color:${COLORS.textSecondary};line-height:1.5;">${escapeHtml(subtext)}</p>` : ""}
   `;
 }
 
 export function bodyText(text: string): string {
-  return `<p style="margin:0 0 16px 0;font-size:14px;color:${COLORS.textSecondary};line-height:1.6;">${text}</p>`;
+  return `<p style="margin:0 0 16px 0;font-size:16px;color:${COLORS.textSecondary};line-height:1.6;">${text}</p>`;
 }
 
 export function ctaButton(label: string, url: string): string {
   return `
-    <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin:24px 0;">
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin:28px 0;">
       <tr>
         <td style="border-radius:8px;background-color:${COLORS.primary};">
           <a href="${url}" target="_blank"
-             style="display:inline-block;padding:12px 28px;font-size:14px;font-weight:600;color:#FFFFFF;text-decoration:none;border-radius:8px;line-height:1.4;">
+             style="display:inline-block;padding:14px 32px;font-size:16px;font-weight:600;color:#FFFFFF;text-decoration:none;border-radius:8px;line-height:1.4;">
             ${escapeHtml(label)}
           </a>
         </td>
@@ -133,7 +134,7 @@ export function ctaButton(label: string, url: string): string {
 }
 
 export function divider(): string {
-  return `<hr style="margin:24px 0;border:none;border-top:1px solid ${COLORS.border};" />`;
+  return `<hr style="margin:28px 0;border:none;border-top:1px solid ${COLORS.border};" />`;
 }
 
 export function infoBox(
@@ -141,7 +142,7 @@ export function infoBox(
   variant: "info" | "warning" | "success" | "danger" = "info",
 ): string {
   const styles = {
-    info: { bg: COLORS.primaryLight, color: COLORS.primary, icon: "ℹ️" },
+    info: { bg: COLORS.primaryLight, color: COLORS.primaryDark, icon: "ℹ️" },
     warning: { bg: COLORS.warningLight, color: COLORS.warning, icon: "⚠️" },
     success: { bg: COLORS.successLight, color: COLORS.success, icon: "✅" },
     danger: { bg: COLORS.dangerLight, color: COLORS.danger, icon: "🚨" },
@@ -151,8 +152,8 @@ export function infoBox(
   return `
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:16px 0;">
       <tr>
-        <td style="background-color:${s.bg};border-radius:8px;padding:14px 16px;">
-          <p style="margin:0;font-size:13px;color:${s.color};line-height:1.5;">
+        <td style="background-color:${s.bg};border-radius:8px;padding:16px 18px;">
+          <p style="margin:0;font-size:15px;color:${s.color};line-height:1.5;">
             <span style="margin-right:6px;">${s.icon}</span>${text}
           </p>
         </td>
@@ -164,8 +165,8 @@ export function infoBox(
 export function keyValueRow(label: string, value: string): string {
   return `
     <tr>
-      <td style="padding:8px 0;font-size:13px;color:${COLORS.textMuted};width:140px;vertical-align:top;">${escapeHtml(label)}</td>
-      <td style="padding:8px 0;font-size:14px;color:${COLORS.textPrimary};font-weight:500;">${value}</td>
+      <td style="padding:10px 0;font-size:15px;color:${COLORS.textMuted};width:140px;vertical-align:top;">${escapeHtml(label)}</td>
+      <td style="padding:10px 0;font-size:16px;color:${COLORS.textBase};font-weight:500;">${value}</td>
     </tr>
   `;
 }

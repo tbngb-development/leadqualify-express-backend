@@ -23,7 +23,6 @@ export function paymentSuccessEmailHtml(
   p: PaymentSuccessTemplateInput,
 ): string {
   const amount = (p.amountPaisa / 100).toFixed(2);
-  const subject = `Payment successful — ₹${amount}`;
   const date =
     p.date ??
     new Date().toLocaleDateString("en-IN", {
@@ -34,45 +33,51 @@ export function paymentSuccessEmailHtml(
 
   const content = sectionPadding(`
     <!-- Success Icon -->
-    <div style="text-align:center;margin:0 0 8px 0;">
-      <div style="display:inline-block;width:56px;height:56px;background-color:${COLORS.successLight};border-radius:50%;line-height:56px;text-align:center;">
-        <span style="font-size:28px;">✓</span>
+    <div style="text-align:center;margin:0 0 12px 0;">
+      <div style="display:inline-block;width:60px;height:60px;background-color:${COLORS.successLight};border:2px solid ${COLORS.success};border-radius:50%;line-height:56px;text-align:center;">
+        <span style="font-size:28px;color:${COLORS.success};">✓</span>
       </div>
     </div>
 
     <div style="text-align:center;">
-      ${heading("Payment Successful", "Your payment has been processed and your wallet has been updated.")}
+      ${heading(
+        "Payment Successful",
+        "Your payment has been processed and your wallet has been updated.",
+      )}
     </div>
 
     <!-- Amount Card -->
-    <div style="margin:24px 0;background-color:${COLORS.successLight};border-radius:12px;padding:24px;text-align:center;">
-      <p style="margin:0 0 4px 0;font-size:12px;color:${COLORS.success};text-transform:uppercase;letter-spacing:0.5px;font-weight:600;">
+    <div style="margin:28px 0;background-color:${COLORS.successLight};border:2px solid ${COLORS.success};border-radius:12px;padding:28px;text-align:center;">
+      <p style="margin:0 0 6px 0;font-size:13px;color:${COLORS.success};text-transform:uppercase;letter-spacing:1px;font-weight:600;">
         Amount Paid
       </p>
-      <p style="margin:0;font-size:36px;font-weight:800;color:${COLORS.success};line-height:1.2;">
+      <p style="margin:0;font-size:40px;font-weight:800;color:${COLORS.success};line-height:1.2;">
         ₹${amount}
       </p>
     </div>
 
     <!-- Details Table -->
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
-           style="background-color:${COLORS.background};border-radius:8px;padding:4px 0;">
+           style="background-color:${COLORS.surface};border-radius:8px;padding:4px 0;">
       ${keyValueRow("Organization", p.tenantName)}
       ${keyValueRow("Payment Type", `<span style="color:${COLORS.primary};font-weight:600;">${escapeHtml(p.kind)}</span>`)}
       ${keyValueRow("Date", date)}
-      ${p.orderId ? keyValueRow("Order ID", `<span style="font-family:monospace;font-size:12px;">${escapeHtml(p.orderId)}</span>`) : ""}
-      ${p.paymentId ? keyValueRow("Payment ID", `<span style="font-family:monospace;font-size:12px;">${escapeHtml(p.paymentId)}</span>`) : ""}
+      ${p.orderId ? keyValueRow("Order ID", `<span style="font-family:monospace;font-size:14px;">${escapeHtml(p.orderId)}</span>`) : ""}
+      ${p.paymentId ? keyValueRow("Payment ID", `<span style="font-family:monospace;font-size:14px;">${escapeHtml(p.paymentId)}</span>`) : ""}
     </table>
 
     ${divider()}
 
-    ${infoBox("Your wallet balance has been updated. You can view your transaction history in the dashboard.", "success")}
+    ${infoBox(
+      "Your wallet balance has been updated. You can view your transaction history in the Kooi dashboard.",
+      "success",
+    )}
 
     ${bodyText("If you did not authorize this payment, please contact our support team immediately.")}
   `);
 
   return emailLayout({
-    previewText: `Payment of ₹${amount} was successful`,
+    previewText: `Kooi payment of ₹${amount} was successful`,
     content,
   });
 }
