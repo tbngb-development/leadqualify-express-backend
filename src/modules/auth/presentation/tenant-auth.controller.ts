@@ -28,6 +28,17 @@ import { type GetProfileUseCase } from "../application/use-cases/get-profile.use
 import { type CreateInviteUseCase } from "../application/use-cases/create-invite.use-case";
 import { type AcceptInviteUseCase } from "../application/use-cases/accept-invite.use-case";
 import { type LogoutUseCase } from "../application/use-cases/logout.use-case";
+// Add imports
+import type { ForgotPasswordUseCase } from "../application/use-cases/forgot-password.use-case";
+import type { VerifyForgotPasswordOtpUseCase } from "../application/use-cases/verify-forgot-password-otp.use-case";
+import type { ResetPasswordUseCase } from "../application/use-cases/reset-password.use-case";
+import type { ChangePasswordUseCase } from "../application/use-cases/change-password.use-case";
+import type {
+  ForgotPasswordBody,
+  VerifyForgotPasswordOtpBody,
+  ResetPasswordBody,
+  ChangePasswordBody,
+} from "./auth.schema";
 
 const DEFAULT_ACCESS_EXPIRY = 900;
 const DEFAULT_REFRESH_EXPIRY = 604800;
@@ -42,6 +53,10 @@ export class TenantAuthController {
     private readonly createInviteUseCase: CreateInviteUseCase,
     private readonly acceptInviteUseCase: AcceptInviteUseCase,
     private readonly logoutUseCase: LogoutUseCase,
+    private readonly forgotPasswordUseCase: ForgotPasswordUseCase,
+    private readonly verifyForgotPasswordOtpUseCase: VerifyForgotPasswordOtpUseCase,
+    private readonly resetPasswordUseCase: ResetPasswordUseCase,
+    private readonly changePasswordUseCase: ChangePasswordUseCase,
   ) {}
 
   register = async (
@@ -217,6 +232,69 @@ export class TenantAuthController {
       }
       this.clearTokenCookies(res);
       sendSuccess(res, { message: AuthMessages.LOGOUT_SUCCESS }, HttpStatus.OK);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  forgotPassword = async (
+    req: Request<unknown, unknown, ForgotPasswordBody>,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const output = await this.forgotPasswordUseCase.execute(req.body);
+      sendSuccess(res, output, HttpStatus.OK);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  verifyForgotPasswordOtp = async (
+    req: Request<unknown, unknown, VerifyForgotPasswordOtpBody>,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const output = await this.verifyForgotPasswordOtpUseCase.execute(
+        req.body,
+      );
+      sendSuccess(res, output, HttpStatus.OK);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  resetPassword = async (
+    req: Request<unknown, unknown, ResetPasswordBody>,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const output = await this.resetPasswordUseCase.execute(req.body);
+      // Force user back to login: clear any existing cookies
+      this.clearTokenCookies(res);
+      sendSuccess(res, output, HttpStatus.OK);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  changePassword = async (
+    req: Request<unknown, unknown, ChangePasswordBody>,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const authReq = req as AuthRequest;
+      const output = await this.changePasswordUseCase.execute({
+        userId: authReq.user.userId,
+        oldPassword: req.body.oldPassword,
+        newPassword: req.body.newPassword,
+      });
+      // Force re-login on all devices
+      this.clearTokenCookies(res);
+      sendSuccess(res, output, HttpStatus.OK);
     } catch (err) {
       next(err);
     }

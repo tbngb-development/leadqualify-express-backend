@@ -50,13 +50,8 @@ export interface AuthRepository {
     userId: string,
     tenantId: string,
   ): Promise<AuthMembershipEntity | null>;
-  createMembership(
-    data: CreateMembershipData,
-  ): Promise<AuthMembershipEntity>;
-  checkMembershipExists(
-    userId: string,
-    tenantId: string,
-  ): Promise<boolean>;
+  createMembership(data: CreateMembershipData): Promise<AuthMembershipEntity>;
+  checkMembershipExists(userId: string, tenantId: string): Promise<boolean>;
 
   // Tenant
   checkTenantActive(tenantId: string): Promise<boolean>;
@@ -71,4 +66,5 @@ export interface AuthRepository {
   } | null>;
   revokeRefreshToken(tokenId: string): Promise<void>;
   revokeAllUserRefreshTokens(userId: string): Promise<void>;
+  updateUserPassword(userId: string, passwordHash: string): Promise<void>;
 }

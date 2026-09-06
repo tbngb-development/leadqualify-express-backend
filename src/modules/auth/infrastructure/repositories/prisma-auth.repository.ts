@@ -228,6 +228,16 @@ export class PrismaAuthRepository implements AuthRepository {
     });
   }
 
+  async updateUserPassword(
+    userId: string,
+    passwordHash: string,
+  ): Promise<void> {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { password: passwordHash },
+    });
+  }
+
   // ── Private Mappers ──────────────────────────────────────────────────────
 
   private mapToEntity(user: {

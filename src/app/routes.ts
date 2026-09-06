@@ -134,7 +134,11 @@ export function buildRoutes(c: AppContainer): Router {
   );
 
   // ── Admin API v1 (Cross-tenant platform overrides) ──────────────────────
-  router.use("/v1/admin/auth", buildAdminAuthRoutes(c.auth.adminController));
+  router.use(
+    "/v1/admin/auth",
+    buildAdminAuthRoutes(c.auth.adminController, c.authenticate),
+  );
+  
   router.use(
     "/v1/admin/invites",
     buildAdminInviteRoutes(
