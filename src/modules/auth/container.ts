@@ -49,6 +49,29 @@ export function buildAuthModule(deps: AuthModuleDeps): AuthModule {
     tokenService,
   );
 
+  const forgotPasswordUseCase = new ForgotPasswordUseCase(
+    authRepository,
+    otpService,
+    emailService,
+  );
+
+  const verifyForgotPasswordOtpUseCase = new VerifyForgotPasswordOtpUseCase(
+    authRepository,
+    otpService,
+    passwordResetTokenService,
+  );
+
+  const resetPasswordUseCase = new ResetPasswordUseCase(
+    authRepository,
+    passwordService,
+    passwordResetTokenService,
+  );
+
+  const changePasswordUseCase = new ChangePasswordUseCase(
+    authRepository,
+    passwordService,
+  );
+
   return {
     tenantController: new TenantAuthController(
       new RegisterTenantOwnerUseCase(
@@ -63,19 +86,17 @@ export function buildAuthModule(deps: AuthModuleDeps): AuthModule {
       new CreateInviteUseCase(tokenService),
       new AcceptInviteUseCase(authRepository, passwordService, tokenService),
       new LogoutUseCase(authRepository, tokenService),
-      new ForgotPasswordUseCase(authRepository, otpService, emailService),
-      new VerifyForgotPasswordOtpUseCase(
-        authRepository,
-        otpService,
-        passwordResetTokenService,
-      ),
-      new ResetPasswordUseCase(
-        authRepository,
-        passwordService,
-        passwordResetTokenService,
-      ),
-      new ChangePasswordUseCase(authRepository, passwordService),
+      forgotPasswordUseCase,
+      verifyForgotPasswordOtpUseCase,
+      resetPasswordUseCase,
+      changePasswordUseCase,
     ),
-    adminController: new AdminAuthController(loginUseCase),
+    adminController: new AdminAuthController(
+      loginUseCase,
+      forgotPasswordUseCase,
+      verifyForgotPasswordOtpUseCase,
+      resetPasswordUseCase,
+      changePasswordUseCase,
+    ),
   };
 }
