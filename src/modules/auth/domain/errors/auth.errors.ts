@@ -57,3 +57,33 @@ export class NotPlatformAdminError extends ForbiddenError {
     super(AuthMessages.NOT_PLATFORM_ADMIN);
   }
 }
+
+export class InvalidOtpError extends UnauthorizedError {
+  constructor() {
+    super(AuthMessages.OTP_INVALID);
+  }
+}
+
+export class OtpMaxAttemptsError extends UnauthorizedError {
+  constructor() {
+    super(AuthMessages.OTP_MAX_ATTEMPTS);
+  }
+}
+
+export class InvalidResetTokenError extends UnauthorizedError {
+  constructor() {
+    super(AuthMessages.RESET_TOKEN_INVALID);
+  }
+}
+
+export class InvalidOldPasswordError extends UnauthorizedError {
+  constructor() {
+    super(AuthMessages.INVALID_OLD_PASSWORD);
+  }
+}
+
+export class SamePasswordError extends ConflictError {
+  constructor() {
+    super(AuthMessages.SAME_PASSWORD_NOT_ALLOWED);
+  }
+}

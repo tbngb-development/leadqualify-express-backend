@@ -61,6 +61,42 @@ export const adminLoginSchema = z.object({
   password: passwordSchema,
 });
 
+// Password reset schemas
+const strongPasswordSchema = z
+  .string()
+  .min(8, "Password must be at least 8 characters")
+  .max(128, "Password too long")
+  .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+  .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+  .regex(/[0-9]/, "Password must contain at least one number");
+
+export const forgotPasswordSchema = z.object({
+  email: emailSchema,
+});
+
+export const verifyForgotPasswordOtpSchema = z.object({
+  email: emailSchema,
+  otp: z
+    .string()
+    .length(6, "OTP must be 6 digits")
+    .regex(/^\d{6}$/, "OTP must be numeric"),
+});
+
+export const resetPasswordSchema = z.object({
+  resetToken: z.string().min(1, "Reset token is required"),
+  newPassword: strongPasswordSchema,
+});
+
+export const changePasswordSchema = z
+  .object({
+    oldPassword: z.string().min(1, "Current password is required"),
+    newPassword: strongPasswordSchema,
+  })
+  .refine((data) => data.oldPassword !== data.newPassword, {
+    message: "New password must be different from current password",
+    path: ["newPassword"],
+  });
+
 export type RegisterTenantOwnerBody = z.infer<typeof registerTenantOwnerSchema>;
 export type LoginBody = z.infer<typeof loginSchema>;
 export type SelectTenantBody = z.infer<typeof selectTenantSchema>;
@@ -69,3 +105,10 @@ export type LogoutBody = z.infer<typeof logoutSchema>;
 export type CreateInviteBody = z.infer<typeof createInviteSchema>;
 export type AcceptInviteBody = z.infer<typeof acceptInviteSchema>;
 export type AdminLoginBody = z.infer<typeof adminLoginSchema>;
+
+export type ForgotPasswordBody = z.infer<typeof forgotPasswordSchema>;
+export type VerifyForgotPasswordOtpBody = z.infer<
+  typeof verifyForgotPasswordOtpSchema
+>;
+export type ResetPasswordBody = z.infer<typeof resetPasswordSchema>;
+export type ChangePasswordBody = z.infer<typeof changePasswordSchema>;

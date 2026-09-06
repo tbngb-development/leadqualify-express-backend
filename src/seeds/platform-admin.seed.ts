@@ -72,6 +72,7 @@ async function main(): Promise<void> {
         email: args.email,
         password: passwordHash,
         name: args.name,
+        isActive: true,
       },
     });
 

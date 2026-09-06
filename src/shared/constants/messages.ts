@@ -8,6 +8,22 @@ export const AuthMessages = {
   INVITE_ACCEPTED: "Invite accepted successfully",
   LOGOUT_SUCCESS: "Logged out successfully",
 
+  // Password reset
+  FORGOT_PASSWORD_SENT:
+    "If an account with this email exists, an OTP has been sent.",
+  OTP_INVALID: "Invalid or expired OTP.",
+  OTP_MAX_ATTEMPTS:
+    "Maximum OTP verification attempts exceeded. Please request a new OTP.",
+  OTP_VERIFIED: "OTP verified successfully.",
+  PASSWORD_RESET_SUCCESS:
+    "Password has been reset successfully. Please login with your new password.",
+  PASSWORD_CHANGED_SUCCESS: "Password changed successfully.",
+  INVALID_OLD_PASSWORD: "Current password is incorrect.",
+  SAME_PASSWORD_NOT_ALLOWED:
+    "New password must be different from the current password.",
+  RESET_TOKEN_INVALID:
+    "Invalid or expired reset token. Please restart the process.",
+
   // Errors
   INVALID_CREDENTIALS: "Invalid email or password",
   EMAIL_ALREADY_EXISTS: "A user with this email already exists",

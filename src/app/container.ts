@@ -1,14 +1,17 @@
 import { PrismaAuthRepository } from "../modules/auth/infrastructure/repositories/prisma-auth.repository";
 import { JwtTokenService } from "../modules/auth/infrastructure/services/jwt-token.service";
+import { JwtPasswordResetTokenService } from "../modules/auth/infrastructure/services/jwt-password-reset-token.service";
 import { BcryptPasswordService } from "../modules/auth/infrastructure/services/bcrypt-password.service";
 import { AuthenticateMiddleware } from "../shared/middleware/authenticate";
 import { AuthorizeMiddleware } from "../shared/middleware/authorize";
 import { EnforcePlanMiddleware } from "../shared/middleware/enforce-plan";
+import redis from "../shared/config/database/redis";
 import {
   BolnaClientFactory,
   type IBolnaClientFactory,
 } from "../shared/config/external/bolna/bolna-client.factory";
 import { ResendEmailService } from "../shared/config/external/email/resend.email";
+import { RedisOtpService } from "../modules/auth/infrastructure/services/redis-otp.service";
 
 import { buildAuthModule, type AuthModule } from "../modules/auth/container";
 import {
@@ -97,6 +100,17 @@ export function buildContainer(): AppContainer {
   const tokenService = new JwtTokenService();
   const passwordService = new BcryptPasswordService();
   const email = new ResendEmailService();
+  const otpService = new RedisOtpService(redis);
+  const passwordResetTokenService = new JwtPasswordResetTokenService(redis);
+
+  const auth = buildAuthModule({
+    authRepository,
+    tokenService,
+    passwordService,
+    otpService,
+    passwordResetTokenService,
+    emailService: email,
+  });
 
   // ── Sprint 1 ──────────────────────────────────────────────────────────
   const plans = buildPlanModule();
@@ -131,7 +145,7 @@ export function buildContainer(): AppContainer {
 
   // ── Domain modules (Bolna factory + wallet hooks) ─────────────────────
   return {
-    auth: buildAuthModule({ authRepository, tokenService, passwordService }),
+    auth: auth,
     assistants: buildAssistantModule({ bolnaClientFactory }),
     tenants: buildTenantModule(),
     campaigns: buildCampaignModule(),

@@ -20,10 +20,15 @@ export const env = {
     accessExpiry: process.env.JWT_ACCESS_EXPIRY || "15m",
     refreshExpiry: process.env.JWT_REFRESH_EXPIRY || "7d",
     inviteExpiry: process.env.JWT_INVITE_EXPIRY || "7d",
+    passwordResetExpiry: process.env.JWT_PASSWORD_RESET_EXPIRY || "10m",
   },
 
   database: {
     url: requireEnv("DATABASE_URL"),
+  },
+
+  redis: {
+    url: process.env.REDIS_URL || "redis://localhost:6379",
   },
 
   cors: {

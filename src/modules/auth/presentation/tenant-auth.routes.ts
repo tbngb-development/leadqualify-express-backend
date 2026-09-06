@@ -11,6 +11,10 @@ import {
   logoutSchema,
   createInviteSchema,
   acceptInviteSchema,
+  forgotPasswordSchema,
+  verifyForgotPasswordOtpSchema,
+  resetPasswordSchema,
+  changePasswordSchema,
 } from "./auth.schema";
 
 export function buildTenantAuthRoutes(
@@ -31,6 +35,30 @@ export function buildTenantAuthRoutes(
     "/accept-invite",
     validate(acceptInviteSchema),
     controller.acceptInvite,
+  );
+
+  router.post(
+    "/forgot-password",
+    validate(forgotPasswordSchema),
+    controller.forgotPassword,
+  );
+  router.post(
+    "/forgot-password/verify-otp",
+    validate(verifyForgotPasswordOtpSchema),
+    controller.verifyForgotPasswordOtp,
+  );
+  router.post(
+    "/reset-password",
+    validate(resetPasswordSchema),
+    controller.resetPassword,
+  );
+
+  // Change password (authenticated — via profile)
+  router.post(
+    "/change-password",
+    authenticate.any(),
+    validate(changePasswordSchema),
+    controller.changePassword,
   );
 
   // Authenticated routes
